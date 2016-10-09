@@ -2,11 +2,9 @@ const jetpack = require('fs-jetpack');
 const webpack = require('webpack');
 const webpackDevServer = require('webpack-dev-server');
 
-const readline = require('../tools/readline');
-
 var server;
 
-module.exports = function buildClient (config) {
+module.exports = function buildClient (config, readline) {
   const paths = config.paths;
 
   return Promise.resolve()

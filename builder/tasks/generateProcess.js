@@ -5,14 +5,10 @@ module.exports = function generateProcess (config) {
     console.log('=> generateProcess');
     const processConfig = {
       apps: [
-        {
-          name: 'discovers-emotion-app',
-          script: config.paths.buildServerBoot,
-          watch: false,
-        }
+        config.server.process
       ]
     };
-    jetpack.writeAsync(config.paths.buildserverProcess, processConfig)
+    jetpack.writeAsync(config.paths.buildServerProcess, processConfig)
     .then(resolve)
     .catch(reject);
   });

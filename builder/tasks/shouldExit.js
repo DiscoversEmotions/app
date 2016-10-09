@@ -1,6 +1,5 @@
-const readline = require('../tools/readline');
 
-module.exports = function (config) {
+module.exports = function (config, readline) {
   if (config.computed.shouldExit) {
     console.log('=> Exit');
     readline.close();

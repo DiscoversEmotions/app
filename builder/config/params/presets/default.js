@@ -6,5 +6,8 @@ module.exports = {
   optimize: false,
   watchClient: true,
   watchClientPort: 3010,
-  pageTitle: 'Discovers Emotions App'
+  pageTitle: 'Discovers Emotions App',
+  monitor: {
+    port: 3011
+  }
 };

@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = function (paths, params, babel) {
+module.exports = function (paths, params, babel, eslint) {
   const webpackConfig = {
     entry: {
       'app': [paths.clientBoot]
@@ -26,6 +26,15 @@ module.exports = function (paths, params, babel) {
     },
     devtool: params.webpack.devtool
   };
+
+  webpackConfig.module.loaders.push(
+    {
+      enforce: 'pre',
+      test: /\.js$/,
+      loader: `eslint-loader?${JSON.stringify(eslint)}`,
+      exclude: /node_modules/
+    }
+  );
 
   webpackConfig.module.loaders.push(
     {

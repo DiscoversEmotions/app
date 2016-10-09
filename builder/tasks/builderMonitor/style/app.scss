@@ -1,0 +1,52 @@
+html, body {
+  background: #CFD8DC;
+}
+
+#app {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.app-tabs {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 250px;
+  background: #212121;
+
+  .tab {
+    cursor: pointer;
+    vertical-align: top;
+    margin-top: 5px;
+    margin-left: 5px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    background: #607D8B;
+    color: #212121;
+    border-radius: 3px 0 0 3px;
+
+    &.active {
+      background: #CFD8DC;
+    }
+  }
+}
+
+.app-content {
+  position: absolute;
+  left: 250px;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  background: #CFD8DC;
+  overflow: auto;
+}
+
+.config-tab {
+  padding: 10px;
+}

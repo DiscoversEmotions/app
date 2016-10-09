@@ -5,12 +5,14 @@ module.exports = function () {
   const paths = require('./paths')();
   const params = require('./params')(buildEnv);
   const client = require('./client')(paths, params);
+  const server = require('./server')(paths);
   const computed = require('./computed')(params);
 
   return {
     paths,
     params,
     client,
+    server,
     package,
     computed
   };

@@ -4,5 +4,6 @@ module.exports = {
     devtool: '#source-map'
   },
   optimize: true,
-  watchClient: false
+  watchClient: false,
+  monitor: false
 }
