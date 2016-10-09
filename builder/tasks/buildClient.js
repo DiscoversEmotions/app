@@ -4,7 +4,7 @@ const webpackDevServer = require('webpack-dev-server');
 
 var server;
 
-module.exports = function buildClient (config, readline) {
+module.exports = function buildClient (config, readline, monitor) {
   const paths = config.paths;
 
   return Promise.resolve()
@@ -14,16 +14,17 @@ module.exports = function buildClient (config, readline) {
   .then(() => {
     return new Promise(function(resolve, reject) {
       const compiler = webpack(config.client.webpack);
+      compiler.plugin('done', function(stats, err) {
+        monitor.updateClientStats(stats);
+      });
       var resolved = false;
 
       if (config.params.watchClient) {
         console.log('=> Webpack Watch');
         server = new webpackDevServer(compiler, {
           hot: true,
-          clientLogLevel: 'info',
-          quiet: false,
-          noInfo: false,
-          stats: { colors: true }
+          quiet: true,
+          noInfo: true,
         });
         server.listen(config.params.watchClientPort, (err) => {
           if (err) {
@@ -39,10 +40,7 @@ module.exports = function buildClient (config, readline) {
       } else {
         // Build prod
         console.log('TODO');
-        compiler.run(function(err, stats) {
-          console.log('Build done !')
-          resolve();
-        });
+        compiler.run();
         // if (jetpack.exists(paths.build)) {
         //   return jetpack.removeAsync(paths.build);
         // }

@@ -22,17 +22,18 @@ html, body {
   .tab {
     cursor: pointer;
     vertical-align: top;
-    margin-top: 5px;
-    margin-left: 5px;
     height: 50px;
     line-height: 50px;
     padding: 0 30px;
-    background: #607D8B;
-    color: #212121;
-    border-radius: 3px 0 0 3px;
+    border-left: 7px solid transparent;
+    color: white;
+    opacity: 0.6;
+    transition-duration: .3s;
+    text-transform: uppercase;
 
     &.active {
-      background: #CFD8DC;
+      border-left: 7px solid #CFD8DC;
+      opacity: 1;
     }
   }
 }
@@ -49,4 +50,8 @@ html, body {
 
 .config-tab {
   padding: 10px;
+}
+
+.jv-obj {
+  margin-left: 10px;
 }

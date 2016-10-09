@@ -12,7 +12,7 @@
 export default {
   methods: {
     sayHello() {
-      return 'Hello !'
+      return 'Hello !!'
     }
   }
 }

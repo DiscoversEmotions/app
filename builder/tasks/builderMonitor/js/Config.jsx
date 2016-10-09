@@ -1,14 +1,12 @@
 import h from 'jsx-create-element';
-const classNames = require('classnames');
+import classNames from 'classnames';
 
-export default function Config (state, dispatch) {
+import JsonViewer from './JsonViewer.jsx';
+
+export default function Config ({ state, dispatch }) {
   return (
-    <div classNames='config-tab'>
-      <pre>
-        <code>
-          { JSON.stringify(state.config, null, 2) }
-        </code>
-      </pre>
+    <div className='config-tab'>
+      { JsonViewer({ state, dispatch, object: state.config, key: 'config'}) }
     </div>
   );
 }

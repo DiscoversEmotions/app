@@ -1,14 +1,17 @@
 import h from 'jsx-create-element';
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 import Config from './Config.jsx';
+import Actions from './Actions.jsx';
+import Client from './Client.jsx';
 
 const tabs = [
   'Config',
-  'Test'
+  'Actions',
+  'Client'
 ]
 
-export default function App (state, dispatch) {
+export default function App ({ state, dispatch, socket }) {
   return (
     <div class='app'>
       <div className='app-tabs'>
@@ -27,7 +30,11 @@ export default function App (state, dispatch) {
         {(() => {
           switch (state.tab) {
             case 0:
-              return Config(state, dispatch);
+              return Config({ state, dispatch, socket });
+            case 1:
+              return Actions({ state, dispatch, socket });
+            case 2:
+              return Client({ state, dispatch, socket });
             default:
               return (<div>No data fro tab {state.tab}</div>)
           }
