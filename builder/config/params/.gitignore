@@ -1,0 +1,6 @@
+
+# ignore local files
+*.local.js
+
+# but keep example files
+!*.local.example.js
