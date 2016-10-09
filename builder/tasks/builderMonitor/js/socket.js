@@ -10,6 +10,10 @@ export default function initSocket (store) {
   });
 
   socket.on('client-stats', function (data) {
+    data.errors = data.errors.map(errorString => ({
+      type: 'console',
+      content: errorString
+    }))
     store.dispatch({
       type: 'SET_CLIENT_STATS',
       payload: data

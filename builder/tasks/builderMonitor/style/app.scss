@@ -1,5 +1,6 @@
 html, body {
   background: #CFD8DC;
+  font-family: 'Roboto', sans-serif;
 }
 
 #app {
@@ -52,6 +53,27 @@ html, body {
   padding: 10px;
 }
 
+
 .jv-obj {
   margin-left: 10px;
+}
+
+.jv-console {
+  color: white;
+  background: rgb(29, 29, 29);
+  overflow: auto;
+  margin: 10px;
+  padding: 10px 30px;
+  border-radius: 5px;
+}
+
+.jv-pre {
+  font-family: 'Roboto Mono', monospace;
+}
+
+.js-obj-more {
+  cursor: pointer;
+  &:hover {
+    background: #44d0e9;
+  }
 }
