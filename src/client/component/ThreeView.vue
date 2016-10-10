@@ -19,5 +19,10 @@ export default {
 .container {
   width: 100%;
   height: 500px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
   <div id="app">
-    <h1>Vue js is working !</h1>
-    <p>
-      {{ sayHello() }}
-    </p>
     <three-view />
+    <div class="content">
+      <h1>Vue js is working !</h1>
+      <p>
+        {{ sayHello() }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -24,5 +26,24 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../../node_modules/normalize.css/normalize.css";
 
+html, body {
+  color: white;
+}
+
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
 </style>
