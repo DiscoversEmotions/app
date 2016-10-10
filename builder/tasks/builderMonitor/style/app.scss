@@ -53,45 +53,109 @@ html, body {
   padding: 10px;
 }
 
+.json-viewer {
 
-.jv-obj {
-  margin-left: 10px;
-}
-
-.jv-console {
-  color: white;
-  background: rgb(29, 29, 29);
-  overflow: auto;
-  margin: 10px;
-  padding: 10px 30px;
-  border-radius: 5px;
-}
-
-.jv-pre {
-  font-family: 'Roboto Mono', monospace;
-}
-
-.js-obj-more {
-  cursor: pointer;
-  &:hover {
-    background: #44d0e9;
+  .jv-obj {
+    margin-left: 30px;
   }
-}
 
-.progress {
-  height: 10px;
-  width: 200px;
-  background: #3770de;
-  border: 2px solid #3770de;
-  display: inline-block;
-  position: relative;
-
-  span {
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    background: white;
+  & > .jv-obj {
+    margin-left: 0;
   }
+
+  .jv-key {
+    margin: 2px;
+    line-height: 1.7;
+  }
+
+  .jv-property-name {
+    font-weight: 900;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 3px 10px;
+    &:hover {
+      background: #EEEEEE;
+    }
+  }
+
+  .jv-inline {
+    border-radius: 3px;
+    padding: 3px 10px;
+    margin-left: 5px;
+  }
+
+  .jv-inline-string {
+    background: rgba(#b39ddb, 0.5);
+    &:hover {
+      background: rgba(#b39ddb, 0.7);
+    }
+  }
+
+  .jv-inline-num {
+    background: rgba(#FFD54F, 0.5);
+    &:hover {
+      background: rgba(#FFD54F, 0.7);
+    }
+  }
+
+  .jv-inline-false {
+    background: rgba(#E57373, 0.5);
+    &:hover {
+      background: rgba(#E57373, 0.7);
+    }
+  }
+
+  .jv-inline-true {
+    background: rgba(#A5D6A7, 0.5);
+    &:hover {
+      background: rgba(#A5D6A7, 0.7);
+    }
+  }
+
+  .js-inline-regex {
+    background: rgba(#4FC3F7, 0.5);
+    &:hover {
+      background: rgba(#4FC3F7, 0.7);
+    }
+  }
+
+  .js-inline-more {
+    cursor: pointer;
+    &:hover {
+      background: #44d0e9;
+    }
+  }
+
+  .jv-console {
+    color: white;
+    background: rgb(29, 29, 29);
+    overflow: auto;
+    margin: 10px;
+    padding: 10px 30px;
+    border-radius: 5px;
+  }
+
+  .jv-pre {
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  .progress {
+    height: 10px;
+    width: 200px;
+    background: #3770de;
+    border: 2px solid #3770de;
+    display: inline-block;
+    position: relative;
+
+    span {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      background: white;
+    }
+  }
+
+
 }

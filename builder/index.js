@@ -1,6 +1,3 @@
-var config = null;
-var monitor = null;
-var readline = null;
 
 // Tasks
 const readlineTask = require('./tasks/readline');
@@ -12,6 +9,11 @@ const generatePackageJsonTask = require('./tasks/generatePackageJson');
 const generateProcessTask = require('./tasks/generateProcess');
 const builderMonitorTask = require('./tasks/builderMonitor');
 const shouldExitTask = require('./tasks/shouldExit');
+
+// Instances
+var config = null;
+var monitor = null;
+var readline = null;
 
 Promise.resolve(config)
 .then(() => readlineTask()).then((rl) => { readline = rl })

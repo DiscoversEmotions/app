@@ -61,7 +61,8 @@ module.exports = function (paths, params, babel, eslint) {
       vue: {
         loaders: {
           js: `babel?${JSON.stringify(babel)}`,
-          // css: 'sass'
+          sass: 'style!css!sass?indentedSyntax',
+          scss: 'style!css!sass'
         }
       }
     })

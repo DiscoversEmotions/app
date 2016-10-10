@@ -12,10 +12,10 @@ const convertHTML = require('html-to-vdom')({
 });
 
 function hasContent (item) {
+  if (_.isEmpty(item)) {
+    return false;
+  }
   if (_.isArray(item)) {
-    if (item.length === 0) {
-      return false;
-    }
     return true;
   }
   if (_.isObject(item)) {
@@ -28,19 +28,49 @@ function hasContent (item) {
 }
 
 function InlineValue ({ dispatch, object, localState, key, newPath, objKey, item }) {
-  const keyVal = (<span className='jv-pre'>{ objKey }</span>);
+  const keyVal = (<span className='jv-pre jv-property-name'>{ objKey }</span>);
   const inlineVal = (() => {
-    if (_.isObject(item)) {
+    if (_.isRegExp(item)) {
+      return (<span className='jv-pre jv-inline js-inline-regex'>{ content.toString() }</span>);
+    }
+    if (_.isString(item)) {
+      if (item.length < 50) {
+        return (<span className='jv-pre jv-inline jv-inline-string'>{ item }</span>);
+      }
+      return (
+        <div style={{ marginLeft: '30px' }}>
+          <span className='jv-pre jv-inline jv-inline-string'>{ item }</span>
+        </div>
+      );
+    }
+    if (_.isNumber(item)) {
+      return (<span className='jv-pre jv-inline jv-inline-num'>{ String(item) }</span>);
+    }
+    if (_.isBoolean(item)) {
+      if (item === true) {
+        return (<span className='jv-pre jv-inline jv-inline-true'>{ String(item) }</span>);
+      }
+      return (<span className='jv-pre jv-inline jv-inline-false'>{ String(item) }</span>);
+    }
+    if (_.isArray(item)) {
       if (localState[newPath.join('.')] !== true) {
-        return (<span className='js-obj-more'>{ `{...}` }</span>);
+        var content = '[...]';
+        if (_.isEmpty(item)) {
+          content = '[]';
+        }
+        return (<span className='jv-pre jv-inline js-inline-more'>{ content }</span>);
       }
       return null;
     }
-    if (_.isString(item)) {
-      return `"${item}"`;
-    }
-    if (_.isNumber(item) || _.isBoolean(item)) {
-      return String(item);
+    if (_.isObject(item)) {
+      if (localState[newPath.join('.')] !== true) {
+        var content = '{...}';
+        if (_.isEmpty(item)) {
+          content = '{}';
+        }
+        return (<span className='jv-pre jv-inline js-inline-more'>{ content }</span>);
+      }
+      return null;
     }
     return null;
   })()
@@ -78,7 +108,6 @@ function Content ({ dispatch, object, localState, key, newPath, item }) {
 
 function ObjectViewer ({ dispatch, object, localState, key, path }) {
   var currentObject = path.length === 0 ? object : _.get(object, path, null);
-  console.log('=====', object, currentObject, path);
   if (_.isNil(currentObject)) {
     return (
       <p>null</p>
@@ -93,13 +122,15 @@ function ObjectViewer ({ dispatch, object, localState, key, path }) {
             className='jv-key'
           >
             <div
-              className='js-property'
+              className='jv-property'
               onclick={() => {
-                dispatch({
-                  type: 'JSON_VIEWER_TOGGLE_PATH',
-                  key: key,
-                  payload: newPath.join('.')
-                })
+                if (hasContent(item)) {
+                  dispatch({
+                    type: 'JSON_VIEWER_TOGGLE_PATH',
+                    key: key,
+                    payload: newPath.join('.')
+                  })
+                }
               }}
             >
               { InlineValue({ dispatch, object, localState, key, newPath, objKey, item }) }
