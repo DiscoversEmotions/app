@@ -9,8 +9,13 @@ export class Scene extends CoreScene {
   createScene() {
     console.log('create my custom scene');
 
-    let cube = new Cube();
-    this.add( cube );
+    this.cube = new Cube();
+    this.add( this.cube );
+  }
+
+  update(dt) {
+    this.cube.rotation.x += 0.01;
+    this.cube.rotation.y += 0.01;
   }
 
 }
