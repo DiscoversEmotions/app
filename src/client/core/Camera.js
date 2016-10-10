@@ -17,6 +17,8 @@ export class Camera extends PerspectiveCamera {
     this.controls = new OrbitControls(this, element);
     this.controls.enabled = true;
 
+    this.gui = GUISingleton.getInstance();
+
     WindowResizeSingleton.getInstance().add(this.resize.bind(this));
 
     this.addGUI();
@@ -26,15 +28,17 @@ export class Camera extends PerspectiveCamera {
    * addGUI method
    */
   addGUI() {
-    GUISingleton.getInstance().panel.add(this.controls, 'enabled', { label: 'OrbitControls' });
+    this.gui.add('camera', (panel) => {
+      panel.add(this.controls, 'enabled', { label: 'OrbitControls' });
+    });
   }
 
   /**
    * update method
    * @param {number} delta Delta
    */
-  update(delta) {
-    this.controls.update(delta);
+  update(time, dt) {
+    // this.controls.update(dt);
   }
 
   /**

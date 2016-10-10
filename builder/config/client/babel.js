@@ -1,8 +1,8 @@
 module.exports = function () {
   return {
     presets: [
-      ['es2015', {'modules': false}],
-      'stage-0'
+      'stage-0',
+      ['es2015', {'modules': false}]
     ]
   };
 }

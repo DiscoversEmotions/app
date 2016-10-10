@@ -5,11 +5,9 @@ import now from 'right-now';
  */
 export class Clock {
 
-  constructor(autoStart) {
-    this.autoStart = (autoStart !== undefined) ? autoStart : true;
+  constructor() {
     this.startTime = 0;
     this.elapsedTime = 0;
-    this.keys = {};
     this.running = false;
   }
 
@@ -19,36 +17,30 @@ export class Clock {
   }
 
   reset() {
-    this.keys = {};
+    this.elapsedTime = 0;
     this.start();
   }
 
   getElapsedTime() {
-    this.getDelta();
+    this._updateElapseTime();
     return this.elapsedTime;
   }
 
-  lap(key) {
-
+  getDelta(key) {
+    var diff = 0;
+    if (!this.running) {
+      throw new Error('Clock is not running !');
+      return;
+    }
+    var newTime = now();
+    diff = (newTime - this.oldTime) / 1000;
+    this.oldTime = newTime;
+    this._updateElapseTime();
+    return diff;
   }
 
-  getDelta(key) {
-    if (this.keys[key] === undefined) {
-      this.keys[key] = {};
-    }
-    var diff = 0;
-    if (this.autoStart && !this.running) {
-      this.start();
-    }
-
-    if (this.running) {
-      var newTime = now();
-      diff = (newTime - this.oldTime) / 1000;
-      this.oldTime = newTime;
-      this.elapsedTime += diff;
-    }
-
-    return diff;
+  _updateElapseTime() {
+    this.elapsedTime = (now() - this.startTime) / 1000;
   }
 
 }

@@ -2,6 +2,7 @@ import { Renderer } from './Renderer';
 import { Camera } from './Camera';
 import { Scene } from './Scene';
 import { MainLoop } from './MainLoop';
+import { Clock } from './Clock';
 
 /**
  * WebGLCore class
@@ -15,6 +16,7 @@ export class WebGLCore {
     this.scene = null;
     this.mainLoop = null;
     this.parentElement = parentElement;
+    this.clock = new Clock();
   }
 
   boot() {
@@ -24,10 +26,11 @@ export class WebGLCore {
 
     // Add to the dom
     this.parentElement.appendChild(this.renderer.domElement);
-    this.scene = this.initScene(this.renderer, this.camera);
 
     this.mainLoop = new MainLoop(this.render.bind(this), 1/60);
 
+    // start clock
+    this.clock.start();
     // start loop
     this.mainLoop.start();
   }
@@ -44,14 +47,16 @@ export class WebGLCore {
     return new Scene();
   }
 
-  render (dt) {
-    this.update(dt);
+  render () {
+    var dt = this.clock.getDelta();
+    var time = this.clock.getElapsedTime();
+    this.update(time, dt);
     this.renderer.render(this.scene, this.camera);
   }
 
-  update (dt) {
-    this.scene.update(dt);
-    this.camera.update(dt);
+  update (time, dt) {
+    this.scene.update(time, dt);
+    this.camera.update(time, dt);
   }
 
 }

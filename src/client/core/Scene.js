@@ -22,6 +22,6 @@ export class Scene extends ThreeScene {
   /**
    * render method
    */
-  update(dt) {
+  update(time, dt) {
   };
 }
