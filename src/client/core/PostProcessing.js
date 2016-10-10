@@ -1,5 +1,5 @@
 import EffectComposer from './EffectComposer';
-import postProcessingConfig from '../config/postProcessing';
+// import postProcessingConfig from '../config/postProcessing';
 
 /**
  * PostProcessing
@@ -17,7 +17,7 @@ class PostProcessing {
     this.scene    = scene;
     this.renderer = renderer;
     this.camera   = camera;
-    this.config   = postProcessingConfig;
+    // this.config   = postProcessingConfig;
 
     this.active   = this.config.active;
     this.composer = new EffectComposer(this.renderer, this.config.effectComposer);

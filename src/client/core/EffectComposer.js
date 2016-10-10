@@ -1,5 +1,5 @@
 import { Composer } from '@superguigui/wagner';
-import WindowManager from '../events/WindowManager';
+import { WindowResizeSingleton } from '../events/WindowResizeSingleton';
 
 /**
  * EffectComposer class
@@ -16,7 +16,7 @@ class EffectComposer extends Composer {
 
     this.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio);
 
-    WindowManager.add(this.resize.bind(this));
+    WindowResizeSingleton.getInstance().add(this.resize.bind(this));
   }
 
   /**

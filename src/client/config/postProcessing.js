@@ -6,14 +6,14 @@ import NoisePass          from '@superguigui/wagner/src/passes/noise/noise';
 import FXAAPass           from '@superguigui/wagner/src/passes/fxaa/FXAAPass';
 
 export default {
-  active: false,
+  active: true,
   effectComposer: {
     useRGBA: true
   },
   passes: [
     {
       name: 'multiPassBloomPass',
-      active: true,
+      active: false,
       constructor: new MultiPassBloomPass({
         blurAmount: 0.5,
         applyZoomBlur: true,
@@ -23,7 +23,7 @@ export default {
     },
     {
       name: 'godrayPass',
-      active: true,
+      active: false,
       constructor: new GodrayPass({
         fX: 0.5,
         fY: 0.5,
@@ -35,7 +35,7 @@ export default {
     },
     {
       name: 'tiltShiftPass',
-      active: true,
+      active: false,
       constructor: new TiltShiftPass({
         bluramount: 1.2,
         center: 1,
@@ -44,7 +44,7 @@ export default {
     },
     {
       name: 'noisePass',
-      active: true,
+      active: false,
       constructor: new NoisePass({
         amount: 0.02,
         speed: 0.1
@@ -52,7 +52,7 @@ export default {
     },
     {
       name: 'fxaaPass',
-      active: true,
+      active: false,
       constructor: new FXAAPass()
     }
   ]

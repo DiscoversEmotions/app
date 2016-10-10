@@ -2,7 +2,7 @@ console.log('Boot the app !');
 
 import Vue from 'vue';
 
-import App from '~/App';
+import App from '~/component/App';
 
 new Vue({
   el: '#app',

@@ -12,7 +12,7 @@ module.exports = function (paths, params, babel, eslint) {
     },
     resolve: {
       alias: {
-        '~': paths.clientComponents
+        '~': paths.client
       },
       extensions: ['.webpack.js', '.web.js', '.js', '.vue']
     },

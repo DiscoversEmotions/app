@@ -1,12 +1,12 @@
 import { PerspectiveCamera } from 'three';
-import OrbitControls from '../helpers/OrbitControls';
-import WindowManager from '../events/WindowManager';
-import GUI from '../helpers/GUI';
+import OrbitControls from './OrbitControls';
+import { WindowResizeSingleton } from './WindowResizeSingleton';
+import { GUISingleton } from './GUISingleton';
 
 /**
  * Camera class
  */
-class Camera extends PerspectiveCamera {
+export class Camera extends PerspectiveCamera {
 
   /**
    * constructor method
@@ -17,7 +17,7 @@ class Camera extends PerspectiveCamera {
     this.controls = new OrbitControls(this, element);
     this.controls.enabled = true;
 
-    WindowManager.add(this.resize.bind(this));
+    WindowResizeSingleton.getInstance().add(this.resize.bind(this));
 
     this.addGUI();
   }
@@ -26,7 +26,7 @@ class Camera extends PerspectiveCamera {
    * addGUI method
    */
   addGUI() {
-    GUI.add(this.controls, 'enabled', { label: 'OrbitControls' });
+    GUISingleton.getInstance().panel.add(this.controls, 'enabled', { label: 'OrbitControls' });
   }
 
   /**
@@ -47,5 +47,3 @@ class Camera extends PerspectiveCamera {
     this.updateProjectionMatrix();
   }
 }
-
-export default Camera;

@@ -1,12 +1,12 @@
 import { Mesh } from 'three';
+import { GUISingleton } from '~/core';
 import CubeGeometry from './CubeGeometry';
 import CubeMaterial from './CubeMaterial';
-import GUI from '../../helpers/GUI';
 
 /**
  * Cube class
  */
-class Cube extends Mesh {
+export class Cube extends Mesh {
 
   /**
    * constructor method
@@ -21,8 +21,9 @@ class Cube extends Mesh {
    * addGUI method
    */
   addGUI() {
-    const positionFolder = GUI.addFolder({ label: 'Cube Position' });
-    const scaleFolder = GUI.addFolder({ label: 'Cube Scale' });
+    const panel = GUISingleton.getInstance().panel;
+    const positionFolder = panel.addFolder({ label: 'Cube Position' });
+    const scaleFolder = panel.addFolder({ label: 'Cube Scale' });
 
     positionFolder.add(this.position, 'x', { label: 'position x', min: -20, max: 20, step: 1 });
     positionFolder.add(this.position, 'y', { label: 'position y', min: -20, max: 20, step: 1 });
@@ -41,5 +42,3 @@ class Cube extends Mesh {
     this.material.update(time);
   }
 }
-
-export default Cube;

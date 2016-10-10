@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <three-view />
+    <web-gl-main />
     <div class="content">
       <h1>Vue js is working !</h1>
       <p>
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import ThreeView from '~/ThreeView';
+import WebGLMain from '~/component/WebGLMain';
 
 export default {
   components: {
-    'three-view': ThreeView
+    'web-gl-main': WebGLMain
   },
   methods: {
     sayHello() {

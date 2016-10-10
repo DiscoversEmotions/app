@@ -1,23 +1,24 @@
 import { WebGLRenderer } from 'three';
-import WindowManager from '../events/WindowManager';
+import { WindowResizeSingleton } from './WindowResizeSingleton';
 
 /**
  * Renderer class
  */
-class Renderer extends WebGLRenderer {
+export class Renderer extends WebGLRenderer {
 
   /**
    * constructor method
    * @param {object} options Options
    */
   constructor(options = { antialias: true, alpha: true }) {
-    super(options);
+    console.log();
+    super();
 
     this.setSize(window.innerWidth, window.innerHeight);
     this.setPixelRatio(window.devicePixelRatio);
     this.setClearColor(0x0a0a0a, 1.0);
 
-    WindowManager.add(this.resize.bind(this));
+    WindowResizeSingleton.getInstance().add(this.resize.bind(this));
   }
 
   /**
@@ -29,5 +30,3 @@ class Renderer extends WebGLRenderer {
     this.setSize(width, height);
   }
 }
-
-export default Renderer;

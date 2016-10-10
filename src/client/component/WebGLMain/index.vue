@@ -4,14 +4,13 @@
 </template>
 
 <script>
-import App from '../core/App.js';
+import WebGLMainApp from './WebGLMainApp';
 
 export default {
   mounted() {
-    console.log(this.$el);
-    console.log('start three')
-    this.app = App.begin(this.$el);
-  },
+    this.app = new WebGLMainApp(this.$el);
+    this.app.boot();
+  }
 }
 </script>
 

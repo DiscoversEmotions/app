@@ -2,10 +2,22 @@ import Signal from 'min-signal';
 import { on } from 'dom-events';
 import debounce from 'lodash/debounce';
 
+let windowResizeSingletonInstance = null;
+
 /**
  * Window class
  */
-class WindowManager extends Signal {
+export class WindowResizeSingleton extends Signal {
+
+  /**
+   *
+   */
+  static getInstance() {
+    if (windowResizeSingletonInstance === null) {
+      windowResizeSingletonInstance = new WindowResizeSingleton();
+    }
+    return windowResizeSingletonInstance;
+  }
 
   /**
    * constructor method
@@ -23,5 +35,3 @@ class WindowManager extends Signal {
     this.dispatch(window.innerWidth, window.innerHeight);
   }
 }
-
-export default new WindowManager();
