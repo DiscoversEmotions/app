@@ -4,12 +4,17 @@
     <p>
       {{ sayHello() }}
     </p>
+    <three-view />
   </div>
 </template>
 
 <script>
+import ThreeView from '~/ThreeView';
 
 export default {
+  components: {
+    'three-view': ThreeView
+  },
   methods: {
     sayHello() {
       return 'Hello !!'

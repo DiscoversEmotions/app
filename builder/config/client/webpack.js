@@ -53,6 +53,14 @@ module.exports = function (paths, params, babel, eslint) {
       query: {
         name: '[name].[ext]?[hash]'
       }
+    },
+    {
+      test: /\.json$/,
+      loader: 'json'
+    },
+    {
+      test: /\.(glsl|vert|frag)$/,
+      loader: 'glsl-template'
     }
   );
 
@@ -64,6 +72,11 @@ module.exports = function (paths, params, babel, eslint) {
           sass: 'style!css!sass?indentedSyntax',
           scss: 'style!css!sass'
         }
+      },
+      glsl: {
+        chunksPath: './src/chunks', // Path to look chunks at
+        chunksExt: 'glsl', // Chunks extension
+        varPrefix: '$' // Every valid name that starts with this symbol will be treated as a template variable
       }
     })
   );
