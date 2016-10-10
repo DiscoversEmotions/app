@@ -10,10 +10,12 @@ export default function initSocket (store) {
   });
 
   socket.on('client-stats', function (data) {
-    data.errors = data.errors.map(errorString => ({
-      type: 'console',
-      content: errorString
-    }))
+    if (data && data.errors) {
+      data.errors = data.errors.map(errorString => ({
+        type: 'console',
+        content: errorString
+      }))
+    }
     store.dispatch({
       type: 'SET_CLIENT_STATS',
       payload: data
@@ -21,6 +23,7 @@ export default function initSocket (store) {
   });
 
   socket.on('client-status', function (data) {
+    console.log(data);
     store.dispatch({
       type: 'SET_CLIENT_STATUS',
       payload: data

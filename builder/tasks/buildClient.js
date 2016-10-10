@@ -13,11 +13,17 @@ module.exports = function buildClient (config, readline, monitor) {
   })
   .then(() => {
     return new Promise(function(resolve, reject) {
+      // Manually push webapck Plugin because I need monitor
+      const webpackConfig = config.client.webpack;
+      webpackConfig.plugins.push(
+        new webpack.ProgressPlugin(function handler(percentage, msg) {
+          monitor.updateClientStatus({ percentage, msg });
+        })
+      )
       const compiler = webpack(config.client.webpack);
-      compiler.plugin('done', function(stats, err) {
+      compiler.plugin('done', (stats) => {
         monitor.updateClientStats(stats);
-      });
-      var resolved = false;
+      })
 
       if (config.params.watchClient) {
         console.log('=> Webpack Watch');

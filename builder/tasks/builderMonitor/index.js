@@ -20,6 +20,8 @@ class BuilderMonitor {
     // data
     this._config = config;
     this._clientStats = null;
+    this._clientStatus = 'unknow';
+    // Init
     if (this._runMonitor) {
       this._init();
     }
@@ -41,6 +43,10 @@ class BuilderMonitor {
 
   updateClientStats(stats) {
     this._updateClientStats(stats);
+  }
+
+  updateClientStatus(data) {
+    this._updateClientStatus(data);
   }
 
   _init() {
@@ -111,6 +117,7 @@ class BuilderMonitor {
       });
       this._sendClientStats();
       this._sendConfig();
+      this._sendClientStatus
     });
   }
 
@@ -138,6 +145,14 @@ class BuilderMonitor {
   }
   _sendConfig() {
     this._trySend('config', this._config);
+  }
+
+  _updateClientStatus(data) {
+    this._clientStatus = data;
+    this._sendClientStatus();
+  }
+  _sendClientStatus(data) {
+    this._trySend('client-status', this._clientStatus);
   }
 }
 
