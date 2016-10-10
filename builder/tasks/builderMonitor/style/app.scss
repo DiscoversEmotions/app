@@ -12,19 +12,38 @@ html, body {
   padding: 0;
 }
 
+button {
+  border: none;
+  padding: 15px 30px;
+  border-radius: 3px;
+  background: #2196F3;
+  color: white;
+  transition-duration: .3s;
+  font-size: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background: #42A5F5;
+  }
+}
+
+.actions-tab {
+  padding: 20px;
+}
+
 .app-tabs {
   position: absolute;
   left: 0;
   top: 0;
   bottom: 0;
   width: 250px;
-  background: #212121;
+  background: #263238;
 
   .tab {
     cursor: pointer;
     vertical-align: top;
     height: 50px;
-    line-height: 50px;
+    line-height: 54px;
     padding: 0 30px;
     border-left: 7px solid transparent;
     color: white;
@@ -34,6 +53,7 @@ html, body {
 
     &.active {
       border-left: 7px solid #CFD8DC;
+      background: #37474F;
       opacity: 1;
     }
   }
@@ -116,6 +136,13 @@ html, body {
     background: rgba(#4FC3F7, 0.5);
     &:hover {
       background: rgba(#4FC3F7, 0.7);
+    }
+  }
+
+  .js-inline-null {
+    background: rgba(#E0E0E0, 0.5);
+    &:hover {
+      background: rgba(#E0E0E0, 0.7);
     }
   }
 

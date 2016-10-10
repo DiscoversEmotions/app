@@ -85,7 +85,7 @@ function Content ({ dispatch, object, localState, key, newPath, item }) {
     return null;
   }
   if (_.isObject(item)) {
-    if (_.isString(item.type)) {
+    if (_.isString(item.type) && !_.isNil(item.content)) {
       if (item.type === 'html') {
         return convertHTML(item.content);
       } else if (item.type === 'console') {
@@ -97,8 +97,10 @@ function Content ({ dispatch, object, localState, key, newPath, item }) {
             </pre>
           </div>
         );
+      } else if (item.type === 'git') {
+        // Do nothing, ignore
       } else {
-        return `Unknown type ${item.type}`;
+        return `Unknown type "${item.type}"`;
       }
     }
     return ObjectViewer({ dispatch, object, localState, key, path: newPath });
@@ -110,7 +112,7 @@ function ObjectViewer ({ dispatch, object, localState, key, path }) {
   var currentObject = path.length === 0 ? object : _.get(object, path, null);
   if (_.isNil(currentObject)) {
     return (
-      <p>null</p>
+      <span className='jv-pre jv-inline js-inline-null'>null</span>
     );
   }
   return (
