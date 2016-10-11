@@ -1,6 +1,6 @@
 import { Mesh } from 'three';
 import { GUISingleton } from '~/core';
-import CubeGeometry from './CubeGeometry';
+import CubeBufferGeometry from './CubeBufferGeometry';
 import CubeMaterial from './CubeMaterial';
 
 /**
@@ -12,7 +12,8 @@ export class Cube extends Mesh {
    * constructor method
    */
   constructor() {
-    super(new CubeGeometry(), new CubeMaterial({ wireframe: true }));
+    var geom = new CubeBufferGeometry();
+    super(geom, new CubeMaterial(geom));
   }
 
   /**

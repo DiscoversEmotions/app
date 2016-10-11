@@ -12,16 +12,16 @@ class CubeMaterial extends ShaderMaterial {
    * constructor method
    * @param {Object} options Options
    */
-  constructor(options) {
-    super(options);
-
-    this.vertexShader   = vertexShader();
-    this.fragmentShader = fragmentShader();
-
-    this.uniforms = {
+  constructor(geom) {
+    let uniforms = {
       time: { type: 'f', value: 0.0 },
       color: { type: 'c', value: new Color(0xffffff) }
     };
+    super({
+      vertexShader: vertexShader(),
+      fragmentShader: fragmentShader(),
+      uniforms
+    });
   }
 
   /**

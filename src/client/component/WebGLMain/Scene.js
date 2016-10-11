@@ -1,5 +1,7 @@
 import { Scene as CoreScene, GUISingleton } from '~/core';
-import { Cube } from '~/meshes/cube';
+import { Cube } from '~/meshes/Cube';
+import { Ground } from '~/meshes/Ground';
+import { PointLight, AmbientLight } from 'three';
 
 export class Scene extends CoreScene {
 
@@ -10,7 +12,13 @@ export class Scene extends CoreScene {
     console.trace('create my custom scene');
 
     this.cube1 = new Cube();
-    this.add( this.cube1 );
+    this.add(this.cube1);
+    this.ground = new Ground();
+    this.ground.position.z = -2;
+    this.add(this.ground);
+    this.mainLight = new AmbientLight();
+    this.mainLight.position.set(0, 0, 10);
+    this.add(this.mainLight);
 
     this.gui = GUISingleton.getInstance();
 
@@ -29,6 +37,10 @@ export class Scene extends CoreScene {
       scaleFolder.add(this.cube1.scale, 'x', { label: 'scale x', min: 0, max: 10, step: 0.1 });
       scaleFolder.add(this.cube1.scale, 'y', { label: 'scale y', min: 0, max: 10, step: 0.1 });
       scaleFolder.add(this.cube1.scale, 'z', { label: 'scale z', min: 0, max: 10, step: 0.1 });
+    });
+    this.gui.add('light', (panel) => {
+      let lightFolder = panel.addFolder({ label: 'Light' });
+      lightFolder.add(this.mainLight, 'color', { label: 'color' });
     });
   }
 
