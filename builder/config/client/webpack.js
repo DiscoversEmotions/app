@@ -14,7 +14,7 @@ module.exports = function (paths, params, babel, eslint) {
       alias: {
         '~': paths.client
       },
-      extensions: ['.webpack.js', '.web.js', '.js', '.vue']
+      extensions: ['.webpack.js', '.web.js', '.js', '.vue', '.glsl']
     },
     module: {
       loaders: [],

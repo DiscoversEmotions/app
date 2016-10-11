@@ -1,4 +1,4 @@
-import { Mesh, PlaneGeometry, MeshBasicMaterial } from 'three';
+import { Mesh, PlaneGeometry, MeshPhongMaterial, DoubleSide } from 'three';
 
 /**
  * Cube class
@@ -9,7 +9,8 @@ export class Ground extends Mesh {
    * constructor method
    */
   constructor() {
-    super(new PlaneGeometry(1000, 1000, 10, 10), new MeshBasicMaterial());
+    super(new PlaneGeometry(10, 10, 10, 10), new MeshPhongMaterial({color: 0xffff00, side: DoubleSide}));
+    this.rotation.x = Math.PI / 2;
   }
 
   /**

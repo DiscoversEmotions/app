@@ -21,6 +21,6 @@ export class Cube extends Mesh {
    * @param {number} time Time
    */
   update(time, dt) {
-    this.material.update(time);
+    this.material.update(time, dt);
   }
 }
