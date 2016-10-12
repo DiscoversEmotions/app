@@ -1,13 +1,10 @@
 import { PostProcessing as CorePostProcessing, GUISingleton } from '~/core';
-import * as Wagner from '@alex_toudic/wagner';
 import BoxBlurPass from '@alex_toudic/wagner/src/passes/box-blur/BoxBlurPass';
 import MultiPassBloomPass from '@alex_toudic/wagner/src/passes/bloom/MultiPassBloomPass';
 import BrightnessContrastPass from '@alex_toudic/wagner/src/passes/brightness-contrast/BrightnessContrastPass';
 import DOFPass from '@alex_toudic/wagner/src/passes/dof/DOFPass';
 import FXAAPass from '@alex_toudic/wagner/src/passes/fxaa/FXAAPass';
 import { Vector2 } from 'three';
-
-console.log(Wagner);
 
 export class PostProcessing extends CorePostProcessing {
 

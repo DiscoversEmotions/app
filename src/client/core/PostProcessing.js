@@ -1,4 +1,5 @@
 import { Composer } from '@alex_toudic/wagner';
+import { WindowResizeSingleton } from './WindowResizeSingleton';
 
 /**
  * PostProcessing
@@ -14,6 +15,12 @@ export class PostProcessing {
     this.renderer = renderer;
     this.effects = this.initEffects();
     this.composer = new Composer(renderer);
+
+    WindowResizeSingleton.getInstance().add(this.resize.bind(this));
+  }
+
+  resize(width, height) {
+    this.setSize(width * window.devicePixelRatio, height * window.devicePixelRatio);
   }
 
   initEffects () {

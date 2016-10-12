@@ -1,7 +1,12 @@
-import Vue from 'vue';
 import App from '~/component/App';
+import { store } from '~/redux';
+import dominus from 'dominus';
 
-new Vue({
-  el: '#app',
-  render: h => h(App)
+const appElement = dominus.find('#app');
+appElement.html('');
+const app = new App(appElement);
+
+store.subscribe(() => {
+  app.rootUpdate();
 });
+app.rootUpdate();

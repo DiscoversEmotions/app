@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = function (paths, params, babel, eslint) {
+module.exports = function (paths, params, babel, eslint, cssModules) {
   const webpackConfig = {
     entry: {
       'app': [paths.clientBoot]
@@ -14,7 +14,7 @@ module.exports = function (paths, params, babel, eslint) {
       alias: {
         '~': paths.client
       },
-      extensions: ['.webpack.js', '.web.js', '.js', '.vue', '.glsl']
+      extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl']
     },
     module: {
       loaders: [],
@@ -38,8 +38,12 @@ module.exports = function (paths, params, babel, eslint) {
 
   webpackConfig.module.loaders.push(
     {
-      test: /\.vue$/,
-      loader: 'vue'
+      test: /\.scss$/,
+      loaders: [
+        'style',
+        `css-loader?${JSON.stringify(cssModules)}`,
+        'sass'
+      ]
     },
     {
       test: /\.js$/,
@@ -66,13 +70,6 @@ module.exports = function (paths, params, babel, eslint) {
 
   webpackConfig.plugins.push(
     new webpack.LoaderOptionsPlugin({
-      vue: {
-        loaders: {
-          js: `babel?${JSON.stringify(babel)}`,
-          sass: 'style!css!sass?indentedSyntax',
-          scss: 'style!css!sass'
-        }
-      },
       glsl: {
         chunksPath: './src/chunks', // Path to look chunks at
         chunksExt: 'glsl', // Chunks extension
