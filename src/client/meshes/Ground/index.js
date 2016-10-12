@@ -10,7 +10,7 @@ export class Ground extends Mesh {
    */
   constructor() {
     super(new PlaneGeometry(10, 10, 10, 10), new MeshPhongMaterial({color: 0xffff00, side: DoubleSide}));
-    this.rotation.x = Math.PI / 2;
+    this.rotation.x = - Math.PI / 2;
   }
 
   /**

@@ -1,7 +1,7 @@
 import { Scene as CoreScene, GUISingleton } from '~/core';
 import { Cube } from '~/meshes/Cube';
 import { Ground } from '~/meshes/Ground';
-import { PointLight, AxisHelper } from 'three';
+import { PointLight, AxisHelper, MeshLambertMaterial } from 'three';
 
 export class Scene extends CoreScene {
 

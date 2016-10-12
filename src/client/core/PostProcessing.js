@@ -1,48 +1,41 @@
-import EffectComposer from './EffectComposer';
-// import postProcessingConfig from '../config/postProcessing';
+import { Composer } from '@alex_toudic/wagner';
 
 /**
  * PostProcessing
  */
-class PostProcessing {
+export class PostProcessing {
 
   /**
    * constructor method
-   * @param {Scene}    scene    Scene instance
-   * @param {Renderer} renderer Renderer instance
-   * @param {Camera}   camera   Camera instance
    */
-  constructor(scene, renderer, camera) {
-
-    this.scene    = scene;
+  constructor(renderer) {
+    // TODO: make it an option
+    this.active = true;
     this.renderer = renderer;
-    this.camera   = camera;
-    // this.config   = postProcessingConfig;
-
-    this.active   = this.config.active;
-    this.composer = new EffectComposer(this.renderer, this.config.effectComposer);
-    this.passes   = this.config.passes;
+    this.effects = this.initEffects();
+    this.composer = new Composer(renderer);
   }
 
-  /**
-   * update method
-   */
-  update() {
+  initEffects () {
+    return [];
+  }
 
+  update (time, dt) {
+
+  }
+
+  render (scene, camera) {
     if(this.active) {
-
       this.composer.reset();
-      this.composer.render(this.scene, this.camera);
-      this.passes
-        .filter(pass => pass.active)
-        .forEach(pass => this.composer.pass(pass.constructor));
+      this.composer.render(scene, camera);
+      this.effects
+        .filter(effect => effect.active)
+        .forEach(effect => {
+          this.composer.pass(effect.pass);
+        });
       this.composer.toScreen();
-
     } else {
-
-      this.renderer.render(this.scene, this.camera);
+      this.renderer.render(scene, camera);
     }
   }
 }
-
-export default PostProcessing;

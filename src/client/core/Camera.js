@@ -1,7 +1,6 @@
 import { PerspectiveCamera } from 'three';
-import OrbitControls from './OrbitControls';
+import { OrbitControls } from './OrbitControls';
 import { WindowResizeSingleton } from './WindowResizeSingleton';
-import { GUISingleton } from './GUISingleton';
 
 /**
  * Camera class
@@ -16,21 +15,8 @@ export class Camera extends PerspectiveCamera {
 
     this.controls = new OrbitControls(this, element);
     this.controls.enabled = true;
-
-    this.gui = GUISingleton.getInstance();
-
+    
     WindowResizeSingleton.getInstance().add(this.resize.bind(this));
-
-    this.addGUI();
-  }
-
-  /**
-   * addGUI method
-   */
-  addGUI() {
-    this.gui.add('camera', (panel) => {
-      panel.add(this.controls, 'enabled', { label: 'OrbitControls' });
-    });
   }
 
   /**

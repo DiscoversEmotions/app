@@ -1,6 +1,7 @@
 import { Renderer } from './Renderer';
 import { Camera } from './Camera';
 import { Scene } from './Scene';
+import { PostProcessing } from './PostProcessing';
 import { MainLoop } from './MainLoop';
 import { Clock } from './Clock';
 
@@ -11,10 +12,11 @@ export class WebGLCore {
 
   constructor(parentElement) {
     this.renderer = null;
-    this.parentElement = null;
     this.camera = null;
     this.scene = null;
+    this.postProcessing = null;
     this.mainLoop = null;
+
     this.parentElement = parentElement;
     this.clock = new Clock();
   }
@@ -23,6 +25,7 @@ export class WebGLCore {
     this.scene = this.initScene();
     this.camera = this.initCamera(this.parentElement);
     this.renderer = this.initRenderer();
+    this.postProcessing = this.initPostProcessing(this.renderer);
 
     // Add to the dom
     this.parentElement.appendChild(this.renderer.domElement);
@@ -47,16 +50,21 @@ export class WebGLCore {
     return new Scene();
   }
 
+  initPostProcessing (renderer) {
+    return new PostProcessing(renderer);
+  }
+
   render () {
     var dt = this.clock.getDelta();
     var time = this.clock.getElapsedTime();
     this.update(time, dt);
-    this.renderer.render(this.scene, this.camera);
+    this.postProcessing.render(this.scene, this.camera);
   }
 
   update (time, dt) {
     this.scene.update(time, dt);
     this.camera.update(time, dt);
+    this.postProcessing.update(time, dt);
   }
 
 }

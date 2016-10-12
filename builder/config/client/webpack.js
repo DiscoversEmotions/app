@@ -60,7 +60,7 @@ module.exports = function (paths, params, babel, eslint) {
     },
     {
       test: /\.(glsl|vert|frag)$/,
-      loader: 'glsl-template'
+      loader: 'webpack-glsl'
     }
   );
 

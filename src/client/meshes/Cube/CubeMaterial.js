@@ -1,7 +1,7 @@
 import { ShaderMaterial, Color, DoubleSide, UniformsUtils, UniformsLib, ShaderLib } from 'three';
 
-import vertexShader from './shader/cube_vert';
-import fragmentShader from './shader/cube_frag';
+import vertexShader from './shader/cube_vert.glsl';
+import fragmentShader from './shader/cube_frag.glsl';
 
 /**
  * CubeMaterial class
@@ -13,13 +13,12 @@ class CubeMaterial extends ShaderMaterial {
    * @param {Object} options Options
    */
   constructor(geom) {
-    console.log(ShaderLib['lambert']);
     let uniforms = UniformsUtils.merge([
       ShaderLib['lambert'].uniforms
     ]);
     super({
-      vertexShader: vertexShader(),
-      fragmentShader: fragmentShader(),
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
       uniforms,
       side: DoubleSide,
       transparent: true,

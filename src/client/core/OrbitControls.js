@@ -1,4 +1,4 @@
 import * as THREE from 'three';
-import OrbitControls from 'three-orbit-controls';
+import ThreeOrbitControls from 'three-orbit-controls';
 
-export default OrbitControls(THREE);
+export const OrbitControls = ThreeOrbitControls(THREE);
