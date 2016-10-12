@@ -1,9 +1,10 @@
 import { PostProcessing as CorePostProcessing, GUISingleton } from '~/core';
-import BoxBlurPass from '@alex_toudic/wagner/src/passes/box-blur/BoxBlurPass';
-import MultiPassBloomPass from '@alex_toudic/wagner/src/passes/bloom/MultiPassBloomPass';
-import BrightnessContrastPass from '@alex_toudic/wagner/src/passes/brightness-contrast/BrightnessContrastPass';
-import DOFPass from '@alex_toudic/wagner/src/passes/dof/DOFPass';
-import FXAAPass from '@alex_toudic/wagner/src/passes/fxaa/FXAAPass';
+import BoxBlurPass from 'wagner/src/passes/box-blur/BoxBlurPass';
+import MultiPassBloomPass from 'wagner/src/passes/bloom/MultiPassBloomPass';
+import BrightnessContrastPass from 'wagner/src/passes/brightness-contrast/BrightnessContrastPass';
+import DOFPass from 'wagner/src/passes/dof/DOFPass';
+import FXAAPass from 'wagner/src/passes/fxaa/FXAAPass';
+import DepthPass from '~/passes/depth/DepthPass';
 import { Vector2 } from 'three';
 
 export class PostProcessing extends CorePostProcessing {
@@ -65,6 +66,11 @@ export class PostProcessing extends CorePostProcessing {
         active: false,
         name: 'dof',
         pass: new DOFPass({ tBias: 1 })
+      },
+      {
+        active: true,
+        name: 'depth',
+        pass: new DepthPass()
       }
     ];
   }

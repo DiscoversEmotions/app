@@ -11,8 +11,9 @@ export class Renderer extends WebGLRenderer {
    * @param {object} options Options
    */
   constructor(options = { antialias: true, alpha: true }) {
+    console.log(options);
     console.log();
-    super();
+    super(options);
 
     this.setSize(window.innerWidth, window.innerHeight);
     this.setPixelRatio(window.devicePixelRatio);

@@ -18,7 +18,6 @@ export const actions = {
 };
 
 export function reducer (state = initialState, action) {
-  console.log(action.type);
   switch (action.type) {
   case actionsTypes.SET_LOADER_STATUS:
     return state.set('loader', action.payload);

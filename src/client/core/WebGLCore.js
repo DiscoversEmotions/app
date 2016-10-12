@@ -39,7 +39,20 @@ export class WebGLCore {
   }
 
   initRenderer () {
-    return new Renderer();
+    var canvas = document.createElement('canvas');
+    var gl;
+    try {
+      gl = canvas.getContext('webgl2');
+    } catch (err) {
+      console.error(err);
+    }
+    var isWebGL2 = Boolean(gl);
+    console.log('isWebGL2 : ' + isWebGL2);
+
+    return new Renderer({
+      canvas: canvas,
+      context: gl
+    });
   }
 
   initCamera (parentElement) {
@@ -51,7 +64,7 @@ export class WebGLCore {
   }
 
   initPostProcessing (renderer) {
-    return new PostProcessing(renderer);
+    return new Renderer(renderer);
   }
 
   render () {
