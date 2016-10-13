@@ -16,25 +16,6 @@ export class PostProcessing extends CorePostProcessing {
 
   addGui () {
     GUISingleton.getInstance().add('postProcessing', (panel) => {
-      let postProcessingFolder = panel.addFolder({ label: 'PostProcessing' });
-      postProcessingFolder.add(this, 'active', { label: 'active' });
-
-      postProcessingFolder.add(this.effects[0], 'active', { label: 'fxaa' });
-
-      postProcessingFolder.add(this.effects[1], 'active', { label: 'blur effect' });
-      postProcessingFolder.add(this.effects[1], 'shake', { label: 'blur shake' });
-
-      postProcessingFolder.add(this.effects[2], 'active', { label: 'bloom effect' });
-      postProcessingFolder.add(this.effects[2].pass, 'params', { label: 'bloom params' });
-
-      postProcessingFolder.add(this.effects[3], 'active', { label: 'brightness contrast effect' });
-      postProcessingFolder.add(this.effects[3].pass.params, 'brightness', { label: 'brightness params', step: 0.01, max: 1, min: -1 });
-      postProcessingFolder.add(this.effects[3].pass.params, 'contrast', { label: 'contrast params', step: 0.01, max: 2 });
-
-      postProcessingFolder.add(this.effects[4], 'active', { label: 'dof' });
-      postProcessingFolder.add(this.effects[4].pass.params, 'focalDistance', { label: 'dof params focalDistance', step: 0.01, max: 5 });
-      postProcessingFolder.add(this.effects[4].pass.params, 'aperture', { label: 'aperture', step: 0.01, max: 5 });
-      postProcessingFolder.add(this.effects[4].pass, 'params', { label: 'dof params' });
 
     });
   }
@@ -70,9 +51,26 @@ export class PostProcessing extends CorePostProcessing {
       {
         active: true,
         name: 'depth',
-        pass: new DepthPass()
+        pass: new DepthPass({ scene: this.scene, camera: this.camera})
       }
     ];
+
+    const pipeline = new EffectPipeline();
+    pipeline.add(new DepthPass({
+      name: 'depth'
+      inputs: {}
+    }));
+    pipeline.add(new DofPass({
+      name: 'dof'
+      inputs: {
+        depth: 'depth.main'
+      },
+      params: {
+        yolo: true
+      }
+    }));
+
+
   }
 
   update (time, dt) {

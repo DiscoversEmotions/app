@@ -12,8 +12,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     },
     resolve: {
       alias: {
-        '~': paths.client,
-        'wagner': '@alex_toudic/wagner'
+        '~': paths.client
       },
       extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl']
     },
