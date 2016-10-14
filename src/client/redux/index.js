@@ -6,6 +6,8 @@ const rootReducer = combineReducers(
   _.mapValues(units, unit => unit.reducer)
 );
 
-export const store = createStore(rootReducer);
+const enhancer = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+
+export const store = createStore(rootReducer, enhancer);
 
 export const actions = _.mapValues(units, unit => unit.actions);
