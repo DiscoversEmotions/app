@@ -1,13 +1,13 @@
 import { Component, connect } from '~/core';
 import { actions, store } from '~/redux';
 import dominus from 'dominus';
-import classes from './Loader';
+import styles from './Loader';
 
 class Loader extends Component {
 
   constructor($parent) {
     super($parent);
-    this.$el.addClass(classes.loader);
+    this.$el.addClass(styles.loader);
     this.$el.on(`click`, this.onElClick.bind(this));
   }
 
@@ -21,10 +21,10 @@ class Loader extends Component {
 
 }
 
-function selector (state, props) {
+function stateSelector (state, props) {
   return {
     loader: state.app.get(`loader`)
   };
 }
 
-export default connect(selector)(Loader);
+export default connect(stateSelector)(Loader);
