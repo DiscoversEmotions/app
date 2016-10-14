@@ -1,6 +1,6 @@
 import { store } from '~/redux';
 
-export function connect (selector) {
+export function ConnectToStore (selector) {
   return function (klass) {
     let oldUpdate = klass.prototype._update;
     function newUpdate (props) {

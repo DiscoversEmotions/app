@@ -1,5 +1,5 @@
 import { Scene as ThreeScene } from 'three';
-import { Clock } from './Clock';
+import { Clock } from '~/core/utils';
 
 /**
  * Scene class

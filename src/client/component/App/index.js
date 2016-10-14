@@ -1,6 +1,6 @@
 import WebGLMain from '~/component/WebGLMain';
 import Loader from '~/component/Loader';
-import { Component, connect } from '~/core';
+import { Component, ConnectToStore } from '~/core/interface';
 import dominus from 'dominus';
 import styles from './App';
 
@@ -19,4 +19,4 @@ class App extends Component {
 
 }
 
-export default connect()(App);
+export default ConnectToStore()(App);

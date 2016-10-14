@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Pass } from './Pass';
 import { Pipe } from './Pipe';
 
-export class Composer extends Pass {
+export class Pipeline extends Pass {
 
   /**
    * options: {
@@ -22,7 +22,7 @@ export class Composer extends Pass {
     this.pipes = [];
     this.outputs = {};
     this.resolved = false;
-    this.isComposer = true;
+    this.isPipeline = true;
   }
 
   addPipe (pipe) {
@@ -71,7 +71,6 @@ export class Composer extends Pass {
     const resolveDependencies = (inputs, pipe) => {
       // find dependencies
       _.forEach(inputs, (path) => {
-        console.log(path);
         const pathArray = path.split(`.`);
         const pipeName = pathArray[0];
         const outputName = pathArray[1];
@@ -117,6 +116,14 @@ export class Composer extends Pass {
     }
   }
 
+  renderPipe (pipe, inputs) {
+    return pipe.render(inputs);
+  }
+
+  buildInitialInputs (inputs) {
+    return inputs;
+  }
+
   /**
    * override render to resolvePipesDependencies before
    * @type {Object}
@@ -127,10 +134,10 @@ export class Composer extends Pass {
   }
 
   run (inputs) {
-    this.outputs[`inputs`] = inputs;
+    this.outputs[`inputs`] = this.buildInitialInputs(inputs);
     _.forEach(this.orderedPipes, pipe => {
       const pipeInputs = this.mapInputsBinding(pipe.getInputsBinding());
-      this.outputs[pipe.name] = pipe.render(pipeInputs);
+      this.outputs[pipe.name] = this.renderPipe(pipe, pipeInputs);
     });
     return this.mapInputsBinding(this.outputsBindings);
   }

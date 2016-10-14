@@ -1,6 +1,6 @@
-import { Composer, Pipe, Pass } from '~/core';
+import { Pipeline, Pipe, Pass } from '~/core/pipeline';
 
-console.log(`Configure Composer`);
+console.log(`Configure Pipeline`);
 
 class GenerateRandomNumberPass extends Pass {
   constructor() {
@@ -12,7 +12,6 @@ class GenerateRandomNumberPass extends Pass {
 
   run (inputs) {
     const val = Math.floor(Math.random() * 100);
-    console.log(`Generate ${val}`);
     return {
       out: val
     };
@@ -50,7 +49,7 @@ class MultiplyPass extends Pass {
   }
 }
 
-const subComposer = new Composer({
+const subPipeline = new Pipeline({
   inputsNames: [`in`]
 })
 .addPipe(new Pipe({
@@ -64,7 +63,7 @@ const subComposer = new Composer({
   out: `multi1.out`
 });
 
-const mainComposer = new Composer()
+const mainPipeline = new Pipeline()
 .addPipe(new Pipe({
   name: `random`,
   pass: new GenerateRandomNumberPass(),
@@ -87,15 +86,16 @@ const mainComposer = new Composer()
 }))
 .addPipe(new Pipe({
   name: `sub-compo`,
-  pass: subComposer,
+  pass: subPipeline,
   inputsBinding: {
     in: `multi2.out`
   }
 }))
 .setOutputsBindings({
-  out: `sub-compo.out`
+  out: `sub-compo.out`,
+  out2: `random.out`
 });
 
-console.log(mainComposer.render({}));
+console.log(mainPipeline.render({}));
 
-export default mainComposer;
+export default mainPipeline;

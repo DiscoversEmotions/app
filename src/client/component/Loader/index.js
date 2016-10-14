@@ -1,4 +1,4 @@
-import { Component, connect } from '~/core';
+import { Component, ConnectToStore } from '~/core/interface';
 import { actions, store } from '~/redux';
 import dominus from 'dominus';
 import styles from './Loader';
@@ -27,4 +27,4 @@ function stateSelector (state, props) {
   };
 }
 
-export default connect(stateSelector)(Loader);
+export default ConnectToStore(stateSelector)(Loader);

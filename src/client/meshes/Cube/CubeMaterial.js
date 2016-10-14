@@ -14,7 +14,7 @@ class CubeMaterial extends ShaderMaterial {
    */
   constructor(geom) {
     let uniforms = UniformsUtils.merge([
-      ShaderLib['lambert'].uniforms
+      ShaderLib[`lambert`].uniforms
     ]);
     super({
       vertexShader: vertexShader,

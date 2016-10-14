@@ -37,12 +37,12 @@ export default class DepthPass extends Pass {
     var postQuad = new THREE.Mesh(postPlane, this.postMaterial);
     this.postScene = new THREE.Scene();
     this.postScene.add(postQuad);
-
   }
 
   run (composer) {
 
     composer.renderer.render(this.scene, this.camera, this.secondTarget);
+    composer.renderer.render(this.scene, this.camera);
     this.postMaterial.uniforms.tDepth.value = this.secondTarget.depthTexture;
     this.postMaterial.uniforms.tDiffuse.value = this.secondTarget.texture;
     this.postMaterial.uniforms.cameraNear.value = 0.1;

@@ -1,7 +1,7 @@
-import { GUISingleton } from '~/core';
-import { WebGLCore } from '~/core';
+import { GUISingleton } from '~/core/utils';
+import { Core as WebGLCore } from '~/core/webgl';
 import { Scene } from './Scene';
-import { PostProcessing } from './PostProcessing';
+import { Pipe } from '~/core/pipeline';
 
 class WebGLMainApp extends WebGLCore {
 
@@ -15,8 +15,12 @@ class WebGLMainApp extends WebGLCore {
     return camera;
   }
 
-  initPostProcessing (renderer) {
-    return new PostProcessing(renderer);
+  initRenderPipeline (renderer, scene, camera) {
+    return super.initRenderPipeline(renderer, scene, camera)
+    // .addPipe(new Pipe({
+    //   name: `test`
+    //
+    // }))
   }
 
 }

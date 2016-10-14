@@ -10,7 +10,7 @@ export class MainLoop extends Signal {
   /**
    * constructor method
    */
-  constructor(fn, targetFrameRate) {
+  constructor(fn) {
     super();
 
     this.running = false;
@@ -30,6 +30,7 @@ export class MainLoop extends Signal {
     this.running = true;
     this.last = now();
     this._frame = raf(this._tick);
+    // this._frame = setTimeout(this._tick, 2000);
     return this;
   }
 
@@ -44,6 +45,7 @@ export class MainLoop extends Signal {
 
   tick () {
     this._frame = raf(this._tick);
+    // this._frame = setTimeout(this._tick, 2000);
     var time = now();
     var dt = (time - this.last) / 1000;
     this.dispatch(dt);
