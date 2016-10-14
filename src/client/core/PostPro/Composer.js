@@ -125,7 +125,7 @@ export class Composer extends Pass {
     _.forEach(this.orderedPipes, pipe => {
       const pipeInputs = this.mapInputsBinding(pipe.getInputsBinding());
       this.outputs[pipe.name] = pipe.render(pipeInputs);
-    })
+    });
     return this.mapInputsBinding(this.outputsBindings);
   }
 

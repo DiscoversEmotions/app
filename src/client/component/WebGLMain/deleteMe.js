@@ -76,11 +76,11 @@ mainComposer.addPipe(new Pipe({
 }));
 
 mainComposer.setOutputsBindings({
-  main: `multi2.out`
+  random: `random.out`,
+  multi2: `multi2.out`,
+  multi1: `multi1.out`
 });
 
 console.log(mainComposer.render({}));
-
-console.log(mainComposer);
 
 export default mainComposer;

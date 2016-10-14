@@ -29,7 +29,7 @@ export class Clock {
   getDelta(key) {
     var diff = 0;
     if (!this.running) {
-      throw new Error('Clock is not running !');
+      throw new Error(`Clock is not running !`);
       return;
     }
     var newTime = now();
