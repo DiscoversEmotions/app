@@ -12,6 +12,7 @@ export class Pass {
 
     this.validated = false;
     this.active = true;
+    this.isPass = true;
   }
 
   getOutputsNames () {
@@ -38,8 +39,6 @@ export class Pass {
 
   validateInputs (inputs) {
     if (inputs.length > 0 && !_.includes(this.inputsNames, _.keys(inputs))) {
-      console.log(inputs);
-      console.log(this.inputsNames);
       throw new Error(`You tried to run with inputs [${_.keys(inputs).join(`, `)}] but valid inputs are [${this.inputsNames.join(`, `)}]`);
     }
   }

@@ -20,8 +20,11 @@ export class Pipe {
     }
     this.name = options.name;
     // Pass
-    if (!(options.pass instanceof Pass)) {
+    if (!(options.pass && options.pass.isPass)) {
       throw new Error(`'options.pass' must be a Pass instance`);
+    }
+    if (options.pass.isComposer) {
+      options.pass.resolvePipesDependencies();
     }
     // Pass should be valid when added to a pipe
     options.pass.validatePass();
@@ -37,13 +40,12 @@ export class Pipe {
   validateInputsBinding (inputsBinding) {
     const validInputs = this.pass.inputsNames;
     _.forEach(inputsBinding, (path, inputName) => {
-      if (true) {
-        if (!_.includes(validInputs, inputName)) {
-          throw new Error(`Invalid inputsBinding '${inputName}' valid inputs are [${this.inputsNames.join(`, `)}]`);
-        }
-        if (path.split(`.`).length !== 2) {
-          throw new Error(`Invalid inputsBinding path '${path}', format is '[pipeName].[outputName]'`);
-        }
+      if (!_.includes(validInputs, inputName)) {
+        console.log(this);
+        throw new Error(`Invalid inputsBinding '${inputName}' valid inputs are [${this.inputsNames.join(`, `)}]`);
+      }
+      if (path.split(`.`).length !== 2) {
+        throw new Error(`Invalid inputsBinding path '${path}', format is '[pipeName].[outputName]'`);
       }
     });
   }

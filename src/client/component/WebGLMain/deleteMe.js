@@ -50,35 +50,50 @@ class MultiplyPass extends Pass {
   }
 }
 
-const mainComposer = new Composer();
+const subComposer = new Composer({
+  inputsNames: [`in`]
+})
+.addPipe(new Pipe({
+  name: `multi1`,
+  pass: new MultiplyByPass(4),
+  inputsBinding: {
+    in: `inputs.in`
+  }
+}))
+.setOutputsBindings({
+  out: `multi1.out`
+});
 
-mainComposer.addPipe(new Pipe({
+const mainComposer = new Composer()
+.addPipe(new Pipe({
   name: `random`,
   pass: new GenerateRandomNumberPass(),
   inputsBinding: {}
-}));
-
-mainComposer.addPipe(new Pipe({
+}))
+.addPipe(new Pipe({
   name: `multi1`,
   pass: new MultiplyByPass(4),
   inputsBinding: {
     in: `random.out`
   }
-}));
-
-mainComposer.addPipe(new Pipe({
+}))
+.addPipe(new Pipe({
   name: `multi2`,
   pass: new MultiplyPass(),
   inputsBinding: {
     in1: `multi1.out`,
     in2: `random.out`
   }
-}));
-
-mainComposer.setOutputsBindings({
-  random: `random.out`,
-  multi2: `multi2.out`,
-  multi1: `multi1.out`
+}))
+.addPipe(new Pipe({
+  name: `sub-compo`,
+  pass: subComposer,
+  inputsBinding: {
+    in: `multi2.out`
+  }
+}))
+.setOutputsBindings({
+  out: `sub-compo.out`
 });
 
 console.log(mainComposer.render({}));

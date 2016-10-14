@@ -22,6 +22,7 @@ export class Composer extends Pass {
     this.pipes = [];
     this.outputs = {};
     this.resolved = false;
+    this.isComposer = true;
   }
 
   addPipe (pipe) {
@@ -30,12 +31,14 @@ export class Composer extends Pass {
     }
     this.pipes.push(pipe);
     this.setDirty();
+    return this;
   }
 
   setOutputsBindings (outputsBindings) {
     this.outputsBindings = _.isNil(outputsBindings) ? {} : outputsBindings;
     this.outputsNames = _.keys(this.outputsBindings);
     this.setDirty();
+    return this;
   }
 
   /**
@@ -73,6 +76,9 @@ export class Composer extends Pass {
         const pipeName = pathArray[0];
         const outputName = pathArray[1];
         // pipe exist ?
+        if (pipeName === `inputs`) {
+          return;
+        }
         const dependPipe = this.getPipe(pipeName);
         if (_.isNil(dependPipe)) {
           throw new Error(`Can't find pipe named '${pipeName}' while resolving ${pipe ? pipe.name : `entry-pipe`}`);
