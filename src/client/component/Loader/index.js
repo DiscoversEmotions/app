@@ -8,7 +8,7 @@ class Loader extends Component {
   constructor($parent) {
     super($parent);
     this.$el.addClass(classes.loader);
-    this.$el.on('click', this.onElClick.bind(this));
+    this.$el.on(`click`, this.onElClick.bind(this));
   }
 
   onElClick (e) {
@@ -16,14 +16,14 @@ class Loader extends Component {
   }
 
   update () {
-    this.$el.css('background', this.props.loader ? 'blue' : 'red');
+    this.$el.css(`background`, this.props.loader ? `blue` : `red`);
   }
 
 }
 
 function selector (state, props) {
   return {
-    loader: state.app.get('loader')
+    loader: state.app.get(`loader`)
   };
 }
 

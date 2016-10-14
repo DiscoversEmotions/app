@@ -10,7 +10,7 @@ export class Component {
     this.children = {};
     this.props = null;
     if (elem === undefined) {
-      this.$el = dominus(document.createElement('div'));
+      this.$el = dominus(document.createElement(`div`));
     }
     else if (elem === null) {
       this.$el = $parent;

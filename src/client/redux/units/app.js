@@ -5,7 +5,7 @@ export const initialState = Map({
 });
 
 export const actionsTypes = {
-  SET_LOADER_STATUS: 'app/SET_LOADER_STATUS'
+  SET_LOADER_STATUS: `app/SET_LOADER_STATUS`
 };
 
 export const actions = {
@@ -20,7 +20,7 @@ export const actions = {
 export function reducer (state = initialState, action) {
   switch (action.type) {
   case actionsTypes.SET_LOADER_STATUS:
-    return state.set('loader', action.payload);
+    return state.set(`loader`, action.payload);
   default:
     return state;
   }

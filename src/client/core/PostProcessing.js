@@ -1,11 +1,8 @@
-import { Composer, CopyPass } from 'wagner';
+import { Composer } from './Composer';
 import { WindowResizeSingleton } from './WindowResizeSingleton';
 import { WebGLRenderTarget } from 'three';
 import DepthPass from '~/passes/depth/DepthPass';
 import * as THREE from 'three';
-
-import vertex from '~/passes/depth/depth_vert';
-import fragment from '~/passes/depth/depth_frag';
 
 /**
  * PostProcessing
@@ -53,4 +50,5 @@ export class PostProcessing {
       this.renderer.render(scene, camera);
     }
   }
+
 }

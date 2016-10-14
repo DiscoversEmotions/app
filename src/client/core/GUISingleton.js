@@ -28,7 +28,7 @@ export class GUISingleton {
   }
 
   add(adderKey, adder) {
-    console.log('Add ' + adderKey);
+    console.log(`Add ${adderKey}`);
     this._adders[adderKey] = adder;
     this._updatePanel();
   }
@@ -46,7 +46,7 @@ export class GUISingleton {
       add: (obj, propName, annotation) => add(obj, propName, annotation, target),
       addFolder: annotation => {
         let api = [];
-        oui.annotate({ label: 'folder', ...annotation })(target, target.push(api) - 1);
+        oui.annotate({ label: `folder`, ...annotation })(target, target.push(api) - 1);
         return addFolder(api);
       },
       reset: () => {

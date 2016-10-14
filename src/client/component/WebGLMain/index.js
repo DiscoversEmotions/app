@@ -1,16 +1,17 @@
 import { Component, connect } from '~/core';
-import WebGLMainApp from './WebGLMainApp';
+// import WebGLMainApp from './WebGLMainApp';
 import dominus from 'dominus';
-import classes from './WebGLMain';
+import styles from './WebGLMain';
+import mainComposer from './deleteMe';
 
 class WebGLMain extends Component {
 
   constructor ($parent) {
     super($parent);
-    this.$el.addClass(classes.container);
+    this.$el.addClass(styles.container);
 
-    this.webGLApp = new WebGLMainApp(this.$el[0]);
-    this.webGLApp.boot();
+    // this.webGLApp = new WebGLMainApp(this.$el[0]);
+    // this.webGLApp.boot();
   }
 
   update () {

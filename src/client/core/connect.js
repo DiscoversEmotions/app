@@ -14,7 +14,7 @@ export function connect (selector) {
       });
     };
 
-    Object.defineProperty(klass.prototype, '_update', {
+    Object.defineProperty(klass.prototype, `_update`, {
       value: newUpdate,
       enumerable: false,
       configurable: true,

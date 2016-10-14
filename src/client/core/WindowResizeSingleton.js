@@ -25,7 +25,7 @@ export class WindowResizeSingleton extends Signal {
   constructor() {
     super();
 
-    on(window, 'resize', debounce(this.handleResize.bind(this), 100));
+    on(window, `resize`, debounce(this.handleResize.bind(this), 100));
   }
 
   /**

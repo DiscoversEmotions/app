@@ -10,8 +10,8 @@ class App extends Component {
     super($parent);
     this.$el.addClass(classes.container);
 
-    this.addChild('webGLApp', WebGLMain);
-    this.addChild('loader', Loader);
+    this.addChild(`webGLApp`, WebGLMain);
+    this.addChild(`loader`, Loader);
   }
 
   update () {

@@ -23,7 +23,7 @@ module.exports = function () {
       ],
       "quotes": [
         "error",
-        "single"
+        "backtick"
       ],
       "semi": [
         "error",
