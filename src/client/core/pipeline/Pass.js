@@ -3,7 +3,7 @@ import _ from 'lodash';
 export class Pass {
 
   /**
-   * { inputsNames, outputsNames }
+   * {  }
    * @type {Object}
    */
   constructor(options = {}) {
@@ -11,7 +11,6 @@ export class Pass {
     this.outputsNames = options.outputsNames;
 
     this.validated = false;
-    this.active = true;
     this.isPass = true;
   }
 

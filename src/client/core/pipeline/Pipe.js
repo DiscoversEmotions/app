@@ -4,93 +4,70 @@ import { Pass } from './Pass';
 export class Pipe {
 
   /**
-   * options: { name, pass, inputsBinding }
-   * @type {Object}
+   *
    */
-  constructor(options = {}) {
-    // Name
-    if (!_.isString(options.name)) {
-      throw new Error(`A pipe must have a name in his options`);
-    }
-    if (options.name.indexOf(`.`) !== -1) {
-      throw new Error(`A pipe name can't contain a point, you name the pipe "${options.name}"`);
-    }
-    if (options.name == `inputs`) {
-      throw new Error(`A pipe can't be named 'inputs'`);
-    }
-    this.name = options.name;
-    // Pass
-    if (!(options.pass && options.pass.isPass)) {
-      throw new Error(`'options.pass' must be a Pass instance`);
-    }
-    if (options.pass.isComposer) {
-      options.pass.resolvePipesDependencies();
-    }
-    // Pass should be valid when added to a pipe
-    options.pass.validatePass();
-    this.pass = options.pass;
-    // InputsBinding
-    this.validateInputsBinding(options.inputsBinding);
-    this.inputsBinding = options.inputsBinding;
+  constructor(inputsNames, outputsNames) {
+    this._active = true;
+    this._dirty = true;
+    this.isPipe = true;
 
-    this.dependencies = [];
-    this.priority = 0;
+    // inputsNames
+    this._inputsNames = inputsNames || null;
+
+    // outputsNames
+    this._outputsNames = outputsNames || null;
   }
 
-  validateInputsBinding (inputsBinding) {
-    const validInputs = this.pass.inputsNames;
-    _.forEach(inputsBinding, (path, inputName) => {
-      if (!_.includes(validInputs, inputName)) {
-        console.log(this);
-        throw new Error(`Invalid inputsBinding '${inputName}' valid inputs are [${this.inputsNames.join(`, `)}]`);
-      }
-      if (path.split(`.`).length !== 2) {
-        throw new Error(`Invalid inputsBinding path '${path}', format is '[pipeName].[outputName]'`);
-      }
-    });
-  }
-
-  getInputsBinding () {
-    return this.inputsBinding;
-  }
-
-  setInputsBinding (inputsBinding) {
-    this.inputsBinding = inputsBinding;
-  }
-
-  getPass () {
-    return this.pass;
-  }
-
-  resetDependencies () {
-    this.dependencies = [];
-    this.priority = 0;
-  }
-
-  getAllDependencies () {
-    return _.concat(_.flatten(_.map(this.dependencies, dep => dep.getAllDependencies())));
-  }
-
-  hasDependency (dependencyPipe) {
-    return _.includes(this.getAllDependencies(), dependencyPipe.name);
-  }
-
-  setPriorityGreaterThan (prio) {
-    if (prio >= this.priority) {
-      this.priority = prio + 1;
+  validateInputs (inputs) {
+    if (inputs.length > 0 && !_.includes(this._inputsNames, _.keys(inputs))) {
+      throw new Error(`You tried to run with inputs [${_.keys(inputs).join(`, `)}] but valid inputs are [${this._inputsNames.join(`, `)}]`);
     }
   }
 
-  addDependency (dependencyPipe) {
-    if (dependencyPipe.hasDependency(this)) {
-      throw new Error(`There is a circular dependency in ${this.name}.\n ${this.name} is a parent of ${dependencyPipe.name}`);
+  validateOutputs (outputs) {
+    if (outputs.length > 0 && !_.includes(this._outputsNames, _.keys(outputs))) {
+      throw new Error(`The run or passThrough return [${_.keys(outputs).join(`, `)}] but valid outputs are [${this._outputsNames.join(`, `)}]`);
     }
-    dependencyPipe.setPriorityGreaterThan(this.priority);
-    this.dependencies.push(dependencyPipe.name);
   }
 
+  validate () {
+    // To be `runnable` a pipe must have inputsNames and outputsNames not null
+    if (!_.isArray(this._inputsNames)) {
+      throw new Error(`'inputsNames' must be an array (it can be empty)`);
+    }
+    if (!_.isArray(this._outputsNames)) {
+      throw new Error(`'outputsNames' must be an array (it can be empty)`);
+    }
+    if (this._outputsNames.length === 0) {
+      console.warn(`Warning, pipe have no output.`);
+    }
+  }
+
+  // this is executed by composer
   render (inputs) {
-    return this.pass.render(inputs);
+    if (this._dirty) {
+      this.validate();
+    }
+    this.validateInputs(inputs);
+    var outputs;
+    if (this._active) {
+      outputs = this.run(inputs);
+    } else {
+      outputs = this.passThrough(inputs);
+    }
+    this.validateOutputs(outputs);
+    return outputs;
+  }
+
+  // override this
+  run (inputs) {
+    return {};
+  }
+
+  // override this
+  // this is called when pipe.active is false
+  passThrough (inputs) {
+    return {};
   }
 
 }

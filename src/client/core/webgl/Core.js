@@ -2,7 +2,7 @@ import {
   Mesh, Scene as ThreeScene, PlaneBufferGeometry, OrthographicCamera, MeshBasicMaterial
 } from 'three';
 import { Renderer, Scene, Camera } from '.';
-import { Clock, MainLoop } from '~/core/utils';
+import { Clock, MainLoop, WindowResizeSingleton } from '~/core/utils';
 import { Pipe } from '~/core/pipeline';
 import { PostProcessingPipeline, QuadRenderer } from '~/core/webgl/postpro';
 import { RenderPass } from '~/core/webgl/postpro/passes/RenderPass';
@@ -14,8 +14,8 @@ import raf from 'raf';
 export class Core {
 
   constructor(parentElement) {
-    this.width = null;
-    this.height = null;
+    this.width = 600;
+    this.height = 600;
     this.parentElement = parentElement;
     this.scene = this.initScene();
     this.camera = this.initCamera(this.parentElement);
@@ -36,6 +36,8 @@ export class Core {
     raf(() => {
       this.setSize(this.parentElement.offsetWidth, this.parentElement.offsetHeight);
     });
+
+    WindowResizeSingleton.getInstance().add(this.setSize.bind(this));
 
   }
 
@@ -61,7 +63,8 @@ export class Core {
   }
 
   initCamera (parentElement) {
-    return new Camera(parentElement, 75, window.innerWidth / window.innerHeight, 0.1, 100);
+    console.log(this.width, this.height);
+    return new Camera(parentElement, 75, this.width / this.height, 0.1, 100);
   }
 
   initScene () {
@@ -107,6 +110,12 @@ export class Core {
     this.height = height;
     this.screen.setSize(width, height);
     this.renderer.setSize(width, height);
+    this.camera.setSize(width, height);
+    this.pipeline.setSize(width, height);
+  }
+
+  resize (winWidth, winHeight) {
+    this.setSize(this.parentElement.offsetWidth, this.parentElement.offsetHeight);
   }
 
   toScreen (out) {

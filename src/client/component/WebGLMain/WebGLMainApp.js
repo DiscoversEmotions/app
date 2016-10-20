@@ -16,7 +16,7 @@ class WebGLMainApp extends WebGLCore {
   }
 
   initRenderPipeline (renderer, scene, camera) {
-    return super.initRenderPipeline(renderer, scene, camera)
+    return super.initRenderPipeline(renderer, scene, camera);
     // .addPipe(new Pipe({
     //   name: `test`
     //

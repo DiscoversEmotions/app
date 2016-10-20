@@ -1,13 +1,10 @@
-import { Pipeline, Pipe, Pass } from '~/core/pipeline';
+import { Pipeline, Pipe } from '~/core/pipeline';
 
 console.log(`Configure Pipeline`);
 
-class GenerateRandomNumberPass extends Pass {
-  constructor() {
-    super({
-      inputsNames: [],
-      outputsNames: [`out`]
-    });
+class GenerateRandomNumberPipe extends Pipe {
+  constructor(name) {
+    super([],[`out`]);
   }
 
   run (inputs) {
@@ -18,28 +15,22 @@ class GenerateRandomNumberPass extends Pass {
   }
 }
 
-class MultiplyByPass extends Pass {
+class MultiplyByPipe extends Pipe {
   constructor(mulBy) {
-    super({
-      inputsNames: [`in`],
-      outputsNames: [`out`]
-    });
-    this.mulBy = mulBy;
+    super([`in`], [`out`]);
+    this._mulBy = mulBy;
   }
 
   run (inputs) {
     return {
-      out: inputs.in * this.mulBy
+      out: inputs.in * this._mulBy
     };
   }
 }
 
-class MultiplyPass extends Pass {
+class MultiplyPipe extends Pipe {
   constructor() {
-    super({
-      inputsNames: [`in1`, `in2`],
-      outputsNames: [`out`]
-    });
+    super([`in1`, `in2`], [`out`]);
   }
 
   run (inputs) {
@@ -49,49 +40,53 @@ class MultiplyPass extends Pass {
   }
 }
 
-const subPipeline = new Pipeline({
-  inputsNames: [`in`]
+const subPipeline = new Pipeline([`in`], [`out`])
+.mapInputs({
+  in: `in`
 })
-.addPipe(new Pipe({
+.addPipe({
   name: `multi1`,
-  pass: new MultiplyByPass(4),
-  inputsBinding: {
-    in: `inputs.in`
-  }
-}))
-.setOutputsBindings({
-  out: `multi1.out`
+  mapInputs: { in: `inputs.in` },
+  pipe: new MultiplyByPipe(4),
+  mapOutputs: { yolo: `out` }
+})
+.mapOutputs({
+  out: `multi1.yolo`
 });
 
-const mainPipeline = new Pipeline()
-.addPipe(new Pipe({
+const mainPipeline = new Pipeline([], [`out`, `out2`])
+.addPipe({
   name: `random`,
-  pass: new GenerateRandomNumberPass(),
-  inputsBinding: {}
-}))
-.addPipe(new Pipe({
+  mapInputs: {},
+  pipe: new GenerateRandomNumberPipe(),
+  mapOutputs: { out: `out` }
+})
+.addPipe({
   name: `multi1`,
-  pass: new MultiplyByPass(4),
-  inputsBinding: {
+  mapInputs: {
     in: `random.out`
-  }
-}))
-.addPipe(new Pipe({
+  },
+  pipe: new MultiplyByPipe(4),
+  mapOutputs: { out: `out` }
+})
+.addPipe({
   name: `multi2`,
-  pass: new MultiplyPass(),
-  inputsBinding: {
+  mapInputs: {
     in1: `multi1.out`,
     in2: `random.out`
-  }
-}))
-.addPipe(new Pipe({
+  },
+  pipe: new MultiplyPipe(),
+  mapOutputs: { out: `out` }
+})
+.addPipe({
   name: `sub-compo`,
-  pass: subPipeline,
-  inputsBinding: {
+  mapInputs: {
     in: `multi2.out`
-  }
-}))
-.setOutputsBindings({
+  },
+  pipe: subPipeline,
+  mapOutputs: { out: `out` }
+})
+.mapOutputs({
   out: `sub-compo.out`,
   out2: `random.out`
 });

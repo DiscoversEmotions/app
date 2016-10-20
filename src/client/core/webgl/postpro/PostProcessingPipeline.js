@@ -54,7 +54,7 @@ export class PostProcessingPipeline extends Pipeline {
   }
 
   setSize (width, height) {
-
+    _.forEach(this.pipes, (pipe) => pipe.setSize(width, height));
   }
 
 }

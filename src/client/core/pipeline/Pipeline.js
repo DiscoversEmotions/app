@@ -1,42 +1,35 @@
 import _ from 'lodash';
-import { Pass } from './Pass';
 import { Pipe } from './Pipe';
 
-export class Pipeline extends Pass {
+export class Pipeline extends Pipe {
 
   /**
-   * options: {
-   *   outputsBindings: { yolo: 'hey.yolo' },
-   *   inputsNames: []
-   * }
+   *
    */
-  constructor (options = {}) {
-    options.outputsBindings = _.defaultTo(options.outputsBindings, {});
-    options.inputsNames = _.defaultTo(options.inputsNames, []);
+  constructor (inputsNames, outputsNames) {
+    super(inputsNames, outputsNames);
 
-    super({
-      inputsNames: options.inputsNames,
-      outputsNames: _.keys(options.outputsBindings)
-    });
+    this._pipelineItems = []; // Array of PipelineItem
+    this._outputs = {};
+    this._resolved = false;
 
-    this.pipes = [];
-    this.outputs = {};
-    this.resolved = false;
-    this.isPipeline = true;
+    this._outputsMap = null;
   }
 
-  addPipe (pipe) {
-    if (_.find(this.pipes, { name: pipe.name })) {
-      console.error(`A pipe named ${name} already exist !`);
+  addPipe (pipeItemOptions) {
+    const newPipelineItem = new PipelineItem(pipeItemOptions);
+
+    if (_.find(this._pipelineItems, (pipelineItem) => (pipelineItem.getName() === newPipelineItem.getName()) )) {
+      console.error(`A pipe named ${newPipelineItem.getName()} already exist !`);
     }
-    this.pipes.push(pipe);
+    this._pipelineItems.push(pipe);
     this.setDirty();
     return this;
   }
 
-  setOutputsBindings (outputsBindings) {
-    this.outputsBindings = _.isNil(outputsBindings) ? {} : outputsBindings;
-    this.outputsNames = _.keys(this.outputsBindings);
+  mapOutputs (outputsMap) {
+    this._outputsMap = _.isNil(outputsMap) ? {} : outputsMap;
+    this.outputsNames = _.keys(this._outputsMap);
     this.setDirty();
     return this;
   }
@@ -49,7 +42,7 @@ export class Pipeline extends Pass {
   }
 
   getPipe (pipeName) {
-    const pipe = _.find(this.pipes, { name: pipeName });
+    const pipe = _.find(this._pipelineItems, { name: pipeName });
     if (!pipe) {
       console.error(`Can't find a pipe named ${pipeName} !`);
     }
@@ -66,7 +59,7 @@ export class Pipeline extends Pass {
   resolvePipesDependencies () {
     if (this.resolved) { return; }
     // Let's do some recursive stuff to check that all inputs/outputs are correct.
-    _.forEach(this.pipes, pipe => pipe.resetDependencies());
+    _.forEach(this._pipelineItems, pipe => pipe.resetDependencies());
 
     const resolveDependencies = (inputs, pipe) => {
       // find dependencies
@@ -98,9 +91,9 @@ export class Pipeline extends Pass {
         resolveDependencies(dependPipe.getInputsBinding(), dependPipe);
       });
     };
-    resolveDependencies(this.outputsBindings, null);
+    resolveDependencies(this._outputsMap, null);
     this.detectUnusedPipes();
-    this.orderedPipes = this.pipes
+    this.orderedPipes = this._pipelineItems
       .filter(pipe => pipe.priority !== 0)
       .sort((left, right) => {
         return right.priority - left.priority;
@@ -109,7 +102,7 @@ export class Pipeline extends Pass {
   }
 
   detectUnusedPipes () {
-    const unused = this.pipes.filter(pipe => pipe.priority === 0);
+    const unused = this._pipelineItems.filter(pipe => pipe.priority === 0);
     if (unused.length > 0) {
       console.warn(`The following pipes are not in the dependency tree :`);
       console.warn(unused);
@@ -139,7 +132,7 @@ export class Pipeline extends Pass {
       const pipeInputs = this.mapInputsBinding(pipe.getInputsBinding());
       this.outputs[pipe.name] = this.renderPipe(pipe, pipeInputs);
     });
-    return this.mapInputsBinding(this.outputsBindings);
+    return this.mapInputsBinding(this._outputsMap);
   }
 
   passThrough (inputs) {

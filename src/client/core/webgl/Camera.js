@@ -1,6 +1,5 @@
 import { PerspectiveCamera } from 'three';
 import { OrbitControls } from './OrbitControls';
-import { WindowResizeSingleton } from '~/core/utils';
 
 /**
  * Camera class
@@ -15,8 +14,6 @@ export class Camera extends PerspectiveCamera {
 
     this.controls = new OrbitControls(this, element);
     this.controls.enabled = true;
-
-    WindowResizeSingleton.getInstance().add(this.resize.bind(this));
   }
 
   /**
@@ -28,11 +25,9 @@ export class Camera extends PerspectiveCamera {
   }
 
   /**
-   * resize method
-   * @param {number} width  Width
-   * @param {number} height Height
+   *
    */
-  resize(width, height) {
+  setSize (width, height) {
     this.aspect = width / height;
     this.updateProjectionMatrix();
   }
