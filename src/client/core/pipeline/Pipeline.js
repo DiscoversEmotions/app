@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Pipe } from './Pipe';
+import { PipelineItem } from './PipelineItem';
 
 export class Pipeline extends Pipe {
 
@@ -10,90 +11,123 @@ export class Pipeline extends Pipe {
     super(inputsNames, outputsNames);
 
     this._pipelineItems = []; // Array of PipelineItem
+    this._orderedPipelineItems = [];
     this._outputs = {};
-    this._resolved = false;
 
-    this._outputsMap = null;
+    this._outputsMap = {};
+    this._inputsMap = {};
   }
 
+  /**
+   * Public Chainanble Api
+   */
   addPipe (pipeItemOptions) {
     const newPipelineItem = new PipelineItem(pipeItemOptions);
 
     if (_.find(this._pipelineItems, (pipelineItem) => (pipelineItem.getName() === newPipelineItem.getName()) )) {
-      console.error(`A pipe named ${newPipelineItem.getName()} already exist !`);
+      throw new Error(`A pipe named ${newPipelineItem.getName()} already exist !`);
     }
-    this._pipelineItems.push(pipe);
-    this.setDirty();
+    this._pipelineItems.push(newPipelineItem);
+    this._setDirty();
     return this;
   }
 
   mapOutputs (outputsMap) {
     this._outputsMap = _.isNil(outputsMap) ? {} : outputsMap;
-    this.outputsNames = _.keys(this._outputsMap);
-    this.setDirty();
+    this.setOutputsNames(_.keys(this._outputsMap));
+    this._setDirty();
+    return this;
+  }
+
+  mapInputs (inputsMap) {
+    this._inputsMap = _.isNil(inputsMap) ? {} : inputsMap;
+    this.setInputsNames(_.keys(this._inputsMap));
+    this._setDirty();
     return this;
   }
 
   /**
-   * To trigger the resolver on next render
+   * Override Pipe methods
    */
-  setDirty () {
-    this.resolved = false;
-  }
 
-  getPipe (pipeName) {
-    const pipe = _.find(this._pipelineItems, { name: pipeName });
-    if (!pipe) {
-      console.error(`Can't find a pipe named ${pipeName} !`);
-    }
-    return pipe;
-  }
-
-  mapInputsBinding (inputsBinding) {
-    return _.mapValues(inputsBinding, (path) => {
-      const pathArray = path.split(`.`);
-      return this.outputs[pathArray[0]][pathArray[1]];
+  run (inputs) {
+    super.run(inputs);
+    this._outputs = {};
+    this._outputs[`inputs`] = this._formatWithMap(inputs, this._inputsMap);
+    _.forEach(this._orderedPipelineItems, pipelineItem => {
+      const outputs = this._renderPipelineItem(pipelineItem);
+      this._outputs[pipelineItem.getName()] = outputs;
     });
+    const outputs = this._formatWithMap(this._outputs, this._outputsMap);
+    return outputs;
   }
 
-  resolvePipesDependencies () {
-    if (this.resolved) { return; }
-    // Let's do some recursive stuff to check that all inputs/outputs are correct.
-    _.forEach(this._pipelineItems, pipe => pipe.resetDependencies());
+  passThrough (inputs) {
+    super.passThrough(inputs);
+    return {}; // TODO
+  }
 
-    const resolveDependencies = (inputs, pipe) => {
+  /**
+   * Private
+   */
+
+  // Override
+  _validate () {
+    this._resolvePipesDependencies();
+    super._validate();
+  }
+
+  _renderPipelineItem (pipelineItem) {
+    const formatedInputs = this._formatWithMap(this._outputs, pipelineItem.getInputsMap());
+    const outputs = pipelineItem.getPipe().render(formatedInputs);
+    return this._formatWithMap(outputs, pipelineItem.getOutputsMap());
+  }
+
+  _getPipelineItem (pipelineItemName) {
+    const pipelineItem = _.find(this._pipelineItems, (pipelineItem) => pipelineItem.getName());
+    if (_.isNil(pipelineItem)) {
+      throw new Error(`Can't find a pipelineItem named ${pipelineItemName} !`);
+    }
+    return pipelineItem;
+  }
+
+  _resolvePipesDependencies () {
+    // Let's do some recursive stuff to check that all inputs/outputs are correct.
+    _.forEach(this._pipelineItems, pipelineItem => pipelineItem.reset());
+
+    const resolveDependencies = (inputs, pipelineItem) => {
       // find dependencies
       _.forEach(inputs, (path) => {
         const pathArray = path.split(`.`);
-        const pipeName = pathArray[0];
+        const pipelineItemName = pathArray[0];
         const outputName = pathArray[1];
-        // pipe exist ?
-        if (pipeName === `inputs`) {
+        // pipelineItem exist ?
+        if (pipelineItemName === `inputs`) {
           return;
         }
-        const dependPipe = this.getPipe(pipeName);
-        if (_.isNil(dependPipe)) {
-          throw new Error(`Can't find pipe named '${pipeName}' while resolving ${pipe ? pipe.name : `entry-pipe`}`);
+        const dependPipelineItem = this._getPipelineItem(pipelineItemName);
+        // pipelineItem has correct output ?
+        const dependPipelineItemOutputs = _.keys(dependPipelineItem.getOutputsMap());
+        if (!_.includes(dependPipelineItemOutputs, outputName)) {
+          throw new Error(
+            `Can't find output '${outputName}' in pass of pipelineItem '${dependPipelineItem.getName()}` +
+            ` while resolving ${pipelineItem ? pipelineItem.getName() : `???`}'`
+          );
         }
-        // pipe has correct output ?
-        const passOutputs = dependPipe.getPass().getOutputsNames();
-        if (!_.includes(passOutputs, outputName)) {
-          throw new Error(`Can't find output '${outputName}' in pass of pipe '${dependPipe.name} while resolving ${pipe.name}'`);
-        }
-        // all ok, add dependPipe as a dependency
-        // NOTE: pipe in null only for entry-pipe
-        if (pipe) {
-          pipe.addDependency(dependPipe);
+        // all ok, add dependPipelineItem as a dependency
+        // NOTE: pipelineItem in null only for entry-pipelineItem
+        if (pipelineItem) {
+          pipelineItem.addDependency(dependPipelineItem);
         } else {
-          dependPipe.setPriorityGreaterThan(0);
+          dependPipelineItem.setPriorityGreaterThan(0);
         }
-        // resolve dependPipe -> recursive
-        resolveDependencies(dependPipe.getInputsBinding(), dependPipe);
+        // resolve dependPipelineItem -> recursive
+        resolveDependencies(dependPipelineItem.getInputsMap(), dependPipelineItem);
       });
     };
     resolveDependencies(this._outputsMap, null);
-    this.detectUnusedPipes();
-    this.orderedPipes = this._pipelineItems
+    this._detectUnusedPipes();
+    this._orderedPipelineItems = this._pipelineItems
       .filter(pipe => pipe.priority !== 0)
       .sort((left, right) => {
         return right.priority - left.priority;
@@ -101,7 +135,7 @@ export class Pipeline extends Pipe {
     this.resolved = true;
   }
 
-  detectUnusedPipes () {
+  _detectUnusedPipes () {
     const unused = this._pipelineItems.filter(pipe => pipe.priority === 0);
     if (unused.length > 0) {
       console.warn(`The following pipes are not in the dependency tree :`);
@@ -109,35 +143,10 @@ export class Pipeline extends Pipe {
     }
   }
 
-  renderPipe (pipe, inputs) {
-    return pipe.render(inputs);
-  }
-
-  buildInitialInputs (inputs) {
-    return inputs;
-  }
-
-  /**
-   * override render to resolvePipesDependencies before
-   * @type {Object}
-   */
-  render (inputs = {}) {
-    if (false === this.resolved) { this.resolvePipesDependencies(); }
-    return super.render(inputs);
-  }
-
-  run (inputs) {
-    this.outputs[`inputs`] = this.buildInitialInputs(inputs);
-    _.forEach(this.orderedPipes, pipe => {
-      const pipeInputs = this.mapInputsBinding(pipe.getInputsBinding());
-      this.outputs[pipe.name] = this.renderPipe(pipe, pipeInputs);
+  _formatWithMap (content, map) {
+    return _.mapValues(map, (path) => {
+      return _.get(content, path);
     });
-    return this.mapInputsBinding(this._outputsMap);
-  }
-
-  passThrough (inputs) {
-    // TODO
-    return {};
   }
 
 }

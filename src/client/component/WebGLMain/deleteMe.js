@@ -46,9 +46,13 @@ const subPipeline = new Pipeline([`in`], [`out`])
 })
 .addPipe({
   name: `multi1`,
-  mapInputs: { in: `inputs.in` },
+  mapInputs: {
+    in: `inputs.in`
+  },
   pipe: new MultiplyByPipe(4),
-  mapOutputs: { yolo: `out` }
+  mapOutputs: {
+    yolo: `out`
+  }
 })
 .mapOutputs({
   out: `multi1.yolo`
@@ -67,7 +71,9 @@ const mainPipeline = new Pipeline([], [`out`, `out2`])
     in: `random.out`
   },
   pipe: new MultiplyByPipe(4),
-  mapOutputs: { out: `out` }
+  mapOutputs: {
+    out: `out`
+  }
 })
 .addPipe({
   name: `multi2`,
@@ -76,7 +82,9 @@ const mainPipeline = new Pipeline([], [`out`, `out2`])
     in2: `random.out`
   },
   pipe: new MultiplyPipe(),
-  mapOutputs: { out: `out` }
+  mapOutputs: {
+    out: `out`
+  }
 })
 .addPipe({
   name: `sub-compo`,
@@ -84,13 +92,22 @@ const mainPipeline = new Pipeline([], [`out`, `out2`])
     in: `multi2.out`
   },
   pipe: subPipeline,
-  mapOutputs: { out: `out` }
+  mapOutputs: {
+    out: `out`
+  }
 })
 .mapOutputs({
   out: `sub-compo.out`,
-  out2: `random.out`
+  out2: `random.out`,
+  out3: `multi2.out`
 });
 
-console.log(mainPipeline.render({}));
+const mainPipelineResult = mainPipeline.render({});
+
+console.log(mainPipelineResult);
+
+console.log(subPipeline.render({
+  in: mainPipelineResult.out3
+}));
 
 export default mainPipeline;

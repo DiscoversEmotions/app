@@ -3,7 +3,6 @@ export class PipelineItem {
 
   /**
    * options: { name, mapInputs, pipe, mapOutputs }
-   * @type {Object}
    */
   constructor(options = {}) {
     this._priority = 0;
@@ -23,20 +22,46 @@ export class PipelineItem {
     this._name = options.name;
 
     // Pipe
-    if (pipe.isPipe !== true) {
+    if (options.pipe && options.pipe.isPipe !== true) {
       throw new Error(`options.pipe must be a Pipe !`);
     }
     this._pipe = options.pipe;
 
     // MapInputs
-    this._mapInputs = !_.isNil(options.mapInputs) ? options.mapInputs : null;
+    this._mapInputs = !_.isNil(options.mapInputs) ? options.mapInputs : {};
+    const pipeInputs = this._pipe.getInputsNames();
+    if (pipeInputs.length > 0 && !_.includes(pipeInputs, ...(_.keys(this._mapInputs)) )) {
+      throw new Error(
+        `PipeItem "${this.getName()}" mapInputs not compatibel with pipes inputs !\n` +
+        `Pipe inputs are [${this._pipe.getInputsNames().join(`, `)}], get [${_.keys(this._mapInputs).join(`, `)}].`
+      );
+    }
 
     // MapOutputs
-    this._mapOutputs = !_.isNil(options.mapOutputs) ? options.mapOutputs : null;
+    this._mapOutputs = !_.isNil(options.mapOutputs) ? options.mapOutputs : {};
+    const pipeOutputs = this._pipe.getOutputsNames();
+    if (pipeOutputs.length > 0 && !_.includes(pipeOutputs, ...(_.values(this._mapOutputs)) )) {
+      throw new Error(
+        `PipeItem "${this.getName()}" mapOutputs not compatibel with pipes outputs !\n` +
+        `Pipe outputs are [${this._pipe.getOutputsNames().join(`, `)}], get ${JSON.stringify(this._mapOutputs)}`
+      );
+    }
   }
 
   getName () {
     return this._name;
+  }
+
+  getPipe () {
+    return this._pipe;
+  }
+
+  getInputsMap () {
+    return this._mapInputs;
+  }
+
+  getOutputsMap () {
+    return this._mapOutputs;
   }
 
   reset () {
@@ -51,7 +76,11 @@ export class PipelineItem {
   }
 
   getAllDependencies () {
-    return _.concat(_.flatten(_.map(this._dependencies, dep => dep.getAllDependencies())));
+    return _(this._dependencies)
+    .map(dep => dep.getAllDependencies())
+    .flatten()
+    .concat()
+    .value();
   }
 
   hasDependency (dependencyPipe) {
