@@ -10,8 +10,8 @@ class WebGLMain extends Component {
     super($parent);
     this.$el.addClass(styles.container);
 
-    // this.webGLApp = new WebGLMainApp(this.$el[0]);
-    // this.webGLApp.boot();
+    this.webGLApp = new WebGLMainApp(this.$el[0]);
+    this.webGLApp.boot();
   }
 
   update () {

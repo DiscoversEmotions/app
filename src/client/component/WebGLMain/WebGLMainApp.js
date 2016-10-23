@@ -1,7 +1,7 @@
 import { GUISingleton } from '~/core/utils';
 import { Core as WebGLCore } from '~/core/webgl';
-import { Scene } from './Scene';
 import { Pipe } from '~/core/pipeline';
+import { Scene } from './Scene';
 
 class WebGLMainApp extends WebGLCore {
 
@@ -15,12 +15,11 @@ class WebGLMainApp extends WebGLCore {
     return camera;
   }
 
-  initRenderPipeline (renderer, scene, camera) {
-    return super.initRenderPipeline(renderer, scene, camera);
-    // .addPipe(new Pipe({
-    //   name: `test`
-    //
-    // }))
+  initRenderPipeline () {
+    return super.initRenderPipeline()
+    .mapOutputs({
+      screen: `render.color`
+    });
   }
 
 }

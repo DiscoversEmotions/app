@@ -1,18 +1,18 @@
-import { Pass } from '~/core/pipeline';
+import { Pipe } from '~/core/webgl/Pipe';
 import { DepthTexture, WebGLRenderTarget, UnsignedShortType } from 'three';
 import * as THREE from 'three';
 
-export class RenderPass extends Pass {
+export class RenderPipe extends Pipe {
 
   /**
    *
    */
   constructor() {
-    super({
-      inputsNames: [`renderer`, `scene`, `camera`],
-      outputsNames: [`color`, `depth`]
-    });
-    this.renderTaget = new WebGLRenderTarget( window.innerWidth, window.innerHeight );
+    super(
+      [`renderer`, `scene`, `camera`],
+      [`color`, `depth`]
+    );
+    this.renderTaget = new WebGLRenderTarget( 600, 600 );
     this.renderTaget.texture.format = THREE.RGBAFormat;
     this.renderTaget.texture.minFilter = THREE.NearestFilter;
     this.renderTaget.texture.magFilter = THREE.NearestFilter;
@@ -24,7 +24,6 @@ export class RenderPass extends Pass {
   }
 
   run (inputs) {
-    this.renderTaget.setSize(inputs.renderer.getSize().width, inputs.renderer.getSize().height);
     inputs.renderer.render(inputs.scene, inputs.camera, this.renderTaget);
     return {
       color: this.renderTaget.texture,
@@ -37,6 +36,10 @@ export class RenderPass extends Pass {
       color: null,
       depth: null
     };
+  }
+
+  setSize(width, height) {
+    this.renderTaget.setSize(width, height);
   }
 
 }

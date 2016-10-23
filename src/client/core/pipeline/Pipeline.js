@@ -46,6 +46,10 @@ export class Pipeline extends Pipe {
     return this;
   }
 
+  getAllPipes() {
+    return this._pipelineItems.map(pipelineItem => pipelineItem.getPipe());
+  }
+
   /**
    * Override Pipe methods
    */

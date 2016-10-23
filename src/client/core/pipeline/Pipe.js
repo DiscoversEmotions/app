@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { Pass } from './Pass';
 
 export class Pipe {
 

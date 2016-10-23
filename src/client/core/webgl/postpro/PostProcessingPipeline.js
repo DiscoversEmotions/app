@@ -10,23 +10,15 @@ export class PostProcessingPipeline extends Pipeline {
 
   /**
    * constructor method
-   * options: { outputsBindings, inputsNames, renderer, scene, camera }
+   * options: { renderer, scene, camera }
    */
   constructor(options = {}) {
-    super({
-      outputsBindings: options.outputsBindings,
-      inputsNames: _.concat(
-        options.inputsNames,
-        `scene`, `renderer`, `camera`,
-        `ppScene`, `ppQuad`, `ppCamera`
-      )
-    });
+    super([], [`screen`]);
 
     this.renderer = options.renderer;
     this.scene = options.scene;
     this.camera = options.camera;
 
-    // PostPro
     this.ppTarget = new WebGLRenderTarget(1, 1, {
       stencilBuffer: true,
       depthBuffer: false

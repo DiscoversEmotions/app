@@ -15,6 +15,10 @@ export default function initSocket (store) {
         type: 'console',
         content: errorString
       }))
+      data.warnings = data.warnings.map(warningString => ({
+        type: 'console',
+        content: warningString
+      }))
     }
     store.dispatch({
       type: 'SET_CLIENT_STATS',
@@ -23,7 +27,6 @@ export default function initSocket (store) {
   });
 
   socket.on('client-status', function (data) {
-    console.log(data);
     store.dispatch({
       type: 'SET_CLIENT_STATUS',
       payload: data

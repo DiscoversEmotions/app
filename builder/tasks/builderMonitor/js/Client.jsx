@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import JsonViewer from './JsonViewer.jsx';
 
 function Progress ({ progress, width, height }) {
-  console.log(progress);
   return (
     <div className='progress' style={{ width: width + 'px', height: height + 'px' }}>
       <span style={{ width: progress + '%' }}></span>
