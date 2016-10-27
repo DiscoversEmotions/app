@@ -3,9 +3,7 @@ import {
 } from 'three';
 import { Renderer, Scene, Camera } from '.';
 import { Clock, MainLoop, WindowResizeSingleton } from '~/core/utils';
-import { Pipeline } from '~/core/pipeline';
-import { QuadRenderer } from '~/core/webgl/postpro';
-import { RenderPipe } from '~/core/webgl/pipes/RenderPipe';
+import { EffectComposer, RenderPass, GlitchPass } from 'postprocessing';
 import raf from 'raf';
 
 /**
@@ -20,10 +18,8 @@ export class Core {
     this.scene = this.initScene();
     this.camera = this.initCamera(this.parentElement);
     this.renderer = this.initRenderer();
-    this.pipeline = this.initRenderPipeline();
+    this.composer = this.initPostComposer();
     this.clock = new Clock();
-    // Screen
-    this.screen = new QuadRenderer(this.renderer);
     this.mainLoop = new MainLoop(this.render.bind(this));
     // Add to the dom
     this.parentElement.appendChild(this.renderer.domElement);
@@ -68,41 +64,22 @@ export class Core {
     return new Scene();
   }
 
-  initRenderPipeline () {
-    return new Pipeline([`renderer`, `scene`, `camera`], [`screen`])
-    .mapInputs({
-      renderer: `renderer`,
-      scene: `scene`,
-      camera: `camera`
-    })
-    .addPipe({
-      name: `render`,
-      mapInputs: {
-        renderer: `inputs.renderer`,
-        camera: `inputs.camera`,
-        scene: `inputs.scene`
-      },
-      pipe: new RenderPipe(),
-      mapOutputs: {
-        color: `color`,
-        depth: `depth`
-      }
-    })
-    .mapOutputs({
-      screen: `render.color`
-    });
+  initPostComposer () {
+    const composer = new EffectComposer(this.renderer);
+    composer.addPass(
+      new RenderPass(this.scene, this.camera)
+    );
+    const glitchPass = new GlitchPass();
+    glitchPass.renderToScreen = true;
+    composer.addPass(glitchPass);
+    return composer;
   }
 
   render () {
     var dt = this.clock.getDelta();
     var time = this.clock.getElapsedTime();
     this.update(time, dt);
-    const outputs = this.pipeline.render({
-      renderer: this.renderer,
-      scene: this.scene,
-      camera: this.camera
-    });
-    this.toScreen(outputs.screen);
+    this.composer.render(dt);
   }
 
   update (time, dt) {
@@ -113,22 +90,13 @@ export class Core {
   setSize (width, height) {
     this.width = width;
     this.height = height;
-    this.screen.setSize(width, height);
     this.renderer.setSize(width, height);
     this.camera.setSize(width, height);
-    this.pipeline.getAllPipes().forEach(pipe => {
-      pipe.setSize(width, height);
-    });
+    this.composer.setSize(width, height);
   }
 
   resize () {
     this.setSize(this.parentElement.offsetWidth, this.parentElement.offsetHeight);
-  }
-
-  toScreen (out) {
-    this.screen.material.setUniform(`uInput`, out);
-    this.screen.material.updateUniform(`resolution`, (val) => val.set(this.width, this.height));
-    this.screen.render(this.renderer);
   }
 
 }

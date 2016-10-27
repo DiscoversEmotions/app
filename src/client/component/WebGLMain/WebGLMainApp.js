@@ -1,7 +1,7 @@
 import { GUISingleton } from '~/core/utils';
 import { Core as WebGLCore } from '~/core/webgl';
-import { Pipe } from '~/core/pipeline';
 import { Scene } from './Scene';
+import { EffectComposer, RenderPass, SMAAPass, BloomPass } from 'postprocessing';
 
 class WebGLMainApp extends WebGLCore {
 
@@ -15,11 +15,19 @@ class WebGLMainApp extends WebGLCore {
     return camera;
   }
 
-  initRenderPipeline () {
-    return super.initRenderPipeline()
-    .mapOutputs({
-      screen: `render.color`
-    });
+  initPostComposer () {
+    const composer = new EffectComposer(this.renderer);
+    composer.addPass(
+      new RenderPass(this.scene, this.camera)
+    );
+    // SMAA
+    this.smaaPass = new SMAAPass(window.Image);
+    composer.addPass(this.smaaPass);
+    // Bloom
+    this.bloomPass = new BloomPass();
+    this.bloomPass.renderToScreen = true;
+    composer.addPass(this.bloomPass);
+    return composer;
   }
 
 }

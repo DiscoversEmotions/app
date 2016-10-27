@@ -52,6 +52,7 @@
     "normalize.css": "^5.0.0",
     "npm": "^3.10.8",
     "ouioui": "0.0.20",
+    "postprocessing": "^1.1.6",
     "raf": "^3.3.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",

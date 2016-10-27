@@ -2,7 +2,6 @@ import { Component, ConnectToStore } from '~/core/interface';
 import WebGLMainApp from './WebGLMainApp';
 import dominus from 'dominus';
 import styles from './WebGLMain';
-import mainComposer from './deleteMe';
 
 class WebGLMain extends Component {
 
