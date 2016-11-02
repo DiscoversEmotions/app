@@ -14,12 +14,13 @@ export class Scene extends CoreScene {
 
     this.cube1 = new Cube();
     this.add(this.cube1);
+    this.cube1.position.set(5, 10, 5);
     this.ground = new Ground();
     this.ground.position.y = -2;
     // this.ground.rotation.x = Math.PI / 2;
-    this.add(this.ground);
+    // this.add(this.ground);
     this.mainLight = new PointLight();
-    this.mainLight.position.set(5, 5, 5);
+    this.mainLight.position.set(5, 60, 5);
     this.add(this.mainLight);
 
     this.add(new AxisHelper(1));

@@ -28,6 +28,7 @@ class WebGLMainApp extends WebGLCore {
   initAssetsManager() {
     var manager = super.initAssetsManager();
     var texture = new Texture();
+
     manager.onProgress = function (item, loaded, total) {
       console.log(item, loaded, total);
     };
@@ -39,15 +40,15 @@ class WebGLMainApp extends WebGLCore {
     };
     var onError = function (xhr) {};
     var loader = new OBJLoader(manager);
-    loader.load(require(`~/meshes/Ground/plane.obj`), function (object) {
-      console.log(object);
-      // object.traverse( function ( child ) {
-      // 	if ( child instanceof Mesh ) {
-      // 		child.material.map = texture;
-      // 	}
-      // });
-      // object.position.y = - 95;
-      // scene.add( object );
+    loader.load(require(`~/meshes/Ground/plane.obj`), (object) => {
+      object.traverse((child) => {
+        if (child instanceof Mesh) {
+          child.material = this.scene.cube1.material;
+          child.scale.set(0.05, 0.05, 0.05);
+          this.scene.add(child);
+        }
+      });
+      object.position.y = -95;
     }, onProgress, onError);
   }
 
@@ -63,15 +64,17 @@ class WebGLMainApp extends WebGLCore {
 
   initPostComposer() {
     const composer = new EffectComposer(this.renderer);
-    composer.addPass(
-      new RenderPass(this.scene, this.camera)
-    );
+    this.renderPass = new RenderPass(this.scene, this.camera);
+    this.renderPass.renderToScreen = true;
+    composer.addPass(this.renderPass);
     // SMAA
     this.smaaPass = new SMAAPass(window.Image);
+    this.smaaPass.enabled = false;
     composer.addPass(this.smaaPass);
     // Bloom
     this.bloomPass = new BloomPass();
     this.bloomPass.renderToScreen = true;
+    this.bloomPass.enabled = false;
     composer.addPass(this.bloomPass);
     return composer;
   }
