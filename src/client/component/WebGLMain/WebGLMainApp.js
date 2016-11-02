@@ -1,21 +1,67 @@
-import { GUISingleton } from '~/core/utils';
-import { Core as WebGLCore } from '~/core/webgl';
-import { Scene } from './Scene';
-import { EffectComposer, RenderPass, SMAAPass, BloomPass } from 'postprocessing';
+import {
+  GUISingleton
+} from '~/core/utils';
+import {
+  Core as WebGLCore,
+  OBJLoader
+} from '~/core/webgl';
+import {
+  Scene
+} from './Scene';
+import {
+  EffectComposer,
+  RenderPass,
+  SMAAPass,
+  BloomPass
+} from 'postprocessing';
+
+import {
+  Texture,
+  ObjectLoader,
+  Mesh
+} from 'three';
+import * as THREE from 'three';
+console.log(THREE);
 
 class WebGLMainApp extends WebGLCore {
 
-  initScene () {
+  initAssetsManager() {
+    var manager = super.initAssetsManager();
+    var texture = new Texture();
+    manager.onProgress = function (item, loaded, total) {
+      console.log(item, loaded, total);
+    };
+    var onProgress = function (xhr) {
+      if (xhr.lengthComputable) {
+        var percentComplete = xhr.loaded / xhr.total * 100;
+        console.log(`${Math.round(percentComplete, 2)}% downloaded`);
+      }
+    };
+    var onError = function (xhr) {};
+    var loader = new OBJLoader(manager);
+    loader.load(require(`~/meshes/Ground/plane.obj`), function (object) {
+      console.log(object);
+      // object.traverse( function ( child ) {
+      // 	if ( child instanceof Mesh ) {
+      // 		child.material.map = texture;
+      // 	}
+      // });
+      // object.position.y = - 95;
+      // scene.add( object );
+    }, onProgress, onError);
+  }
+
+  initScene() {
     return new Scene();
   }
 
-  initCamera (parentElement) {
+  initCamera(parentElement) {
     let camera = super.initCamera(parentElement);
     camera.position.z = 5;
     return camera;
   }
 
-  initPostComposer () {
+  initPostComposer() {
     const composer = new EffectComposer(this.renderer);
     composer.addPass(
       new RenderPass(this.scene, this.camera)

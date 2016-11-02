@@ -1,5 +1,5 @@
 import {
-  Mesh, Scene as ThreeScene, PlaneBufferGeometry, OrthographicCamera, MeshBasicMaterial
+  Mesh, Scene as ThreeScene, PlaneBufferGeometry, OrthographicCamera, MeshBasicMaterial, LoadingManager
 } from 'three';
 import { Renderer, Scene, Camera } from '.';
 import { Clock, MainLoop, WindowResizeSingleton } from '~/core/utils';
@@ -19,6 +19,7 @@ export class Core {
     this.camera = this.initCamera(this.parentElement);
     this.renderer = this.initRenderer();
     this.composer = this.initPostComposer();
+    this.assetsManager = this.initAssetsManager();
     this.clock = new Clock();
     this.mainLoop = new MainLoop(this.render.bind(this));
     // Add to the dom
@@ -31,7 +32,6 @@ export class Core {
 
     WindowResizeSingleton.getInstance().add(this.resize.bind(this));
     this.resize();
-
   }
 
   boot() {
@@ -73,6 +73,10 @@ export class Core {
     glitchPass.renderToScreen = true;
     composer.addPass(glitchPass);
     return composer;
+  }
+
+  initAssetsManager() {
+    return new LoadingManager();
   }
 
   render () {

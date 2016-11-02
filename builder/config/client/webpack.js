@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = function (paths, params, babel, eslint, cssModules) {
+module.exports = function (paths, params, babel, eslint) {
   const webpackConfig = {
     entry: {
       'app': [paths.clientBoot]
@@ -39,11 +39,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
   webpackConfig.module.loaders.push(
     {
       test: /\.scss$/,
-      loaders: [
-        'style',
-        `css?${JSON.stringify(cssModules)}`,
-        'sass'
-      ]
+      loader: 'style!css!sass'
     },
     {
       test: /\.vue$/,
@@ -63,7 +59,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       query: babel
     },
     {
-      test: /\.(png|jpg|gif|svg)$/,
+      test: /\.(png|jpg|gif|svg|obj)$/,
       loader: 'file',
       query: {
         name: '[name].[ext]?[hash]'
