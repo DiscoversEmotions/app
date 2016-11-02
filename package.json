@@ -66,8 +66,8 @@
     "virtual-dom": "^2.1.1",
     "vue": "^2.0.3",
     "vuex": "^2.0.0",
-    "webpack": "^2.1.0-beta.25",
-    "webpack-dev-server": "^2.1.0-beta.8",
+    "webpack": "2.1.0-beta.25",
+    "webpack-dev-server": "2.1.0-beta.8",
     "webpack-glsl-loader": "^1.0.1"
   }
 }
