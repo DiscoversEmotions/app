@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" ref="render">
 
   </div>
 </template>
@@ -14,32 +14,17 @@ export default {
 
 
 <script>
+import WebGLMainApp from './WebGLMainApp';
+
 export default  {
+  data: () => ({
+    webGLApp: null
+  }),
   mounted() {
-    console.log('mounted');
+    this.webGLApp = new WebGLMainApp(this.$refs.render);
+    this.webGLApp.boot();
   }
 };
-// import { Component, ConnectToStore } from '~/core/interface';
-// import WebGLMainApp from './WebGLMainApp';
-// import dominus from 'dominus';
-// import styles from './WebGLMain';
-//
-// class WebGLMain extends Component {
-//
-//   constructor ($parent) {
-//     super($parent);
-//     this.$el.addClass(styles.container);
-//
-//     this.webGLApp = new WebGLMainApp(this.$el[0]);
-//     this.webGLApp.boot();
-//   }
-//
-//   update () {
-//   }
-//
-// }
-//
-// export default ConnectToStore()(WebGLMain);
 </script>
 
 <style scoped lang="scss">
@@ -49,6 +34,6 @@ export default  {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgb(38, 38, 38);
+    background: black;
   }
 </style>
