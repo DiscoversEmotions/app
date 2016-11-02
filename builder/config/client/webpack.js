@@ -14,7 +14,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       alias: {
         '~': paths.client
       },
-      extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl']
+      extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl', '.vue']
     },
     module: {
       loaders: [],
@@ -46,10 +46,15 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       ]
     },
     {
-      test: /\.js$/,
-      loader: 'babel',
+      test: /\.vue$/,
+      loader: 'vue',
       exclude: /node_modules/,
-      query: babel
+      options: {
+        loaders: {
+          scss: `style!css-loader?${JSON.stringify(cssModules)}!sass`,
+          js: `babel?${JSON.stringify(babel)}`
+        }
+      }
     },
     {
       test: /\.(png|jpg|gif|svg)$/,
@@ -64,18 +69,13 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     },
     {
       test: /\.(glsl|vert|frag)$/,
-      loader: 'webpack-glsl'
-    }
-  );
-
-  webpackConfig.plugins.push(
-    new webpack.LoaderOptionsPlugin({
-      glsl: {
+      loader: 'webpack-glsl',
+      options: {
         chunksPath: './src/chunks', // Path to look chunks at
         chunksExt: 'glsl', // Chunks extension
         varPrefix: '$' // Every valid name that starts with this symbol will be treated as a template variable
       }
-    })
+    }
   );
 
   webpackConfig.plugins.push(
