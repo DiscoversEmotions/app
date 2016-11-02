@@ -31,7 +31,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     {
       enforce: 'pre',
       test: /\.js$/,
-      loader: `eslint-loader?${JSON.stringify(eslint)}`,
+      loader: `eslint?${JSON.stringify(eslint)}`,
       exclude: /node_modules/
     }
   );
@@ -41,7 +41,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       test: /\.scss$/,
       loaders: [
         'style',
-        `css-loader?${JSON.stringify(cssModules)}`,
+        `css?${JSON.stringify(cssModules)}`,
         'sass'
       ]
     },
@@ -51,10 +51,16 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       exclude: /node_modules/,
       options: {
         loaders: {
-          scss: `style!css-loader?${JSON.stringify(cssModules)}!sass`,
+          scss: `style!css!sass`,
           js: `babel?${JSON.stringify(babel)}`
         }
       }
+    },
+    {
+      test: /\.js$/,
+      loader: 'babel',
+      exclude: /node_modules/,
+      query: babel
     },
     {
       test: /\.(png|jpg|gif|svg)$/,
