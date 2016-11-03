@@ -1,19 +1,7 @@
-import {
-  GUISingleton
-} from '~/core/utils';
-import {
-  Core as WebGLCore,
-  OBJLoader
-} from '~/core/webgl';
-import {
-  Scene
-} from './Scene';
-import {
-  EffectComposer,
-  RenderPass,
-  SMAAPass,
-  BloomPass
-} from 'postprocessing';
+import { GUISingleton } from '~/core/utils';
+import { Core as WebGLCore, OBJLoader } from '~/core/webgl';
+import { Scene } from './Scene';
+import { EffectComposer, RenderPass, SMAAPass, BloomPass } from 'postprocessing';
 
 import {
   Texture,
@@ -23,7 +11,7 @@ import {
 import * as THREE from 'three';
 console.log(THREE);
 
-class WebGLMainApp extends WebGLCore {
+class WebGLRoomApp extends WebGLCore {
 
   initAssetsManager() {
     var manager = super.initAssetsManager();
@@ -44,7 +32,7 @@ class WebGLMainApp extends WebGLCore {
       object.traverse((child) => {
         if (child instanceof Mesh) {
           child.material = this.scene.cube1.material;
-          child.scale.set(0.05, 0.05, 0.05);
+          child.scale.set(1, 1, 1);
           this.scene.add(child);
         }
       });
@@ -65,12 +53,13 @@ class WebGLMainApp extends WebGLCore {
   initPostComposer() {
     const composer = new EffectComposer(this.renderer);
     this.renderPass = new RenderPass(this.scene, this.camera);
-    this.renderPass.renderToScreen = true;
+    // this.renderPass.renderToScreen = true;
     composer.addPass(this.renderPass);
     // SMAA
     this.smaaPass = new SMAAPass(window.Image);
-    this.smaaPass.enabled = false;
+    // this.smaaPass.enabled = false;
     composer.addPass(this.smaaPass);
+    this.smaaPass.renderToScreen = true;
     // Bloom
     this.bloomPass = new BloomPass();
     this.bloomPass.renderToScreen = true;
@@ -81,4 +70,4 @@ class WebGLMainApp extends WebGLCore {
 
 }
 
-export default WebGLMainApp;
+export default WebGLRoomApp;

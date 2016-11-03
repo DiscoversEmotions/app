@@ -1,16 +1,22 @@
 <template>
   <div class="app-container">
-    <web-gl-main />
+    <!-- <web-gl-main /> -->
+    <web-gl-room />
+    <hello />
   </div>
 </template>
 
 <script>
 import WegGLMain from '~/component/WebGLMain';
+import WegGLRoom from '~/component/WebGLRoom';
+import Hello from '~/component/Hello';
 
 export default {
   name: 'app',
   components: {
-    'web-gl-main': WegGLMain
+    'web-gl-main': WegGLMain,
+    'web-gl-room': WegGLRoom,
+    Hello
   }
 };
 </script>

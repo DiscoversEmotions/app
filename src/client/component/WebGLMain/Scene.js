@@ -14,7 +14,7 @@ export class Scene extends CoreScene {
 
     this.cube1 = new Cube();
     this.add(this.cube1);
-    this.cube1.position.set(5, 10, 5);
+    this.cube1.position.set(0, 3, 0);
     this.ground = new Ground();
     this.ground.position.y = -2;
     // this.ground.rotation.x = Math.PI / 2;
