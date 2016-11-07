@@ -38,6 +38,10 @@ export class Core {
 
   }
 
+  initScene() {
+    return new Scene();
+  }
+
   initRenderer () {
     var canvas = document.createElement(`canvas`);
     var gl;
@@ -58,10 +62,6 @@ export class Core {
   initCamera (parentElement) {
     console.log(this.width, this.height);
     return new Camera(parentElement, 75, this.width / this.height, 0.1, 100);
-  }
-
-  initScene () {
-    return new Scene();
   }
 
   initPostComposer () {

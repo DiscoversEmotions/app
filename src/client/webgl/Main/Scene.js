@@ -4,7 +4,7 @@ import { Cube } from '~/meshes/Cube';
 import { Ground } from '~/meshes/Ground';
 import { PointLight, AxisHelper, MeshLambertMaterial } from 'three';
 
-export class Scene extends CoreScene {
+export default class Scene extends CoreScene {
 
   /**
    * createScene method

@@ -102,7 +102,7 @@ class BuilderMonitor {
       response: true
     }));
     app.get('/normalize.css', function(req, res) {
-      res.sendFile(path.resolve(__dirname, '../../../node_modules/normalize.css/normalize.css'));
+      res.sendFile(path.resolve(__dirname, '../../node_modules/normalize.css/normalize.css'));
     });
     // Store
     this._app = app;

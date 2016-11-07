@@ -1,6 +1,5 @@
 import { GUISingleton } from '~/core/utils';
 import { Core as WebGLCore, OBJLoader } from '~/core/webgl';
-import { Scene } from './Scene';
 import { EffectComposer, RenderPass, SMAAPass, BloomPass } from 'postprocessing';
 
 import {

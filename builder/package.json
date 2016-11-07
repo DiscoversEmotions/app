@@ -1,0 +1,28 @@
+{
+  "name": "builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Etienne DELADONCHAMPS <etienne.dldc@outlook.fr> (http://www.etiennedeladonchamps.fr)",
+  "license": "ISC",
+  "dependencies": {
+    "aliasify": "^2.1.0",
+    "ansi-to-html": "^0.4.2",
+    "babelify": "^7.3.0",
+    "browserify-middleware": "^7.1.0",
+    "classnames": "^2.2.5",
+    "fs-jetpack": "^0.10.1",
+    "html-to-vdom": "^0.7.0",
+    "main-loop": "^3.4.0",
+    "node-sass-middleware": "^0.9.8",
+    "normalize.css": "^5.0.0",
+    "require-dir": "^0.3.1",
+    "socket.io": "^1.5.1",
+    "virtual-dom": "^2.1.1",
+    "webpack": "beta",
+    "webpack-dev-server": "beta"
+  }
+}

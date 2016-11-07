@@ -1,15 +1,9 @@
 import { GUISingleton } from '~/core/utils';
 import { Core as WebGLCore, OBJLoader } from '~/core/webgl';
-import { Scene } from './Scene';
-import { EffectComposer, RenderPass, SMAAPass, BloomPass } from 'postprocessing';
-
-import {
-  Texture,
-  ObjectLoader,
-  Mesh
-} from 'three';
+import { EffectComposer, RenderPass } from 'postprocessing';
+import { Texture, ObjectLoader, Mesh } from 'three';
 import * as THREE from 'three';
-console.log(THREE);
+import Scene from './Scene';
 
 class WebGLMainApp extends WebGLCore {
 

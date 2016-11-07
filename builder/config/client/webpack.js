@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = function (paths, params, babel, eslint) {
+module.exports = function (paths, params, babel, eslint, cssModules) {
   const webpackConfig = {
     entry: {
       'app': [paths.clientBoot]
@@ -14,7 +14,7 @@ module.exports = function (paths, params, babel, eslint) {
       alias: {
         '~': paths.client
       },
-      extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl', '.vue']
+      extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl', '.jsx']
     },
     module: {
       loaders: [],
@@ -39,21 +39,10 @@ module.exports = function (paths, params, babel, eslint) {
   webpackConfig.module.loaders.push(
     {
       test: /\.scss$/,
-      loader: 'style!css!sass'
+      loader: `style!css?${JSON.stringify(cssModules)}!sass`
     },
     {
-      test: /\.vue$/,
-      loader: 'vue',
-      exclude: /node_modules/,
-      options: {
-        loaders: {
-          scss: `style!css!sass`,
-          js: `babel?${JSON.stringify(babel)}`
-        }
-      }
-    },
-    {
-      test: /\.js$/,
+      test: /\.jsx?$/,
       loader: 'babel',
       exclude: /node_modules/,
       query: babel
