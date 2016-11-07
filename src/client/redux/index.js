@@ -1,9 +1,10 @@
 import { createStore as reduxCreateStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { routerForBrowser } from 'redux-little-router';
+import { reducer as system } from './system';
 
 const initialState = {};
 const rootReducer = combineReducers({
-  yolo: (state = 0) => state
+  system
 });
 
 export function createStore (routes) {
@@ -11,8 +12,7 @@ export function createStore (routes) {
     routerEnhancer,
     routerMiddleware
   } = routerForBrowser({
-    routes,
-    basename: `/`
+    routes
   });
   return reduxCreateStore(
     rootReducer,

@@ -91,6 +91,10 @@ export class Core {
     this.camera.update(time, dt);
   }
 
+  updateState(state) {
+    
+  }
+
   setSize (width, height) {
     this.width = width;
     this.height = height;
