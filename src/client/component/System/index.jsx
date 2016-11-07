@@ -8,7 +8,8 @@ import { Link } from 'redux-little-router';
 
 @connect(
   (state) => ({
-    color: state.system.get(`color`)
+    color: state.system.get(`color`),
+    path: state.router.pathname
   }),
   { switchColor }
 )
@@ -23,6 +24,7 @@ class System extends React.Component {
         onClick={ () => this.props.switchColor() }
         style={{ background: this.props.color }}
         >
+        <p>Je suis sur { this.props.path }</p>
         <Link href='/about'>Go About</Link>
       </div>
     );
