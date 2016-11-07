@@ -60,7 +60,6 @@ export class Core {
   }
 
   initCamera (parentElement) {
-    console.log(this.width, this.height);
     return new Camera(parentElement, 75, this.width / this.height, 0.1, 100);
   }
 
@@ -92,7 +91,7 @@ export class Core {
   }
 
   updateState(state) {
-    
+
   }
 
   setSize (width, height) {

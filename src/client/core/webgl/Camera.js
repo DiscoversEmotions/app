@@ -9,11 +9,13 @@ export class Camera extends PerspectiveCamera {
   /**
    * constructor method
    */
-  constructor(element, fov, aspect, near, far) {
+  constructor(element, fov, aspect, near, far, orbit = true) {
     super(fov, aspect, near, far);
 
-    this.controls = new OrbitControls(this, element);
-    this.controls.enabled = true;
+    if (orbit) {
+      this.controls = new OrbitControls(this, element);
+      this.controls.enabled = true;
+    }
   }
 
   /**

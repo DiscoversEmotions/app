@@ -1,42 +1,19 @@
-import { GUISingleton } from '~/core/utils';
-import { Core as WebGLCore, OBJLoader } from '~/core/webgl';
+import { GUISingleton, EventUtils } from '~/core/utils';
+import { Core as WebGLCore, OBJLoader, Camera } from '~/core/webgl';
 import { EffectComposer, RenderPass, SMAAPass, BloomPass } from 'postprocessing';
-
-import {
-  Texture,
-  ObjectLoader,
-  Mesh
-} from 'three';
-import * as THREE from 'three';
-console.log(THREE);
+import { Scene } from './Scene';
+import { Texture, ObjectLoader, Mesh, Vector3, Object3D } from 'three';
 
 class WebGLRoomApp extends WebGLCore {
+
+  constructor(parentElement) {
+    super(parentElement);
+    this.addEvents();
+  }
 
   initAssetsManager() {
     var manager = super.initAssetsManager();
     var texture = new Texture();
-
-    manager.onProgress = function (item, loaded, total) {
-      console.log(item, loaded, total);
-    };
-    var onProgress = function (xhr) {
-      if (xhr.lengthComputable) {
-        var percentComplete = xhr.loaded / xhr.total * 100;
-        console.log(`${Math.round(percentComplete, 2)}% downloaded`);
-      }
-    };
-    var onError = function (xhr) {};
-    var loader = new OBJLoader(manager);
-    loader.load(require(`~/meshes/Ground/plane.obj`), (object) => {
-      object.traverse((child) => {
-        if (child instanceof Mesh) {
-          child.material = this.scene.cube1.material;
-          child.scale.set(1, 1, 1);
-          this.scene.add(child);
-        }
-      });
-      object.position.y = -95;
-    }, onProgress, onError);
   }
 
   initScene() {
@@ -44,27 +21,26 @@ class WebGLRoomApp extends WebGLCore {
   }
 
   initCamera(parentElement) {
-    let camera = super.initCamera(parentElement);
-    camera.position.z = 5;
+    var camera = new Camera(parentElement, 75, this.width / this.height, 1, 1100, false);
     return camera;
   }
 
   initPostComposer() {
     const composer = new EffectComposer(this.renderer);
     this.renderPass = new RenderPass(this.scene, this.camera);
-    // this.renderPass.renderToScreen = true;
+    this.renderPass.renderToScreen = true;
     composer.addPass(this.renderPass);
-    // SMAA
-    this.smaaPass = new SMAAPass(window.Image);
-    // this.smaaPass.enabled = false;
-    composer.addPass(this.smaaPass);
-    this.smaaPass.renderToScreen = true;
-    // Bloom
-    this.bloomPass = new BloomPass();
-    this.bloomPass.renderToScreen = true;
-    this.bloomPass.enabled = false;
-    composer.addPass(this.bloomPass);
     return composer;
+  }
+
+  addEvents() {
+    document.addEventListener(`mousemove`, this.onMouseMove.bind(this), false );
+  }
+
+  onMouseMove(e) {
+    const offset = EventUtils.getOffsetOf(e, this.parentElement);
+    this.camera.rotation.y = - offset.x / this.width * 2;
+    // this.camVertical.rotation.x = - offset.y / this.height;
   }
 
 }
