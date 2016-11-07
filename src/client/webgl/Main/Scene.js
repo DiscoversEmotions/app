@@ -1,7 +1,7 @@
 import { Scene as CoreScene } from '~/core/webgl';
 import { GUISingleton } from '~/core/utils';
-import { Cube } from '~/meshes/Cube';
-import { Ground } from '~/meshes/Ground';
+import { Cube } from '~/webgl/meshes/Cube';
+import { Ground } from '~/webgl/meshes/Ground';
 import { PointLight, AxisHelper, MeshLambertMaterial } from 'three';
 
 export default class Scene extends CoreScene {
