@@ -1,17 +1,21 @@
 import React from 'react';
 import App from '~/component/App';
 import { Core } from '~/core';
-import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 import steps from '~/steps';
-import { WebGLApp } from '~/webgl';
+import { WebGLCore } from '~/webgl';
 
 const appCanvasEl = document.getElementById('app-canvas');
 const appUiEl = document.getElementById('app-ui');
 
-const initialState = new Map({
+const initialState = fromJS({
   width: 600,
   height: 600,
-  color: `red`
+  color: `red`,
+  world: {
+    current: `mind`,
+    transitionInProgress: false
+  }
 });
 
 const core = new Core(
@@ -22,5 +26,6 @@ const core = new Core(
   appUiEl,
   <App />,
   // WebGL
-  new WebGLApp(appCanvasEl)
+  appCanvasEl,
+  WebGLCore
 );

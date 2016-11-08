@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as motion from 'popmotion';
 
 import { WindowResizeSingleton } from './WindowResizeSingleton';
-import { MainLoop } from './MainLoop';
 import { Provider } from './Provider';
-import { Clock } from './Clock';
 import { StateManager } from './StateManager';
 import { StepsManager } from './StepsManager';
 
@@ -13,19 +12,21 @@ import { StepsManager } from './StepsManager';
  */
 export class Core {
 
-  constructor(steps, initialState, appUiEl, rootElement, webGLApp) {
+  constructor(steps, initialState, appUiEl, rootElement, appCanvasEl, WebGLCore) {
 
-    this.webGLApp = webGLApp;
     this.appUiEl = appUiEl;
+    this.appCanvasEl = appCanvasEl;
     this.rootElement = rootElement;
 
-    this.time = null;
-    this.dt = null;
     this.lastState = null;
-    this.clock = new Clock();
-    this.mainLoop = new MainLoop(this.update.bind(this));
+    this.mainTask = motion.task({
+      onUpdate: this.update.bind(this),
+      onRender: this.render.bind(this)
+    });
     this.stateManager = new StateManager(initialState);
-    this.stepsManager = new StepsManager(steps);
+    this.stepsManager = new StepsManager(steps, this.stateManager);
+
+    this.webGLCore = new WebGLCore(this.appCanvasEl, this.stateManager);
 
     WindowResizeSingleton.getInstance().add((width, height) => {
       this.stateManager.updateState((state) => {
@@ -36,24 +37,21 @@ export class Core {
     });
 
     // start
-    this.clock.start(); // start clock
-    this.mainLoop.start(); // start loop
-    this.webGLApp.init(this.stateManager);
+    this.mainTask.start();
 
   }
 
-  update() {
-    // console.log(this.stateManager.state.toJS());
-    this.dt = this.clock.getDelta();
-    this.time = this.clock.getElapsedTime();
-    // Time state changes
-    this.stepsManager.update(this.stateManager, this.time, this.dt);
-    // Updates
-    this.updateView();
-    this.updateWebGL();
+  update(task, time, dt) {
+    this.stepsManager.update(time, dt);
+    this.updateWebGL(time, dt);
+    this.updateView(time, dt);
   }
 
-  updateView() {
+  render(task, time, dt) {
+    this.renderWebGL();
+  }
+
+  updateView(time, dt) {
     if (this.lastState === this.stateManager.state) {
       return;
     }
@@ -72,8 +70,12 @@ export class Core {
     );
   }
 
-  updateWebGL() {
-    this.webGLApp.update(this.stateManager, this.time, this.dt);
+  updateWebGL(time, dt) {
+    this.webGLCore.update(time, dt);
+  }
+
+  renderWebGL() {
+    this.webGLCore.render();
   }
 
 }

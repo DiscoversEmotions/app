@@ -38,6 +38,7 @@
     "node-sass": "^3.11.2",
     "normalize.css": "^5.0.0",
     "ouioui": "0.0.20",
+    "popmotion": "^5.0.18",
     "postprocessing": "^1.1.6",
     "raf": "^3.3.0",
     "react": "^15.3.2",

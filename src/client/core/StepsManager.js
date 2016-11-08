@@ -1,26 +1,33 @@
+// interface Step {
+//   start(stateManager, time, dt) -> void
+//   update(stateManager, time, dt) -> newStep
+//   stop(stateManager, time, dt) -> void
+// }
+
 export class StepsManager {
-  constructor(steps) {
+  constructor(steps, stateManager) {
     if (_.isNil(steps[`init`])) {
       throw new Error(`Steps must contain a 'init' step`);
     }
     this.steps = steps;
+    this.stateManager = stateManager;
     this.currentStep = `init`;
   }
 
-  startIfNot(stateManager, time, dt) {
+  startIfNot(time, dt) {
     if (!this.started) {
       this.currentStepStart(time, dt);
       this.started = true;
     }
   }
 
-  update(stateManager, time, dt) {
-    this.startIfNot(stateManager, time, dt);
-    var nextStep = this.currentStepUpdate(stateManager, time, dt);
+  update(time, dt) {
+    this.startIfNot(time, dt);
+    var nextStep = this.currentStepUpdate(time, dt);
     if (_.isString(nextStep) && nextStep !== this.currentStep) {
-      this.currentStepStop(stateManager, time, dt);
+      this.currentStepStop(time, dt);
       this.currentStep = nextStep;
-      this.currentStepStart(stateManager, time, dt);
+      this.currentStepStart(time, dt);
     }
   }
 
@@ -31,22 +38,22 @@ export class StepsManager {
     return this.steps[this.currentStep];
   }
 
-  currentStepUpdate(stateManager, time, dt) {
-    return this.currentStepMethod(`update`, stateManager, time, dt);
+  currentStepUpdate(time, dt) {
+    return this.currentStepMethod(`update`, time, dt);
   }
 
-  currentStepStart(stateManager, time, dt) {
-    return this.currentStepMethod(`start`, stateManager, time, dt);
+  currentStepStart(time, dt) {
+    return this.currentStepMethod(`start`, time, dt);
   }
 
-  currentStepStop(stateManager, time, dt) {
-    return this.currentStepMethod(`stop`, stateManager, time, dt);
+  currentStepStop(time, dt) {
+    return this.currentStepMethod(`stop`, time, dt);
   }
 
-  currentStepMethod(methodName, stateManager, time, dt) {
+  currentStepMethod(methodName, time, dt) {
     const curr = this.getCurrentStep();
     if (_.isFunction(curr[methodName])) {
-      return curr[methodName](stateManager, time, dt);
+      return curr[methodName](this.stateManager, time, dt);
     }
     return null;
   }

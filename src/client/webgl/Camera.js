@@ -1,36 +1,30 @@
-import { PerspectiveCamera } from 'three';
-import { OrbitControls } from './OrbitControls';
+import { PerspectiveCamera, Object3D } from 'three';
 
 /**
  * Camera class
  */
-export class Camera extends PerspectiveCamera {
+export class Camera extends Object3D{
 
-  /**
-   * constructor method
-   */
-  constructor(element, fov, aspect, near, far, orbit = true) {
-    super(fov, aspect, near, far);
-
-    if (orbit) {
-      this.controls = new OrbitControls(this, element);
-      this.controls.enabled = true;
-    }
+  constructor(fov, aspect, near, far) {
+    super();
+    this.camera = new PerspectiveCamera(fov, aspect, near, far);
+    this.add(this.camera);
   }
 
-  /**
-   * update method
-   * @param {number} delta Delta
-   */
   update(time, dt) {
-    // this.controls.update(dt);
+
   }
 
-  /**
-   *
-   */
+  setVerticalAngle(x) {
+    this.camera.rotation.x = x;
+  }
+
+  setHorizontalAngle(y) {
+    this.rotation.y = y;
+  }
+
   setSize (width, height) {
-    this.aspect = width / height;
-    this.updateProjectionMatrix();
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
   }
 }

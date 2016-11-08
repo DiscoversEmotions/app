@@ -12,20 +12,16 @@ export default class BootStep {
   }
 
   update(stateManager, time, dt) {
-    if (time) {
-      const seconds = Math.round(time - this.startTime);
-      if (seconds !== this.secondCount) {
-        console.log(`time update ${seconds}`);
-        this.secondCount = seconds;
-      }
-      this.time = time;
-      if (time - this.startTime > 10) {
-        return `boot2`;
-      }
-      return null;
-    } else {
-      return null;
+    const seconds = Math.round((time - this.startTime) / 1000);
+    if (seconds !== this.secondCount) {
+      console.log(`time update ${seconds}`);
+      this.secondCount = seconds;
     }
+    this.time = time;
+    if (time - this.startTime > 10000) {
+      return `boot2`;
+    }
+    return null;
   }
 
   stop(stateManager, time, dt) {

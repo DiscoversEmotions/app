@@ -6,3 +6,9 @@ export function switchColor () {
     return state.set(`color`, `red`);
   };
 }
+
+export function setWorld (world) {
+  return (state) => {
+    return state.set(`world`, world);
+  };
+}
