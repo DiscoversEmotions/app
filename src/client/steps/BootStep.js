@@ -1,3 +1,5 @@
+import { world, switchColor } from '~/actions';
+
 export default class BootStep {
 
   constructor() {
@@ -13,15 +15,22 @@ export default class BootStep {
 
   update(stateManager, time, dt) {
     const seconds = Math.round((time - this.startTime) / 1000);
+    var result = null;
     if (seconds !== this.secondCount) {
       console.log(`time update ${seconds}`);
       this.secondCount = seconds;
+      if (seconds === 4) {
+        stateManager.updateState(world.setWorld(`mind`));
+      }
+      // if (seconds === 12) {
+      //   stateManager.updateState(world.setWorld(`room`));
+      // }
     }
     this.time = time;
-    if (time - this.startTime > 5000) {
-      return `boot2`;
-    }
-    return null;
+    // if (time - this.startTime > 5000) {
+    //   return `boot2`;
+    // }
+    return result;
   }
 
   stop(stateManager, time, dt) {

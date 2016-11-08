@@ -1,9 +1,9 @@
 import { PerspectiveCamera, Object3D } from 'three';
 
 /**
- * Camera class
+ * Cameraman class
  */
-export class Camera extends Object3D {
+export class Cameraman extends Object3D {
 
   constructor(fov, aspect, near, far) {
     super();
@@ -15,12 +15,24 @@ export class Camera extends Object3D {
 
   }
 
+  getCamera() {
+    return this.camera;
+  }
+
   setVerticalAngle(x) {
     this.camera.rotation.x = x;
   }
 
   setHorizontalAngle(y) {
     this.rotation.y = y;
+  }
+
+  getVerticalAngle() {
+    return this.camera.rotation.x;
+  }
+
+  getHorizontalAngle() {
+    return this.rotation.y;
   }
 
   setSize (width, height) {

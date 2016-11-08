@@ -11,7 +11,7 @@ export default class BootStepBis {
     if (time) {
       this.startTime = time;
       stateManager.updateState(switchColor());
-      stateManager.updateState(world.setWorld(`room`));
+      stateManager.updateState(world.setWorld(`mind`));
     }
   }
 
