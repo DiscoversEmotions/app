@@ -1,9 +1,9 @@
 import _ from 'lodash';
 
 // class Step {
-//   start(time, dt, state, updateState) -> void
-//   update(time, dt, state, updateState) -> (newStep: string) | null
-//   stop(time, dt, state, updateState) -> void
+//   start(state, updateState, time: num | false, dt) -> void
+//   update(state, updateState, time: num | false, dt) -> (newStep: string) | null
+//   stop(state, updateState, time: num | false, dt) -> void
 // }
 
 export class StateManager {
@@ -19,25 +19,24 @@ export class StateManager {
     this.started = false;
 
     // bind
-    this.updateStateFromStep = this.updateStateFromStep.bind(this);
     this.updateState = this.updateState.bind(this);
   }
 
   startIfNot(time, dt) {
     if (!this.started) {
       this.onStateUpdate(this.state, this.updateState);
-      this.startCurrentStep(time, dt);
+      this.currentStepStart(time, dt);
       this.started = true;
     }
   }
 
   update(time, dt) {
     this.startIfNot(time, dt);
-    var nextStep = this.updateCurrentStep(time, dt);
+    var nextStep = this.currentStepUpdate(time, dt);
     if (_.isString(nextStep) && nextStep !== this.currentStep) {
-      this.stopCurrentStep(time, dt);
+      this.currentStepStop(time, dt);
       this.currentStep = nextStep;
-      this.startCurrentStep(time, dt);
+      this.currentStepStart(time, dt);
     }
   }
 
@@ -48,17 +47,10 @@ export class StateManager {
       return; // Nothing changed
     }
     if (notifyStep) {
-      this.notifyStep();
+      // update with no time
+      this.update(false);
     }
     this.onStateUpdate(this.state, this.updateState);
-  }
-
-  updateStateFromStep(updater) {
-    return this.updateState(updater, false);
-  }
-
-  notifyStep() {
-    this.getCurrentStep().update();
   }
 
   getCurrentStep() {
@@ -68,22 +60,22 @@ export class StateManager {
     return this.steps[this.currentStep];
   }
 
-  updateCurrentStep(time, dt) {
-    return this.execOnCurrentStep(`update`, time, dt);
+  currentStepUpdate(time, dt) {
+    return this.currentStepMethod(`update`, time, dt);
   }
 
-  startCurrentStep(time, dt) {
-    return this.execOnCurrentStep(`start`, time, dt);
+  currentStepStart(time, dt) {
+    return this.currentStepMethod(`start`, time, dt);
   }
 
-  stopCurrentStep(time, dt) {
-    return this.execOnCurrentStep(`stop`, time, dt);
+  currentStepStop(time, dt) {
+    return this.currentStepMethod(`stop`, time, dt);
   }
 
-  execOnCurrentStep(methodName, time, dt) {
+  currentStepMethod(methodName, time, dt) {
     const curr = this.getCurrentStep();
     if (_.isFunction(curr[methodName])) {
-      return curr[methodName](time, dt, this.state, this.updateStateFromStep);
+      return curr[methodName](this.state, (updater) => this.updateState(updater, false), time, dt);
     }
     return null;
   }
