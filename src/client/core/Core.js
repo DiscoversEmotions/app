@@ -48,7 +48,7 @@ export class Core {
   }
 
   render(task, time, dt) {
-    this.renderWebGL();
+    this.renderWebGL(time, dt);
   }
 
   updateView(time, dt) {
@@ -74,8 +74,8 @@ export class Core {
     this.webGLCore.update(time, dt);
   }
 
-  renderWebGL() {
-    this.webGLCore.render();
+  renderWebGL(time, dt) {
+    this.webGLCore.render(time, dt);
   }
 
 }

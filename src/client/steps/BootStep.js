@@ -19,12 +19,12 @@ export default class BootStep {
     if (seconds !== this.secondCount) {
       console.log(`time update ${seconds}`);
       this.secondCount = seconds;
-      if (seconds === 4) {
+      if (seconds === 6) {
         stateManager.updateState(world.setWorld(`mind`));
       }
-      // if (seconds === 12) {
-      //   stateManager.updateState(world.setWorld(`room`));
-      // }
+      if (seconds === 12) {
+        stateManager.updateState(world.setWorld(`room`));
+      }
     }
     this.time = time;
     // if (time - this.startTime > 5000) {
