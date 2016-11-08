@@ -1,4 +1,4 @@
-import { switchColor } from '~/actions';
+import { world, switchColor } from '~/actions';
 
 export default class BootStepBis {
 
@@ -11,6 +11,7 @@ export default class BootStepBis {
     if (time) {
       this.startTime = time;
       stateManager.updateState(switchColor());
+      stateManager.updateState(world.setWorld(`mind`));
     }
   }
 

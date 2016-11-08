@@ -1,5 +1,5 @@
 import { Cube } from '~/webgl/meshes';
-import { Camera } from '~/webgl';
+import { Cameraman } from '~/webgl';
 import { PointLight, Object3D } from 'three';
 
 export class MemoryWorld {
@@ -8,9 +8,9 @@ export class MemoryWorld {
     this.stateManager = stateManager;
 
     this.scene = new Object3D();
-    this.camera = new Camera(45, 1, 1, 1100);
-    this.camera.position.set(0, 2, 5);
-    this.scene.add(this.camera);
+    this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.cameraman.position.set(0, 2, 5);
+    this.scene.add(this.cameraman);
 
     this.cube1 = new Cube();
     this.scene.add(this.cube1);
@@ -20,8 +20,8 @@ export class MemoryWorld {
     this.scene.add(this.light);
   }
 
-  getCamera() {
-    return this.camera.camera;
+  getCameraman() {
+    return this.cameraman;
   }
 
   getScene() {
@@ -34,7 +34,7 @@ export class MemoryWorld {
   }
 
   setSize(width, height) {
-    this.camera.setSize(width, height);
+    this.cameraman.setSize(width, height);
   }
 
 }

@@ -1,5 +1,5 @@
 import { Cube } from '~/webgl/meshes';
-import { Camera } from '~/webgl';
+import { Cameraman } from '~/webgl';
 import { PointLight, Object3D } from 'three';
 
 export class MindWorld {
@@ -8,9 +8,9 @@ export class MindWorld {
     this.stateManager = stateManager;
 
     this.scene = new Object3D();
-    this.camera = new Camera(45, 1, 1, 1100);
-    this.camera.position.set(0, 2, 5);
-    this.scene.add(this.camera);
+
+    this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.cameraman.position.set(0, 1, 5);
 
     this.cube1 = new Cube();
     this.scene.add(this.cube1);
@@ -18,10 +18,18 @@ export class MindWorld {
     this.light = new PointLight();
     this.light.position.y = 5;
     this.scene.add(this.light);
+
+    this.rootObject = new Object3D();
+    this.rootObject.add(this.scene);
+    this.rootObject.add(this.cameraman);
   }
 
-  getCamera() {
-    return this.camera.camera;
+  getCameraman() {
+    return this.cameraman;
+  }
+
+  getRootObject() {
+    return this.rootObject;
   }
 
   getScene() {
@@ -34,7 +42,7 @@ export class MindWorld {
   }
 
   setSize(width, height) {
-    this.camera.setSize(width, height);
+    this.cameraman.setSize(width, height);
   }
 
 }

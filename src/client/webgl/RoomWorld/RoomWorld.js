@@ -1,5 +1,5 @@
 import { Cube, Ground, RoomSphere } from '~/webgl/meshes';
-import { Camera } from '~/webgl';
+import { Cameraman } from '~/webgl';
 import { PointLight, Object3D } from 'three';
 
 export class RoomWorld {
@@ -8,10 +8,9 @@ export class RoomWorld {
     this.stateManager = stateManager;
 
     this.scene = new Object3D();
-    this.camera = new Camera(75, 1, 1, 1100);
-    this.camera.position.set(0, 2, -5);
+    this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.cameraman.position.set(0, 2, -5);
     this.camVert = 0;
-    this.scene.add(this.camera);
 
     this.roomSphere = new RoomSphere();
     this.scene.add(this.roomSphere);
@@ -27,10 +26,20 @@ export class RoomWorld {
     var light = new PointLight();
     light.position.y = 5;
     this.scene.add(light);
+
+    this.cameraman.setHorizontalAngle(Math.PI * 1.5);
+
+    this.rootObject = new Object3D();
+    this.rootObject.add(this.scene);
+    this.rootObject.add(this.cameraman);
   }
 
-  getCamera() {
-    return this.camera.camera;
+  getCameraman() {
+    return this.cameraman;
+  }
+
+  getRootObject() {
+    return this.rootObject;
   }
 
   getScene() {
@@ -39,8 +48,8 @@ export class RoomWorld {
 
   update(time, dt) {
     this.camVert += 0.01;
-    this.camera.setHorizontalAngle((Math.PI * 1.5));
-    this.camera.setVerticalAngle(Math.sin(this.camVert));
+    this.cameraman.setHorizontalAngle((Math.PI * 1.5) + Math.sin(this.camVert) * 0.5);
+    // this.cameraman.setVerticalAngle(Math.sin(this.camVert));
     this.cube1.rotation.x += 0.01;
     this.cube1.rotation.y += 0.02;
     this.cube2.rotation.x += 0.02;
@@ -48,7 +57,7 @@ export class RoomWorld {
   }
 
   setSize(width, height) {
-    this.camera.setSize(width, height);
+    this.cameraman.setSize(width, height);
   }
 
   // initAssetsManager() {
@@ -67,7 +76,7 @@ export class RoomWorld {
   //
   // initPostComposer() {
   //   const composer = new EffectComposer(this.renderer);
-  //   this.renderPass = new RenderPass(this.scene, this.camera);
+  //   this.renderPass = new RenderPass(this.scene, this.cameraman);
   //   this.renderPass.renderToScreen = true;
   //   composer.addPass(this.renderPass);
   //   return composer;
@@ -79,7 +88,7 @@ export class RoomWorld {
   //
   // onMouseMove(e) {
   //   const offset = EventUtils.getOffsetOf(e, this.parentElement);
-  //   this.camera.rotation.y = - offset.x / this.width * 2;
+  //   this.cameraman.rotation.y = - offset.x / this.width * 2;
   //   // this.camVertical.rotation.x = - offset.y / this.height;
   // }
 
