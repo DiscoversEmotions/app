@@ -3,7 +3,7 @@ import { PerspectiveCamera, Object3D } from 'three';
 /**
  * Camera class
  */
-export class Camera extends Object3D{
+export class Camera extends Object3D {
 
   constructor(fov, aspect, near, far) {
     super();
