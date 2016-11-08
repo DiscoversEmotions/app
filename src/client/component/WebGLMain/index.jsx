@@ -20,7 +20,6 @@ class WebGLMain extends React.Component {
     if (this.app) {
       this.app.updateState(this.props.state);
     }
-    console.log(this.props);
     return (
       <div
         ref={(screen) => this.screen = screen}

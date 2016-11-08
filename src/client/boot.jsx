@@ -1,19 +1,23 @@
-import ReactDOM from 'react-dom';
 import React from 'react';
 import App from '~/component/App';
-import { Provider } from 'react-redux';
-import { RouterProvider } from 'redux-little-router';
-import routes from './routes';
-import { createStore } from '~/redux';
+import { Core } from '~/core';
+import { Map } from 'immutable';
+import steps from '~/steps';
 
-const rootEl = document.getElementById('app');
-const store = createStore(routes);
+const appCanvasEl = document.getElementById('app-canvas');
+const appUiEl = document.getElementById('app-ui');
+// const store = createStore(routes);
 
-ReactDOM.render(
-  <Provider store={store}>
-    <RouterProvider store={store}>
-      <App />
-    </RouterProvider>
-  </Provider>,
-  rootEl
+const initialState = new Map({
+  width: 600,
+  height: 600,
+  color: `red`
+});
+
+const core = new Core(
+  appCanvasEl,
+  appUiEl,
+  <App />,
+  steps,
+  initialState
 );

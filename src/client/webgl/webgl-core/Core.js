@@ -12,6 +12,7 @@ import raf from 'raf';
 export class Core {
 
   constructor(parentElement) {
+
     this.width = 600;
     this.height = 600;
     this.parentElement = parentElement;
@@ -86,6 +87,7 @@ export class Core {
   }
 
   update (time, dt) {
+    this.state.update(time, dt);
     this.scene.update(time, dt);
     this.camera.update(time, dt);
   }

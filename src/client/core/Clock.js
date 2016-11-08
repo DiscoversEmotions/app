@@ -26,7 +26,7 @@ export class Clock {
     return this.elapsedTime;
   }
 
-  getDelta(key) {
+  getDelta() {
     var diff = 0;
     if (!this.running) {
       throw new Error(`Clock is not running !`);

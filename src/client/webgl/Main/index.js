@@ -1,3 +1,7 @@
-import App from './App';
+class WebGLMain {
+  constructor() {
 
-export default App;
+  }
+
+  
+}
