@@ -1,3 +1,5 @@
+import * as world from './world';
+
 export function switchColor () {
   return (state) => {
     if (state.get(`color`) === `red`) {
@@ -7,8 +9,6 @@ export function switchColor () {
   };
 }
 
-export function setWorld (world) {
-  return (state) => {
-    return state.set(`world`, world);
-  };
-}
+export {
+  world
+};

@@ -1,6 +1,7 @@
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
 import { Camera } from './Camera';
+import * as actions from '~/actions';
 import _ from 'lodash';
 
 import { RoomWorld } from './RoomWorld';
@@ -59,11 +60,18 @@ export class WebGLCore {
   }
 
   _onStateChange(time, dt) {
+    console.log(this.stateManager.state.toJS());
     this._resize();
     const currentWorld = this.stateManager.state.getIn([`world`, `current`]);
     if (currentWorld !== this.currentWorld) {
-      console.log(`world change`);
+      this._startWorldTransition(this.currentWorld, currentWorld);
+      this.currentWorld = currentWorld;
     }
+  }
+
+  _startWorldTransition(fromWordl, toWorld) {
+    this.stateManager.updateState(actions.world.startTransition());
+    console.log(`World transition ${fromWordl} -> ${toWorld}`);
   }
 
   _resize() {

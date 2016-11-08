@@ -18,7 +18,7 @@ export default class BootStep {
       this.secondCount = seconds;
     }
     this.time = time;
-    if (time - this.startTime > 10000) {
+    if (time - this.startTime > 5000) {
       return `boot2`;
     }
     return null;
