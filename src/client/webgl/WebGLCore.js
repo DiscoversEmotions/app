@@ -23,6 +23,7 @@ export class WebGLCore {
     this.height = null;
     this.lastState = null;
     this.stateManager = stateManager;
+    this.currentWorld = this.stateManager.state.getIn([`world`, `current`]);
 
     this.scene = new Scene();
     this.renderer = new Renderer();
@@ -37,8 +38,7 @@ export class WebGLCore {
     this.scene.add(this.transitionCamera);
 
     /////////
-    const currentWorld = this.stateManager.state.getIn([`world`, `current`]);
-    this.scene.add(this.worlds[currentWorld].getScene());
+    this.scene.add(this.worlds[this.currentWorld].getScene());
     /////////
 
     this._resize();
@@ -51,17 +51,19 @@ export class WebGLCore {
       this._onStateChange(time, dt);
       this.lastState = this.stateManager.state;
     }
-    const currentWorld = this.stateManager.state.getIn([`world`, `current`]);
-    this.worlds[currentWorld].update(time, dt);
+    this.worlds[this.currentWorld].update(time, dt);
   }
 
   render() {
-    const currentWorld = this.stateManager.state.getIn([`world`, `current`]);
-    this.renderer.render(this.scene, this.worlds[currentWorld].getCamera());
+    this.renderer.render(this.scene, this.worlds[this.currentWorld].getCamera());
   }
 
   _onStateChange(time, dt) {
     this._resize();
+    const currentWorld = this.stateManager.state.getIn([`world`, `current`]);
+    if (currentWorld !== this.currentWorld) {
+      console.log(`world change`);
+    }
   }
 
   _resize() {
