@@ -2,7 +2,7 @@ import { Cube } from '~/webgl/meshes';
 import { Camera } from '~/webgl';
 import { PointLight, Object3D } from 'three';
 
-export class MindWorld {
+export class MemoryWorld {
 
   constructor(stateManager) {
     this.stateManager = stateManager;
