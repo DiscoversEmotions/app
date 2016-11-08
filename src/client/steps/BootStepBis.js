@@ -6,19 +6,19 @@ export default class BootStepBis {
     this.startTime = null;
   }
 
-  start(state, updateState, time, dt) {
+  start(stateManager, time, dt) {
     console.log(`start boot2`);
     if (time) {
       this.startTime = time;
-      updateState(switchColor());
+      stateManager.updateState(switchColor());
     }
   }
 
-  update(state, updateState, time, dt) {
+  update(stateManager, time, dt) {
     return null;
   }
 
-  stop(state, updateState, time, dt) {
+  stop(stateManager, time, dt) {
     console.log(`stop boot2`);
     this.startTime = null;
   }

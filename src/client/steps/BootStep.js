@@ -5,13 +5,13 @@ export default class BootStep {
     this.time = null;
   }
 
-  start(state, updateState, time, dt) {
+  start(stateManager, time, dt) {
     console.log(`start boot`);
     this.startTime = time;
     this.secondCount = 0;
   }
 
-  update(state, updateState, time, dt) {
+  update(stateManager, time, dt) {
     if (time) {
       const seconds = Math.round(time - this.startTime);
       if (seconds !== this.secondCount) {
@@ -28,7 +28,7 @@ export default class BootStep {
     }
   }
 
-  stop(state, updateState, time, dt) {
+  stop(stateManager, time, dt) {
     console.log(`stop boot`);
     this.startTime = null;
   }

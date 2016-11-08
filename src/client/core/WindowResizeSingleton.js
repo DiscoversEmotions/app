@@ -24,14 +24,25 @@ export class WindowResizeSingleton extends Signal {
    */
   constructor() {
     super();
+    this.width = null;
+    this.height = null;
 
     on(window, `resize`, debounce(this.handleResize.bind(this), 100));
+    this.handleResize();
+  }
+
+  add(cb, ...args) {
+    var result = super.add(cb, ...args);
+    cb(this.width, this.height);
+    return result;
   }
 
   /**
    * handleResize method
    */
   handleResize() {
-    this.dispatch(window.innerWidth, window.innerHeight);
+    this.width = window.innerWidth;
+    this.height = window.innerHeight;
+    this.dispatch(this.width, this.height);
   }
 }

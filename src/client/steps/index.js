@@ -3,7 +3,7 @@ import BootStepBis from './BootStepBis';
 
 export default {
   init: {
-    update(time, dt) {
+    update(stateManager, time, dt) {
       return `boot`;
     }
   },
