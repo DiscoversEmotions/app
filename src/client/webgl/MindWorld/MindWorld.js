@@ -4,8 +4,9 @@ import { PointLight, Object3D } from 'three';
 
 export class MindWorld {
 
-  constructor(stateManager) {
+  constructor(stateManager, parentElement) {
     this.stateManager = stateManager;
+    this.parentElement = parentElement;
 
     this.scene = new Object3D();
 

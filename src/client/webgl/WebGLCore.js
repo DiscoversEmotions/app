@@ -1,7 +1,7 @@
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import * as motion from 'popmotion';
 import _ from 'lodash';
-import { Vector3 } from 'three';
+import { Vector3, Color } from 'three';
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
 import * as actions from '~/actions';
@@ -29,6 +29,9 @@ export class WebGLCore {
     this.stateManager = stateManager;
     this.currentWorld = this.stateManager.state.getIn([`world`, `current`]);
     this.transitionStartTime = null;
+    this.defaultEnvConfig = {
+      background: new Color(0, 0, 0)
+    };
 
     this.scene = new Scene();
     this.renderer = new Renderer();
@@ -38,12 +41,12 @@ export class WebGLCore {
     this.composer.addPass(this.renderPass);
 
     this.worlds = {
-      room: new RoomWorld(this.stateManager),
-      mind: new MindWorld(this.stateManager),
-      memory: new MemoryWorld(this.stateManager)
+      room: new RoomWorld(this.stateManager, this.parentElement),
+      mind: new MindWorld(this.stateManager, this.parentElement),
+      memory: new MemoryWorld(this.stateManager, this.parentElement)
     };
 
-    this.scene.add(this.worlds[this.currentWorld].getRootObject());
+    this._mountWorld(this.currentWorld, 0);
 
     this._initComposer();
 
@@ -81,20 +84,10 @@ export class WebGLCore {
 
   _onStateChange(time, dt) {
     this._resize();
-    const currentWorld = this.stateManager.state.getIn([`world`, `current`]);
-    if (currentWorld !== this.currentWorld) {
-      this._startWorldTransition(this.currentWorld, currentWorld, time);
-      this.currentWorld = currentWorld;
+    const nextWorld = this.stateManager.state.getIn([`world`, `current`]);
+    if (nextWorld !== this.currentWorld) {
+      this._switchWorld(nextWorld, time);
     }
-  }
-
-  _startWorldTransition(fromWorld, toWorld, time) {
-    const nextWordlRootObject = this.worlds[toWorld].getRootObject();
-    const prevWordlRootObject = this.worlds[fromWorld].getRootObject();
-    this.scene.add(nextWordlRootObject);
-    this.scene.remove(prevWordlRootObject);
-    this.transitionStartTime = time;
-    this.stateManager.updateState(actions.world.startTransition());
   }
 
   _resize() {
@@ -119,5 +112,40 @@ export class WebGLCore {
     this.glitchPass.enabled = false;
     this.composer.addPass(this.glitchPass);
   }
+
+  _mountWorld(worldName, time) {
+    const rootObject = this.worlds[worldName].getRootObject();
+    if (_.isFunction(this.worlds[worldName].mount)) {
+      this.worlds[worldName].mount(time);
+    }
+    if (_.isFunction(this.worlds[worldName].getEnvConfig)) {
+      const envConfig = Object.assign({}, this.defaultEnvConfig, this.worlds[worldName].getEnvConfig());
+      this._useEnvConfig(envConfig);
+    } else {
+      this._useEnvConfig(this.defaultEnvConfig);
+    }
+    this.scene.add(rootObject);
+    this.currentWorld = worldName;
+  }
+
+  _unmountWorld(worldName, time) {
+    const rootObject = this.worlds[worldName].getRootObject();
+    if (_.isFunction(this.worlds[worldName].unmount)) {
+      this.worlds[worldName].unmount(time);
+    }
+    this.scene.remove(rootObject);
+  }
+
+  _switchWorld(nextWorld, time) {
+    this._unmountWorld(this.currentWorld);
+    this._mountWorld(nextWorld);
+    this.transitionStartTime = time;
+    this.stateManager.updateState(actions.world.startTransition());
+  }
+
+  _useEnvConfig(config) {
+    this.scene.background = config.background;
+  }
+
 
 }

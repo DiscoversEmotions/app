@@ -1,16 +1,22 @@
 import { Cube, Ground, RoomSphere } from '~/webgl/meshes';
 import { Cameraman } from '~/webgl';
+import { EventUtils } from '~/core';
 import { PointLight, Object3D } from 'three';
+import _ from 'lodash';
 
 export class RoomWorld {
 
-  constructor(stateManager) {
+  constructor(stateManager, parentElement) {
     this.stateManager = stateManager;
+    this.parentElement = parentElement;
 
     this.scene = new Object3D();
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 2, -5);
     this.camVert = 0;
+    this.width = 600;
+    this.height = 600;
+    this.mousePos = { x: 0, y: 0 };
 
     this.roomSphere = new RoomSphere();
     this.scene.add(this.roomSphere);
@@ -32,6 +38,9 @@ export class RoomWorld {
     this.rootObject = new Object3D();
     this.rootObject.add(this.scene);
     this.rootObject.add(this.cameraman);
+
+    // Bind
+    this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000/60);
   }
 
   getCameraman() {
@@ -46,18 +55,38 @@ export class RoomWorld {
     return this.scene;
   }
 
+  mount(time) {
+    console.log(`mount`);
+    document.addEventListener(`mousemove`, this._onMouseMove, false);
+  }
+
+  unmount(time) {
+    document.removeEventListener(`mousemove`, this._onMouseMove, false);
+  }
+
   update(time, dt) {
-    this.camVert += 0.01;
-    this.cameraman.setHorizontalAngle((Math.PI * 1.5) + Math.sin(this.camVert) * 0.5);
-    // this.cameraman.setVerticalAngle(Math.sin(this.camVert));
     this.cube1.rotation.x += 0.01;
     this.cube1.rotation.y += 0.02;
     this.cube2.rotation.x += 0.02;
     this.cube2.rotation.y += 0.01;
+    this._updateCameraman();
   }
 
   setSize(width, height) {
+    this.width = width;
+    this.height = height;
     this.cameraman.setSize(width, height);
+  }
+
+  _onMouseMove(e) {
+    const offset = EventUtils.getOffset(e);
+    this.mousePos.x = ((offset.x / this.width) * 2) - 0.5;
+    this.mousePos.y = ((offset.y / this.height) * 2) - 0.5;
+  }
+
+  _updateCameraman() {
+    this.cameraman.setHorizontalAngle((Math.PI * 1.5) - 2 * this.mousePos.x);
+    this.cameraman.setVerticalAngle(- 1 * this.mousePos.y);
   }
 
   // initAssetsManager() {

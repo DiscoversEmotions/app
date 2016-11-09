@@ -22,8 +22,11 @@ export default class BootStep {
       if (seconds === 6) {
         stateManager.updateState(world.setWorld(`mind`));
       }
-      if (seconds === 12) {
-        stateManager.updateState(world.setWorld(`room`));
+      if (seconds === 10) {
+        stateManager.updateState(world.setWorld(`memory`));
+      }
+      if (seconds === 13) {
+        stateManager.updateState(world.setWorld(`mind`));
       }
     }
     this.time = time;
