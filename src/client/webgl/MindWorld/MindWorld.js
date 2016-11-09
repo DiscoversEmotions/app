@@ -10,16 +10,17 @@ import {
   PointLight,
   Object3D,
   LoadingManager,
-  Mesh, 
+  Mesh,
   Raycaster
 } from 'three';
 import _ from 'lodash';
-import * as actions from '~/actions';
+import * as actions from '~/store/actions';
 import { PointerLock } from '~/core';
 
 export class MindWorld {
 
-  constructor(stateManager, parentElement) {
+  constructor(name, stateManager, parentElement) {
+    this.name = name;
     this.stateManager = stateManager;
     this.parentElement = parentElement;
 
@@ -30,7 +31,7 @@ export class MindWorld {
 
     // this.pointerLock = new PointerLock(this.parentElement, this._onPointerLockChange.bind(this));
     // _onPointerLockChange(pointerLocked) {
-    //   this.stateManager.updateState(actions.movement.setPointerLock(pointerLocked));
+    //   this.stateManager.dispatch(actions.movement.setPointerLock(pointerLocked));
     // }
 
     this.scene = new Object3D();
@@ -150,7 +151,7 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // w
-      this.stateManager.updateState(actions.movement.setForward(true));
+      this.stateManager.dispatch(actions.movement.setForward(true));
       break;
     };
   }
@@ -159,17 +160,17 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // w
-      this.stateManager.updateState(actions.movement.setForward(false));
+      this.stateManager.dispatch(actions.movement.setForward(false));
       break;
     };
   }
 
   _onMouseDown(e) {
-    this.stateManager.updateState(actions.movement.setForward(true));
+    this.stateManager.dispatch(actions.movement.setForward(true));
   }
 
   _onMouseUp(e) {
-    this.stateManager.updateState(actions.movement.setForward(false));
+    this.stateManager.dispatch(actions.movement.setForward(false));
   }
 
   _updateCameraman() {

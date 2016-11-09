@@ -12,22 +12,17 @@ export function Connect (
           component,
           Object.assign(
             {},
-            {
-              state: this.context.state,
-              updateState: this.context.updateState
-            },
             this.props,
-            selector(this.context.state, this.props),
+            selector(this.context.store.get(), this.props),
             _.mapValues(actions, (action) => (...args) => {
-              return this.context.updateState(action(...args));
+              return this.context.store.dispatch(action(...args));
             })
           )
         );
       }
     }
     ConnectedComponent.contextTypes = {
-      state: PropTypes.any.isRequired,
-      updateState: PropTypes.func.isRequired
+      store: PropTypes.any.isRequired,
     };
     return ConnectedComponent;
   };

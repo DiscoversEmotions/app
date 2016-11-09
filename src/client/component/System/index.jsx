@@ -1,7 +1,7 @@
 import React from 'react';
 import { BindCSS, Connect } from '~/core';
 import styles from './System';
-import { startRecovery } from '~/actions';
+import { startRecovery } from '~/store/actions';
 import _ from 'lodash';
 
 const allMessages = [
@@ -17,17 +17,14 @@ const allMessages = [
 
 @Connect(
   (state, props) => ({
-    color: state.get(`color`),
-    messages: state.get(`messages`),
-    bootData: state.getIn([`step`, `data`, `boot`]).toJS(),
-    step: state.getIn([`step`, `current`])
+    step: state.step
   }),
   { startRecovery }
 )
 @BindCSS(styles)
 class System extends React.Component {
   render() {
-    const messages = this.getBootStepMessages();
+    // const messages = this.getBootStepMessages();
     const classes = [`system`];
     if (this.props.step !== `boot`) {
       classes.push(`full`);
@@ -37,9 +34,6 @@ class System extends React.Component {
         styleName={classes.join(` `)}
       >
         <div>
-          { messages.map((mess, index) => (
-            <p key={index}>{ mess.value }</p>
-          )) }
         </div>
         { this.renderAsk() }
       </div>

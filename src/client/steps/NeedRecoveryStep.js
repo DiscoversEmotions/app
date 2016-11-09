@@ -1,4 +1,4 @@
-import { world, step } from '~/actions';
+import { world, step } from '~/store/actions';
 
 export default class NeedRecoveryStep {
 
@@ -7,7 +7,7 @@ export default class NeedRecoveryStep {
   }
 
   start(stateManager, time, dt) {
-    stateManager.updateState(step.setData(
+    stateManager.dispatch(step.setData(
       `needRecovery`,
       {}
     ));

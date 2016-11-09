@@ -1,4 +1,4 @@
-import { world, step } from '~/actions';
+import { world, step } from '~/store/actions';
 
 export default class BootStep {
 
@@ -10,7 +10,7 @@ export default class BootStep {
     console.log(`start boot`);
     this.startTime = time;
     this.seconds = 0;
-    stateManager.updateState(step.setData(
+    stateManager.dispatch(step.setData(
       `boot`,
       {
         seconds: 0
@@ -22,9 +22,9 @@ export default class BootStep {
     const seconds = Math.round((time - this.startTime) / 100) / 10;
     if (seconds !== this.seconds) {
       this.seconds = seconds;
-      stateManager.updateState(step.updateData(`boot`, data => data.set(`seconds`, this.seconds)));
+      stateManager.dispatch(step.updateData(`boot`, data => data.set(`seconds`, this.seconds)));
       if (seconds >= 8) {
-        stateManager.updateState(step.setCurrent(`needRecovery`));
+        stateManager.dispatch(step.setCurrent(`needRecovery`));
       }
     }
   }

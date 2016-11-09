@@ -6,7 +6,8 @@ import _ from 'lodash';
 
 export class RoomWorld {
 
-  constructor(stateManager, parentElement) {
+  constructor(name, stateManager, parentElement) {
+    this.name = name;
     this.stateManager = stateManager;
     this.parentElement = parentElement;
 
