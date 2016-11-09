@@ -113,10 +113,6 @@ export class WebGLCore {
   }
 
   _initComposer() {
-    // this.smaaPass = new SMAAPass(window.Image);
-    // this.smaaPass.renderToScreen = true;
-    // this.smaaPass.enabled = false;
-    // this.composer.addPass(this.smaaPass);
     this.glitchPass = new GlitchPass();
     this.glitchPass.renderToScreen = true;
     this.glitchPass.mode = 1;
