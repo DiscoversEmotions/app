@@ -80,45 +80,13 @@ export class RoomWorld {
 
   _onMouseMove(e) {
     const offset = EventUtils.getOffset(e);
-    this.mousePos.x = ((offset.x / this.width) * 2) - 0.5;
-    this.mousePos.y = ((offset.y / this.height) * 2) - 0.5;
+    this.mousePos.x = ((offset.x / this.width) * 2) - 1;
+    this.mousePos.y = ((offset.y / this.height) * 2) - 1;
   }
 
   _updateCameraman() {
-    this.cameraman.setHorizontalAngle((Math.PI * 1.5) - 2 * this.mousePos.x);
-    this.cameraman.setVerticalAngle(- 1 * this.mousePos.y);
+    this.cameraman.setHorizontalAngle((Math.PI * 1.5) - (2 * this.mousePos.x));
+    this.cameraman.setVerticalAngle(- (1 * this.mousePos.y));
   }
-
-  // initAssetsManager() {
-  //   var manager = super.initAssetsManager();
-  //   var texture = new Texture();
-  // }
-  //
-  // initScene() {
-  //   return new Scene();
-  // }
-  //
-  // initCamera(parentElement) {
-  //   var camera = new Camera(parentElement, 75, this.width / this.height, 1, 1100, false);
-  //   return camera;
-  // }
-  //
-  // initPostComposer() {
-  //   const composer = new EffectComposer(this.renderer);
-  //   this.renderPass = new RenderPass(this.scene, this.cameraman);
-  //   this.renderPass.renderToScreen = true;
-  //   composer.addPass(this.renderPass);
-  //   return composer;
-  // }
-  //
-  // addEvents() {
-  //   document.addEventListener(`mousemove`, this.onMouseMove.bind(this), false );
-  // }
-  //
-  // onMouseMove(e) {
-  //   const offset = EventUtils.getOffsetOf(e, this.parentElement);
-  //   this.cameraman.rotation.y = - offset.x / this.width * 2;
-  //   // this.camVertical.rotation.x = - offset.y / this.height;
-  // }
 
 }
