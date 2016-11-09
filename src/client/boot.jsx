@@ -1,9 +1,9 @@
 import React from 'react';
-import App from '~/component/App';
-import { Core } from '~/core';
 import { fromJS } from 'immutable';
-import steps from '~/steps';
+import App from '~/component/App';
+import AppCore from './AppCore';
 import { WebGLCore } from '~/webgl';
+import { Store } from '~/store';
 
 const appCanvasEl = document.getElementById('app-canvas');
 const appUiEl = document.getElementById('app-ui');
@@ -11,24 +11,24 @@ const appUiEl = document.getElementById('app-ui');
 const initialState = fromJS({
   width: 600,
   height: 600,
-  color: `red`,
   world: {
-    current: `mind`,
+    current: `room`,
     transitionInProgress: false
   },
   movement: {
-    forward: false
+    forward: false,
+    pointerLocked: false
+  },
+  step: {
+    current: `boot`,
+    data: {}
   }
 });
 
-const core = new Core(
-  // state
-  steps,
-  initialState,
-  // UI
+const core = new AppCore(
+  new Store(),
   appUiEl,
   <App />,
-  // WebGL
   appCanvasEl,
   WebGLCore
 );

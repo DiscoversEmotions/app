@@ -4,14 +4,15 @@ import _ from 'lodash';
 import { Vector3, Color } from 'three';
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
-import * as actions from '~/actions';
+import * as actions from '~/store/actions';
+import { Worlds } from '~/store';
 
 import { RoomWorld } from './RoomWorld';
 import { MindWorld } from './MindWorld';
 import { MemoryWorld } from './MemoryWorld';
 
 // interface World {
-//   constructor(stateManager)
+//   constructor(store)
 //   getScene()
 //   getCameraman()
 //   update()
@@ -19,14 +20,15 @@ import { MemoryWorld } from './MemoryWorld';
 
 export class WebGLCore {
 
-  constructor(parentElement, stateManager) {
+  constructor(parentElement, store) {
     this.parentElement = parentElement;
 
     this.width = null;
     this.height = null;
     this.lastState = null;
-    this.stateManager = stateManager;
-    this.currentWorld = this.stateManager.state.getIn([`world`, `current`]);
+    this.store = store;
+    this.currentWorld = this.store.get(`world`);
+    console.log(this.currentWorld);
     this.transitionStartTime = null;
     this.defaultEnvConfig = {
       background: new Color(0, 0, 0)
@@ -40,9 +42,9 @@ export class WebGLCore {
     this.composer.addPass(this.renderPass);
 
     this.worlds = {
-      room: new RoomWorld(this.stateManager, this.parentElement),
-      mind: new MindWorld(this.stateManager, this.parentElement),
-      memory: new MemoryWorld(this.stateManager, this.parentElement)
+      [Worlds.Room]: new RoomWorld(Worlds.Room, this.store, this.parentElement),
+      [Worlds.Mind]: new MindWorld(Worlds.Mind, this.store, this.parentElement),
+      [Worlds.Memory]: new MemoryWorld(Worlds.Memory, this.store, this.parentElement)
     };
 
     this._mountWorld(this.currentWorld, 0);
@@ -55,24 +57,24 @@ export class WebGLCore {
   }
 
   update(time, dt) {
-    if (this.stateManager.state !== this.lastState) {
+    if (this.store.state !== this.lastState) {
       this._onStateChange(time, dt);
-      this.lastState = this.stateManager.state;
+      this.lastState = this.store.state;
     }
     // Update worlds
     this.worlds[this.currentWorld].update(time, dt);
     // Pass
-    if (
-      this.stateManager.state.getIn([`world`, `transitionInProgress`]) &&
-      time - this.transitionStartTime < 500
-    ) {
-      this.glitchPass.enabled = true;
-      this.renderPass.renderToScreen = false;
-    } else {
-      this.renderPass.renderToScreen = true;
-      this.glitchPass.enabled = false;
-      this.stateManager.updateState(actions.world.endTransition());
-    }
+    // if (
+    //   this.store.get(`world`, `transitionInProgress`]) &&
+    //   time - this.transitionStartTime < 500
+    // ) {
+    //   this.glitchPass.enabled = true;
+    //   this.renderPass.renderToScreen = false;
+    // } else {
+    //   this.renderPass.renderToScreen = true;
+    //   this.glitchPass.enabled = false;
+    //   this.store.dispatch(actions.world.endTransition());
+    // }
   }
 
   render(time, dt) {
@@ -83,14 +85,14 @@ export class WebGLCore {
 
   _onStateChange(time, dt) {
     this._resize();
-    const nextWorld = this.stateManager.state.getIn([`world`, `current`]);
+    const nextWorld = this.store.get(`world`);
     if (nextWorld !== this.currentWorld) {
       this._switchWorld(nextWorld, time);
     }
   }
 
   _resize() {
-    const state = this.stateManager.state;
+    const state = this.store.state;
     if (this.width !== state.get(`width`) || this.height !== state.get(`height`)) {
       this.width = state.get(`width`);
       this.height = state.get(`height`);
@@ -139,7 +141,7 @@ export class WebGLCore {
     this._unmountWorld(this.currentWorld);
     this._mountWorld(nextWorld);
     this.transitionStartTime = time;
-    this.stateManager.updateState(actions.world.startTransition());
+    this.store.dispatch(actions.world.startTransition());
   }
 
   _useEnvConfig(config) {

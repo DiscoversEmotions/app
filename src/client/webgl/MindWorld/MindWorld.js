@@ -10,14 +10,21 @@ import {
   PointLight,
   Object3D,
   LoadingManager,
-  Mesh
+  Mesh,
+  Raycaster,
+  JSONLoader,
+  SkinnedMesh,
+  MeshFaceMaterial,
+  ObjectLoader
 } from 'three';
 import _ from 'lodash';
-import * as actions from '~/actions';
+import * as actions from '~/store/actions';
+import { PointerLock } from '~/core';
 
 export class MindWorld {
 
-  constructor(stateManager, parentElement) {
+  constructor(name, stateManager, parentElement) {
+    this.name = name;
     this.stateManager = stateManager;
     this.parentElement = parentElement;
 
@@ -25,6 +32,11 @@ export class MindWorld {
       vert: 0,
       hori: 0
     };
+
+    // this.pointerLock = new PointerLock(this.parentElement, this._onPointerLockChange.bind(this));
+    // _onPointerLockChange(pointerLocked) {
+    //   this.stateManager.dispatch(actions.movement.setPointerLock(pointerLocked));
+    // }
 
     this.scene = new Object3D();
 
@@ -44,8 +56,12 @@ export class MindWorld {
     this.user.position.y = 0.5;
     this.userPosition.add(this.user);
 
+    this.raycaster = new Raycaster();
+    this.collidableMeshList = [];
+
     //////////////////
     this.manager = new LoadingManager();
+
     this.manager.onProgress = function (item, loaded, total) {
       console.log(item, loaded, total);
     };
@@ -56,17 +72,35 @@ export class MindWorld {
       }
     };
     var onError = function (xhr) {};
+
     var loader = new OBJLoader(this.manager);
+    var loaderJson = new ObjectLoader();
+    var meshFace = new MeshFaceMaterial();
+
     loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
       object.traverse((child) => {
         if (child instanceof Mesh) {
           // child.material = this.scene.cube1.material;
           // child.scale.set(1, 1, 1);
           this.scene.add(child);
+          this.collidableMeshList.push(child);
         }
       });
       object.position.y = 1;
+
     }, onProgress, onError);
+
+    loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
+      (geometry, materials) => {
+        var skinnedMesh = new SkinnedMesh(geometry, new MeshFaceMaterial(materials));
+        // skinnedMesh.position.y = 10;
+        // skinnedMesh.scale.set(1, 1, 1);
+
+        // this.scene.add(skinnedMesh);
+
+        console.log(`LOAD`);
+      });
+
     //////////////////
 
     // Bind
@@ -90,6 +124,19 @@ export class MindWorld {
     if (forward) {
       this.userPosition.translateZ(-(dt * 0.01));
     }
+
+    // this.raycaster.ray.origin.copy(this.userPosition.position);
+    const originPoint = 5;
+    this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
+    this.raycaster.ray.direction.set(0, -.5, 0);
+
+    this.collisionResults = this.raycaster.intersectObjects( this.collidableMeshList, true );
+
+    if(this.collisionResults.length){
+      this.userPosition.position.y = this.collisionResults[0].point.y;
+
+    }
+
     this._updateCameraman();
   }
 
@@ -125,7 +172,7 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // w
-      this.stateManager.updateState(actions.movement.setForward(true));
+      this.stateManager.dispatch(actions.movement.setForward(true));
       break;
     };
   }
@@ -134,17 +181,17 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // w
-      this.stateManager.updateState(actions.movement.setForward(false));
+      this.stateManager.dispatch(actions.movement.setForward(false));
       break;
     };
   }
 
   _onMouseDown(e) {
-    this.stateManager.updateState(actions.movement.setForward(true));
+    this.stateManager.dispatch(actions.movement.setForward(true));
   }
 
   _onMouseUp(e) {
-    this.stateManager.updateState(actions.movement.setForward(false));
+    this.stateManager.dispatch(actions.movement.setForward(false));
   }
 
   _updateCameraman() {

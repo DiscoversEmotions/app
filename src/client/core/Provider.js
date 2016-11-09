@@ -3,20 +3,17 @@ import { Component, PropTypes, Children } from 'react';
 export class Provider extends Component {
   getChildContext() {
     return {
-      state: this.state,
-      updateState: this.updateState
+      store: this.store
     };
   }
 
   constructor(props, context) {
     super(props, context);
-    this.state = props.state;
-    this.updateState = props.updateState;
+    this.store = props.store;
   }
 
   componentWillReceiveProps (nextProps) {
-    this.state = nextProps.state;
-    this.updateState = nextProps.updateState;
+    this.store = nextProps.store;
   }
 
   render() {
@@ -25,11 +22,9 @@ export class Provider extends Component {
 }
 
 Provider.propTypes = {
-  state: PropTypes.any.isRequired,
-  updateState: PropTypes.func.isRequired,
+  store: PropTypes.any.isRequired,
   children: PropTypes.element.isRequired
 };
 Provider.childContextTypes = {
-  state: PropTypes.any.isRequired,
-  updateState: PropTypes.func.isRequired
+  store: PropTypes.any.isRequired,
 };

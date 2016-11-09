@@ -1,18 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
-
-import { WindowResizeSingleton } from './WindowResizeSingleton';
-import { Provider } from './Provider';
-import { StateManager } from './StateManager';
-import { StepsManager } from './StepsManager';
+import { WindowResizeSingleton, Provider } from '~/core';
+import { actions, Worlds, Steps } from '~/store';
 
 /**
  * Core class
  */
-export class Core {
+export default class AppCore {
 
-  constructor(steps, initialState, appUiEl, rootElement, appCanvasEl, WebGLCore) {
+  constructor(store, appUiEl, rootElement, appCanvasEl, WebGLCore) {
 
     this.appUiEl = appUiEl;
     this.appCanvasEl = appCanvasEl;
@@ -23,13 +20,14 @@ export class Core {
       onUpdate: this.update.bind(this),
       onRender: this.render.bind(this)
     });
-    this.stateManager = new StateManager(initialState);
-    this.stepsManager = new StepsManager(steps, this.stateManager);
+    this.store = store;
 
-    this.webGLCore = new WebGLCore(this.appCanvasEl, this.stateManager);
+    this.store.dispatch(actions.step.setCurrent(Steps.Boot));
+
+    this.webGLCore = new WebGLCore(this.appCanvasEl, this.store);
 
     WindowResizeSingleton.getInstance().add((width, height) => {
-      this.stateManager.updateState((state) => {
+      this.store.dispatch((state) => {
         return state
         .set(`width`, width)
         .set(`height`, height);
@@ -42,7 +40,7 @@ export class Core {
   }
 
   update(task, time, dt) {
-    this.stepsManager.update(time, dt);
+    this.stateTimeUpdate(time, dt);
     this.updateWebGL(time, dt);
     this.updateView(time, dt);
   }
@@ -52,17 +50,16 @@ export class Core {
   }
 
   updateView(time, dt) {
-    if (this.lastState === this.stateManager.state) {
+    if (this.lastState === this.store.state) {
       return;
     }
-    this.lastState = this.stateManager.state;
+    this.lastState = this.store.state;
     // Render view
     ReactDOM.render(
       React.createElement(
         Provider,
         {
-          state: this.stateManager.state,
-          updateState: this.stateManager.updateState
+          store: this.store
         },
         this.rootElement
       ),
@@ -76,6 +73,13 @@ export class Core {
 
   renderWebGL(time, dt) {
     this.webGLCore.render(time, dt);
+  }
+
+  stateTimeUpdate(time, dt) {
+    const step = this.store.get(`step`);
+    if (step === Steps.Boot && time > 3000) {
+      this.store.dispatch(actions.step.setCurrent(Steps.FoundError));
+    }
   }
 
 }
