@@ -52,6 +52,7 @@ export class MindWorld {
     this.userPosition.add(this.user);
 
     this.raycaster = new Raycaster();
+    this.collidableMeshList = [];
 
     //////////////////
     this.manager = new LoadingManager();
@@ -72,9 +73,11 @@ export class MindWorld {
           // child.material = this.scene.cube1.material;
           // child.scale.set(1, 1, 1);
           this.scene.add(child);
+          this.collidableMeshList.push(child);
         }
       });
       object.position.y = 1;
+
     }, onProgress, onError);
     //////////////////
 
@@ -100,11 +103,17 @@ export class MindWorld {
       this.userPosition.translateZ(-(dt * 0.01));
     }
 
-    this.raycaster.ray.origin.copy(this.userPosition.position);
+    // this.raycaster.ray.origin.copy(this.userPosition.position);
+    const originPoint = 5;
+    this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
+    this.raycaster.ray.direction.set(0, -.5, 0);
 
-    this.raycaster.ray.direction.copy(this.userPosition.position.y );
+    this.collisionResults = this.raycaster.intersectObjects( this.collidableMeshList, true );
 
-    console.log(this.raycaster);
+    if(this.collisionResults.length){
+      this.userPosition.position.y = this.collisionResults[0].point.y;
+
+    }
 
     this._updateCameraman();
   }

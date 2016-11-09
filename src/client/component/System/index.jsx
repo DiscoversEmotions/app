@@ -14,14 +14,14 @@ import { switchColor } from '~/actions';
 @BindCSS(styles)
 class System extends React.Component {
   render() {
-    return (
-      <div
-        styleName='system'
-        onClick={ () => this.props.switchColor() }
-        style={{ background: this.props.color }}
-      >
-      </div>
-    );
+    // return (
+    //   <div
+    //     styleName='system'
+    //     onClick={ () => this.props.switchColor() }
+    //     style={{ background: this.props.color }}
+    //   >
+    //   </div>
+    // );
   }
 }
 
