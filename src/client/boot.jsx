@@ -11,16 +11,18 @@ const appUiEl = document.getElementById('app-ui');
 const initialState = fromJS({
   width: 600,
   height: 600,
-  color: `red`,
   world: {
-    current: `mind`,
+    current: `room`,
     transitionInProgress: false
   },
   movement: {
     forward: false,
     pointerLocked: false
   },
-  step: `boot`
+  step: {
+    current: `boot`,
+    data: {}
+  }
 });
 
 const core = new Core(

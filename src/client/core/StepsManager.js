@@ -30,7 +30,7 @@ export class StepsManager {
   }
 
   getCurrentStepName() {
-    return this.stateManager.state.get(`step`);
+    return this.stateManager.state.getIn([`step`, `current`]);
   }
 
   getCurrentStep() {

@@ -2,7 +2,16 @@
   position: absolute;
   height: 200px;
   width: 300px;
-  bottom: 20px;
-  right: 20px;
+  bottom: 2%;
+  right: 2%;
   background: red;
+  transition-duration: .3s;
+}
+
+.full {
+  bottom: 50%;
+  right: 50%;
+  width: 500px;
+  height: 300px;
+  transform: translate(50%, 50%);
 }

@@ -11,6 +11,7 @@ export class StateManager {
 
   updateState(updater) {
     this.state = updater(this.state);
+    // console.log(this.state.toJS());
   }
 
 }

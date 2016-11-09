@@ -1,7 +1,7 @@
 import BootStep from './BootStep';
-import BootStepBis from './BootStepBis';
+import NeedRecoveryStep from './NeedRecoveryStep';
 
 export default {
   boot: new BootStep(),
-  boot2: new BootStepBis()
+  needRecovery: new NeedRecoveryStep()
 };

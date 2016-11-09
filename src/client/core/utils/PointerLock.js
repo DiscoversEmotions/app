@@ -3,9 +3,9 @@ export class PointerLock {
   constructor(element) {
     this.element = element;
     this.havePointerLock = (
-      'pointerLockElement' in document ||
-      'mozPointerLockElement' in document ||
-      'webkitPointerLockElement' in document
+      `pointerLockElement` in document ||
+      `mozPointerLockElement` in document ||
+      `webkitPointerLockElement` in document
     );
   }
 
@@ -28,5 +28,5 @@ export class PointerLock {
     );
     document.exitPointerLock();
   }
-  
+
 }

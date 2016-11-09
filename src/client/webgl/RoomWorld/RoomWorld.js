@@ -36,7 +36,8 @@ export class RoomWorld {
     light.position.y = 5;
     this.scene.add(light);
 
-    this.cameraman.setHorizontalAngle(Math.PI * 1.5);
+    this.cameraman.setHorizontalAngle((Math.PI * 1.5));
+    this.cameraman.setVerticalAngle(0);
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000/60);
@@ -73,14 +74,14 @@ export class RoomWorld {
   }
 
   _onMouseMove(e) {
-    const offset = EventUtils.getOffset(e);
+    const offset = EventUtils.getOffsetOf(e, this.parentElement);
     this.mousePos.x = ((offset.x / this.width) * 2) - 1;
     this.mousePos.y = ((offset.y / this.height) * 2) - 1;
   }
 
   _updateCameraman() {
-    this.cameraman.setHorizontalAngle((Math.PI * 1.5) - (2 * this.mousePos.x));
-    this.cameraman.setVerticalAngle(- (1 * this.mousePos.y));
+    this.cameraman.setHorizontalAngle((Math.PI * 1.5) - (1 * this.mousePos.x));
+    this.cameraman.setVerticalAngle(- (0.5 * this.mousePos.y));
   }
 
 }

@@ -1,22 +1,13 @@
 import * as world from './world';
 import * as movement from './movement';
+import * as step from './step';
 
-export function switchColor () {
-  return (state) => {
-    if (state.get(`color`) === `red`) {
-      return state.set(`color`, `blue`);
-    }
-    return state.set(`color`, `red`);
-  };
-}
-
-export function setStep (step) {
-  return (state) => {
-    return state.set(`step`, step);
-  };
+export function startRecovery () {
+  return world.setWorld(`mind`);
 }
 
 export {
   world,
-  movement
+  movement,
+  step
 };
