@@ -14,6 +14,7 @@ import {
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/actions';
+import { PointerLock } from '~/core';
 
 export class MindWorld {
 
@@ -25,6 +26,11 @@ export class MindWorld {
       vert: 0,
       hori: 0
     };
+
+    // this.pointerLock = new PointerLock(this.parentElement, this._onPointerLockChange.bind(this));
+    // _onPointerLockChange(pointerLocked) {
+    //   this.stateManager.updateState(actions.movement.setPointerLock(pointerLocked));
+    // }
 
     this.scene = new Object3D();
 

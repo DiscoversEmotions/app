@@ -17,8 +17,10 @@ const initialState = fromJS({
     transitionInProgress: false
   },
   movement: {
-    forward: false
-  }
+    forward: false,
+    pointerLocked: false
+  },
+  step: `boot`
 });
 
 const core = new Core(
