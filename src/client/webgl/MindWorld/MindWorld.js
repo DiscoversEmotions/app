@@ -10,7 +10,8 @@ import {
   PointLight,
   Object3D,
   LoadingManager,
-  Mesh
+  Mesh, 
+  Raycaster
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/actions';
@@ -43,6 +44,8 @@ export class MindWorld {
     this.user = new Cube();
     this.user.position.y = 0.5;
     this.userPosition.add(this.user);
+
+    this.raycaster = new Raycaster();
 
     //////////////////
     this.manager = new LoadingManager();
@@ -90,6 +93,13 @@ export class MindWorld {
     if (forward) {
       this.userPosition.translateZ(-(dt * 0.01));
     }
+
+    this.raycaster.ray.origin.copy(this.userPosition.position);
+
+    this.raycaster.ray.direction.copy(this.userPosition.position.y );
+
+    console.log(this.raycaster);
+
     this._updateCameraman();
   }
 
