@@ -10,7 +10,8 @@ import {
   PointLight,
   Object3D,
   LoadingManager,
-  Mesh
+  Mesh, 
+  Raycaster
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/actions';
@@ -50,6 +51,9 @@ export class MindWorld {
     this.user.position.y = 0.5;
     this.userPosition.add(this.user);
 
+    this.raycaster = new Raycaster();
+    this.collidableMeshList = [];
+
     //////////////////
     this.manager = new LoadingManager();
     this.manager.onProgress = function (item, loaded, total) {
@@ -69,9 +73,11 @@ export class MindWorld {
           // child.material = this.scene.cube1.material;
           // child.scale.set(1, 1, 1);
           this.scene.add(child);
+          this.collidableMeshList.push(child);
         }
       });
       object.position.y = 1;
+
     }, onProgress, onError);
     //////////////////
 
@@ -96,6 +102,19 @@ export class MindWorld {
     if (forward) {
       this.userPosition.translateZ(-(dt * 0.01));
     }
+
+    // this.raycaster.ray.origin.copy(this.userPosition.position);
+    const originPoint = 5;
+    this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
+    this.raycaster.ray.direction.set(0, -.5, 0);
+
+    this.collisionResults = this.raycaster.intersectObjects( this.collidableMeshList, true );
+
+    if(this.collisionResults.length){
+      this.userPosition.position.y = this.collisionResults[0].point.y;
+
+    }
+
     this._updateCameraman();
   }
 
