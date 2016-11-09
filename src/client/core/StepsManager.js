@@ -6,12 +6,9 @@
 
 export class StepsManager {
   constructor(steps, stateManager) {
-    if (_.isNil(steps[`init`])) {
-      throw new Error(`Steps must contain a 'init' step`);
-    }
     this.steps = steps;
     this.stateManager = stateManager;
-    this.currentStep = `init`;
+    this.currentStep = this.getCurrentStepName();
   }
 
   startIfNot(time, dt) {
@@ -23,12 +20,17 @@ export class StepsManager {
 
   update(time, dt) {
     this.startIfNot(time, dt);
-    var nextStep = this.currentStepUpdate(time, dt);
+    const nextStep = this.getCurrentStepName();
     if (_.isString(nextStep) && nextStep !== this.currentStep) {
       this.currentStepStop(time, dt);
       this.currentStep = nextStep;
       this.currentStepStart(time, dt);
     }
+    this.currentStepUpdate(time, dt);
+  }
+
+  getCurrentStepName() {
+    return this.stateManager.state.get(`step`);
   }
 
   getCurrentStep() {
@@ -39,22 +41,21 @@ export class StepsManager {
   }
 
   currentStepUpdate(time, dt) {
-    return this.currentStepMethod(`update`, time, dt);
+    this.currentStepMethod(`update`, time, dt);
   }
 
   currentStepStart(time, dt) {
-    return this.currentStepMethod(`start`, time, dt);
+    this.currentStepMethod(`start`, time, dt);
   }
 
   currentStepStop(time, dt) {
-    return this.currentStepMethod(`stop`, time, dt);
+    this.currentStepMethod(`stop`, time, dt);
   }
 
   currentStepMethod(methodName, time, dt) {
     const curr = this.getCurrentStep();
     if (_.isFunction(curr[methodName])) {
-      return curr[methodName](this.stateManager, time, dt);
+      curr[methodName](this.stateManager, time, dt);
     }
-    return null;
   }
 }

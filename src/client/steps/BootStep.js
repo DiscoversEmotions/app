@@ -1,4 +1,4 @@
-import { world, switchColor } from '~/actions';
+import { world, switchColor, setStep } from '~/actions';
 
 export default class BootStep {
 
@@ -15,7 +15,6 @@ export default class BootStep {
 
   update(stateManager, time, dt) {
     const seconds = Math.round((time - this.startTime) / 1000);
-    var result = null;
     if (seconds !== this.secondCount) {
       this.secondCount = seconds;
       // console.log(`time update ${seconds}`);
@@ -33,10 +32,9 @@ export default class BootStep {
       // }
     }
     this.time = time;
-    // if (time - this.startTime > 5000) {
-    //   return `boot2`;
-    // }
-    return result;
+    if (time - this.startTime > 5000) {
+      stateManager.updateState(setStep(`boot2`));
+    }
   }
 
   stop(stateManager, time, dt) {

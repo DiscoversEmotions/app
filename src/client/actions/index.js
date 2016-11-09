@@ -10,6 +10,12 @@ export function switchColor () {
   };
 }
 
+export function setStep (step) {
+  return (state) => {
+    return state.set(`step`, step);
+  };
+}
+
 export {
   world,
   movement
