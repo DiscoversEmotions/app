@@ -13,7 +13,6 @@ import { MemoryWorld } from './MemoryWorld';
 // interface World {
 //   constructor(stateManager)
 //   getScene()
-//   getRootObject()
 //   getCameraman()
 //   update()
 // }
@@ -114,7 +113,7 @@ export class WebGLCore {
   }
 
   _mountWorld(worldName, time) {
-    const rootObject = this.worlds[worldName].getRootObject();
+    const worldScene = this.worlds[worldName].getScene();
     if (_.isFunction(this.worlds[worldName].mount)) {
       this.worlds[worldName].mount(time);
     }
@@ -124,16 +123,16 @@ export class WebGLCore {
     } else {
       this._useEnvConfig(this.defaultEnvConfig);
     }
-    this.scene.add(rootObject);
+    this.scene.add(worldScene);
     this.currentWorld = worldName;
   }
 
   _unmountWorld(worldName, time) {
-    const rootObject = this.worlds[worldName].getRootObject();
+    const worldScene = this.worlds[worldName].getScene();
     if (_.isFunction(this.worlds[worldName].unmount)) {
       this.worlds[worldName].unmount(time);
     }
-    this.scene.remove(rootObject);
+    this.scene.remove(worldScene);
   }
 
   _switchWorld(nextWorld, time) {

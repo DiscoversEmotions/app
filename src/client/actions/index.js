@@ -1,4 +1,5 @@
 import * as world from './world';
+import * as movement from './movement';
 
 export function switchColor () {
   return (state) => {
@@ -10,5 +11,6 @@ export function switchColor () {
 }
 
 export {
-  world
+  world,
+  movement
 };

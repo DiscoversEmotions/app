@@ -19,18 +19,10 @@ export class MemoryWorld {
     this.light = new PointLight();
     this.light.position.y = 5;
     this.scene.add(this.light);
-
-    this.rootObject = new Object3D();
-    this.rootObject.add(this.scene);
-    this.rootObject.add(this.cameraman);
   }
 
   getCameraman() {
     return this.cameraman;
-  }
-
-  getRootObject() {
-    return this.rootObject;
   }
 
   getScene() {

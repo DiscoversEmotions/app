@@ -17,20 +17,20 @@ export default class BootStep {
     const seconds = Math.round((time - this.startTime) / 1000);
     var result = null;
     if (seconds !== this.secondCount) {
-      console.log(`time update ${seconds}`);
       this.secondCount = seconds;
-      if (seconds === 6) {
-        stateManager.updateState(world.setWorld(`mind`));
-      }
-      if (seconds === 10) {
-        stateManager.updateState(world.setWorld(`memory`));
-      }
-      if (seconds === 13) {
-        stateManager.updateState(world.setWorld(`mind`));
-      }
-      if (seconds === 16) {
-        stateManager.updateState(world.setWorld(`room`));
-      }
+      // console.log(`time update ${seconds}`);
+      // if (seconds === 6) {
+      //   stateManager.updateState(world.setWorld(`mind`));
+      // }
+      // if (seconds === 10) {
+      //   stateManager.updateState(world.setWorld(`memory`));
+      // }
+      // if (seconds === 13) {
+      //   stateManager.updateState(world.setWorld(`mind`));
+      // }
+      // if (seconds === 16) {
+      //   stateManager.updateState(world.setWorld(`room`));
+      // }
     }
     this.time = time;
     // if (time - this.startTime > 5000) {

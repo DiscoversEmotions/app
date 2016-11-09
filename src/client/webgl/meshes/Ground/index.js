@@ -9,14 +9,10 @@ export class Ground extends Mesh {
    * constructor method
    */
   constructor() {
-    super(new PlaneGeometry(10, 10, 10, 10), new MeshPhongMaterial({color: 0xffff00, side: DoubleSide}));
+    super(new PlaneGeometry(10, 10, 10, 10), new MeshPhongMaterial({color: 0xd4d4d4, side: DoubleSide}));
     this.rotation.x = - Math.PI / 2;
   }
 
-  /**
-   * update method
-   * @param {number} time Time
-   */
   update(time, dt) {
 
   }

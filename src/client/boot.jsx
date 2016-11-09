@@ -13,8 +13,11 @@ const initialState = fromJS({
   height: 600,
   color: `red`,
   world: {
-    current: `room`,
+    current: `mind`,
     transitionInProgress: false
+  },
+  movement: {
+    forward: false
   }
 });
 
