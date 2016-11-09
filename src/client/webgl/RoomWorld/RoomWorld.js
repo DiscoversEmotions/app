@@ -10,13 +10,16 @@ export class RoomWorld {
     this.stateManager = stateManager;
     this.parentElement = parentElement;
 
-    this.scene = new Object3D();
-    this.cameraman = new Cameraman(45, 1, 1, 1100);
-    this.cameraman.position.set(0, 2, -5);
     this.camVert = 0;
     this.width = 600;
     this.height = 600;
     this.mousePos = { x: 0, y: 0 };
+
+    this.scene = new Object3D();
+
+    this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.cameraman.position.set(0, 2, -5);
+    this.scene.add(this.cameraman);
 
     this.roomSphere = new RoomSphere();
     this.scene.add(this.roomSphere);
@@ -35,10 +38,6 @@ export class RoomWorld {
 
     this.cameraman.setHorizontalAngle(Math.PI * 1.5);
 
-    this.rootObject = new Object3D();
-    this.rootObject.add(this.scene);
-    this.rootObject.add(this.cameraman);
-
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000/60);
   }
@@ -47,16 +46,11 @@ export class RoomWorld {
     return this.cameraman;
   }
 
-  getRootObject() {
-    return this.rootObject;
-  }
-
   getScene() {
     return this.scene;
   }
 
   mount(time) {
-    console.log(`mount`);
     document.addEventListener(`mousemove`, this._onMouseMove, false);
   }
 
