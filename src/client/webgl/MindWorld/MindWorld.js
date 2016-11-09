@@ -11,7 +11,11 @@ import {
   Object3D,
   LoadingManager,
   Mesh,
-  Raycaster
+  Raycaster,
+  JSONLoader,
+  SkinnedMesh,
+  MeshFaceMaterial,
+  ObjectLoader
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/store/actions';
@@ -57,6 +61,7 @@ export class MindWorld {
 
     //////////////////
     this.manager = new LoadingManager();
+
     this.manager.onProgress = function (item, loaded, total) {
       console.log(item, loaded, total);
     };
@@ -67,7 +72,11 @@ export class MindWorld {
       }
     };
     var onError = function (xhr) {};
+
     var loader = new OBJLoader(this.manager);
+    var loaderJson = new ObjectLoader();
+    var meshFace = new MeshFaceMaterial();
+
     loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
       object.traverse((child) => {
         if (child instanceof Mesh) {
@@ -80,6 +89,18 @@ export class MindWorld {
       object.position.y = 1;
 
     }, onProgress, onError);
+
+    loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
+      (geometry, materials) => {
+        var skinnedMesh = new SkinnedMesh(geometry, new MeshFaceMaterial(materials));
+        // skinnedMesh.position.y = 10;
+        // skinnedMesh.scale.set(1, 1, 1);
+
+        // this.scene.add(skinnedMesh);
+
+        console.log(`LOAD`);
+      });
+
     //////////////////
 
     // Bind
