@@ -15,7 +15,8 @@ import {
   JSONLoader,
   SkinnedMesh,
   MeshFaceMaterial,
-  ObjectLoader
+  ObjectLoader,
+  Vector3
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/store/actions';
@@ -54,7 +55,7 @@ export class MindWorld {
 
     this.user = new Cube();
     this.user.position.y = 0.5;
-    this.userPosition.add(this.user);
+    // this.userPosition.add(this.user);
 
     this.raycaster = new Raycaster();
     this.collidableMeshList = [];
@@ -92,13 +93,16 @@ export class MindWorld {
 
     loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
       (geometry, materials) => {
-        var skinnedMesh = new SkinnedMesh(geometry, new MeshFaceMaterial(materials));
-        // skinnedMesh.position.y = 10;
-        // skinnedMesh.scale.set(1, 1, 1);
+        this.persoFinal = geometry.children[0];
 
-        // this.scene.add(skinnedMesh);
+        this.persoFinal.scale.set(0.01, 0.01, 0.01);
+        this.persoFinal.position.y = 1;
+        this.persoFinal.rotation.set(0, Math.PI / 10, 0);
 
-        console.log(`LOAD`);
+        this.scene.add(this.persoFinal);
+        this.userPosition.add(this.persoFinal);
+
+        console.log(this.persoFinal.rotation);
       });
 
     //////////////////
@@ -120,9 +124,22 @@ export class MindWorld {
   }
 
   update(time, dt) {
-    const forward = this.stateManager.state.getIn([`movement`, `forward`]);
+    const forward = this.stateManager.state.getIn([`movement`, `forward`]),
+          backward = this.stateManager.state.getIn([`movement`, `backward`]),
+          left = this.stateManager.state.getIn([`movement`, `left`]),
+          right = this.stateManager.state.getIn([`movement`, `right`]);
+
     if (forward) {
       this.userPosition.translateZ(-(dt * 0.01));
+    }
+    else if(backward) {
+      this.userPosition.translateZ((dt * 0.01));
+    }
+    else if(left) {
+      this.userPosition.translateX(-(dt * 0.01));
+    }
+    else if(right) {
+      this.userPosition.translateX((dt * 0.01));
     }
 
     // this.raycaster.ray.origin.copy(this.userPosition.position);
@@ -171,8 +188,20 @@ export class MindWorld {
   _onKeyDown(e) {
     switch (e.keyCode) {
     case 38: // up
-    case 90: // w
+    case 90: // z
       this.stateManager.dispatch(actions.movement.setForward(true));
+      break;
+    case 37: //left
+    case 81: //q
+      this.stateManager.dispatch(actions.movement.setLeft(true));
+      break;
+    case 40: //back
+    case 83:  //s
+      this.stateManager.dispatch(actions.movement.setBackward(true));
+      break;
+    case 39: //right
+    case 68: //d
+      this.stateManager.dispatch(actions.movement.setRight(true));
       break;
     };
   }
@@ -182,6 +211,18 @@ export class MindWorld {
     case 38: // up
     case 90: // w
       this.stateManager.dispatch(actions.movement.setForward(false));
+      break;
+    case 37: //left
+    case 81: //q
+      this.stateManager.dispatch(actions.movement.setLeft(false));
+      break;
+    case 40: //back
+    case 83:  //s
+      this.stateManager.dispatch(actions.movement.setBackward(false));
+      break;
+    case 39: //right
+    case 68: //d
+      this.stateManager.dispatch(actions.movement.setRight(false));
       break;
     };
   }
