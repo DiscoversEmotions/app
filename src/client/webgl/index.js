@@ -1,2 +1,3 @@
 export * from './WebGLCore';
-export * from './Camera';
+export * from './Cameraman';
+export * from './utils';

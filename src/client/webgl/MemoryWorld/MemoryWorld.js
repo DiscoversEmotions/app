@@ -1,16 +1,17 @@
 import { Cube } from '~/webgl/meshes';
-import { Camera } from '~/webgl';
-import { PointLight, Object3D } from 'three';
+import { Cameraman } from '~/webgl';
+import { PointLight, Object3D, Color } from 'three';
 
 export class MemoryWorld {
 
-  constructor(stateManager) {
+  constructor(stateManager, parentElement) {
     this.stateManager = stateManager;
+    this.parentElement = parentElement;
 
     this.scene = new Object3D();
-    this.camera = new Camera(45, 1, 1, 1100);
-    this.camera.position.set(0, 2, 5);
-    this.scene.add(this.camera);
+    this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.cameraman.position.set(0, 2, 5);
+    this.scene.add(this.cameraman);
 
     this.cube1 = new Cube();
     this.scene.add(this.cube1);
@@ -20,12 +21,18 @@ export class MemoryWorld {
     this.scene.add(this.light);
   }
 
-  getCamera() {
-    return this.camera.camera;
+  getCameraman() {
+    return this.cameraman;
   }
 
   getScene() {
     return this.scene;
+  }
+
+  getEnvConfig() {
+    return {
+      background: new Color(1, 1, 1)
+    };
   }
 
   update(time, dt) {
@@ -34,7 +41,7 @@ export class MemoryWorld {
   }
 
   setSize(width, height) {
-    this.camera.setSize(width, height);
+    this.cameraman.setSize(width, height);
   }
 
 }

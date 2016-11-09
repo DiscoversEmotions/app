@@ -15,6 +15,9 @@ const initialState = fromJS({
   world: {
     current: `mind`,
     transitionInProgress: false
+  },
+  movement: {
+    forward: false
   }
 });
 
