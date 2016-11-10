@@ -1,11 +1,19 @@
 .system {
   position: absolute;
-  height: 200px;
+  height: 120px;
   width: 300px;
   bottom: 2%;
   right: 2%;
-  background: red;
+  background: rgba(0, 0, 0, 0.68);
+  padding: 10px;
   transition-duration: .3s;
+  color: white;
+  line-height: 1.5;
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .full {
@@ -14,4 +22,9 @@
   width: 500px;
   height: 300px;
   transform: translate(50%, 50%);
+}
+
+
+.btn {
+  
 }
