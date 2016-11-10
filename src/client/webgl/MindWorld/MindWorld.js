@@ -15,12 +15,16 @@ import {
   JSONLoader,
   SkinnedMesh,
   MeshFaceMaterial,
+  MeshStandardMaterial,
   ObjectLoader,
-  Vector3
+  Vector3,
+  DoubleSide
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/store/actions';
-import { PointerLock } from '~/core';
+import {
+  PointerLock
+} from '~/core';
 
 export class MindWorld {
 
@@ -94,6 +98,10 @@ export class MindWorld {
     loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
       (geometry, materials) => {
         this.persoFinal = geometry.children[0];
+        this.persoFinal.material = new MeshStandardMaterial({
+          wireframe: true
+				});
+
 
         this.persoFinal.scale.set(0.01, 0.01, 0.01);
         this.persoFinal.position.y = 0;
@@ -125,23 +133,18 @@ export class MindWorld {
 
   update(time, dt) {
 
-    // this.persoFinal.rotation.y += 0.1;
-
     const forward = this.stateManager.state.getIn([`movement`, `forward`]),
-          backward = this.stateManager.state.getIn([`movement`, `backward`]),
-          left = this.stateManager.state.getIn([`movement`, `left`]),
-          right = this.stateManager.state.getIn([`movement`, `right`]);
+      backward = this.stateManager.state.getIn([`movement`, `backward`]),
+      left = this.stateManager.state.getIn([`movement`, `left`]),
+      right = this.stateManager.state.getIn([`movement`, `right`]);
 
     if (forward) {
       this.userPosition.translateZ(-(dt * 0.01));
-    }
-    else if(backward) {
+    } else if (backward) {
       this.userPosition.translateZ((dt * 0.01));
-    }
-    else if(left) {
+    } else if (left) {
       this.userPosition.translateX(-(dt * 0.01));
-    }
-    else if(right) {
+    } else if (right) {
       this.userPosition.translateX((dt * 0.01));
     }
 
@@ -150,11 +153,10 @@ export class MindWorld {
     this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
     this.raycaster.ray.direction.set(0, -.5, 0);
 
-    this.collisionResults = this.raycaster.intersectObjects( this.collidableMeshList, true );
+    this.collisionResults = this.raycaster.intersectObjects(this.collidableMeshList, true);
 
-    if(this.collisionResults.length){
+    if (this.collisionResults.length) {
       this.userPosition.position.y = this.collisionResults[0].point.y;
-
     }
 
     this._updateCameraman();
@@ -199,7 +201,7 @@ export class MindWorld {
       this.stateManager.dispatch(actions.movement.setLeft(true));
       break;
     case 40: //back
-    case 83:  //s
+    case 83: //s
       this.stateManager.dispatch(actions.movement.setBackward(true));
       break;
     case 39: //right
@@ -220,7 +222,7 @@ export class MindWorld {
       this.stateManager.dispatch(actions.movement.setLeft(false));
       break;
     case 40: //back
-    case 83:  //s
+    case 83: //s
       this.stateManager.dispatch(actions.movement.setBackward(false));
       break;
     case 39: //right
