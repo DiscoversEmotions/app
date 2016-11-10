@@ -22,7 +22,7 @@ import {
   AnimationMixer
 } from 'three';
 import _ from 'lodash';
-import { actions, Steps } from '~/store';
+import { actions, Steps, Worlds } from '~/store';
 import {
   PointerLock
 } from '~/core';
@@ -39,11 +39,6 @@ export class MindWorld {
       vert: 0,
       hori: 0
     };
-
-    // this.pointerLock = new PointerLock(this.parentElement, this._onPointerLockChange.bind(this));
-    // _onPointerLockChange(pointerLocked) {
-    //   this.store.dispatch(actions.movement.setPointerLock(pointerLocked));
-    // }
 
     this.scene = new Object3D();
 
@@ -66,7 +61,9 @@ export class MindWorld {
 
     this.user = new Cube();
     this.user.position.y = 0;
-    // this.userPosition.add(this.user);
+
+    this.pointerLock = new PointerLock(document.body);
+    this.store.onStateUpdate(this._updatePointerLock.bind(this));
 
     this.raycaster = new Raycaster();
 
@@ -155,7 +152,7 @@ export class MindWorld {
   update(time, dt) {
 
     const step = this.store.get(`step`);
-    
+
     if (step === Steps.RecoveryLvl1) {
       const movement = this.store.get(`movement`).toJS();
 
@@ -193,7 +190,6 @@ export class MindWorld {
         this.store.dispatch(actions.step.setCurrent(Steps.RecoveryLvl1Done));
       }
     }
-
   }
 
   mount(time) {
@@ -280,6 +276,17 @@ export class MindWorld {
     // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
     this.userPosition.rotation.y = this.cameramanRotation.hori;
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
+  }
+
+  _updatePointerLock(state) => {
+    const shouldBe = [Worlds.Mind].indexOf(this.store.getComputed(`world`)) > -1;
+    if(shouldBe !== this.pointerLock.isActivated()) {
+      if (shouldBe) {
+        this.pointerLock.tryActivate();
+      } else {
+        this.pointerLock.deactivate();
+      }
+    }
   }
 
 }

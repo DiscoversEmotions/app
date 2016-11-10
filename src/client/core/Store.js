@@ -8,6 +8,7 @@ export class Store {
     this.computedState = computedState;
 
     this.lastState = null;
+    this.listeners = [];
 
     // bind
     this.dispatch = this.dispatch.bind(this);
@@ -19,6 +20,9 @@ export class Store {
     if (this.state !== this.lastState) {
       this.updateComputedState();
     }
+    this.listeners.forEach(listener => {
+      listener(this.state);
+    });
   }
 
   hasChangedIn(path) {
@@ -27,6 +31,10 @@ export class Store {
 
   hasChanged(key) {
     return this.state.get(key) !== this.lastState.get(key);
+  }
+
+  onStateUpdate(cb) {
+    this.listeners.push(cb);
   }
 
   updateComputedState() {}
