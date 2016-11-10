@@ -32,10 +32,8 @@ export const state = fromJS({
   currentTime: null,
   glitch: false,
   movement: {
-    forward: false,
-    backward: false,
-    left: false,
-    right: false,
+    forward: 0,
+    left: 0,
     pointerLocked: false
   }
 });

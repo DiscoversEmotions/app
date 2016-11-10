@@ -155,16 +155,13 @@ export class MindWorld {
 
     if (step === Steps.RecoveryLvl1) {
       const movement = this.store.get(`movement`).toJS();
-
-      if (movement.forward) {
-        this.userPosition.translateZ(-(dt * 0.01));
-      } else if (movement.backward) {
-        this.userPosition.translateZ((dt * 0.01));
-      } else if (movement.left) {
-        this.userPosition.translateX(-(dt * 0.01));
-      } else if (movement.right) {
-        this.userPosition.translateX((dt * 0.01));
-      }
+      this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
+      this.userPosition.translateX(-(dt * 0.01) * movement.left);
+      const angle = motion.calc.degreesToRadians(motion.calc.angle(
+        { y: movement.forward, x: 0 },
+        { y: 0, x: -movement.left}
+      ));
+      this.persoFinalMesh.rotation.y = angle;
     }
 
     // Collision with ground
@@ -226,19 +223,19 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // z
-      this.store.dispatch(actions.movement.setForward(true));
+      this.store.dispatch(actions.movement.setForward(1));
       break;
     case 37: //left
     case 81: //q
-      this.store.dispatch(actions.movement.setLeft(true));
+      this.store.dispatch(actions.movement.setLeft(1));
       break;
     case 40: //back
     case 83: //s
-      this.store.dispatch(actions.movement.setBackward(true));
+      this.store.dispatch(actions.movement.setForward(-1));
       break;
     case 39: //right
     case 68: //d
-      this.store.dispatch(actions.movement.setRight(true));
+      this.store.dispatch(actions.movement.setLeft(-1));
       break;
     };
   }
@@ -247,19 +244,15 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // w
-      this.store.dispatch(actions.movement.setForward(false));
+    case 40: //back
+    case 83: //s
+      this.store.dispatch(actions.movement.setForward(0));
       break;
     case 37: //left
     case 81: //q
-      this.store.dispatch(actions.movement.setLeft(false));
-      break;
-    case 40: //back
-    case 83: //s
-      this.store.dispatch(actions.movement.setBackward(false));
-      break;
     case 39: //right
     case 68: //d
-      this.store.dispatch(actions.movement.setRight(false));
+      this.store.dispatch(actions.movement.setLeft(0));
       break;
     };
   }
@@ -278,7 +271,7 @@ export class MindWorld {
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
   }
 
-  _updatePointerLock(state) => {
+  _updatePointerLock(state) {
     const shouldBe = [Worlds.Mind].indexOf(this.store.getComputed(`world`)) > -1;
     if(shouldBe !== this.pointerLock.isActivated()) {
       if (shouldBe) {
