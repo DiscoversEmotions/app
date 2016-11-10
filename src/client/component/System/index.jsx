@@ -77,7 +77,7 @@ class System extends React.Component {
   renderRecoveryLvl1Done() {
     return (
       <div>
-        Souvenir retrouvé !
+        <h2>Emotion recovered !</h2>
       </div>
     );
   }
