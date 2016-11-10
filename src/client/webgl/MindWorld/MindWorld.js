@@ -25,6 +25,7 @@ import * as actions from '~/store/actions';
 import {
   PointerLock
 } from '~/core';
+import * as motion from 'popmotion';
 
 export class MindWorld {
 
@@ -100,8 +101,7 @@ export class MindWorld {
         this.persoFinal = geometry.children[0];
         this.persoFinal.material = new MeshStandardMaterial({
           wireframe: true
-				});
-
+        });
 
         this.persoFinal.scale.set(0.01, 0.01, 0.01);
         this.persoFinal.position.y = 0;
@@ -188,6 +188,8 @@ export class MindWorld {
 
     this.cameramanRotation.hori -= movementX * 0.003;
     this.cameramanRotation.vert -= movementY * 0.003;
+
+    this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, -0.5, 0);
   }
 
   _onKeyDown(e) {

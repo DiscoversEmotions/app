@@ -64,17 +64,16 @@ export class WebGLCore {
     // Update worlds
     this.worlds[this.currentWorld].update(time, dt);
     // Pass
-    // if (
-    //   this.store.get(`world`, `transitionInProgress`]) &&
-    //   time - this.transitionStartTime < 500
-    // ) {
-    //   this.glitchPass.enabled = true;
-    //   this.renderPass.renderToScreen = false;
-    // } else {
-    //   this.renderPass.renderToScreen = true;
-    //   this.glitchPass.enabled = false;
-    //   this.store.dispatch(actions.world.endTransition());
-    // }
+    if (
+      this.store.getComputed(`glitch`)
+    ) {
+      this.glitchPass.enabled = true;
+      this.renderPass.renderToScreen = false;
+    } else {
+      this.renderPass.renderToScreen = true;
+      this.glitchPass.enabled = false;
+      this.store.dispatch(actions.world.endTransition());
+    }
   }
 
   render(time, dt) {
@@ -94,7 +93,6 @@ export class WebGLCore {
   _resize() {
     const state = this.store.state;
     const size = this.store.get(`size`).toJS();
-    console.log(size);
     if (this.width !== size.width || this.height !== size.height) {
       this.width = size.width;
       this.height = size.height;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
 import { WindowResizeSingleton, Provider } from '~/core';
-import { actions, Worlds, Steps } from '~/store';
+import { actions, Steps } from '~/store';
 
 /**
  * Core class
@@ -40,7 +40,7 @@ export default class AppCore {
   }
 
   update(task, time, dt) {
-    this.stateTimeUpdate(time, dt);
+    this.store.timeUpdate(time, dt);
     this.updateWebGL(time, dt);
     this.updateView(time, dt);
   }
@@ -73,17 +73,6 @@ export default class AppCore {
 
   renderWebGL(time, dt) {
     this.webGLCore.render(time, dt);
-  }
-
-  stateTimeUpdate(time, dt) {
-    const step = this.store.get(`step`);
-    const stepTime = this.store.getIn([`time`, step]);
-    if (stepTime === undefined) {
-      this.store.dispatch(actions.time.set(step, time));
-    }
-    if (step === Steps.Boot && time > 5000) {
-      this.store.dispatch(actions.step.setCurrent(Steps.FoundError));
-    }
   }
 
 }

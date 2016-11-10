@@ -1,65 +1,77 @@
 import React from 'react';
 import { BindCSS, Connect } from '~/core';
 import styles from './System';
-import { startRecovery } from '~/store/actions';
+import { actions, Steps } from '~/store';
 import _ from 'lodash';
 
-const allMessages = [
-  { time: 1, value: `Connection au système nerveux...` },
-  { time: 3, value: `Récupération des souvenirs... 1/3450` },
-  { time: 3.5, value: `Récupération des souvenirs... 2/3450` },
-  { time: 4, value: `Mise à jour des règles de d'analyse...` },
-  { time: 4.5, value: `Récupération des émotions ... 1/47` },
-  { time: 5, value: `Récupération des émotions ... 2/47` },
-  { time: 6, value: `Erreur: Emotion maquante : Joie` },
-  { time: 7, value: `Erreur: Emotion maquante : Colère` }
-];
-
 @Connect(
-  (state, props) => ({
-    step: state.step
+  (store, props) => ({
+    step: store.get(`step`),
+    messages: store.getComputed(`messages`).toJS(),
+    full: store.getComputed(`systemFull`)
   }),
-  { startRecovery }
+  {
+    setStep: actions.step.setCurrent
+  }
 )
 @BindCSS(styles)
 class System extends React.Component {
   render() {
-    // const messages = this.getBootStepMessages();
     const classes = [`system`];
-    if (this.props.step !== `boot`) {
+    if (this.props.full) {
       classes.push(`full`);
     }
     return (
-      <div
-        styleName={classes.join(` `)}
-      >
-        <div>
-        </div>
-        { this.renderAsk() }
+      <div styleName={classes.join(` `)}>
+        { this.renderContent() }
       </div>
     );
   }
 
-  getBootStepMessages() {
-    return _(allMessages)
-    .filter(mess => mess.time <= this.props.bootData.seconds)
-    .orderBy(`time`)
-    .slice(-5)
-    .value();
+  renderContent() {
+    switch (this.props.step) {
+      case Steps.Boot:
+        return this.renderBoot();
+      case Steps.MissingFiles:
+        return this.renderMissingFiles();
+      case Steps.RecoveryWillStart:
+        return this.renderRecoveryWillStart();
+      default:
+        return null;
+    }
   }
 
-  renderAsk() {
-    if (this.props.step === `boot`) {
-      return null
-    }
+  renderBoot() {
     return (
-      <button
-        onClick={() => this.props.startRecovery() }
-      >
+      <div>
+        { this.props.messages.map(msg => (
+          <p key={ msg.id }>{ msg.value }</p>
+        )) }
+      </div>
+    );
+  }
+
+  renderMissingFiles() {
+    return (
+      <button onClick={() => this.props.setStep(Steps.RecoveryWillStart) }>
         Start Recovery
       </button>
     );
   }
+
+  renderRecoveryWillStart() {
+    return (
+      <div>
+        <p>
+          Are you ready ?
+        </p>
+        <button onClick={() => this.props.setStep(Steps.RecoveryLvl1) }>
+          Go !
+        </button>
+      </div>
+    );
+  }
+
 }
 
 export default System;

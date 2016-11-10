@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 
 export function Connect (
-  selector = (state, props) => ({}),
+  selector = (store, props) => ({}),
   actions = {}
 ) {
   return (component) => {
@@ -13,8 +13,11 @@ export function Connect (
           Object.assign(
             {},
             this.props,
-            selector(this.context.store.get(), this.props),
-            _.mapValues(actions, (action) => (...args) => {
+            selector(this.context.store, this.props),
+            _.mapValues(actions, (action, key) => (...args) => {
+              if (!_.isFunction(action)) {
+                throw new Error(`Action for key ${key} is not a function !`);
+              }
               return this.context.store.dispatch(action(...args));
             })
           )
