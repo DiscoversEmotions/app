@@ -36,6 +36,8 @@ class System extends React.Component {
         return this.renderMissingFiles();
       case Steps.RecoveryWillStart:
         return this.renderRecoveryWillStart();
+      case Steps.RecoveryLvl1Done:
+        return this.renderRecoveryLvl1Done();
       default:
         return null;
     }
@@ -68,6 +70,14 @@ class System extends React.Component {
         <button onClick={() => this.props.setStep(Steps.RecoveryLvl1) }>
           Go !
         </button>
+      </div>
+    );
+  }
+
+  renderRecoveryLvl1Done() {
+    return (
+      <div>
+        Souvenir retrouvé !
       </div>
     );
   }

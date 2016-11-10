@@ -12,6 +12,7 @@ export const Steps = {
   MissingFiles: `missing-files`,
   RecoveryWillStart: `recovery-will-start`,
   RecoveryLvl1: `recovery-lvl-1`,
+  RecoveryLvl1Done: `recovery-lvl-1-done`,
   RecoveryLvl2: `recovery-lvl-2`
 };
 
@@ -47,7 +48,8 @@ export const computedState = fromJS({
 
 const stepsWithSystemFull = [
   Steps.MissingFiles,
-  Steps.RecoveryWillStart
+  Steps.RecoveryWillStart,
+  Steps.RecoveryLvl1Done
 ];
 
 const stepsWithGlitch = [
@@ -73,6 +75,7 @@ export class Store extends CoreStore {
       this.tmp.world = (() => {
         switch (this.tmp.step) {
         case Steps.RecoveryLvl1:
+        case Steps.RecoveryLvl1Done:
           return Worlds.Mind;
         default:
           return Worlds.Room;

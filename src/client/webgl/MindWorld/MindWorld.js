@@ -69,7 +69,6 @@ export class MindWorld {
     // this.userPosition.add(this.user);
 
     this.raycaster = new Raycaster();
-    this.collidableMeshList = [];
 
     this.mixer;
     this.mixerArray = [];
@@ -91,13 +90,13 @@ export class MindWorld {
     var loader = new OBJLoader(this.manager);
     var loaderJson = new ObjectLoader();
 
+    this.ground = null;
+
     loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
       object.traverse((child) => {
         if (child instanceof Mesh) {
-          // child.material = this.scene.cube1.material;
-          // child.scale.set(1, 1, 1);
+          this.ground = child;
           this.scene.add(child);
-          this.collidableMeshList.push(child);
         }
       });
       object.position.y = 1;
@@ -131,6 +130,9 @@ export class MindWorld {
         console.log(this.idle);
 
       });
+
+
+    this.scene.updateMatrixWorld(true);
 
     //////////////////
 
@@ -166,10 +168,10 @@ export class MindWorld {
     }
 
     // Collision with ground
-    this.raycaster.ray.origin = this.userPosition.position.copy();
+    this.raycaster.ray.origin.copy(this.userPosition.position);
     this.raycaster.ray.origin.y += 5;
-    this.raycaster.ray.direction.set(0, -.5, 0);
-    this.collisionResults = this.raycaster.intersectObjects(this.collidableMeshList, true);
+    this.raycaster.ray.direction.set(0, -1, 0);
+    this.collisionResults = this.raycaster.intersectObjects([this.ground], true);
     if (this.collisionResults.length) {
       this.userPosition.position.y = this.collisionResults[0].point.y;
     }
@@ -183,7 +185,10 @@ export class MindWorld {
     }
 
     if (step === Steps.RecoveryLvl1) {
-
+      this.collisionResults = this.raycaster.intersectObjects([this.tile], true);
+      if (this.collisionResults.length) {
+        this.store.dispatch(actions.step.setCurrent(Steps.RecoveryLvl1Done));
+      }
     }
 
   }
