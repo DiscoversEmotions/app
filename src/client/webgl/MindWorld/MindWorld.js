@@ -16,7 +16,8 @@ import {
   SkinnedMesh,
   MeshFaceMaterial,
   ObjectLoader,
-  Vector3
+  Vector3,
+  AnimationMixer
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/store/actions';
@@ -60,6 +61,9 @@ export class MindWorld {
     this.raycaster = new Raycaster();
     this.collidableMeshList = [];
 
+    this.mixer;
+    this.mixerArray = [];
+
     //////////////////
     this.manager = new LoadingManager();
 
@@ -76,7 +80,6 @@ export class MindWorld {
 
     var loader = new OBJLoader(this.manager);
     var loaderJson = new ObjectLoader();
-    var meshFace = new MeshFaceMaterial();
 
     loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
       object.traverse((child) => {
@@ -94,15 +97,25 @@ export class MindWorld {
     loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
       (geometry, materials) => {
         this.persoFinal = geometry.children[0];
+        this.persoFinalMesh = new SkinnedMesh( this.persoFinal.geometry, materials );
 
-        this.persoFinal.scale.set(0.01, 0.01, 0.01);
-        this.persoFinal.position.y = 1;
-        this.persoFinal.rotation.set(0, Math.PI / 10, 0);
+        this.persoFinalMesh.scale.set(0.015, 0.015, 0.015);
+        this.persoFinalMesh.position.y = 0;
+        this.persoFinalMesh.rotation.set(0, 0, 0);
 
-        this.scene.add(this.persoFinal);
-        this.userPosition.add(this.persoFinal);
+        //Anim perso
+        this.mixer = new AnimationMixer(this.persoFinalMesh);
+        this.idle = this.mixer.clipAction(this.persoFinalMesh.geometry.animations[0]);
+        this.idle.setEffectiveWeight(1);
+        this.idle.play();
 
-        console.log(this.persoFinal.rotation);
+        this.mixerArray.push(this.mixer);
+
+        this.scene.add(this.persoFinalMesh);
+        this.userPosition.add(this.persoFinalMesh);
+
+        console.log(this.idle);
+
       });
 
     //////////////////
@@ -124,10 +137,11 @@ export class MindWorld {
   }
 
   update(time, dt) {
-    const forward = this.stateManager.state.getIn([`movement`, `forward`]),
-          backward = this.stateManager.state.getIn([`movement`, `backward`]),
-          left = this.stateManager.state.getIn([`movement`, `left`]),
-          right = this.stateManager.state.getIn([`movement`, `right`]);
+
+    const forward = this.stateManager.state.getIn([`movement`, `forward`]);
+    const backward = this.stateManager.state.getIn([`movement`, `backward`]);
+    const left = this.stateManager.state.getIn([`movement`, `left`]);
+    const right = this.stateManager.state.getIn([`movement`, `right`]);
 
     if (forward) {
       this.userPosition.translateZ(-(dt * 0.01));
@@ -142,7 +156,6 @@ export class MindWorld {
       this.userPosition.translateX((dt * 0.01));
     }
 
-    // this.raycaster.ray.origin.copy(this.userPosition.position);
     const originPoint = 5;
     this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
     this.raycaster.ray.direction.set(0, -.5, 0);
@@ -151,10 +164,15 @@ export class MindWorld {
 
     if(this.collisionResults.length){
       this.userPosition.position.y = this.collisionResults[0].point.y;
-
     }
 
     this._updateCameraman();
+    this.mixerFinal = this.mixerArray[0];
+
+    if(this.mixerFinal){
+      this.mixerFinal.update(time, dt);
+    }
+
   }
 
   mount(time) {
