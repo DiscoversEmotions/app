@@ -22,7 +22,7 @@ import {
   AnimationMixer
 } from 'three';
 import _ from 'lodash';
-import * as actions from '~/store/actions';
+import { actions, Steps } from '~/store';
 import {
   PointerLock
 } from '~/core';
@@ -62,6 +62,7 @@ export class MindWorld {
     this.tile = new Tile();
     this.scene.add(this.tile);
     this.tile.position.y = 0.1;
+    this.tile.position.z = -5;
 
     this.user = new Cube();
     this.user.position.y = 0;
@@ -151,6 +152,7 @@ export class MindWorld {
 
   update(time, dt) {
 
+    const step = this.store.get(`step`);
     const movement = this.store.get(`movement`).toJS();
 
     if (movement.forward) {
@@ -163,21 +165,25 @@ export class MindWorld {
       this.userPosition.translateX((dt * 0.01));
     }
 
-    const originPoint = 5;
-    this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
+    // Collision with ground
+    this.raycaster.ray.origin = this.userPosition.position.copy();
+    this.raycaster.ray.origin.y += 5;
     this.raycaster.ray.direction.set(0, -.5, 0);
-
     this.collisionResults = this.raycaster.intersectObjects(this.collidableMeshList, true);
-
     if (this.collisionResults.length) {
       this.userPosition.position.y = this.collisionResults[0].point.y;
     }
 
     this._updateCameraman();
-    this.mixerFinal = this.mixerArray[0];
 
+    // Annin
+    this.mixerFinal = this.mixerArray[0];
     if(this.mixerFinal){
       this.mixerFinal.update(time, dt);
+    }
+
+    if (step === Steps.RecoveryLvl1) {
+
     }
 
   }
