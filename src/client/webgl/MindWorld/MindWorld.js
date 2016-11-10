@@ -155,16 +155,19 @@ export class MindWorld {
   update(time, dt) {
 
     const step = this.store.get(`step`);
-    const movement = this.store.get(`movement`).toJS();
+    
+    if (step === Steps.RecoveryLvl1) {
+      const movement = this.store.get(`movement`).toJS();
 
-    if (movement.forward) {
-      this.userPosition.translateZ(-(dt * 0.01));
-    } else if (movement.backward) {
-      this.userPosition.translateZ((dt * 0.01));
-    } else if (movement.left) {
-      this.userPosition.translateX(-(dt * 0.01));
-    } else if (movement.right) {
-      this.userPosition.translateX((dt * 0.01));
+      if (movement.forward) {
+        this.userPosition.translateZ(-(dt * 0.01));
+      } else if (movement.backward) {
+        this.userPosition.translateZ((dt * 0.01));
+      } else if (movement.left) {
+        this.userPosition.translateX(-(dt * 0.01));
+      } else if (movement.right) {
+        this.userPosition.translateX((dt * 0.01));
+      }
     }
 
     // Collision with ground

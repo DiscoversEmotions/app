@@ -55,7 +55,7 @@ class System extends React.Component {
 
   renderMissingFiles() {
     return (
-      <button onClick={() => this.props.setStep(Steps.RecoveryWillStart) }>
+      <button onClick={() => this.props.setStep(Steps.RecoveryWillStart) } styleName='btn'>
         Start Recovery
       </button>
     );
@@ -67,7 +67,7 @@ class System extends React.Component {
         <p>
           Are you ready ?
         </p>
-        <button onClick={() => this.props.setStep(Steps.RecoveryLvl1) }>
+        <button onClick={() => this.props.setStep(Steps.RecoveryLvl1) } styleName='btn'>
           Go !
         </button>
       </div>
