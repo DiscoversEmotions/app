@@ -19,7 +19,7 @@ import {
   MeshStandardMaterial,
   ObjectLoader,
   Vector3,
-  DoubleSide
+  AnimationMixer
 } from 'three';
 import _ from 'lodash';
 import * as actions from '~/store/actions';
@@ -30,9 +30,9 @@ import * as motion from 'popmotion';
 
 export class MindWorld {
 
-  constructor(name, stateManager, parentElement) {
+  constructor(name, store, parentElement) {
     this.name = name;
-    this.stateManager = stateManager;
+    this.store = store;
     this.parentElement = parentElement;
 
     this.cameramanRotation = {
@@ -42,7 +42,7 @@ export class MindWorld {
 
     // this.pointerLock = new PointerLock(this.parentElement, this._onPointerLockChange.bind(this));
     // _onPointerLockChange(pointerLocked) {
-    //   this.stateManager.dispatch(actions.movement.setPointerLock(pointerLocked));
+    //   this.store.dispatch(actions.movement.setPointerLock(pointerLocked));
     // }
 
     this.scene = new Object3D();
@@ -70,6 +70,9 @@ export class MindWorld {
     this.raycaster = new Raycaster();
     this.collidableMeshList = [];
 
+    this.mixer;
+    this.mixerArray = [];
+
     //////////////////
     this.manager = new LoadingManager();
 
@@ -86,7 +89,6 @@ export class MindWorld {
 
     var loader = new OBJLoader(this.manager);
     var loaderJson = new ObjectLoader();
-    var meshFace = new MeshFaceMaterial();
 
     loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
       object.traverse((child) => {
@@ -104,18 +106,29 @@ export class MindWorld {
     loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
       (geometry, materials) => {
         this.persoFinal = geometry.children[0];
-        this.persoFinal.material = new MeshStandardMaterial({
+        this.persoFinalMesh = new SkinnedMesh( this.persoFinal.geometry, materials );
+
+        this.persoFinalMesh.material = new MeshStandardMaterial({
           wireframe: true
         });
 
-        this.persoFinal.scale.set(0.01, 0.01, 0.01);
-        this.persoFinal.position.y = 0;
-        this.persoFinal.rotation.set(0, 0, 0);
+        this.persoFinalMesh.scale.set(0.015, 0.015, 0.015);
+        this.persoFinalMesh.position.y = 0;
+        this.persoFinalMesh.rotation.set(0, 0, 0);
 
-        this.scene.add(this.persoFinal);
-        this.userPosition.add(this.persoFinal);
+        //Anim perso
+        this.mixer = new AnimationMixer(this.persoFinalMesh);
+        this.idle = this.mixer.clipAction(this.persoFinalMesh.geometry.animations[0]);
+        this.idle.setEffectiveWeight(1);
+        this.idle.play();
 
-        console.log(this.persoFinal.rotation);
+        this.mixerArray.push(this.mixer);
+
+        this.scene.add(this.persoFinalMesh);
+        this.userPosition.add(this.persoFinalMesh);
+
+        console.log(this.idle);
+
       });
 
     //////////////////
@@ -138,22 +151,18 @@ export class MindWorld {
 
   update(time, dt) {
 
-    const forward = this.stateManager.state.getIn([`movement`, `forward`]),
-      backward = this.stateManager.state.getIn([`movement`, `backward`]),
-      left = this.stateManager.state.getIn([`movement`, `left`]),
-      right = this.stateManager.state.getIn([`movement`, `right`]);
+    const movement = this.store.get(`movement`).toJS();
 
-    if (forward) {
+    if (movement.forward) {
       this.userPosition.translateZ(-(dt * 0.01));
-    } else if (backward) {
+    } else if (movement.backward) {
       this.userPosition.translateZ((dt * 0.01));
-    } else if (left) {
+    } else if (movement.left) {
       this.userPosition.translateX(-(dt * 0.01));
-    } else if (right) {
+    } else if (movement.right) {
       this.userPosition.translateX((dt * 0.01));
     }
 
-    // this.raycaster.ray.origin.copy(this.userPosition.position);
     const originPoint = 5;
     this.raycaster.ray.origin.set(this.userPosition.position.x, originPoint, this.userPosition.position.z);
     this.raycaster.ray.direction.set(0, -.5, 0);
@@ -165,6 +174,12 @@ export class MindWorld {
     }
 
     this._updateCameraman();
+    this.mixerFinal = this.mixerArray[0];
+
+    if(this.mixerFinal){
+      this.mixerFinal.update(time, dt);
+    }
+
   }
 
   mount(time) {
@@ -201,19 +216,19 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // z
-      this.stateManager.dispatch(actions.movement.setForward(true));
+      this.store.dispatch(actions.movement.setForward(true));
       break;
     case 37: //left
     case 81: //q
-      this.stateManager.dispatch(actions.movement.setLeft(true));
+      this.store.dispatch(actions.movement.setLeft(true));
       break;
     case 40: //back
     case 83: //s
-      this.stateManager.dispatch(actions.movement.setBackward(true));
+      this.store.dispatch(actions.movement.setBackward(true));
       break;
     case 39: //right
     case 68: //d
-      this.stateManager.dispatch(actions.movement.setRight(true));
+      this.store.dispatch(actions.movement.setRight(true));
       break;
     };
   }
@@ -222,29 +237,29 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // w
-      this.stateManager.dispatch(actions.movement.setForward(false));
+      this.store.dispatch(actions.movement.setForward(false));
       break;
     case 37: //left
     case 81: //q
-      this.stateManager.dispatch(actions.movement.setLeft(false));
+      this.store.dispatch(actions.movement.setLeft(false));
       break;
     case 40: //back
     case 83: //s
-      this.stateManager.dispatch(actions.movement.setBackward(false));
+      this.store.dispatch(actions.movement.setBackward(false));
       break;
     case 39: //right
     case 68: //d
-      this.stateManager.dispatch(actions.movement.setRight(false));
+      this.store.dispatch(actions.movement.setRight(false));
       break;
     };
   }
 
   _onMouseDown(e) {
-    this.stateManager.dispatch(actions.movement.setForward(true));
+    this.store.dispatch(actions.movement.setForward(true));
   }
 
   _onMouseUp(e) {
-    this.stateManager.dispatch(actions.movement.setForward(false));
+    this.store.dispatch(actions.movement.setForward(false));
   }
 
   _updateCameraman() {

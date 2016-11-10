@@ -29,7 +29,14 @@ export const state = fromJS({
   times: {},
   step: null,
   currentTime: null,
-  glitch: false
+  glitch: false,
+  movement: {
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    pointerLocked: false
+  }
 });
 
 export const computedState = fromJS({

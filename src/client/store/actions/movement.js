@@ -27,3 +27,4 @@ export function setPointerLock (enabled) {
     return state.setIn([`movement`, `pointerLocked`], enabled);
   };
 }
+
