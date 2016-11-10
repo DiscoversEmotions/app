@@ -1,6 +1,7 @@
 import {
   Cube,
-  Ground
+  Ground,
+  Tile
 } from '~/webgl/meshes';
 import {
   Cameraman,
@@ -58,8 +59,12 @@ export class MindWorld {
     this.scene.add(this.userPosition);
     this.userPosition.add(this.cameraman);
 
+    this.tile = new Tile();
+    this.scene.add(this.tile);
+    this.tile.position.y = 0.1;
+
     this.user = new Cube();
-    this.user.position.y = 0.5;
+    this.user.position.y = 0;
     // this.userPosition.add(this.user);
 
     this.raycaster = new Raycaster();
