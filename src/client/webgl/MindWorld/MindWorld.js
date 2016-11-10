@@ -96,8 +96,8 @@ export class MindWorld {
         this.persoFinal = geometry.children[0];
 
         this.persoFinal.scale.set(0.01, 0.01, 0.01);
-        this.persoFinal.position.y = 1;
-        this.persoFinal.rotation.set(0, Math.PI / 10, 0);
+        this.persoFinal.position.y = 0;
+        this.persoFinal.rotation.set(0, 0, 0);
 
         this.scene.add(this.persoFinal);
         this.userPosition.add(this.persoFinal);
@@ -124,6 +124,9 @@ export class MindWorld {
   }
 
   update(time, dt) {
+
+    // this.persoFinal.rotation.y += 0.1;
+
     const forward = this.stateManager.state.getIn([`movement`, `forward`]),
           backward = this.stateManager.state.getIn([`movement`, `backward`]),
           left = this.stateManager.state.getIn([`movement`, `left`]),
