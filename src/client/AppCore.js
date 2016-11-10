@@ -29,8 +29,8 @@ export default class AppCore {
     WindowResizeSingleton.getInstance().add((width, height) => {
       this.store.dispatch((state) => {
         return state
-        .set(`width`, width)
-        .set(`height`, height);
+        .setIn([`size`, `width`], width)
+        .setIn([`size`, `height`], height);
       });
     });
 
@@ -77,7 +77,11 @@ export default class AppCore {
 
   stateTimeUpdate(time, dt) {
     const step = this.store.get(`step`);
-    if (step === Steps.Boot && time > 3000) {
+    const stepTime = this.store.getIn([`time`, step]);
+    if (stepTime === undefined) {
+      this.store.dispatch(actions.time.set(step, time));
+    }
+    if (step === Steps.Boot && time > 5000) {
       this.store.dispatch(actions.step.setCurrent(Steps.FoundError));
     }
   }

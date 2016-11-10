@@ -26,13 +26,7 @@ export const state = fromJS({
 });
 
 export const computedState = fromJS({
-  size: {
-    width: 600,
-    height: 600
-  },
-  world: null,
-  times: {},
-  step: null
+  world: null
 });
 
 export class Store extends CoreStore {
@@ -44,12 +38,8 @@ export class Store extends CoreStore {
   }
 
   updateComputedState() {
-    if (this.hasChanged(`size`)) {
-      this.computedState = this.computedState.set(`size`, this.state.get(`size`));
-    }
     if (this.hasChanged(`step`)) {
       const step = this.state.get(`step`);
-      this.computedState = this.computedState.set(`step`, step);
       const world = (() => {
         switch (step) {
         case Steps.Boot:

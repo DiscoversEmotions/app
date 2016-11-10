@@ -29,18 +29,27 @@ export class Store {
     return this.state.get(key) !== this.lastState.get(key);
   }
 
-  updateComputedState() {
-
-  }
+  updateComputedState() {}
 
   get(key) {
+    if (key === undefined) {
+      return this.state;
+    }
+    return this.state.get(key);
+  }
+
+  getIn(path) {
+    return this.state.getIn(path);
+  }
+
+  getComputed(key) {
     if (key === undefined) {
       return this.computedState;
     }
     return this.computedState.get(key);
   }
 
-  getIn(path) {
+  getComputedIn(path) {
     return this.computedState.getIn(path);
   }
 

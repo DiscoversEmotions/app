@@ -45,7 +45,7 @@ export class MindWorld {
     this.cameraman.setVerticalAngle(-0.3);
 
     this.light = new PointLight();
-    this.light.position.y = 5;
+    this.light.position.y = 20;
     this.scene.add(this.light);
 
     this.userPosition = new Object3D();

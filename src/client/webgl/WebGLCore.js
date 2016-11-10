@@ -27,7 +27,7 @@ export class WebGLCore {
     this.height = null;
     this.lastState = null;
     this.store = store;
-    this.currentWorld = this.store.get(`world`);
+    this.currentWorld = this.store.getComputed(`world`);
     console.log(this.currentWorld);
     this.transitionStartTime = null;
     this.defaultEnvConfig = {
@@ -85,7 +85,7 @@ export class WebGLCore {
 
   _onStateChange(time, dt) {
     this._resize();
-    const nextWorld = this.store.get(`world`);
+    const nextWorld = this.store.getComputed(`world`);
     if (nextWorld !== this.currentWorld) {
       this._switchWorld(nextWorld, time);
     }
@@ -93,9 +93,11 @@ export class WebGLCore {
 
   _resize() {
     const state = this.store.state;
-    if (this.width !== state.get(`width`) || this.height !== state.get(`height`)) {
-      this.width = state.get(`width`);
-      this.height = state.get(`height`);
+    const size = this.store.get(`size`).toJS();
+    console.log(size);
+    if (this.width !== size.width || this.height !== size.height) {
+      this.width = size.width;
+      this.height = size.height;
       _.forEach(this.worlds, (world) => {
         if (_.isFunction(world.setSize)) {
           world.setSize(this.width, this.height);
