@@ -10,6 +10,7 @@ export default function initSocket (store) {
   });
 
   socket.on('client-stats', function (data) {
+    console.log(data);
     if (data && data.errors) {
       data.errors = data.errors.map(errorString => ({
         type: 'console',

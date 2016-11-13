@@ -13,7 +13,7 @@ export function Connect (
           Object.assign(
             {},
             this.props,
-            selector(this.context.store, this.props),
+            selector(this.context.store.computedState, this.props),
             _.mapValues(actions, (action, key) => (...args) => {
               if (!_.isFunction(action)) {
                 throw new Error(`Action for key ${key} is not a function !`);

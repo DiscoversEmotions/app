@@ -5,10 +5,10 @@ import { actions, Steps } from '~/store';
 import _ from 'lodash';
 
 @Connect(
-  (store, props) => ({
-    step: store.get(`step`),
-    messages: store.getComputed(`messages`).toJS(),
-    full: store.getComputed(`systemFull`)
+  (uiState, props) => ({
+    step: uiState.get(`step`),
+    messages: [], // uiState.get(`messages`).toJS(),
+    full: false // uiState.get(`systemFull`)
   }),
   {
     setStep: actions.step.setCurrent

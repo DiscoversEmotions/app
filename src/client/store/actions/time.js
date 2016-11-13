@@ -1,12 +1,5 @@
-
-export function set(stepName, time) {
+export function setTime(time) {
   return (state) => {
-    return state.setIn([`time`, stepName], time);
-  };
-}
-
-export function setCurrent(time) {
-  return (state) => {
-    return state.set(`currentTime`, time);
+    return state.set(`time`, time);
   };
 }

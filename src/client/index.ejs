@@ -27,6 +27,11 @@
     <div id="app-ui">
       [here should be a very cool loader]
     </div>
+    <script type="text/javascript">
+      var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
+      var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
+      window.__START_TIME = currentTime();
+    </script>
   </body>
 
 </html>

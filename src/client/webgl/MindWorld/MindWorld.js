@@ -63,7 +63,7 @@ export class MindWorld {
     this.user.position.y = 0;
 
     this.pointerLock = new PointerLock(document.body);
-    this.store.onStateUpdate(this._updatePointerLock.bind(this));
+    // this.store.onStateUpdate(this._updatePointerLock.bind(this));
 
     this.raycaster = new Raycaster();
 
@@ -174,6 +174,7 @@ export class MindWorld {
     }
 
     this._updateCameraman();
+    this._updateMenu();
 
     // Annin
     this.mixerFinal = this.mixerArray[0];
@@ -258,17 +259,21 @@ export class MindWorld {
   }
 
   _onMouseDown(e) {
-    this.store.dispatch(actions.movement.setForward(true));
+    this.store.dispatch(actions.movement.setForward(1));
   }
 
   _onMouseUp(e) {
-    this.store.dispatch(actions.movement.setForward(false));
+    this.store.dispatch(actions.movement.setForward(0));
   }
 
   _updateCameraman() {
     // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
     this.userPosition.rotation.y = this.cameramanRotation.hori;
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
+  }
+
+  _updateMenu() {
+
   }
 
   _updatePointerLock(state) {
