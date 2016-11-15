@@ -11,7 +11,10 @@ export const initialState = fromJS({
     height: 600
   },
   stepsTimes: {},
-  time: 0
+  time: 0,
+  clicked: {
+    startRecovery: false
+  }
 });
 
 export const computedStateUpdaters = {

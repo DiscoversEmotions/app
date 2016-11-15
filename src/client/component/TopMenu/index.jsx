@@ -5,7 +5,7 @@ import { actions, Steps } from '~/store';
 import _ from 'lodash';
 
 @Connect(
-  (uiState, props) => ({}),
+  (state, computedState, props) => ({}),
   {
   }
 )

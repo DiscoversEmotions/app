@@ -5,13 +5,16 @@ import { actions, Steps } from '~/store';
 import _ from 'lodash';
 
 @Connect(
-  (uiState, props) => ({
-    step: uiState.get(`step`),
-    messages: [], // uiState.get(`messages`).toJS(),
-    full: false // uiState.get(`systemFull`)
-  }),
+  (state, computedState, props) => {
+    console.log(computedState.toJS(), state.toJS());
+    return {
+      step: computedState.get(`step`),
+      messages: [], // uiState.get(`messages`).toJS(),
+      full: false // uiState.get(`systemFull`)
+    };
+  },
   {
-    setStep: actions.step.setCurrent
+    startRecovery: actions.startRecovery
   }
 )
 @BindCSS(styles)
@@ -55,7 +58,7 @@ class System extends React.Component {
 
   renderMissingFiles() {
     return (
-      <button onClick={() => this.props.setStep(Steps.RecoveryWillStart) } styleName='btn'>
+      <button onClick={() => this.props.startRecovery() } styleName='btn'>
         Start Recovery
       </button>
     );

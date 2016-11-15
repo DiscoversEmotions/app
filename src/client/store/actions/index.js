@@ -6,7 +6,9 @@ import * as size from './size';
 import * as stepsTimes from './stepsTimes';
 
 export function startRecovery () {
-  return world.setWorld(`mind`);
+  return (state) => {
+    return state.setIn([`clicked`, `startRecovery`], true);
+  };
 }
 
 export function setShowMenu (val) {
