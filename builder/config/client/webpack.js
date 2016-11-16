@@ -83,6 +83,12 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     })
   );
 
+  webpackConfig.plugins.push(
+    new webpack.ProvidePlugin({
+      'Promise': 'es6-promise'
+    })
+  );
+
   if (params.optimize) {
     webpackConfig.plugins.push(
       new webpack.DefinePlugin({

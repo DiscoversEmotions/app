@@ -9,6 +9,7 @@ export const Steps = {
 };
 
 export const Worlds = {
+  Black: `black`,
   Room: `room`,
   Mind: `mind`,
   Memory: `memory`

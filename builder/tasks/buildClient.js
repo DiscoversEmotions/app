@@ -45,8 +45,14 @@ module.exports = function buildClient (config, readline, monitor) {
         });
       } else {
         // Build prod
-        console.log('TODO');
-        compiler.run();
+        compiler.run(function(err, stats) {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
         // if (jetpack.exists(paths.build)) {
         //   return jetpack.removeAsync(paths.build);
         // }

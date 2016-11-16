@@ -12,18 +12,20 @@ window.IMap = Map;
  */
 export default class AppCore {
 
-  constructor(store, appUiEl, rootElement, appCanvasEl, WebGLCore) {
+  constructor(store, appUiEl, appCanvasEl) {
 
     this.appUiEl = appUiEl;
     this.appCanvasEl = appCanvasEl;
-    this.rootElement = rootElement;
+
+    this.webGLCore = null;
+    this.rootElement = null;
 
     this.lastState = Map();
     this.lastComputedState = Map();
 
     this.mainTask = motion.task({
       onUpdate: this.update.bind(this),
-      onRender: this.onRender.bind(this),
+      onRender: this.render.bind(this),
       onStart: () => {
         console.log(`start !`);
         console.log(window.__START_TIME);
@@ -31,14 +33,20 @@ export default class AppCore {
     });
     this.store = store;
 
-    this.webGLCore = new WebGLCore(this.appCanvasEl, this.store);
-
     WindowResizeSingleton.getInstance().add((width, height) => {
       this.store.dispatch(actions.size.resize(width, height));
     });
 
     // start
     this.mainTask.start();
+  }
+
+  bootUI(rootElement) {
+    this.rootElement = rootElement;
+  }
+
+  bootWebgl(WebGLCore) {
+    this.webGLCore = new WebGLCore(this.appCanvasEl, this.store);
   }
 
   update(task, time, dt) {
@@ -50,11 +58,17 @@ export default class AppCore {
     this.lastComputedState = this.store.computedState;
   }
 
-  onRender(task, time, dt) {
+  render(task, time, dt) {
+    if (!this.webGLCore) {
+      return;
+    }
     this.webGLCore.render(time, dt);
   }
 
   updateView() {
+    if (!this.rootElement) {
+      return;
+    }
     if (this.lastComputedState !== this.store.computedState) {
       ReactDOM.render(
         React.createElement(
@@ -70,6 +84,9 @@ export default class AppCore {
   }
 
   updateWebGL(time, dt) {
+    if (!this.webGLCore) {
+      return;
+    }
     this.webGLCore.update(time, dt);
   }
 
