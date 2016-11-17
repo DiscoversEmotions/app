@@ -5,7 +5,7 @@ import {
 import * as selectors from './selectors';
 import * as actions from './actions';
 import { initialState, computedStateUpdaters } from './state';
-import { Worlds, Steps } from './types';
+import { Worlds, Steps } from '~/types';
 
 /**
  * STORE

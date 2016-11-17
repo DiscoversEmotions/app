@@ -31,7 +31,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     {
       enforce: 'pre',
       test: /\.js$/,
-      loader: `eslint?${JSON.stringify(eslint)}`,
+      loader: `eslint-loader?${JSON.stringify(eslint)}`,
       exclude: /node_modules/
     }
   );
@@ -39,28 +39,28 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
   webpackConfig.module.loaders.push(
     {
       test: /\.scss$/,
-      loader: `style!css?${JSON.stringify(cssModules)}!sass`
+      loader: `style-loader!css-loader?${JSON.stringify(cssModules)}!sass-loader`
     },
     {
       test: /\.jsx?$/,
-      loader: 'babel',
+      loader: 'babel-loader',
       exclude: /node_modules/,
       query: babel
     },
     {
       test: /\.(png|jpg|gif|svg|obj)$/,
-      loader: 'file',
+      loader: 'file-loader',
       query: {
         name: '[name].[ext]?[hash]'
       }
     },
     {
       test: /\.json$/,
-      loader: 'json'
+      loader: 'json-loader'
     },
     {
       test: /\.(glsl|vert|frag)$/,
-      loader: 'webpack-glsl',
+      loader: 'webpack-glsl-loader',
       options: {
         chunksPath: './src/chunks', // Path to look chunks at
         chunksExt: 'glsl', // Chunks extension
