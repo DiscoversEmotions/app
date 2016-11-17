@@ -2,10 +2,10 @@ import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing
 import * as motion from 'popmotion';
 import _ from 'lodash';
 import { Vector3, Color } from 'three';
+import * as THREE from 'three';
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
-import * as actions from '~/store/actions';
-import { Worlds } from '~/store';
+import { Worlds } from '~/types';
 
 import { RoomWorld } from './RoomWorld';
 import { MindWorld } from './MindWorld';
@@ -18,6 +18,8 @@ import { MemoryWorld } from './MemoryWorld';
 //   update()
 // }
 
+// window.THREE = THREE;
+
 export class WebGLCore {
 
   constructor(parentElement, store) {
@@ -27,12 +29,11 @@ export class WebGLCore {
     this.height = null;
     this.lastState = null;
     this.store = store;
-    this.currentWorld = this.store.getComputed(`world`);
-    console.log(this.currentWorld);
-    this.transitionStartTime = null;
     this.defaultEnvConfig = {
       background: new Color(0, 0, 0)
     };
+
+    this.currentWorld = null;
 
     this.scene = new Scene();
     this.renderer = new Renderer();
@@ -47,33 +48,19 @@ export class WebGLCore {
       [Worlds.Memory]: new MemoryWorld(Worlds.Memory, this.store, this.parentElement)
     };
 
-    this._mountWorld(this.currentWorld, 0);
+    // this._mountWorld(this.currentWorld, 0);
 
     this._initComposer();
 
-    this._resize();
+    // this._resize();
     // Append to DOM
     this.parentElement.appendChild( this.renderer.domElement );
   }
 
   update(time, dt) {
-    if (this.store.state !== this.lastState) {
-      this._onStateChange(time, dt);
-      this.lastState = this.store.state;
-    }
-    // Update worlds
-    this.worlds[this.currentWorld].update(time, dt);
-    // Pass
-    if (
-      this.store.getComputed(`glitch`)
-    ) {
-      this.glitchPass.enabled = true;
-      this.renderPass.renderToScreen = false;
-    } else {
-      this.renderPass.renderToScreen = true;
-      this.glitchPass.enabled = false;
-      this.store.dispatch(actions.world.endTransition());
-    }
+    this._resize();
+    this._updateWorld(time, dt);
+    this._updatePass();
   }
 
   render(time, dt) {
@@ -82,17 +69,8 @@ export class WebGLCore {
     this.composer.render(dt);
   }
 
-  _onStateChange(time, dt) {
-    this._resize();
-    const nextWorld = this.store.getComputed(`world`);
-    if (nextWorld !== this.currentWorld) {
-      this._switchWorld(nextWorld, time);
-    }
-  }
-
   _resize() {
-    const state = this.store.state;
-    const size = this.store.get(`size`).toJS();
+    const size = this.store.state.get(`size`).toJS();
     if (this.width !== size.width || this.height !== size.height) {
       this.width = size.width;
       this.height = size.height;
@@ -103,6 +81,32 @@ export class WebGLCore {
       });
       this.composer.setSize(this.width, this.height);
       this.renderer.setSize(this.width, this.height);
+    }
+  }
+
+  _updateWorld(time, dt) {
+    const nextWorld = this.store.computedState.get(`world`);
+    if (nextWorld !== this.currentWorld) {
+      if (this.currentWorld === null) {
+        this._mountWorld(nextWorld, time);
+      } else {
+        this._switchWorld(nextWorld, time);
+      }
+    }
+    // Update worlds
+    this.worlds[this.currentWorld].update(time, dt);
+  }
+
+  _updatePass() {
+    if (
+      this.store.computedState.get(`glitch`)
+    ) {
+      this.glitchPass.enabled = true;
+      this.renderPass.renderToScreen = false;
+    } else {
+      this.renderPass.renderToScreen = true;
+      this.glitchPass.enabled = false;
+      this.store.dispatch(this.store.actions.world.endTransition());
     }
   }
 
@@ -140,13 +144,11 @@ export class WebGLCore {
   _switchWorld(nextWorld, time) {
     this._unmountWorld(this.currentWorld);
     this._mountWorld(nextWorld);
-    this.transitionStartTime = time;
-    this.store.dispatch(actions.world.startTransition());
+    this.store.dispatch(this.store.actions.world.startTransition());
   }
 
   _useEnvConfig(config) {
     this.scene.background = config.background;
   }
-
 
 }

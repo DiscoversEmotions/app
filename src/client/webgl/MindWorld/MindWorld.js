@@ -22,7 +22,7 @@ import {
   AnimationMixer
 } from 'three';
 import _ from 'lodash';
-import { actions, Steps, Worlds } from '~/store';
+import { Steps, Worlds } from '~/types';
 import {
   PointerLock
 } from '~/core';
@@ -63,7 +63,7 @@ export class MindWorld {
     this.user.position.y = 0;
 
     this.pointerLock = new PointerLock(document.body);
-    this.store.onStateUpdate(this._updatePointerLock.bind(this));
+    // this.store.onStateUpdate(this._updatePointerLock.bind(this));
 
     this.raycaster = new Raycaster();
 
@@ -89,16 +89,16 @@ export class MindWorld {
 
     this.ground = null;
 
-    loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
-      object.traverse((child) => {
-        if (child instanceof Mesh) {
-          this.ground = child;
-          this.scene.add(child);
-        }
-      });
-      object.position.y = 1;
-
-    }, onProgress, onError);
+    // loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
+    //   object.traverse((child) => {
+    //     if (child instanceof Mesh) {
+    //       this.ground = child;
+    //       this.scene.add(child);
+    //     }
+    //   });
+    //   object.position.y = 1;
+    //
+    // }, onProgress, onError);
 
     loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
       (geometry, materials) => {
@@ -174,6 +174,7 @@ export class MindWorld {
     }
 
     this._updateCameraman();
+    this._updateMenu();
 
     // Annin
     this.mixerFinal = this.mixerArray[0];
@@ -184,7 +185,7 @@ export class MindWorld {
     if (step === Steps.RecoveryLvl1) {
       this.collisionResults = this.raycaster.intersectObjects([this.tile], true);
       if (this.collisionResults.length) {
-        this.store.dispatch(actions.step.setCurrent(Steps.RecoveryLvl1Done));
+        this.store.dispatch(this.store.actions.step.setCurrent(Steps.RecoveryLvl1Done));
       }
     }
   }
@@ -223,19 +224,19 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // z
-      this.store.dispatch(actions.movement.setForward(1));
+      this.store.dispatch(this.store.actions.movement.setForward(1));
       break;
     case 37: //left
     case 81: //q
-      this.store.dispatch(actions.movement.setLeft(1));
+      this.store.dispatch(this.store.actions.movement.setLeft(1));
       break;
     case 40: //back
     case 83: //s
-      this.store.dispatch(actions.movement.setForward(-1));
+      this.store.dispatch(this.store.actions.movement.setForward(-1));
       break;
     case 39: //right
     case 68: //d
-      this.store.dispatch(actions.movement.setLeft(-1));
+      this.store.dispatch(this.store.actions.movement.setLeft(-1));
       break;
     };
   }
@@ -246,29 +247,33 @@ export class MindWorld {
     case 90: // w
     case 40: //back
     case 83: //s
-      this.store.dispatch(actions.movement.setForward(0));
+      this.store.dispatch(this.store.actions.movement.setForward(0));
       break;
     case 37: //left
     case 81: //q
     case 39: //right
     case 68: //d
-      this.store.dispatch(actions.movement.setLeft(0));
+      this.store.dispatch(this.store.actions.movement.setLeft(0));
       break;
     };
   }
 
   _onMouseDown(e) {
-    this.store.dispatch(actions.movement.setForward(true));
+    this.store.dispatch(this.store.actions.movement.setForward(1));
   }
 
   _onMouseUp(e) {
-    this.store.dispatch(actions.movement.setForward(false));
+    this.store.dispatch(this.store.actions.movement.setForward(0));
   }
 
   _updateCameraman() {
     // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
     this.userPosition.rotation.y = this.cameramanRotation.hori;
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
+  }
+
+  _updateMenu() {
+
   }
 
   _updatePointerLock(state) {

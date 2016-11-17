@@ -1,9 +1,9 @@
-import * as THREE from 'three';
+import { Scene as ThreeScene } from 'three';
 
 /**
  * Scene class
  */
-export class Scene extends THREE.Scene {
+export class Scene extends ThreeScene {
 
   /**
    *

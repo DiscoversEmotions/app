@@ -1,0 +1,14 @@
+.top-menu {
+  position: absolute;
+  height: 100px;
+  width: 400px;
+  top: 0;
+  left: 50%;
+  background: rebeccapurple;
+  transition-duration: .3s;
+  transform: translate(-50%, 0);
+
+  &.hidden {
+    transform: translate(0, -100%);
+  }
+}
