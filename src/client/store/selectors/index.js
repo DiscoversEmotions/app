@@ -1,7 +1,5 @@
-import {
-  createSelector
-} from 'reselect';
-import { Steps, Worlds } from '~/store';
+import { createSelector } from 'reselect';
+import { Steps, Worlds } from '~/types';
 
 export const timeSelector = (state) => state.get(`time`);
 export const clickedSelector = (state) => state.get(`clicked`);

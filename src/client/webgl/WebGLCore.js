@@ -5,8 +5,7 @@ import { Vector3, Color } from 'three';
 import * as THREE from 'three';
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
-import * as actions from '~/store/actions';
-import { Worlds } from '~/store';
+import { Worlds } from '~/types';
 
 import { RoomWorld } from './RoomWorld';
 import { MindWorld } from './MindWorld';
@@ -107,7 +106,7 @@ export class WebGLCore {
     } else {
       this.renderPass.renderToScreen = true;
       this.glitchPass.enabled = false;
-      this.store.dispatch(actions.world.endTransition());
+      this.store.dispatch(this.store.actions.world.endTransition());
     }
   }
 
@@ -145,7 +144,7 @@ export class WebGLCore {
   _switchWorld(nextWorld, time) {
     this._unmountWorld(this.currentWorld);
     this._mountWorld(nextWorld);
-    this.store.dispatch(actions.world.startTransition());
+    this.store.dispatch(this.store.actions.world.startTransition());
   }
 
   _useEnvConfig(config) {

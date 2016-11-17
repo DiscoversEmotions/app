@@ -14,3 +14,12 @@ export const Worlds = {
   Mind: `mind`,
   Memory: `memory`
 };
+
+export const AssetStatus = {
+  Requested: `requested`
+};
+
+export const AssetTypes = {
+  Obj: `obj`,
+  Image: `image`
+};

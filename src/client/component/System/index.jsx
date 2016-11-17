@@ -1,21 +1,20 @@
 import React from 'react';
 import { BindCSS, Connect } from '~/core';
-import styles from './System';
-import { actions, Steps } from '~/store';
+import { Steps } from '~/types';
 import _ from 'lodash';
+import styles from './System';
 
 @Connect(
   (state, computedState, props) => {
-    console.log(computedState.toJS(), state.toJS());
     return {
       step: computedState.get(`step`),
       messages: [], // uiState.get(`messages`).toJS(),
       full: false // uiState.get(`systemFull`)
     };
   },
-  {
+  (actions) => ({
     startRecovery: actions.startRecovery
-  }
+  })
 )
 @BindCSS(styles)
 class System extends React.Component {

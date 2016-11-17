@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 
 export function Connect (
-  selector = (store, props) => ({}),
-  actions = {}
+  mapState = (store, props) => ({}),
+  mapActions = (actions) => ({})
 ) {
   return (component) => {
     class ConnectedComponent extends Component {
@@ -13,8 +13,8 @@ export function Connect (
           Object.assign(
             {},
             this.props,
-            selector(this.context.store.state, this.context.store.computedState, this.props),
-            _.mapValues(actions, (action, key) => (...args) => {
+            mapState(this.context.store.state, this.context.store.computedState, this.props),
+            _.mapValues(mapActions(this.context.store.actions), (action, key) => (...args) => {
               if (!_.isFunction(action)) {
                 throw new Error(`Action for key ${key} is not a function !`);
               }

@@ -6,8 +6,7 @@ import _ from 'lodash';
 
 @Connect(
   (state, computedState, props) => ({}),
-  {
-  }
+  (actions) => ({})
 )
 @BindCSS(styles)
 class TopMenu extends React.Component {

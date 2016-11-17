@@ -4,6 +4,7 @@ import * as step from './step';
 import * as time from './time';
 import * as size from './size';
 import * as stepsTimes from './stepsTimes';
+import * as asset from './asset';
 
 export function startRecovery () {
   return (state) => {
@@ -31,5 +32,6 @@ export {
   step,
   time,
   size,
-  stepsTimes
+  stepsTimes,
+  asset
 };

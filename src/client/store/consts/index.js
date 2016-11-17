@@ -1,3 +1,4 @@
+import { Steps } from '~/types';
 
 export const bootMessages = [
   { id: 1, time: 1000, value: `Connection au système nerveux...` },
