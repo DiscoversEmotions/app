@@ -1,3 +1,11 @@
+import {
+  AssetTypes,
+  AssetStatus
+} from '~/types';
+import {
+  TextureLoader
+} from 'three';
+
 export class AssetsManager {
 
   constructor(store) {
@@ -17,8 +25,8 @@ export class AssetsManager {
     const requested = this.store.selectors.assets.requestedAssetsSelector();
     const queued = this.store.selectors.assets.queuedAssetsSelector();
     if (requested.size <= 4 && queued.size > 0) {
-      const nextRequested = queued.valueSeq().first();
-      console.log(`Set requested`);
+      const nextRequested = this.store.selectors.assets.nextRequestedSelector();
+      console.log(`Set requested ${nextRequested.get(`key`)}`);
       console.log(nextRequested.toJS());
       this.store.actions.asset.setAssetRequested(nextRequested.get(`key`));
     }
@@ -28,5 +36,30 @@ export class AssetsManager {
 
     this.lastAssetState = assetState;
   }
+
+  getLoader(type) {
+    switch( type ) {
+    case AssetTypes.Texture:
+      return new TextureLoader(this);
+    default:
+      throw new Error(`Can't find loader for asset of type ${type}`);
+    }
+  }
+
+  /**
+   * LoadingManager Methods
+   */
+
+  itemStart(url) {
+
+  };
+
+  itemEnd(url) {
+
+  };
+
+  itemError(url) {
+    console.error(`Ooops :/`);
+  };
 
 }
