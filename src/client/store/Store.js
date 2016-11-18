@@ -4,8 +4,10 @@ import {
 } from 'immutable';
 import * as selectors from './selectors';
 import * as actions from './actions';
-import { initialState, computedStateUpdaters } from './state';
+import { initialState } from './state';
+import { getComputedStateUpdaters } from './computed';
 import { Worlds, Steps } from '~/types';
+import _ from 'lodash';
 
 /**
  * STORE
@@ -14,9 +16,12 @@ import { Worlds, Steps } from '~/types';
 export class Store {
   constructor() {
     this.state = initialState;
-    this.computedStateUpdaters = computedStateUpdaters;
-    this.selectors = selectors;
-    this.actions = actions;
+
+    this.selectors = this._wrapSelectors(selectors);
+    this.actions = this._wrapAction(actions);
+    console.log(this.actions);
+
+    this.computedStateUpdaters = getComputedStateUpdaters(this.selectors);
 
     this._computedStateKeys = Object.keys(this.computedStateUpdaters);
 
@@ -75,6 +80,24 @@ export class Store {
           });
         });
       });
+  }
+
+  _wrapAction(actions) {
+    return _.mapValues(actions, (action) => {
+      if (_.isFunction(action)) {
+        return (...args) => this.dispatch(action(...args));
+      }
+      return this._wrapAction(action);
+    });
+  }
+
+  _wrapSelectors(selectors) {
+    return _.mapValues(selectors, (selector) => {
+      if (_.isFunction(selector)) {
+        return (props) => selector(this.state, props);
+      }
+      return this._wrapSelectors(selector);
+    });
   }
 
 }

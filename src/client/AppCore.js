@@ -33,7 +33,7 @@ export default class AppCore {
     this.store = store;
 
     WindowResizeSingleton.getInstance().add((width, height) => {
-      this.store.dispatch(this.store.actions.size.resize(width, height));
+      this.store.actions.size.resize(width, height);
     });
 
     this.assetsManager = new AssetsManager(this.store);
@@ -51,7 +51,7 @@ export default class AppCore {
   }
 
   update(task, time, dt) {
-    this.store.dispatch(this.store.actions.time.setTime(time));
+    this.store.actions.time.setTime(time);
 
     this.updateAssetsManager();
     this.updateView();

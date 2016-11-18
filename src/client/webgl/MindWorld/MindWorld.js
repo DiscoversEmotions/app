@@ -185,7 +185,7 @@ export class MindWorld {
     if (step === Steps.RecoveryLvl1) {
       this.collisionResults = this.raycaster.intersectObjects([this.tile], true);
       if (this.collisionResults.length) {
-        this.store.dispatch(this.store.actions.step.setCurrent(Steps.RecoveryLvl1Done));
+        this.store.actions.step.setCurrent(Steps.RecoveryLvl1Done);
       }
     }
   }
@@ -224,19 +224,19 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // z
-      this.store.dispatch(this.store.actions.movement.setForward(1));
+      this.store.actions.movement.setForward(1);
       break;
     case 37: //left
     case 81: //q
-      this.store.dispatch(this.store.actions.movement.setLeft(1));
+      this.store.actions.movement.setLeft(1);
       break;
     case 40: //back
     case 83: //s
-      this.store.dispatch(this.store.actions.movement.setForward(-1));
+      this.store.actions.movement.setForward(-1);
       break;
     case 39: //right
     case 68: //d
-      this.store.dispatch(this.store.actions.movement.setLeft(-1));
+      this.store.actions.movement.setLeft(-1);
       break;
     };
   }
@@ -247,23 +247,23 @@ export class MindWorld {
     case 90: // w
     case 40: //back
     case 83: //s
-      this.store.dispatch(this.store.actions.movement.setForward(0));
+      this.store.actions.movement.setForward(0);
       break;
     case 37: //left
     case 81: //q
     case 39: //right
     case 68: //d
-      this.store.dispatch(this.store.actions.movement.setLeft(0));
+      this.store.actions.movement.setLeft(0);
       break;
     };
   }
 
   _onMouseDown(e) {
-    this.store.dispatch(this.store.actions.movement.setForward(1));
+    this.store.actions.movement.setForward(1);
   }
 
   _onMouseUp(e) {
-    this.store.dispatch(this.store.actions.movement.setForward(0));
+    this.store.actions.movement.setForward(0);
   }
 
   _updateCameraman() {

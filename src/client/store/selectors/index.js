@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { Steps, Worlds } from '~/types';
+import * as assets from './assets';
 
 export const timeSelector = (state) => state.get(`time`);
 export const clickedSelector = (state) => state.get(`clicked`);
@@ -34,3 +35,7 @@ export const worldSelector = createSelector(
     }
   }
 );
+
+export {
+  assets
+};

@@ -14,12 +14,7 @@ export function Connect (
             {},
             this.props,
             mapState(this.context.store.state, this.context.store.computedState, this.props),
-            _.mapValues(mapActions(this.context.store.actions), (action, key) => (...args) => {
-              if (!_.isFunction(action)) {
-                throw new Error(`Action for key ${key} is not a function !`);
-              }
-              return this.context.store.dispatch(action(...args));
-            })
+            mapActions(this.context.store.actions)
           )
         );
       }

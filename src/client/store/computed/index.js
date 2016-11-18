@@ -1,12 +1,11 @@
 import { Worlds, Steps } from '~/types';
-import * as selectors from '../selectors';
 
-export const computedStateUpdaters = {
+export const getComputedStateUpdaters = (selectors) => ({
   world: (value = Worlds.Room, state, prevState) => {
-    return selectors.worldSelector(state);
+    return selectors.worldSelector();
   },
   step: (value = Steps.PreBoot, state, prevState) => {
-    return selectors.stepSelector(state);
+    return selectors.stepSelector();
   },
   glitch: (value = false, state) => {
     return value;
@@ -40,4 +39,4 @@ export const computedStateUpdaters = {
 
     // return lastState;
   // }
-};
+});

@@ -106,7 +106,7 @@ export class WebGLCore {
     } else {
       this.renderPass.renderToScreen = true;
       this.glitchPass.enabled = false;
-      this.store.dispatch(this.store.actions.world.endTransition());
+      this.store.actions.world.endTransition();
     }
   }
 
@@ -144,7 +144,7 @@ export class WebGLCore {
   _switchWorld(nextWorld, time) {
     this._unmountWorld(this.currentWorld);
     this._mountWorld(nextWorld);
-    this.store.dispatch(this.store.actions.world.startTransition());
+    this.store.actions.world.startTransition();
   }
 
   _useEnvConfig(config) {

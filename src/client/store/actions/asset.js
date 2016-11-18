@@ -1,16 +1,13 @@
 import { fromJS } from 'immutable';
 import { AssetStatus } from '~/types';
 
-export function setAssetRequested (assetName) {
+export function setAssetRequested (assetKey) {
   return (state) => {
     return state
     .update(`assets`, (assets) => {
-      if (!assets.has(`assetName`)) {
-        var assets = assets.set(assetName, fromJS({
-          status: AssetStatus.Requested
-        }));
-      }
-      return assets;
+      return assets.update(assetKey, asset => {
+        return asset.set(`status`, AssetStatus.Requested);
+      });
     });
   };
 }
