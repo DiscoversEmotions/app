@@ -1,8 +1,28 @@
 import React from 'react';
-import { BindCSS, Connect } from '~/core';
+import styled from 'styled-components';
+import { Connect } from '~/core';
 import { Steps } from '~/types';
 import _ from 'lodash';
-import styles from './System';
+import Button from '~/component/Button';
+
+const StyledDiv = styled.div`
+  position: absolute;
+  height: ${ (props) => !props.full ? `120px` : `300px` };
+  width: ${ (props) => !props.full ? `300px` : `500px` };
+  bottom: ${ (props) => !props.full ? `2%` : `50%` };
+  right: ${ (props) => !props.full ? `2%` : `50%` };
+  background: rgba(0, 0, 0, 0.68);
+  padding: 10px;
+  transition-duration: .3s;
+  color: white;
+  line-height: 1.5;
+  transform: translate(${ (props) => !props.full ? `0, 0` : `50%, 50%` });
+
+  p {
+    margin: 0;
+    padding: 0;
+  }
+`;
 
 @Connect(
   (state, computedState, props) => {
@@ -16,21 +36,17 @@ import styles from './System';
     startRecovery: actions.startRecovery
   })
 )
-@BindCSS(styles)
 class System extends React.Component {
   render() {
-    const classes = [`system`];
-    if (this.props.full) {
-      classes.push(`full`);
-    }
     return (
-      <div styleName={classes.join(` `)}>
+      <StyledDiv full={this.props.full}>
         { this.renderContent() }
-      </div>
+      </StyledDiv>
     );
   }
 
   renderContent() {
+    console.log(this.props.step);
     switch (this.props.step) {
       case Steps.Boot:
         return this.renderBoot();
@@ -48,6 +64,9 @@ class System extends React.Component {
   renderBoot() {
     return (
       <div>
+        <Button>
+          Yolo
+        </Button>
         { this.props.messages.map(msg => (
           <p key={ msg.id }>{ msg.value }</p>
         )) }
@@ -57,21 +76,19 @@ class System extends React.Component {
 
   renderMissingFiles() {
     return (
-      <button onClick={() => this.props.startRecovery() } styleName='btn'>
+      <Button onClick={() => this.props.startRecovery() }>
         Start Recovery
-      </button>
+      </Button>
     );
   }
 
   renderRecoveryWillStart() {
     return (
       <div>
-        <p>
-          Are you ready ?
-        </p>
-        <button onClick={() => this.props.setStep(Steps.RecoveryLvl1) } styleName='btn'>
+        <p>Are you ready</p>
+        <Button onClick={() => this.props.setStep(Steps.RecoveryLvl1) }>
           Go !
-        </button>
+        </Button>
       </div>
     );
   }
