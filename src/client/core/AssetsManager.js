@@ -8,8 +8,7 @@ import {
 
 export class AssetsManager {
 
-  constructor(store) {
-    this.store = store;
+  constructor() {
     this.started = false;
 
     this.lastAssetState = null;

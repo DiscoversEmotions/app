@@ -1,16 +1,15 @@
 import React from 'react';
-import { fromJS } from 'immutable';
 import App from '~/component/App';
 import AppCore from './AppCore';
-// import { WebGLCore } from '~/webgl';
-import { Store } from '~/store';
+import controller from '~/controller';
+import { ConnectFunction } from '~/core';
 
 const appCanvasEl = document.getElementById('app-canvas');
 const appUiEl = document.getElementById('app-ui');
 
 // Instantiate the core
 const core = new AppCore(
-  new Store(),
+  controller,
   appUiEl,
   appCanvasEl,
   () => {}
@@ -20,7 +19,24 @@ const core = new AppCore(
 core.bootUI(<App />);
 
 // Async fetch webgl stuff
-System.import('~/webgl').then((result) => {
-  // Boot WebGLCore
-  core.bootWebgl(result.WebGLCore);
+// System.import('~/webgl').then((result) => {
+//   // Boot WebGLCore
+//   core.bootWebgl(result.WebGLCore);
+// });
+
+const Connected = ConnectFunction(
+  controller,
+  (props) => ({
+    value: props.propsName
+  }),
+  {
+    buttonClicked: 'buttonClicked'
+  }
+)((props) => {
+  console.log('update : ' + props.value);
 });
+
+const demo = new Connected();
+
+demo.update({ propsName: `title` });
+demo.update({ propsName: `subTitle` });

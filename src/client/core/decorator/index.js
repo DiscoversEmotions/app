@@ -1,4 +1,5 @@
 // Decorator composer
 export * from './compose';
 // Decorators
-export * from './Connect';
+export * from './ConnectFunction';
+export * from './ConnectReact';

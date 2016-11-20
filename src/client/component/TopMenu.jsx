@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { compose, Connect } from '~/core';
+import { compose } from '~/core';
 
-import { actions, Steps } from '~/store';
 import _ from 'lodash';
 
 const TopMenuContainer = styled.div`
@@ -21,10 +20,7 @@ const TopMenuContainer = styled.div`
 `;
 
 const TopMenu = compose(
-  Connect(
-    (state, computedState, props) => ({}),
-    (actions) => ({})
-  )
+
 )((props) => {
   return <TopMenuContainer />;
 });
