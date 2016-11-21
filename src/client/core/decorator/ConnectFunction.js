@@ -1,4 +1,6 @@
-import { Computed } from 'cerebral';
+import { Computed as ComputedFactory } from 'cerebral';
+
+const Computed = ComputedFactory({}, () => null).constructor;
 
 /**
  * Utils
@@ -184,6 +186,6 @@ export function ConnectFunction (controller, paths, passedSignals, injectedProps
   let props = injectedProps;
 
   return (component) => {
-    return HOC(controller, paths, signals, props, component);
+    return new (HOC(controller, paths, signals, props, component))();
   };
 }

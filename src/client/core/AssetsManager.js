@@ -5,35 +5,47 @@ import {
 import {
   TextureLoader
 } from 'three';
+import { ConnectFunction } from '~/core';
+import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 
 export class AssetsManager {
 
-  constructor() {
-    this.started = false;
-
-    this.lastAssetState = null;
+  mapState(props) {
+    return {
+      assets: `assets`,
+      requested: requestedAssets,
+      queued: queuedAssets,
+      next: nextRequestedAsset
+    };
   }
 
-  update() {
-    const assetState = this.store.state.get(`assets`);
-    if (this.lastAssetState === assetState) {
-      return;
-    }
-    console.log(`Update AssetsManager`);
-    console.log(assetState.toJS());
-    const requested = this.store.selectors.assets.requestedAssetsSelector();
-    const queued = this.store.selectors.assets.queuedAssetsSelector();
-    if (requested.size <= 4 && queued.size > 0) {
-      const nextRequested = this.store.selectors.assets.nextRequestedSelector();
-      console.log(`Set requested ${nextRequested.get(`key`)}`);
-      console.log(nextRequested.toJS());
-      this.store.actions.asset.setAssetRequested(nextRequested.get(`key`));
-    }
-    // if (!assetState.has(`world_1`)) {
-    //   this.store.actions.asset.setAssetRequested(`world_1`);
-    // }
+  mapSignals(props) {
+    return {
+      doTheYolo: `assets.doTheYolo`
+    };
+  }
 
-    this.lastAssetState = assetState;
+  constructor(controller) {
+    this.controller = controller;
+    this.updater = ConnectFunction(
+      this.controller,
+      this.mapState.bind(this),
+      this.mapSignals.bind(this)
+    )(
+      this.update.bind(this)
+    );
+    this.updater.update({});
+  }
+
+  update({ assets, requested, queued, next, doTheYolo }) {
+    console.log(`update assetsManager`);
+    console.log(requested, assets, queued);
+    console.log(next);
+    if (requested.length <= 4 && queued.length > 0 && next !== null) {
+      console.log(`Set requested ${next.key}`);
+      doTheYolo();
+      // this.store.actions.asset.setAssetRequested(nextRequested.get(`key`));
+    }
   }
 
   getLoader(type) {

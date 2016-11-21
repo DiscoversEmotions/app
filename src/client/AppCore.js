@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
-import { WindowResizeSingleton, AssetsManager } from '~/core';
+import { WindowResizeSingleton, AssetsManager, ConnectFunction } from '~/core';
 import { Steps } from '~/types';
 import { Container } from 'cerebral/react';
 
@@ -29,10 +29,10 @@ export default class AppCore {
     this.controller = controller;
 
     WindowResizeSingleton.getInstance().add((width, height) => {
-      // this.store.actions.size.resize(width, height);
+      this.controller.getSignal(`app.setSize`)({ width, height });
     });
 
-    this.assetsManager = new AssetsManager(this.store);
+    this.assetsManager = new AssetsManager(this.controller);
 
     // start
     this.mainTask.start();

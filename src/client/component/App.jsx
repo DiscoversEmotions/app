@@ -23,25 +23,17 @@ const Title = styled.h1`
 const App = compose(
   ConnectReact(
     {
-      title: 'title',
-      subTitle: 'subTitle'
-    },
-    {
-      buttonClicked: 'buttonClicked'
+      title: 'app.title',
+      subTitle: 'app.subTitle',
+      aboutVisible: 'app.aboutVisible'
     }
   )
 )((props) => {
   return (
     <AppContainer>
-      <Title>{ props.title } - { props.subTitle }</Title>
+      <Title>{ props.title } - { props.subTitle } - { (props.aboutVisible + ``) }</Title>
       <System />
       <TopMenu />
-      <button
-        className="c-button c-button--info c-button--block"
-        onClick={() => props.buttonClicked()}
-      >
-        Update state
-      </button>
     </AppContainer>
   );
 });
