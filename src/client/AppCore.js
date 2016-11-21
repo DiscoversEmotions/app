@@ -1,26 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
-import { WindowResizeSingleton, Provider, AssetsManager } from '~/core';
+import { WindowResizeSingleton, AssetsManager, ConnectFunction } from '~/core';
 import { Steps } from '~/types';
-import { Map } from 'immutable';
-
-window.IMap = Map;
+import { Container } from 'cerebral/react';
 
 /**
  * Core class
  */
 export default class AppCore {
 
-  constructor(store, appUiEl, appCanvasEl) {
+  constructor(controller, appUiEl, appCanvasEl) {
 
     this.appUiEl = appUiEl;
     this.appCanvasEl = appCanvasEl;
 
     this.webGLCore = null;
     this.rootElement = null;
-
-    this.lastState = Map();
 
     this.mainTask = motion.task({
       onUpdate: this.update.bind(this),
@@ -30,13 +26,13 @@ export default class AppCore {
         console.log(window.__START_TIME);
       }
     });
-    this.store = store;
+    this.controller = controller;
 
     WindowResizeSingleton.getInstance().add((width, height) => {
-      this.store.actions.size.resize(width, height);
+      this.controller.getSignal(`app.setSize`)({ width, height });
     });
 
-    this.assetsManager = new AssetsManager(this.store);
+    this.assetsManager = new AssetsManager(this.controller);
 
     // start
     this.mainTask.start();
@@ -44,6 +40,16 @@ export default class AppCore {
 
   bootUI(rootElement) {
     this.rootElement = rootElement;
+    ReactDOM.render(
+      React.createElement(
+        Container,
+        {
+          controller: this.controller
+        },
+        this.rootElement
+      ),
+      this.appUiEl
+    );
   }
 
   bootWebgl(WebGLCore) {
@@ -51,12 +57,8 @@ export default class AppCore {
   }
 
   update(task, time, dt) {
-    this.store.actions.time.setTime(time);
-
-    this.updateAssetsManager();
-    this.updateView();
-    this.updateWebGL(time, dt);
-    this.lastState = this.store.state;
+    // this.updateAssetsManager();
+    // this.updateWebGL(time, dt);
   }
 
   render(task, time, dt) {
@@ -66,27 +68,9 @@ export default class AppCore {
     this.webGLCore.render(time, dt);
   }
 
-  updateAssetsManager() {
-    this.assetsManager.update();
-  }
-
-  updateView() {
-    if (!this.rootElement) {
-      return;
-    }
-    if (this.lastState !== this.store.state) {
-      ReactDOM.render(
-        React.createElement(
-          Provider,
-          {
-            store: this.store
-          },
-          this.rootElement
-        ),
-        this.appUiEl
-      );
-    }
-  }
+  // updateAssetsManager() {
+  //   this.assetsManager.update();
+  // }
 
   updateWebGL(time, dt) {
     if (!this.webGLCore) {
