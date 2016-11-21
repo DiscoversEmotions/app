@@ -4626,9 +4626,9 @@ three@0.82.x:
   version "0.82.1"
   resolved "https://registry.yarnpkg.com/three/-/three-0.82.1.tgz#f63c3730971520c54479e3627d370d764a4a8383"
 
-three@^0.81.2:
-  version "0.81.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.81.2.tgz#100c078dcfbb0a235e3d433066b1b26b145c69c3"
+"three@github:mrdoob/three.js#dev":
+  version "0.82.1"
+  resolved "https://codeload.github.com/mrdoob/three.js/tar.gz/b821339288a97a5e013877668853a70fdf1afa9e"
 
 through@^2.3.6, through@^2.3.7:
   version "2.3.8"

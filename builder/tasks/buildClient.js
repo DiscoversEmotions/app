@@ -50,6 +50,7 @@ module.exports = function buildClient (config, readline, monitor) {
             console.error(err);
             reject(err);
           } else {
+            jetpack.write(config.paths.stats, stats.toJson('minimal'));
             resolve();
           }
         });

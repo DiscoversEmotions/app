@@ -2,6 +2,10 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function (paths, params, babel, eslint, cssModules) {
+  /**
+   * Base
+   */
+
   const webpackConfig = {
     entry: {
       'app': [paths.clientBoot]
@@ -12,12 +16,13 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     },
     resolve: {
       alias: {
-        '~': paths.client
+        '~': paths.client,
+        'three': paths.three
       },
       extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl', '.jsx']
     },
     module: {
-      loaders: [],
+      rules: [],
     },
     plugins: [],
     devServer: {
@@ -27,7 +32,11 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     devtool: params.webpack.devtool
   };
 
-  webpackConfig.module.loaders.push(
+  /**
+   * Rules
+   */
+
+  webpackConfig.module.rules.push(
     {
       enforce: 'pre',
       test: /\.js$/,
@@ -36,7 +45,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     }
   );
 
-  webpackConfig.module.loaders.push(
+  webpackConfig.module.rules.push(
     {
       test: /\.scss$/,
       loader: `style-loader!css-loader?${JSON.stringify(cssModules)}!sass-loader`
@@ -69,6 +78,10 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     }
   );
 
+  /**
+   * Plugins
+   */
+
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
       template: paths.clientHtmlTemplate,
@@ -88,6 +101,10 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       'Promise': 'es6-promise'
     })
   );
+
+  /**
+   * Dev
+   */
 
   if (params.optimize) {
     webpackConfig.plugins.push(

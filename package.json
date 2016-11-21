@@ -48,7 +48,7 @@
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "styled-components": "^1.0.11",
-    "three": "^0.81.2",
+    "three": "github:mrdoob/three.js#dev",
     "three-orbit-controls": "^72.0.0",
     "webpack": "beta",
     "webpack-dev-server": "beta",
