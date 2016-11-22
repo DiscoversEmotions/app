@@ -41,7 +41,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       enforce: 'pre',
       test: /\.js$/,
       loader: `eslint-loader?${JSON.stringify(eslint)}`,
-      exclude: [/node_modules/, /three/]
+      exclude: /node_modules/
     }
   );
 
