@@ -1,4 +1,4 @@
-import { Mesh, SphereGeometry, MeshBasicMaterial, TextureLoader } from 'three';
+import { Mesh, SphereGeometry, MeshBasicMaterial, TextureLoader } from '~/three';
 
 export class RoomSphere extends Mesh {
   constructor() {

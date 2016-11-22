@@ -1,4 +1,4 @@
-import { Scene as ThreeScene } from 'three';
+import { Scene as ThreeScene } from '~/three';
 
 /**
  * Scene class

@@ -1,13 +1,14 @@
 import {
   TextureLoader
-} from 'three';
+} from '~/three';
+import { AssetTypes } from '~/types';
 
 function getLoader (asset) {
   switch( asset.type ) {
   case AssetTypes.Texture:
     return new TextureLoader(this);
   default:
-    throw new Error(`Can't find loader for asset of type ${type}`);
+    throw new Error(`Can't find loader for asset of type "${asset.type}"`);
   }
 }
 

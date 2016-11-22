@@ -20,7 +20,7 @@ import {
   ObjectLoader,
   Vector3,
   AnimationMixer
-} from 'three';
+} from '~/three';
 import _ from 'lodash';
 import { Steps, Worlds } from '~/types';
 import {

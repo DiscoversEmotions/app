@@ -4,7 +4,7 @@ import {
 } from '~/types';
 import {
   TextureLoader
-} from 'three';
+} from '~/three';
 import { ConnectFunction } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 

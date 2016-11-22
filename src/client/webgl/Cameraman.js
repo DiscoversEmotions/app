@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Object3D } from 'three';
+import { PerspectiveCamera, Object3D } from '~/three';
 
 /**
  * Cameraman class

@@ -1,6 +1,6 @@
 import { Cube } from '~/webgl/meshes';
 import { Cameraman } from '~/webgl';
-import { PointLight, Object3D, Color } from 'three';
+import { PointLight, Object3D, Color } from '~/three';
 
 export class MemoryWorld {
 

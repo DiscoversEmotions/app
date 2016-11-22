@@ -1,7 +1,7 @@
 import { Cube, Ground, RoomSphere } from '~/webgl/meshes';
 import { Cameraman } from '~/webgl';
 import { EventUtils } from '~/core';
-import { PointLight, Object3D } from 'three';
+import { PointLight, Object3D } from '~/three';
 import _ from 'lodash';
 
 export class RoomWorld {

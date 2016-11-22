@@ -46,9 +46,16 @@ module.exports = function buildClient (config, readline, monitor) {
       } else {
         // Build prod
         compiler.run(function(err, stats) {
+
+          console.log(stats.toString({
+            chunks: false,  // Makes the build much quieter
+            colors: true    // Shows colors in the console
+          }));
           if (err) {
             console.error(err);
             reject(err);
+          } else if (stats.hasErrors()) {
+            reject();
           } else {
             jetpack.write(config.paths.stats, stats.toJson('minimal'));
             resolve();
