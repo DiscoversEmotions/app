@@ -57,7 +57,8 @@ module.exports = function buildClient (config, readline, monitor) {
           } else if (stats.hasErrors()) {
             reject();
           } else {
-            jetpack.write(config.paths.stats, stats.toJson('minimal'));
+            // write stats.json
+            // jetpack.write(config.paths.stats, stats.toJson('minimal'));
             resolve();
           }
         });
