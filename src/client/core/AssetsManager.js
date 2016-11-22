@@ -4,7 +4,7 @@ import {
 } from '~/types';
 import {
   TextureLoader
-} from 'three';
+} from '~/three';
 import { ConnectFunction } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 
@@ -21,7 +21,7 @@ export class AssetsManager {
 
   mapSignals(props) {
     return {
-      doTheYolo: `assets.doTheYolo`
+      requestAsset: `assets.requestAsset`
     };
   }
 
@@ -37,14 +37,10 @@ export class AssetsManager {
     this.updater.update({});
   }
 
-  update({ assets, requested, queued, next, doTheYolo }) {
-    console.log(`update assetsManager`);
-    console.log(requested, assets, queued);
-    console.log(next);
+  update({ assets, requested, queued, next, requestAsset }) {
     if (requested.length <= 4 && queued.length > 0 && next !== null) {
       console.log(`Set requested ${next.key}`);
-      doTheYolo();
-      // this.store.actions.asset.setAssetRequested(nextRequested.get(`key`));
+      requestAsset({ asset: next });
     }
   }
 

@@ -1,4 +1,4 @@
-import { ShaderMaterial, Color, DoubleSide, UniformsUtils, UniformsLib, ShaderLib } from 'three';
+import { ShaderMaterial, Color, DoubleSide, UniformsUtils, UniformsLib, ShaderLib } from '~/three';
 
 import vertexShader from './shader/cube_vert.glsl';
 import fragmentShader from './shader/cube_frag.glsl';

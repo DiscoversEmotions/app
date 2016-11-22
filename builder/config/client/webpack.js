@@ -2,13 +2,18 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = function (paths, params, babel, eslint, cssModules) {
+  /**
+   * Base
+   */
+
   const webpackConfig = {
     entry: {
       'app': [paths.clientBoot]
     },
     output: {
       path: paths.buildClient,
-      publicPath: '/'
+      publicPath: '/',
+      pathinfo: false,
     },
     resolve: {
       alias: {
@@ -17,7 +22,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl', '.jsx']
     },
     module: {
-      loaders: [],
+      rules: [],
     },
     plugins: [],
     devServer: {
@@ -27,16 +32,20 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     devtool: params.webpack.devtool
   };
 
-  webpackConfig.module.loaders.push(
+  /**
+   * Rules
+   */
+
+  webpackConfig.module.rules.push(
     {
       enforce: 'pre',
       test: /\.js$/,
       loader: `eslint-loader?${JSON.stringify(eslint)}`,
-      exclude: /node_modules/
+      exclude: [/node_modules/, /three/]
     }
   );
 
-  webpackConfig.module.loaders.push(
+  webpackConfig.module.rules.push(
     {
       test: /\.scss$/,
       loader: `style-loader!css-loader?${JSON.stringify(cssModules)}!sass-loader`
@@ -69,6 +78,10 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     }
   );
 
+  /**
+   * Plugins
+   */
+
   webpackConfig.plugins.push(
     new HtmlWebpackPlugin({
       template: paths.clientHtmlTemplate,
@@ -88,20 +101,40 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       'Promise': 'es6-promise'
     })
   );
+  webpackConfig.plugins.push(
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    })
+  );
+
+  /**
+   * Dev
+   */
 
   if (params.optimize) {
     webpackConfig.plugins.push(
-      new webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: '"production"'
-        }
-      })
-    );
-    webpackConfig.plugins.push(
+      new webpack.LoaderOptionsPlugin({
+        minimize: true,
+        debug: false
+      }),
       new webpack.optimize.UglifyJsPlugin({
         compress: {
-          warnings: false
-        }
+          warnings: false,
+          screw_ie8: true,
+          conditionals: true,
+          unused: true,
+          comparisons: true,
+          sequences: true,
+          dead_code: true,
+          evaluate: true,
+          if_return: true,
+          join_vars: true,
+        },
+        output: {
+          comments: false
+        },
       })
     );
   }

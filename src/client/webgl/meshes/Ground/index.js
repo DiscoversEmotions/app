@@ -1,4 +1,4 @@
-import { Mesh, PlaneGeometry, MeshPhongMaterial, DoubleSide, ObjectLoader } from 'three';
+import { Mesh, PlaneGeometry, MeshPhongMaterial, DoubleSide, ObjectLoader } from '~/three';
 
 /**
  * Cube class

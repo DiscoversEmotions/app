@@ -1,4 +1,4 @@
-import { BoxGeometry, BufferGeometry, BufferAttribute } from 'three';
+import { BoxGeometry, BufferGeometry, BufferAttribute } from '~/three';
 
 /**
  * CubeGeometry class
