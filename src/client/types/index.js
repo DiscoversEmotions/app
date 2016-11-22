@@ -22,5 +22,6 @@ export const AssetStatus = {
 
 export const AssetTypes = {
   Obj: `obj`,
-  Texture: `texture`
+  Texture: `texture`,
+  Json: `json`
 };

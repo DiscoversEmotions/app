@@ -1,4 +1,4 @@
-import { Mesh, BoxBufferGeometry, MeshLambertMaterial, FlatShading } from '~/three';
+import { Mesh, BoxBufferGeometry, MeshLambertMaterial, FlatShading } from 'three';
 
 export class Tile extends Mesh {
   constructor() {

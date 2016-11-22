@@ -11,7 +11,7 @@ import {
   LineSegments,
   MultiMaterial,
   Mesh
-} from '~/three';
+} from 'three';
 
 export class OBJLoader {
   constructor(manager) {

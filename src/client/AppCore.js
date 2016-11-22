@@ -10,7 +10,7 @@ import { Container } from 'cerebral/react';
  */
 export default class AppCore {
 
-  constructor(controller, appUiEl, appCanvasEl) {
+  constructor(createController, appUiEl, appCanvasEl) {
 
     this.appUiEl = appUiEl;
     this.appCanvasEl = appCanvasEl;
@@ -26,7 +26,7 @@ export default class AppCore {
         console.log(window.__START_TIME);
       }
     });
-    this.controller = controller;
+    this.controller = createController(this);
 
     WindowResizeSingleton.getInstance().add((width, height) => {
       this.controller.getSignal(`app.setSize`)({ width, height });
@@ -36,6 +36,8 @@ export default class AppCore {
 
     // start
     this.mainTask.start();
+    
+    this.assetsManager.boot();
   }
 
   bootUI(rootElement) {

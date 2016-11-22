@@ -1,14 +1,24 @@
-import {
-  AssetTypes,
-  AssetStatus
-} from '~/types';
-import {
-  TextureLoader
-} from '~/three';
+import { AssetTypes, AssetStatus } from '~/types';
+import { TextureLoader, ObjectLoader } from 'three';
 import { ConnectFunction } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 
 export class AssetsManager {
+
+  constructor(controller) {
+    this.controller = controller;
+    this.updater = ConnectFunction(
+      this.controller,
+      this.mapState.bind(this),
+      this.mapSignals.bind(this)
+    )(
+      this.render.bind(this)
+    );
+  }
+
+  boot() {
+    this.updater.update({});
+  }
 
   mapState(props) {
     return {
@@ -25,31 +35,23 @@ export class AssetsManager {
     };
   }
 
-  constructor(controller) {
-    this.controller = controller;
-    this.updater = ConnectFunction(
-      this.controller,
-      this.mapState.bind(this),
-      this.mapSignals.bind(this)
-    )(
-      this.update.bind(this)
-    );
-    this.updater.update({});
-  }
-
-  update({ assets, requested, queued, next, requestAsset }) {
-    if (requested.length <= 4 && queued.length > 0 && next !== null) {
+  render({ assets, requested, queued, next, requestAsset }) {
+    if (requested.length <= 1 && queued.length > 0 && next !== null) {
       console.log(`Set requested ${next.key}`);
       requestAsset({ asset: next });
     }
   }
 
-  getLoader(type) {
-    switch( type ) {
+  getLoader(asset) {
+    switch(asset.type) {
     case AssetTypes.Texture:
       return new TextureLoader(this);
+    // case AssetTypes.Obj:
+    //   return new OBJLoader(this);
+    case AssetTypes.Json:
+      return new ObjectLoader(this);
     default:
-      throw new Error(`Can't find loader for asset of type ${type}`);
+      throw new Error(`Can't find loader for asset of type "${asset.type}"`);
     }
   }
 
@@ -57,12 +59,12 @@ export class AssetsManager {
    * LoadingManager Methods
    */
 
-  itemStart(url) {
-
+  itemStart(url, args) {
+    console.log(`itemStart : ${url}`);
   };
 
   itemEnd(url) {
-
+    console.log(`itemEnd : ${url}`);
   };
 
   itemError(url) {

@@ -1,8 +1,8 @@
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import * as motion from 'popmotion';
 import _ from 'lodash';
-import { Vector3, Color } from '~/three';
-import * as THREE from '~/three';
+import { Vector3, Color } from 'three';
+import * as THREE from 'three';
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
 import { Worlds } from '~/types';

@@ -6,21 +6,19 @@ import {
 import { AssetStatus, AssetTypes } from '~/types';
 import signals from './signals';
 
-console.log(signals);
-
 export default {
   state: {
-    world_1: {
-      key: `world_1`,
-      get: require(`~/assets/plane.obj`),
-      type: AssetTypes.Obj,
+    perso: {
+      key: `perso`,
+      fileUrl: require(`~/assets/perso.json`),
+      type: AssetTypes.Json,
       status: AssetStatus.Queued,
       size: 298,
       priority: 0,
     },
     room: {
       key: `room`,
-      get: require(`~/assets/room.jpg`),
+      fileUrl: require(`~/assets/room.jpg`),
       type: AssetTypes.Texture,
       status: AssetStatus.Queued,
       size: 566,

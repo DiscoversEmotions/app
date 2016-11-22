@@ -1,26 +1,16 @@
-import {
-  TextureLoader
-} from '~/three';
-import { AssetTypes } from '~/types';
 
-function getLoader (asset) {
-  switch( asset.type ) {
-  case AssetTypes.Texture:
-    return new TextureLoader(this);
-  default:
-    throw new Error(`Can't find loader for asset of type "${asset.type}"`);
-  }
-}
-
-export function yoloAction({ input, path }) {
+export function loadAsset ({ input, path, core }) {
   const asset = input.asset;
-  console.log(asset);
-  const loader = getLoader(asset);
-  console.log(loader);
-};
-
-export function loadAsset ({ input, path }) {
-  const asset = input.get(`asset`);
-
-
+  const loader = core.assetsManager.getLoader(asset);
+  return new Promise(function(resolve, reject) {
+    loader.load(
+      asset.fileUrl,
+      (ressource) => path.load({ ressource }),
+      (request) => path.progress(),
+      (err) => path.error()
+    );
+    // setTimeout(function () {
+    //   resolve(path.progress());
+    // }, 3000);
+  });
 }

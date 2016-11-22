@@ -13,7 +13,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
     output: {
       path: paths.buildClient,
       publicPath: '/',
-      pathinfo: false,
+      pathinfo: true,
     },
     resolve: {
       alias: {
@@ -57,16 +57,16 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       query: babel
     },
     {
-      test: /\.(png|jpg|gif|svg|obj)$/,
+      test: /\.(png|jpg|gif|svg|obj|json$)$/,
       loader: 'file-loader',
       query: {
         name: '[name].[ext]?[hash]'
       }
     },
-    {
-      test: /\.json$/,
-      loader: 'json-loader'
-    },
+    // {
+    //   test: /\.json$/,
+    //   loader: 'json-loader'
+    // },
     {
       test: /\.(glsl|vert|frag)$/,
       loader: 'webpack-glsl-loader',
