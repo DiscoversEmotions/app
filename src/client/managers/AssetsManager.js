@@ -7,6 +7,7 @@ export class AssetsManager {
 
   constructor(controller) {
     this.controller = controller;
+    this.assetsData = {};
     this.updater = ConnectFunction(
       this.controller,
       this.mapState.bind(this),
@@ -53,6 +54,13 @@ export class AssetsManager {
     default:
       throw new Error(`Can't find loader for asset of type "${asset.type}"`);
     }
+  }
+
+  setAsset(key, ressource) {
+    if (this.assetsData[key] !== undefined) {
+      throw new Error(`Asset '${key}' already exist !`);
+    }
+    this.assetsData[key] = ressource;
   }
 
   /**

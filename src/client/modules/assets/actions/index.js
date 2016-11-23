@@ -1,16 +1,24 @@
 
-export function loadAsset ({ input, path, core }) {
+export function loadAsset ({ input, path, core, controller }) {
   const asset = input.asset;
+  const setAssetProgress = controller.getSignal(`assets.setAssetProgress`);
   const loader = core.assetsManager.getLoader(asset);
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     loader.load(
       asset.fileUrl,
-      (ressource) => path.load({ ressource }),
-      (request) => path.progress(),
-      (err) => path.error()
+      (ressource) => {
+        core.assetsManager.setAsset(asset.key, ressource);
+        resolve(ressource);
+      },
+      (request) => setAssetProgress({ asset }),
+      (err) => reject()
     );
-    // setTimeout(function () {
-    //   resolve(path.progress());
-    // }, 3000);
-  });
+  })
+  .then(ressource => path.success({}))
+  .catch(err => path.error({ err }));
+}
+
+export function setAssetProgress ({ input, path, core }) {
+  console.log(`setAssetProgress`);
+  console.log(input);
 }

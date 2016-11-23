@@ -18,7 +18,7 @@ const core = new AppCore(
 core.bootUI(<App />);
 
 // Async fetch webgl stuff
-// System.import('~/webgl').then((result) => {
-//   // Boot WebGLCore
-//   core.bootWebgl(result.WebGLCore);
-// });
+System.import('~/webgl').then((result) => {
+  // Boot WebGLCore
+  core.bootWebgl(result.WebGLCore);
+});

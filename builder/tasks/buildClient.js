@@ -62,9 +62,9 @@ module.exports = function buildClient (config, readline, monitor) {
             resolve();
           }
         });
-        // if (jetpack.exists(paths.build)) {
-        //   return jetpack.removeAsync(paths.build);
-        // }
+        if (jetpack.exists(paths.build)) {
+          return jetpack.removeAsync(paths.build);
+        }
         // console.error(`${paths.build} does not exist !`);
         // return;
       }

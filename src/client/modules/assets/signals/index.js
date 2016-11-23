@@ -1,5 +1,5 @@
 import { wait, set, state, input } from 'cerebral/operators';
-import { loadAsset } from '../actions';
+import { loadAsset, setAssetProgress } from '../actions';
 import { AssetStatus } from '~/types';
 
 export default {
@@ -7,10 +7,14 @@ export default {
     [
       set(state`assets.${input`asset.key`}.status`, AssetStatus.Requested),
       loadAsset, {
-        load: [() => { console.log(`load`); }],
-        progress: [() => { console.log(`progress`); }],
+        success: [
+          set(state`assets.${input`asset.key`}.status`, AssetStatus.Ready)
+        ],
         error: [() => { console.log(`error`); }]
       }
     ]
+  ],
+  setAssetProgress: [
+    setAssetProgress
   ]
 };

@@ -17,7 +17,8 @@ export const Worlds = {
 
 export const AssetStatus = {
   Queued: `queued`,
-  Requested: `requested`
+  Requested: `requested`,
+  Ready: `ready`
 };
 
 export const AssetTypes = {

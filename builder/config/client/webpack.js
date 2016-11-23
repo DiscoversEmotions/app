@@ -1,14 +1,15 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-module.exports = function (paths, params, babel, eslint, cssModules) {
+module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
   /**
    * Base
    */
 
   const webpackConfig = {
     entry: {
-      'app': [paths.clientBoot]
+      'app': [paths.clientBoot],
+      vendor: vendors
     },
     output: {
       path: paths.buildClient,
@@ -88,7 +89,7 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
       hash: false,
       title: params.pageTitle,
       filename: 'index.html',
-      chunks: ['app'],
+      chunks: ['app', 'vendor'],
       inject: 'body',
       minify: {
         collapseWhitespace: true
@@ -135,6 +136,11 @@ module.exports = function (paths, params, babel, eslint, cssModules) {
         output: {
           comments: false
         },
+      }),
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        minChunks: Infinity,
+        children: true
       })
     );
   }
