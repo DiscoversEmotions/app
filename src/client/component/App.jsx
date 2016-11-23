@@ -17,8 +17,7 @@ const App = compose(
   ConnectReact(
     {
       title: 'app.title',
-      subTitle: 'app.subTitle',
-      aboutVisible: 'app.aboutVisible'
+      subTitle: 'app.subTitle'
     }
   )
 )((props) => {

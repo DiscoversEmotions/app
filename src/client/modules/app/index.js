@@ -1,4 +1,5 @@
 import { state, set, wait, when, merge, input } from 'cerebral/operators';
+import { Worlds } from '~/types';
 
 export default {
   state: {
@@ -6,7 +7,8 @@ export default {
       width: 600,
       height: 600
     },
-    aboutVisible: false
+    world: Worlds.Black,
+    webglReady: false
   },
   signals: {
     setSize: [

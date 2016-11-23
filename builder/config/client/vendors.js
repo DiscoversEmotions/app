@@ -5,5 +5,6 @@ module.exports = function () {
     'cerebral',
     'three',
     'popmotion'
+    'postprocessing'
   ];
 };

@@ -2,10 +2,10 @@ import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing
 import * as motion from 'popmotion';
 import _ from 'lodash';
 import { Vector3, Color } from 'three';
-import * as THREE from 'three';
+import { Worlds } from '~/types';
+import { ConnectFunction } from '~/core';
 import { Scene } from './Scene';
 import { Renderer } from './Renderer';
-import { Worlds } from '~/types';
 
 import { RoomWorld } from './RoomWorld';
 import { MindWorld } from './MindWorld';
@@ -18,22 +18,25 @@ import { MemoryWorld } from './MemoryWorld';
 //   update()
 // }
 
-// window.THREE = THREE;
-
 export class WebGLCore {
 
-  constructor(parentElement, store) {
+  constructor(parentElement, controller) {
     this.parentElement = parentElement;
 
-    this.width = null;
-    this.height = null;
-    this.lastState = null;
-    this.store = store;
+    this.controller = controller;
+
     this.defaultEnvConfig = {
       background: new Color(0, 0, 0)
     };
 
-    this.currentWorld = null;
+    this.sizeWatcher = ConnectFunction(
+      this.controller,
+      {
+        size: `app.size`
+      }
+    )((props) => {
+      console.log(`size changed !`);
+    });
 
     this.scene = new Scene();
     this.renderer = new Renderer();
@@ -64,9 +67,9 @@ export class WebGLCore {
   }
 
   render(time, dt) {
-    var cameraman = this.worlds[this.currentWorld].getCameraman();
-    this.renderPass.camera = cameraman.getCamera();
-    this.composer.render(dt);
+    // var cameraman = this.worlds[this.currentWorld].getCameraman();
+    // this.renderPass.camera = cameraman.getCamera();
+    // this.composer.render(dt);
   }
 
   _resize() {

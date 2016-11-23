@@ -21,6 +21,8 @@ export class WorldsManager {
 
   mapState(props) {
     return {
+      currentWorld: `app.world`,
+      webglReady: `app.webglReady`
     };
   }
 
@@ -30,7 +32,7 @@ export class WorldsManager {
   }
 
   render({ assets, requested, queued, next, requestAsset }) {
-    
+    console.log(`render worldsManager`);
   }
 
 }
