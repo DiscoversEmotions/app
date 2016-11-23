@@ -8,7 +8,6 @@ module.exports = function () {
     paths.nodeModules = path.resolve(paths.workdir, 'node_modules');
     paths.src = path.resolve(paths.workdir, 'src');
       paths.client = path.resolve(paths.src, 'client');
-        paths.three = path.resolve(paths.client, 'three.js');
         paths.clientBoot = path.resolve(paths.client, 'boot.jsx');
         paths.clientComponents = path.resolve(paths.client, 'component');
         paths.clientHtmlTemplate = path.resolve(paths.client, 'index.ejs');

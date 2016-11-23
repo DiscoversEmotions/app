@@ -448,13 +448,9 @@ three-orbit-controls@^72.0.0:
   version "72.0.0"
   resolved "https://registry.yarnpkg.com/three-orbit-controls/-/three-orbit-controls-72.0.0.tgz#13a4cbf3780cc6e5446aed0032fe1c5135e72755"
 
-three@0.82.x:
+three@0.82.x, three@^0.82.1:
   version "0.82.1"
   resolved "https://registry.yarnpkg.com/three/-/three-0.82.1.tgz#f63c3730971520c54479e3627d370d764a4a8383"
-
-"three@github:mrdoob/three.js#dev":
-  version "0.82.1"
-  resolved "https://codeload.github.com/mrdoob/three.js/tar.gz/2be03c31c8cce4510659ba0028b9fd9d5ac4b2b7"
 
 timers-ext@0.1:
   version "0.1.0"

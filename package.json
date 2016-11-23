@@ -32,8 +32,9 @@
     "react-dom": "^15.3.2",
     "right-now": "^1.0.0",
     "styled-components": "^1.0.11",
-    "three": "github:mrdoob/three.js#dev",
     "three-orbit-controls": "^72.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "three": "^0.82.1"
+  }
 }

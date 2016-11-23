@@ -19,7 +19,8 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
     },
     resolve: {
       alias: {
-        '~': paths.client
+        '~': paths.client,
+        'three': 'three/build/three.modules.js'
       },
       extensions: ['.webpack.js', '.web.js', '.js', '.scss', '.glsl', '.jsx']
     },
