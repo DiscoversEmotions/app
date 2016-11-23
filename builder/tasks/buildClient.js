@@ -58,13 +58,13 @@ module.exports = function buildClient (config, readline, monitor) {
             reject();
           } else {
             // write stats.json
-            // jetpack.write(config.paths.stats, stats.toJson('minimal'));
+            jetpack.write(config.paths.stats, stats.toJson('minimal'));
             resolve();
           }
         });
-        if (jetpack.exists(paths.build)) {
-          return jetpack.removeAsync(paths.build);
-        }
+        // if (jetpack.exists(paths.build)) {
+        //   return jetpack.removeAsync(paths.build);
+        // }
         // console.error(`${paths.build} does not exist !`);
         // return;
       }

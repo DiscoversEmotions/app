@@ -13,13 +13,6 @@ const AppContainer = styled.div`
   bottom: 0;
 `;
 
-const Title = styled.h1`
-  position: relative;
-  top: 0;
-  font-size: 20px;
-  z-index: 1000;
-`;
-
 const App = compose(
   ConnectReact(
     {
@@ -31,7 +24,6 @@ const App = compose(
 )((props) => {
   return (
     <AppContainer>
-      <Title>{ props.title } - { props.subTitle } - { (props.aboutVisible + ``) }</Title>
       <System />
       <TopMenu />
     </AppContainer>
