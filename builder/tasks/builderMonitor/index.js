@@ -83,7 +83,7 @@ class BuilderMonitor {
             babelrc: false
           }),
           [
-            'aliasify',
+            require.resolve('aliasify'),
             {
               'aliases': {
                 'jsx-create-element': './jsx-create-element.js'

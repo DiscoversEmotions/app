@@ -1,10 +1,15 @@
-module.exports = function () {
+const stage0 = require.resolve('babel-preset-stage-0');
+const react = require.resolve('babel-preset-react');
+const es2015 = require.resolve('babel-preset-es2015');
+const decoratorPlugin = require.resolve('babel-plugin-transform-decorators-legacy');
+
+module.exports = function (paths) {
   return {
     presets: [
-      'stage-0',
-      'react',
-      ['es2015', {'modules': false}]
+      stage0,
+      react,
+      [es2015, {'modules': false}]
     ],
-    plugins: ['transform-decorators-legacy']
+    plugins: [decoratorPlugin]
   };
 }

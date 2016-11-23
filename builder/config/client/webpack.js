@@ -7,6 +7,7 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
    */
 
   const webpackConfig = {
+    context: paths.builder,
     entry: {
       'app': [paths.clientBoot],
       vendor: vendors
@@ -64,10 +65,6 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
         name: '[name].[ext]?[hash]'
       }
     },
-    // {
-    //   test: /\.json$/,
-    //   loader: 'json-loader'
-    // },
     {
       test: /\.(glsl|vert|frag)$/,
       loader: 'webpack-glsl-loader',
@@ -138,9 +135,7 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
         },
       }),
       new webpack.optimize.CommonsChunkPlugin({
-        name: 'vendor',
-        minChunks: Infinity,
-        children: true
+        name: 'vendor'
       })
     );
   }

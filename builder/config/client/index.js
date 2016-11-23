@@ -1,5 +1,5 @@
 module.exports = function (paths, params) {
-  const babel = require('./babel')();
+  const babel = require('./babel')(paths);
   const eslint = require('./eslint')();
   const cssModules = require('./cssModules')();
   const vendors = require('./vendors')();

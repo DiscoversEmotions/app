@@ -4,7 +4,7 @@ module.exports = function () {
     'react-dom',
     'cerebral',
     'three',
-    'popmotion'
+    'popmotion',
     'postprocessing'
   ];
 };
