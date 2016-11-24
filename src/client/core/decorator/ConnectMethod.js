@@ -10,7 +10,7 @@ export function ConnectMethod (...args) {
       value: (props, controller, context) => {
         if (connectedComponent === null) {
           if (controller === undefined || context === undefined) {
-            throw new Error(`Need controller and context fro the first update !`);
+            throw new Error(`Need controller and context for the first update !\nDid you call the method with (props, controller, context) ?`);
           }
           connectedComponent = ConnectFunction(controller, ...connectArgs)(method.bind(context));
         } else if (controller !== undefined || context !== undefined) {

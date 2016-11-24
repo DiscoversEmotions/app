@@ -25,10 +25,10 @@ export class BlackWorld {
 
   }
 
-  mount(time) {
+  mount() {
   }
 
-  unmount(time) {
+  unmount() {
   }
 
   setSize(width, height) {

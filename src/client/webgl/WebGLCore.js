@@ -56,16 +56,13 @@ export class WebGLCore {
     // Append to DOM
     this.parentElement.appendChild( this.renderer.domElement );
 
-    // this._mountWorld(this.currentWorld, 0);
-
-    this._initComposer();
-    this._resize({}, this.controller, this);
-    this._updateWorld({}, this.controller, this);
-    // this._resize();
+    this.initComposer();
+    this.resize({}, this.controller, this);
+    this.updateWorld({}, this.controller, this);
+    this.updatePass({}, this.controller, this);
   }
 
   update(time, dt) {
-    this._updatePass();
     if (this.world) {
       this.worlds[this.world].update(time, dt);
     }
@@ -83,7 +80,7 @@ export class WebGLCore {
   @ConnectMethod(
     { size: `app.size` }
   )
-  _resize(props) {
+  resize(props) {
     console.log(`_resize`);
     console.log(props);
     this.width = props.size.width;
@@ -103,38 +100,45 @@ export class WebGLCore {
       nextWorld: `app.nextWorld`
     }
   )
-  _updateWorld({ world, nextWorld }) {
+  updateWorld({ world, nextWorld }) {
+    // Init
     if (this.world === null) {
-      this._mountWorld(world);
+      this.mountWorld(world);
+    } else if (this.world !== world) {
+      console.log(`replace world ${this.world} by ${world}`);
+      this.switchWorld(world);
     }
     this.world = world;
     this.nextWorld = nextWorld;
     // const nextWorld = this.store.computedState.get(`world`);
     // if (nextWorld !== this.currentWorld) {
     //   if (this.currentWorld === null) {
-    //     this._mountWorld(nextWorld, time);
+    //     this.mountWorld(nextWorld, time);
     //   } else {
-    //     this._switchWorld(nextWorld, time);
+    //     this.switchWorld(nextWorld, time);
     //   }
     // }
     // // Update worlds
     // this.worlds[this.currentWorld].update(time, dt);
   }
 
-  _updatePass() {
-    // if (
-    //   this.store.computedState.get(`glitch`)
-    // ) {
-    //   this.glitchPass.enabled = true;
-    //   this.renderPass.renderToScreen = false;
-    // } else {
-    //   this.renderPass.renderToScreen = true;
-    //   this.glitchPass.enabled = false;
-    //   this.store.actions.world.endTransition();
-    // }
+  @ConnectMethod(
+    {
+      nextWorld: `app.nextWorld`
+    }
+  )
+  updatePass({ nextWorld }) {
+    console.log(`===== updatePass nextWorld ${nextWorld}`);
+    if (nextWorld !== `none`) {
+      this.glitchPass.enabled = true;
+      this.renderPass.renderToScreen = false;
+    } else {
+      this.renderPass.renderToScreen = true;
+      this.glitchPass.enabled = false;
+    }
   }
 
-  _initComposer() {
+  initComposer() {
     this.glitchPass = new GlitchPass();
     this.glitchPass.renderToScreen = true;
     this.glitchPass.mode = 1;
@@ -142,23 +146,23 @@ export class WebGLCore {
     this.composer.addPass(this.glitchPass);
   }
 
-  _mountWorld(worldName, time) {
-    console.log(`_mountWorld`);
+  mountWorld(worldName) {
+    console.log(`mountWorld`);
     const worldScene = this.worlds[worldName].getScene();
     if (_.isFunction(this.worlds[worldName].mount)) {
-      this.worlds[worldName].mount(time);
+      this.worlds[worldName].mount();
     }
     if (_.isFunction(this.worlds[worldName].getEnvConfig)) {
       const envConfig = Object.assign({}, this.defaultEnvConfig, this.worlds[worldName].getEnvConfig());
-      this._useEnvConfig(envConfig);
+      this.useEnvConfig(envConfig);
     } else {
-      this._useEnvConfig(this.defaultEnvConfig);
+      this.useEnvConfig(this.defaultEnvConfig);
     }
     this.scene.add(worldScene);
     this.currentWorld = worldName;
   }
 
-  _unmountWorld(worldName, time) {
+  unmountWorld(worldName, time) {
     const worldScene = this.worlds[worldName].getScene();
     if (_.isFunction(this.worlds[worldName].unmount)) {
       this.worlds[worldName].unmount(time);
@@ -166,13 +170,13 @@ export class WebGLCore {
     this.scene.remove(worldScene);
   }
 
-  _switchWorld(nextWorld, time) {
-    this._unmountWorld(this.currentWorld);
-    this._mountWorld(nextWorld);
+  switchWorld(nextWorld) {
+    this.unmountWorld(this.currentWorld);
+    this.mountWorld(nextWorld);
     this.store.actions.world.startTransition();
   }
 
-  _useEnvConfig(config) {
+  useEnvConfig(config) {
     this.scene.background = config.background;
   }
 

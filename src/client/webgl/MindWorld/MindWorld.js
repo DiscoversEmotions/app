@@ -121,7 +121,7 @@ export class MindWorld {
 
   }
 
-  mount(time) {
+  mount() {
     this.level = this.app.assetsManager.getAsset(`scene`);
 
     document.addEventListener(`mousemove`, this._onMouseMove, false);
@@ -131,7 +131,7 @@ export class MindWorld {
     document.addEventListener(`mouseup`, this._onMouseUp, false);
   }
 
-  unmount(time) {
+  unmount() {
     document.removeEventListener(`mousemove`, this._onMouseMove, false);
     document.removeEventListener(`keydown`, this._onKeyDown, false);
     document.removeEventListener(`keyup`, this._onKeyUp, false);

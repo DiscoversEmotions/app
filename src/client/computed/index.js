@@ -28,3 +28,15 @@ export const nextRequestedAsset = Computed(
     return null;
   }
 );
+
+export const lvl1AssetsReady = Computed(
+  {
+    lvl1: `assets.lvl1.status`
+  },
+  ({ lvl1 }) => {
+    if (lvl1 === AssetStatus.Ready) {
+      return true;
+    }
+    return false;
+  }
+);

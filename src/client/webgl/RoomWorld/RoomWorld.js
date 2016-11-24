@@ -52,11 +52,11 @@ export class RoomWorld {
     return this.scene;
   }
 
-  mount(time) {
+  mount() {
     document.addEventListener(`mousemove`, this._onMouseMove, false);
   }
 
-  unmount(time) {
+  unmount() {
     document.removeEventListener(`mousemove`, this._onMouseMove, false);
   }
 

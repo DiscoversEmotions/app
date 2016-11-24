@@ -9,7 +9,7 @@ export default {
       height: 600
     },
     world: Worlds.Black,
-    nextWorld: null,
+    nextWorld: `none`,
     webglReady: false
   },
   signals: {
@@ -23,10 +23,11 @@ export default {
       set(state`app.world`, input`world`)
     ],
     transitionToWorld: [
+      () => { console.log(`transitionToWorld`); },
       set(state`app.nextWorld`, input`world`),
-      ...debounce(1000, [
+      ...wait(1000, [
         set(state`app.world`, input`world`),
-        set(state`app.nextWorld`, null)
+        set(state`app.nextWorld`, `none`)
       ])
     ]
   }

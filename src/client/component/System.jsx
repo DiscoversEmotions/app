@@ -16,6 +16,7 @@ const StyledDiv = styled.div`
   color: white;
   line-height: 1.5;
   transform: translate(${ (props) => !props.full ? `0, 0` : `50%, 50%` });
+  display: none;
 
   p {
     margin: 0;

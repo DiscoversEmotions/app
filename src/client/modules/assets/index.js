@@ -23,8 +23,8 @@ const assets = [
     priority: 10,
   },
   {
-    key: `scene`,
-    fileUrl: require(`~/assets/scene.awd`),
+    key: `lvl1`,
+    fileUrl: require(`~/assets/lvl1.awd`),
     type: AssetTypes.AWD,
     status: AssetStatus.Queued,
     priority: 10,
