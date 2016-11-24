@@ -8,7 +8,7 @@ module.exports = function generateProcess (config) {
         config.server.process
       ]
     };
-    jetpack.writeAsync(config.paths.buildServerProcess, processConfig)
+    jetpack.writeAsync(config.paths.buildProcess, processConfig)
     .then(resolve)
     .catch(reject);
   });

@@ -1,13 +1,15 @@
 # install for builder
-npm install
+yarn install
 # build
-npm run build-prod
+yarn run build-prod
 # clean
-rm -Rf /srv/discovers-emotions-app
+rm -Rf /srv/remember-experiment
 # copy the build
-mkdir /srv/discovers-emotions-app
-cp -r ./build/* /srv/discovers-emotions-app
+mkdir /srv/remember-experiment
+cp -r ./build/* /srv/remember-experiment
+# move
+cd /srv/remember-experiment
 # install prod packages
-npm install
+yarn install
 # run the server with pm2
 pm2 start process.json

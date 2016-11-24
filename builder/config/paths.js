@@ -14,10 +14,10 @@ module.exports = function () {
       paths.server = path.resolve(paths.src, 'server');
     paths.build = path.resolve(paths.workdir, 'build');
       paths.buildClient = path.resolve(paths.build, 'client');
+      paths.buildPackage = path.resolve(paths.build, 'package.json');
+      paths.buildProcess = path.resolve(paths.build, 'process.json');
       paths.buildServer = path.resolve(paths.build, 'server');
         paths.buildServerBoot = path.resolve(paths.buildServer, 'boot.js');
-        paths.buildServerPackage = path.resolve(paths.buildServer, 'package.json');
-        paths.buildServerProcess = path.resolve(paths.buildServer, 'process.json');
 
   return paths;
 };
