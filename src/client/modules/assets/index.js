@@ -21,6 +21,13 @@ const assets = [
     type: AssetTypes.Texture,
     status: AssetStatus.Queued,
     priority: 10,
+  },
+  {
+    key: `scene`,
+    fileUrl: require(`~/assets/scene.awd`),
+    type: AssetTypes.AWD,
+    status: AssetStatus.Queued,
+    priority: 10,
   }
 ];
 

@@ -1,6 +1,6 @@
 module.exports = function (paths) {
   return {
-    name: 'discovers-emotion-app',
+    name: 'remember-experiment',
     script: './server/boot.js',
     watch: false,
   }

@@ -26,7 +26,8 @@ function noop (yolo) {
 
 export class WebGLCore {
 
-  constructor(parentElement, controller) {
+  constructor(app, parentElement, controller) {
+    this.app = app;
     this.parentElement = parentElement;
 
     this.controller = controller;
@@ -46,10 +47,10 @@ export class WebGLCore {
     this.composer.addPass(this.renderPass);
 
     this.worlds = {
-      [Worlds.Room]: new RoomWorld(Worlds.Room, this.controller, this.parentElement),
-      [Worlds.Mind]: new MindWorld(Worlds.Mind, this.controller, this.parentElement),
-      [Worlds.Memory]: new MemoryWorld(Worlds.Memory, this.controller, this.parentElement),
-      [Worlds.Black]: new BlackWorld(Worlds.Memory, this.controller, this.parentElement)
+      [Worlds.Room]: new RoomWorld(this.app, this.controller, this.parentElement),
+      [Worlds.Mind]: new MindWorld(this.app, this.controller, this.parentElement),
+      [Worlds.Memory]: new MemoryWorld(this.app, this.controller, this.parentElement),
+      [Worlds.Black]: new BlackWorld(this.app, this.controller, this.parentElement)
     };
 
     // Append to DOM

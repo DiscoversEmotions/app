@@ -58,7 +58,7 @@ export default class AppCore {
   }
 
   bootWebgl(WebGLCore) {
-    this.webGLCore = new WebGLCore(this.appCanvasEl, this.controller);
+    this.webGLCore = new WebGLCore(this, this.appCanvasEl, this.controller);
     this.controller.getSignal(`app.webglReady`)();
   }
 

@@ -18,11 +18,13 @@ export const Worlds = {
 export const AssetStatus = {
   Queued: `queued`,
   Requested: `requested`,
-  Ready: `ready`
+  Ready: `ready`,
+  Ignore: `ignore`
 };
 
 export const AssetTypes = {
   Obj: `obj`,
   Texture: `texture`,
+  AWD: `awd`,
   Json: `json`
 };

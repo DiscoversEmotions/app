@@ -1,4 +1,4 @@
-import { ConnectFunction } from '~/core';
+import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
 import {  } from '~/computed';
 
@@ -6,33 +6,22 @@ export class WorldsManager {
 
   constructor(controller) {
     this.controller = controller;
-    this.updater = ConnectFunction(
-      this.controller,
-      this.mapState.bind(this),
-      this.mapSignals.bind(this)
-    )(
-      this.render.bind(this)
-    );
   }
 
   boot() {
-    this.updater.update({});
+    this.update({}, this.controller, this);
   }
 
-  mapState(props) {
-    return {
+  @ConnectMethod(
+    {
       currentWorld: `app.world`,
       webglReady: `app.webglReady`
-    };
-  }
-
-  mapSignals(props) {
-    return {
+    },
+    {
       transitionToWorld: `app.transitionToWorld`
-    };
-  }
-
-  render({ currentWorld, webglReady, transitionToWorld }) {
+    }
+  )
+  update({ currentWorld, webglReady, transitionToWorld }) {
     if (currentWorld === Worlds.Black && webglReady === true) {
       transitionToWorld({ world: Worlds.Room });
     }

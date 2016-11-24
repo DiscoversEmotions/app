@@ -15,7 +15,10 @@ export function loadAsset ({ input, path, core, controller }) {
     );
   })
   .then(ressource => path.success({}))
-  .catch(err => path.error({ err }));
+  .catch(err => {
+    console.error(err);
+    path.error({ error: true });
+  });
 }
 
 export function setAssetProgress ({ input, path, core }) {

@@ -3,8 +3,8 @@ import { Object3D } from 'three';
 
 export class BlackWorld {
 
-  constructor(name, controller, parentElement) {
-    this.name = name;
+  constructor(app, controller, parentElement) {
+    this.app = app;
     this.controller = controller;
     this.parentElement = parentElement;
 

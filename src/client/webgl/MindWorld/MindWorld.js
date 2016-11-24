@@ -30,8 +30,8 @@ import * as motion from 'popmotion';
 
 export class MindWorld {
 
-  constructor(name, controller, parentElement) {
-    this.name = name;
+  constructor(app, controller, parentElement) {
+    this.app = app;
     this.controller = controller;
     this.parentElement = parentElement;
 
@@ -89,27 +89,26 @@ export class MindWorld {
 
   update(time, dt) {
 
-    const step = this.store.get(`step`);
-
-    if (step === Steps.RecoveryLvl1) {
-      const movement = this.store.get(`movement`).toJS();
-      this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
-      this.userPosition.translateX(-(dt * 0.01) * movement.left);
-      const angle = motion.calc.degreesToRadians(motion.calc.angle(
-        { y: movement.forward, x: 0 },
-        { y: 0, x: -movement.left}
-      ));
-      this.persoFinalMesh.rotation.y = angle;
-    }
+    const movement = {
+      forward: 0,
+      left: 0
+    };
+    this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
+    this.userPosition.translateX(-(dt * 0.01) * movement.left);
+    // const angle = motion.calc.degreesToRadians(motion.calc.angle(
+    //   { y: movement.forward, x: 0 },
+    //   { y: 0, x: -movement.left}
+    // ));
+    // this.persoFinalMesh.rotation.y = angle;
 
     // Collision with ground
-    this.raycaster.ray.origin.copy(this.userPosition.position);
-    this.raycaster.ray.origin.y += 5;
-    this.raycaster.ray.direction.set(0, -1, 0);
-    this.collisionResults = this.raycaster.intersectObjects([this.ground], true);
-    if (this.collisionResults.length) {
-      this.userPosition.position.y = this.collisionResults[0].point.y;
-    }
+    // this.raycaster.ray.origin.copy(this.userPosition.position);
+    // this.raycaster.ray.origin.y += 5;
+    // this.raycaster.ray.direction.set(0, -1, 0);
+    // this.collisionResults = this.raycaster.intersectObjects([this.ground], true);
+    // if (this.collisionResults.length) {
+    //   this.userPosition.position.y = this.collisionResults[0].point.y;
+    // }
 
     this._updateCameraman();
     this._updateMenu();
@@ -123,6 +122,8 @@ export class MindWorld {
   }
 
   mount(time) {
+    this.level = this.app.assetsManager.getAsset(`scene`);
+
     document.addEventListener(`mousemove`, this._onMouseMove, false);
     document.addEventListener(`keydown`, this._onKeyDown, false);
     document.addEventListener(`keyup`, this._onKeyUp, false);
@@ -156,19 +157,19 @@ export class MindWorld {
     switch (e.keyCode) {
     case 38: // up
     case 90: // z
-      this.store.actions.movement.setForward(1);
+      // this.store.actions.movement.setForward(1);
       break;
     case 37: //left
     case 81: //q
-      this.store.actions.movement.setLeft(1);
+      // this.store.actions.movement.setLeft(1);
       break;
     case 40: //back
     case 83: //s
-      this.store.actions.movement.setForward(-1);
+      // this.store.actions.movement.setForward(-1);
       break;
     case 39: //right
     case 68: //d
-      this.store.actions.movement.setLeft(-1);
+      // this.store.actions.movement.setLeft(-1);
       break;
     };
   }
@@ -179,23 +180,23 @@ export class MindWorld {
     case 90: // w
     case 40: //back
     case 83: //s
-      this.store.actions.movement.setForward(0);
+      // this.store.actions.movement.setForward(0);
       break;
     case 37: //left
     case 81: //q
     case 39: //right
     case 68: //d
-      this.store.actions.movement.setLeft(0);
+      // this.store.actions.movement.setLeft(0);
       break;
     };
   }
 
   _onMouseDown(e) {
-    this.store.actions.movement.setForward(1);
+    // this.store.actions.movement.setForward(1);
   }
 
   _onMouseUp(e) {
-    this.store.actions.movement.setForward(0);
+    // this.store.actions.movement.setForward(0);
   }
 
   _updateCameraman() {
@@ -208,15 +209,15 @@ export class MindWorld {
 
   }
 
-  _updatePointerLock(state) {
-    const shouldBe = [Worlds.Mind].indexOf(this.store.getComputed(`world`)) > -1;
-    if(shouldBe !== this.pointerLock.isActivated()) {
-      if (shouldBe) {
-        this.pointerLock.tryActivate();
-      } else {
-        this.pointerLock.deactivate();
-      }
-    }
-  }
+  // _updatePointerLock(state) {
+  //   const shouldBe = [Worlds.Mind].indexOf(this.store.getComputed(`world`)) > -1;
+  //   if(shouldBe !== this.pointerLock.isActivated()) {
+  //     if (shouldBe) {
+  //       this.pointerLock.tryActivate();
+  //     } else {
+  //       this.pointerLock.deactivate();
+  //     }
+  //   }
+  // }
 
 }

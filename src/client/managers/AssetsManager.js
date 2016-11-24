@@ -1,5 +1,6 @@
 import { AssetTypes, AssetStatus } from '~/types';
 import { TextureLoader, ObjectLoader } from 'three';
+import { AWDLoader } from '~/webgl';
 import { ConnectFunction } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 
@@ -50,6 +51,8 @@ export class AssetsManager {
     //   return new OBJLoader(this);
     case AssetTypes.Json:
       return new ObjectLoader(this);
+    case AssetTypes.AWD:
+      return new AWDLoader(this);
     default:
       throw new Error(`Can't find loader for asset of type "${asset.type}"`);
     }
@@ -60,6 +63,12 @@ export class AssetsManager {
       throw new Error(`Asset '${key}' already exist !`);
     }
     this.assetsData[key] = ressource;
+  }
+
+  getAsset(key) {
+    const status = this.controller.getState(`assets.${key}.status`);
+    console.log(status);
+    // this.assetsData[key] = ressource;
   }
 
   /**
