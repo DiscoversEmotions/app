@@ -5,6 +5,9 @@ module.exports = function generatePackageJson (config) {
   return new Promise(function(resolve, reject) {
     console.log('=> generatePackageJson');
     var buildPackage = _.pick(config.package, ['name', 'version', 'description', 'dependencies', 'author', 'license']);
+    buildPackage.scripts = {
+      start: "node boot.js"
+    }
     jetpack.writeAsync(config.paths.buildServerPackage, buildPackage)
     .then(resolve)
     .catch(reject);

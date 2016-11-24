@@ -50,8 +50,8 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
 
   webpackConfig.module.rules.push(
     {
-      test: /\.scss$/,
-      loader: `style-loader!css-loader?${JSON.stringify(cssModules)}!sass-loader`
+      test: /\.css$/,
+      loader: `style-loader!css-loader?${JSON.stringify(cssModules)}`
     },
     {
       test: /\.jsx?$/,

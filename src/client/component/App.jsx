@@ -1,9 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
-import styles from './style.scss';
+import styled, { injectGlobal } from 'styled-components';
 import { compose, ConnectReact } from '~/core';
 import System from '~/component/System';
 import TopMenu from '~/component/TopMenu';
+
+require('normalize.css/normalize.css');
+
+injectGlobal`
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+`;
 
 const AppContainer = styled.div`
   position: fixed;
