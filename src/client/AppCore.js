@@ -58,30 +58,24 @@ export default class AppCore {
   }
 
   bootWebgl(WebGLCore) {
-    this.webGLCore = new WebGLCore(this.appCanvasEl, this.store);
+    this.webGLCore = new WebGLCore(this.appCanvasEl, this.controller);
+    this.controller.getSignal(`app.webglReady`)();
   }
 
   update(task, time, dt) {
-    // this.updateAssetsManager();
-    // this.updateWebGL(time, dt);
+    this.updateWebGL(time, dt);
   }
 
   render(task, time, dt) {
-    if (!this.webGLCore) {
-      return;
+    if (this.webGLCore) {
+      this.webGLCore.render(time, dt);
     }
-    this.webGLCore.render(time, dt);
   }
 
-  // updateAssetsManager() {
-  //   this.assetsManager.update();
-  // }
-
   updateWebGL(time, dt) {
-    if (!this.webGLCore) {
-      return;
+    if (this.webGLCore) {
+      this.webGLCore.update(time, dt);
     }
-    this.webGLCore.update(time, dt);
   }
 
 }

@@ -4,9 +4,9 @@ import { PointLight, Object3D, Color } from 'three';
 
 export class MemoryWorld {
 
-  constructor(name, stateManager, parentElement) {
+  constructor(name, controller, parentElement) {
     this.name = name;
-    this.stateManager = stateManager;
+    this.controller = controller;
     this.parentElement = parentElement;
 
     this.scene = new Object3D();

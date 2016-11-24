@@ -6,9 +6,9 @@ import _ from 'lodash';
 
 export class RoomWorld {
 
-  constructor(name, stateManager, parentElement) {
+  constructor(name, controller, parentElement) {
     this.name = name;
-    this.stateManager = stateManager;
+    this.controller = controller;
     this.parentElement = parentElement;
 
     this.camVert = 0;

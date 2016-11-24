@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/DiscoversEmotions/app#readme",
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.19.0",
     "cerebral": "next",
+    "core-decorators": "^0.14.0",
     "dom-events": "^0.1.1",
     "es6-promise": "^4.0.5",
     "lodash": "^4.16.4",

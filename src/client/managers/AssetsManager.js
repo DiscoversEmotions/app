@@ -38,7 +38,6 @@ export class AssetsManager {
 
   render({ assets, requested, queued, next, requestAsset }) {
     if (requested.length <= 1 && queued.length > 0 && next !== null) {
-      console.log(`Set requested ${next.key}`);
       requestAsset({ asset: next });
     }
   }
@@ -68,15 +67,15 @@ export class AssetsManager {
    */
 
   itemStart(url, args) {
-    console.log(`itemStart : ${url}`);
+    // console.log(`itemStart : ${url}`);
   };
 
   itemEnd(url) {
-    console.log(`itemEnd : ${url}`);
+    // console.log(`itemEnd : ${url}`);
   };
 
   itemError(url) {
-    console.error(`Ooops :/`);
+    // console.error(`Ooops :/`);
   };
 
 }

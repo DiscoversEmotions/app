@@ -19,6 +19,5 @@ export function loadAsset ({ input, path, core, controller }) {
 }
 
 export function setAssetProgress ({ input, path, core }) {
-  console.log(`setAssetProgress`);
-  console.log(input);
+  // TODO: use progress !
 }

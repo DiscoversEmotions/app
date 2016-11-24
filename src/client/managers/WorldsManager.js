@@ -1,5 +1,5 @@
 import { ConnectFunction } from '~/core';
-import {  } from '~/types';
+import { Worlds } from '~/types';
 import {  } from '~/computed';
 
 export class WorldsManager {
@@ -28,10 +28,14 @@ export class WorldsManager {
 
   mapSignals(props) {
     return {
+      transitionToWorld: `app.transitionToWorld`
     };
   }
 
-  render({ assets, requested, queued, next, requestAsset }) {
+  render({ currentWorld, webglReady, transitionToWorld }) {
+    if (currentWorld === Worlds.Black && webglReady === true) {
+      transitionToWorld({ world: Worlds.Room });
+    }
     console.log(`render worldsManager`);
   }
 

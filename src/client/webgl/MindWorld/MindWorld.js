@@ -30,9 +30,9 @@ import * as motion from 'popmotion';
 
 export class MindWorld {
 
-  constructor(name, store, parentElement) {
+  constructor(name, controller, parentElement) {
     this.name = name;
-    this.store = store;
+    this.controller = controller;
     this.parentElement = parentElement;
 
     this.cameramanRotation = {
@@ -63,75 +63,13 @@ export class MindWorld {
     this.user.position.y = 0;
 
     this.pointerLock = new PointerLock(document.body);
-    // this.store.onStateUpdate(this._updatePointerLock.bind(this));
 
     this.raycaster = new Raycaster();
 
     this.mixer;
     this.mixerArray = [];
 
-    //////////////////
-    this.manager = new LoadingManager();
-
-    this.manager.onProgress = function (item, loaded, total) {
-      console.log(item, loaded, total);
-    };
-    var onProgress = function (xhr) {
-      if (xhr.lengthComputable) {
-        var percentComplete = xhr.loaded / xhr.total * 100;
-        console.log(`${Math.round(percentComplete, 2)}% downloaded`);
-      }
-    };
-    var onError = function (xhr) {};
-
-    var loader = new OBJLoader(this.manager);
-    var loaderJson = new ObjectLoader();
-
-    this.ground = null;
-
-    // loader.load(require(`~/webgl/meshes/Ground/plane.obj`), (object) => {
-    //   object.traverse((child) => {
-    //     if (child instanceof Mesh) {
-    //       this.ground = child;
-    //       this.scene.add(child);
-    //     }
-    //   });
-    //   object.position.y = 1;
-    //
-    // }, onProgress, onError);
-
-    loaderJson.load(`./src/client/webgl/meshes/Player/lowpolyAnim.json`,
-      (geometry, materials) => {
-        this.persoFinal = geometry.children[0];
-        this.persoFinalMesh = new SkinnedMesh( this.persoFinal.geometry, materials );
-
-        this.persoFinalMesh.material = new MeshStandardMaterial({
-          wireframe: true
-        });
-
-        this.persoFinalMesh.scale.set(0.015, 0.015, 0.015);
-        this.persoFinalMesh.position.y = 0;
-        this.persoFinalMesh.rotation.set(0, 0, 0);
-
-        //Anim perso
-        this.mixer = new AnimationMixer(this.persoFinalMesh);
-        this.idle = this.mixer.clipAction(this.persoFinalMesh.geometry.animations[0]);
-        this.idle.setEffectiveWeight(1);
-        this.idle.play();
-
-        this.mixerArray.push(this.mixer);
-
-        this.scene.add(this.persoFinalMesh);
-        this.userPosition.add(this.persoFinalMesh);
-
-        console.log(this.idle);
-
-      });
-
-
     this.scene.updateMatrixWorld(true);
-
-    //////////////////
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
@@ -182,12 +120,6 @@ export class MindWorld {
       this.mixerFinal.update(time, dt);
     }
 
-    if (step === Steps.RecoveryLvl1) {
-      this.collisionResults = this.raycaster.intersectObjects([this.tile], true);
-      if (this.collisionResults.length) {
-        this.store.actions.step.setCurrent(Steps.RecoveryLvl1Done);
-      }
-    }
   }
 
   mount(time) {
