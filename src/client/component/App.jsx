@@ -30,6 +30,7 @@ const App = compose(
     }
   )
 )((props) => {
+  // yoloyolo();
   return (
     <AppContainer>
       <System />

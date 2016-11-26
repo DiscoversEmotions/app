@@ -1,4 +1,4 @@
-import { state, set, wait, debounce, when, merge, input } from 'cerebral/operators';
+import { state, set, debounce, when, wait, merge, input } from 'cerebral/operators';
 import { Worlds } from '~/types';
 import { getDuration } from './actions';
 
@@ -23,9 +23,8 @@ export default {
       set(state`app.world`, input`world`)
     ],
     transitionToWorld: [
-      () => { console.log(`transitionToWorld`); },
       set(state`app.nextWorld`, input`world`),
-      ...wait(1000, [
+      wait(1000, [
         set(state`app.world`, input`world`),
         set(state`app.nextWorld`, `none`)
       ])

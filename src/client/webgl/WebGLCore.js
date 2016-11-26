@@ -173,7 +173,7 @@ export class WebGLCore {
   switchWorld(nextWorld) {
     this.unmountWorld(this.currentWorld);
     this.mountWorld(nextWorld);
-    this.store.actions.world.startTransition();
+    // this.store.actions.world.startTransition();
   }
 
   useEnvConfig(config) {

@@ -42,6 +42,7 @@ function HOC(controller, paths, signals, injectedProps, Component) {
     }
 
     constructor() {
+      this.render = this.render.bind(this);
       this.mounted = false;
     }
 
@@ -168,7 +169,7 @@ function HOC(controller, paths, signals, injectedProps, Component) {
     }
 
     _update() {
-      this.render();
+      setTimeout(this.render);
     }
 
     render() {
