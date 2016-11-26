@@ -68,6 +68,10 @@ export class AssetsManager {
   getAsset(key) {
     const status = this.controller.getState(`assets.${key}.status`);
     console.log(status);
+    if (status === AssetStatus.Ready && !_.isNil(this.assetsData[key])) {
+      return this.assetsData[key];
+    }
+    throw new Error(`Can't find asset ${key}`);
     // this.assetsData[key] = ressource;
   }
 

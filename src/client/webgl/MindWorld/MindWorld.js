@@ -19,7 +19,10 @@ import {
   MeshStandardMaterial,
   ObjectLoader,
   Vector3,
-  AnimationMixer
+  AnimationMixer,
+  AmbientLight,
+  MeshPhongMaterial,
+  FlatShading
 } from 'three';
 import _ from 'lodash';
 import { Steps, Worlds } from '~/types';
@@ -42,13 +45,18 @@ export class MindWorld {
 
     this.scene = new Object3D();
 
+    this.level1 = null;
+
     this.cameraman = new Cameraman(45, 1, 1, 1100);
-    this.cameraman.position.set(0, 3, 7);
+    this.cameraman.position.set(0, 10, 40);
     this.cameraman.setVerticalAngle(-0.3);
 
     this.light = new PointLight();
     this.light.position.y = 20;
     this.scene.add(this.light);
+
+    this.ambiantLight = new AmbientLight( 0x404040 );
+    this.scene.add(this.ambiantLight);
 
     this.userPosition = new Object3D();
     this.scene.add(this.userPosition);
@@ -60,7 +68,8 @@ export class MindWorld {
     this.tile.position.z = -5;
 
     this.user = new Cube();
-    this.user.position.y = 0;
+    // this.user.position.z = 5;
+    this.scene.add(this.user);
 
     this.pointerLock = new PointerLock(document.body);
 
@@ -122,7 +131,18 @@ export class MindWorld {
   }
 
   mount() {
-    this.level = this.app.assetsManager.getAsset(`scene`);
+    if ( this.level1 === null) {
+      this.level1 = this.app.assetsManager.getAsset(`lvl1`);
+      this.scene.add(this.level1);
+
+      this.level1.children[0].material = new MeshPhongMaterial({
+        color: 0xdddddd,
+        specular: 0x009900,
+        shininess: 30,
+        shading: FlatShading
+      });
+      this.level1.scale.set(0.1, 0.1, 0.1);
+    }
 
     document.addEventListener(`mousemove`, this._onMouseMove, false);
     document.addEventListener(`keydown`, this._onKeyDown, false);
