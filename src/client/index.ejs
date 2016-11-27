@@ -33,6 +33,7 @@
       var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
       var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
       window.__START_TIME = currentTime();
+      window.__MESSAGES = [];
     </script>
   </body>
 

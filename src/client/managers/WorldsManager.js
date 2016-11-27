@@ -17,15 +17,15 @@ export class WorldsManager {
       currentWorld: `app.world`,
       nextWorld: `app.nextWorld`,
       webglReady: `app.webglReady`,
+      worldTransition: `app.worldTransition`,
       lvl1AssetsReady: lvl1AssetsReady
     },
     {
       transitionToWorld: `app.transitionToWorld`
     }
   )
-  update({ currentWorld, nextWorld, webglReady, lvl1AssetsReady, transitionToWorld }) {
-    console.log(`update world ${nextWorld}`);
-    if (nextWorld !== `none`) {
+  update({ currentWorld, nextWorld, worldTransition, webglReady, lvl1AssetsReady, transitionToWorld }) {
+    if (worldTransition) {
       return;
     }
     if (currentWorld === Worlds.Black && webglReady === true) {
@@ -34,7 +34,6 @@ export class WorldsManager {
     if (currentWorld === Worlds.Room && webglReady && webglReady) {
       transitionToWorld({ world: Worlds.Mind });
     }
-    console.log(`render worldsManager`);
   }
 
 }

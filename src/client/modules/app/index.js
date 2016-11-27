@@ -10,7 +10,9 @@ export default {
     },
     world: Worlds.Black,
     nextWorld: `none`,
-    webglReady: false
+    prevWorld: `none`,
+    webglReady: false,
+    worldTransition: false
   },
   signals: {
     setSize: [
@@ -24,10 +26,17 @@ export default {
     ],
     transitionToWorld: [
       set(state`app.nextWorld`, input`world`),
-      wait(1000, [
-        set(state`app.world`, input`world`),
-        set(state`app.nextWorld`, `none`)
-      ])
+      set(state`app.worldTransition`, true),
+      [
+        ...wait(500, [
+          set(state`app.prevWorld`, state`app.world`),
+          set(state`app.world`, input`world`),
+          set(state`app.nextWorld`, `none`)
+        ]),
+        ...wait(1000, [
+          set(state`app.worldTransition`, false)
+        ])
+      ]
     ]
   }
 };

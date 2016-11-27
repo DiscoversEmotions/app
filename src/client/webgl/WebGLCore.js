@@ -124,12 +124,11 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
-      nextWorld: `app.nextWorld`
+      worldTransition: `app.worldTransition`
     }
   )
-  updatePass({ nextWorld }) {
-    console.log(`===== updatePass nextWorld ${nextWorld}`);
-    if (nextWorld !== `none`) {
+  updatePass({ worldTransition }) {
+    if (worldTransition) {
       this.glitchPass.enabled = true;
       this.renderPass.renderToScreen = false;
     } else {
