@@ -10,6 +10,8 @@
         overflow: hidden;
         background: black;
         color: white;
+        margin: 0;
+        padding: 0;
       }
       #app-canvas {
         position: fixed;
@@ -21,6 +23,22 @@
       #app-ui {
         position: absolute;
       }
+      #basic-boot {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        height: 160px;
+        width: 400px;
+        overflow: hidden;
+      }
+      #basic-boot span {
+        height: 20px;
+        display: block;
+        font-family: monospace;
+        text-align: right;
+        padding: 0;
+        margin: 0;
+      }
     </style>
   </head>
 
@@ -29,11 +47,86 @@
     <div id="app-ui">
       [here should be a very cool loader]
     </div>
+    <div id="basic-boot">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
     <script type="text/javascript">
       var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
       var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
       window.__START_TIME = currentTime();
-      window.__MESSAGES = [];
+      window.__MESSAGES = [
+        'start'
+      ];
+
+      var MESSAGES = {
+        boot: "Connect to the brain",
+        yolo: {
+          content: 'Yolo ',
+          progress: 0
+        }
+      }
+
+      var container = document.getElementById('basic-boot');
+
+      function addSpanMessage (content) {
+        var spanElem = document.createElement('span');
+        spanElem.innerHTML = content;
+        container.appendChild(spanElem);
+      }
+
+      function update () {
+        var spans = [].map.call(container.childNodes, function(element) { return element; })
+        spans = spans.filter(function  (item) {
+          return item.tagName === 'SPAN';
+        })
+        if (spans.length >= 7) {
+          var spanToRemove = spans.slice(0, -7);
+          for (var i = 0; i < spanToRemove.length; i++) {
+            var span = spanToRemove[i];
+            span.parentElement.removeChild(span);
+          }
+        }
+
+        var lastMessage = window.__MESSAGES[window.__MESSAGES.length - 1];
+        if (lastMessage === 'start') {
+          addSpanMessage(MESSAGES.boot)
+          window.__MESSAGES.push('boot');
+        } else
+        if (lastMessage === 'boot') {
+          addSpanMessage(MESSAGES.yolo.content + MESSAGES.yolo.progress);
+          window.__MESSAGES.push('yolo');
+        } else
+        if (lastMessage === 'yolo') {
+          MESSAGES.yolo.progress += Math.floor((Math.random() + 1) * 30);
+          addSpanMessage(MESSAGES.yolo.content + MESSAGES.yolo.progress);
+        }
+        window.__BOOT_TIMER = setTimeout(update, 500);
+      }
+
+      // function updateView () {
+      //   container.innerHTML = '';
+      //   for (var i = 0; i < window.__MESSAGES.length; i++) {
+      //     var key = window.__MESSAGES[i];
+      //     if (key === 'yolo') {
+      //
+      //     } else {
+      //
+      //       var spanElem = document.createElement('span');
+      //       spanElem.innerHTML = MESSAGES[key];
+      //       container.appendChild(spanElem);
+      //     }
+      //   }
+      // }
+
+      update();
+
     </script>
   </body>
 

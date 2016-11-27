@@ -1,6 +1,6 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
-import { lvl1AssetsReady } from '~/computed';
+import { lastMessage } from '~/computed';
 
 export class SystemManager {
 
@@ -10,18 +10,19 @@ export class SystemManager {
 
   boot() {
     this.update({}, this.controller, this);
+    this.update({});
   }
 
   @ConnectMethod(
     {
-
+      lastMessage: lastMessage
     },
     {
 
     }
   )
-  update({  }) {
-
+  update({ lastMessage }) {
+    console.log(`Update SystemManager : ${ lastMessage }`);
   }
 
 }

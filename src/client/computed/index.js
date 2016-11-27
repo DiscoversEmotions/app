@@ -40,3 +40,15 @@ export const lvl1AssetsReady = Computed(
     return false;
   }
 );
+
+export const lastMessage = Computed(
+  {
+    messages: `system.messages`
+  },
+  ({ messages }) => {
+    if (messages.length === 0) {
+      return null;
+    }
+    return _.last(messages);
+  }
+);
