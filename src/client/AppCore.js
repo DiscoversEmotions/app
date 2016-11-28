@@ -5,6 +5,7 @@ import { WindowResizeSingleton, ConnectFunction } from '~/core';
 import { AssetsManager, WorldsManager, SystemManager } from '~/managers';
 import { Steps } from '~/types';
 import { Container } from 'cerebral/react';
+import { Provider } from 'react-tunnel';
 
 /**
  * Core class
@@ -47,14 +48,23 @@ export default class AppCore {
 
   bootUI(rootElement) {
     this.rootElement = rootElement;
-    ReactDOM.render(
+    const enhancedRootElement = React.createElement(
+      Container,
+      {
+        controller: this.controller
+      },
       React.createElement(
-        Container,
+        Provider,
         {
-          controller: this.controller
+          provide: {
+            core: this
+          }
         },
-        this.rootElement
-      ),
+        () => this.rootElement
+      )
+    );
+    ReactDOM.render(
+      enhancedRootElement,
       this.appUiEl
     );
   }

@@ -4,6 +4,7 @@ import { Steps } from '~/types';
 import _ from 'lodash';
 import Button from '~/component/Button';
 import { compose, ConnectReact } from '~/core';
+import { inject } from 'react-tunnel';
 
 const Container = styled.div`
   position: absolute;
@@ -35,6 +36,7 @@ const Message = styled.div`
 `;
 
 const System = compose(
+  inject((provided) => ({ core: provided.core })),
   ConnectReact(
     {
     }

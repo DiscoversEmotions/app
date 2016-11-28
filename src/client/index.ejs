@@ -61,8 +61,8 @@
       var numberOfMessages = 8;
       var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
       var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
-      window.__START_TIME = currentTime();
-      window.__MESSAGES = [];
+      var BOOT_TIMER = null;
+      var BASIC_BOOT_STOPED = false;
 
       var container = document.getElementById('basic-boot');
       // Get spans
@@ -70,6 +70,16 @@
       spans = spans.filter(function  (item) {
         return item.tagName === 'SPAN';
       });
+
+      window.__START_TIME = currentTime();
+      window.__MESSAGES = [
+        { key: 'boot' }
+      ];
+      window.__STOP_BASIC_BOOT = function  () {
+        BASIC_BOOT_STOPED = true;
+        clearTimeout(window.BOOT_TIMER);
+        container.parentElement.removeChild(container);
+      }
 
       function addMessage (msg) {
         window.__MESSAGES.push(msg);
@@ -104,29 +114,29 @@
       }
 
       function update () {
+        console.log('BASIC_BOOT_STOPED', BASIC_BOOT_STOPED);
         // Add message
-        var lastMessage = window.__MESSAGES.length > 0 ? window.__MESSAGES[window.__MESSAGES.length - 1] : null;
-        if (lastMessage === null) {
-          addMessage({ key: 'boot' });
-        } else
-        if (lastMessage.key === 'boot') {
-          addMessage({
-            key: 'yolo',
-            progress: 0
-          });
-        } else
-        if (lastMessage.key === 'yolo') {
-          addMessage({
-            key: 'yolo',
-            progress: lastMessage.progress + Math.floor((Math.random() + 1) * 30)
-          });
+        var lastMessage = window.__MESSAGES[window.__MESSAGES.length - 1];
+        switch (lastMessage.key) {
+          case 'boot':
+            addMessage({
+              key: 'yolo',
+              progress: 0
+            });
+            break;
+          case 'yolo':
+            addMessage({
+              key: 'yolo',
+              progress: lastMessage.progress + Math.floor((Math.random() + 1) * 30)
+            });
+            break;
         }
         render();
-        window.__BOOT_TIMER = setTimeout(update, 300);
+        BOOT_TIMER = setTimeout(update, 300);
       }
 
-
-      update();
+      render();
+      BOOT_TIMER = setTimeout(update, 300);
 
     </script>
   </body>

@@ -5,7 +5,6 @@ import createController from '~/controller';
 
 const appCanvasEl = document.getElementById('app-canvas');
 const appUiEl = document.getElementById('app-ui');
-const basicBootContainer = document.getElementById('basic-boot');
 
 // Instantiate the core
 const core = new AppCore(
@@ -25,5 +24,4 @@ System.import('~/webgl').then((result) => {
 });
 
 // Stop the basic boot
-clearTimeout(window.__BOOT_TIMER);
-basicBootContainer.parentElement.removeChild(basicBootContainer);
+window.__STOP_BASIC_BOOT();

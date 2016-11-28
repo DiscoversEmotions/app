@@ -4,6 +4,7 @@ import {
   push,
   input
 } from 'cerebral/operators';
+import { planNextMessage } from './actions';
 
 export default {
   state: {
@@ -12,6 +13,9 @@ export default {
   signals: {
     pushMessage: [
       push(state`system.messages`, input`message`)
+    ],
+    planNextMessage: [
+      planNextMessage
     ]
   }
 };
