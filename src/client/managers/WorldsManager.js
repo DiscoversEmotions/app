@@ -1,6 +1,6 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
-import { lvl1AssetsReady } from '~/computed';
+import { lvl1AssetsReady, memory1AssetsReady } from '~/computed';
 
 export class WorldsManager {
 
@@ -18,17 +18,18 @@ export class WorldsManager {
       nextWorld: `app.nextWorld`,
       webglReady: `app.webglReady`,
       worldTransition: `app.worldTransition`,
-      lvl1AssetsReady: lvl1AssetsReady
+      lvl1AssetsReady: lvl1AssetsReady,
+      memory1AssetsReady: memory1AssetsReady
     },
     {
       transitionToWorld: `app.transitionToWorld`
     }
   )
-  update({ currentWorld, nextWorld, worldTransition, webglReady, lvl1AssetsReady, transitionToWorld }) {
+  update({ currentWorld, nextWorld, worldTransition, webglReady, lvl1AssetsReady, transitionToWorld, memory1AssetsReady }) {
     if (worldTransition) {
       return;
     }
-    // if (currentWorld !== Worlds.Room) {
+    // if (currentWorld === Worlds.Black && webglReady === true) {
     //   transitionToWorld({ world: Worlds.Room });
     // }
     if (currentWorld === Worlds.Black && webglReady === true) {
