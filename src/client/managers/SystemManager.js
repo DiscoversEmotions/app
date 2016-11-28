@@ -25,8 +25,6 @@ export class SystemManager {
     }
   )
   update({ lastMessage, planNextMessage }) {
-    console.log(`Update SystemManager`);
-    console.log(lastMessage);
     switch (lastMessage.key) {
     case `boot`:
       planNextMessage({
@@ -42,7 +40,7 @@ export class SystemManager {
           key: `yolo`,
           progress: lastMessage.progress + motion.calc.random(12, 56)
         },
-        time: 2000
+        time: 1000
       });
       break;
     default:
