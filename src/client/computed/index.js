@@ -31,10 +31,11 @@ export const nextRequestedAsset = Computed(
 
 export const lvl1AssetsReady = Computed(
   {
-    lvl1: `assets.lvl1.status`
+    lvl1: `assets.lvl1.status`,
+    perso: `assets.perso.status`
   },
-  ({ lvl1 }) => {
-    if (lvl1 === AssetStatus.Ready) {
+  ({ lvl1, perso }) => {
+    if (lvl1 === AssetStatus.Ready && perso === AssetStatus.Ready) {
       return true;
     }
     return false;

@@ -1,7 +1,7 @@
 import { AssetTypes, AssetStatus } from '~/types';
-import { TextureLoader, ObjectLoader } from 'three';
+import { TextureLoader, ObjectLoader, AudioLoader } from 'three';
 import { AWDLoader } from '~/webgl';
-import { ConnectFunction } from '~/core';
+import { ConnectMethod } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 
 export class AssetsManager {
@@ -16,29 +16,27 @@ export class AssetsManager {
     )(
       this.render.bind(this)
     );
+
   }
 
   boot() {
-    this.updater.update({});
+    this.update({}, this.controller, this);
   }
 
-  mapState(props) {
-    return {
+  @ConnectMethod(
+    {
       assets: `assets`,
       requested: requestedAssets,
       queued: queuedAssets,
       next: nextRequestedAsset
-    };
-  }
-
-  mapSignals(props) {
-    return {
+    },
+    {
       requestAsset: `assets.requestAsset`
     };
   } 
 
-  render({ assets, requested, queued, next, requestAsset }) {
-    if (requested.length <= 1 && queued.length > 0 && next !== null) {
+  update({ assets, requested, queued, next, requestAsset }) {
+    if (requested.length <= 3 && queued.length > 0 && next !== null) {
       requestAsset({ asset: next });
     }
   }
@@ -51,6 +49,8 @@ export class AssetsManager {
     //   return new OBJLoader(this);
     case AssetTypes.Json:
       return new ObjectLoader(this);
+    case AssetTypes.Audio:
+      return new AudioLoader(this);
     case AssetTypes.AWD:
       return new AWDLoader(this);
     default:

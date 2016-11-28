@@ -47,7 +47,7 @@ export class WebGLCore {
     this.composer.addPass(this.renderPass);
 
     this.worlds = {
-      [Worlds.Room]: new RoomWorld(this.app, this.controller, this.parentElement),
+      [Worlds.Room]: new RoomWorld(this, this.app, this.controller, this.parentElement),
       [Worlds.Mind]: new MindWorld(this.app, this.controller, this.parentElement),
       [Worlds.Memory]: new MemoryWorld(this.app, this.controller, this.parentElement),
       [Worlds.Black]: new BlackWorld(this.app, this.controller, this.parentElement)
@@ -81,8 +81,6 @@ export class WebGLCore {
     { size: `app.size` }
   )
   resize(props) {
-    console.log(`_resize`);
-    console.log(props);
     this.width = props.size.width;
     this.height = props.size.height;
     _.forEach(this.worlds, (world) => {
@@ -105,7 +103,6 @@ export class WebGLCore {
     if (this.world === null) {
       this.mountWorld(world);
     } else if (this.world !== world) {
-      console.log(`replace world ${this.world} by ${world}`);
       this.switchWorld(world);
     }
     this.world = world;
@@ -124,10 +121,11 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
+      world: `app.world`,
       worldTransition: `app.worldTransition`
     }
   )
-  updatePass({ worldTransition }) {
+  updatePass({ worldTransition, world }) {
     if (worldTransition) {
       this.glitchPass.enabled = true;
       this.renderPass.renderToScreen = false;
@@ -146,7 +144,6 @@ export class WebGLCore {
   }
 
   mountWorld(worldName) {
-    console.log(`mountWorld`);
     const worldScene = this.worlds[worldName].getScene();
     if (_.isFunction(this.worlds[worldName].mount)) {
       this.worlds[worldName].mount();
