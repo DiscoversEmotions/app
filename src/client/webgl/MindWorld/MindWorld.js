@@ -55,11 +55,10 @@ export class MindWorld {
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.setVerticalAngle(-0.3);
     this.user = new Cube();
-    this.user.position.z = 5;
+    // this.user.position.z = 5;
     this.userPosition.add(this.user);
     this.userPosition.add(this.cameraman);
     this.scene.add(this.userPosition);
-
 
     this.light = new PointLight();
     this.light.position.y = 20;
@@ -100,12 +99,25 @@ export class MindWorld {
   // Keyboard Method
   @ConnectMethod(
     {
-      keys: `keyboard.keys`,
+      keys: `keyboard.keys`
     }
   )
   updateKeyEvent({ keys }) {
     if(keys.left){
-      console.log(`Left`);
+      this.userLeft = true;
+    } else if (keys.right){
+      this.userRight = true;
+    } else if (keys.down){
+      this.userDown = true;
+    } else if (keys.up){
+      this.userUp = true;
+    }
+
+    else {
+      this.userLeft = false;
+      this.userRight = false;
+      this.userDown = false;
+      this.userUp = false;
     }
   }
 
@@ -139,6 +151,19 @@ export class MindWorld {
     this.mixerFinal = this.mixerArray[0];
     if(this.mixerFinal){
       this.mixerFinal.update(time, dt);
+    }
+
+    if(this.userLeft){
+      this.userPosition.translateX(-(dt * 0.01));
+    } 
+    else if(this.userRight){
+      this.userPosition.translateX((dt * 0.01));
+    } 
+    else if(this.userUp){
+      this.userPosition.translateZ(-(dt * 0.01));
+    }
+    else if(this.userDown){
+      this.userPosition.translateZ((dt * 0.01));
     }
 
   }
@@ -187,6 +212,7 @@ export class MindWorld {
     // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
     this.userPosition.rotation.y = this.cameramanRotation.hori;
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
+
   }
 
   _updateMenu() {
