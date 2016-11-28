@@ -5,6 +5,7 @@ import _ from 'lodash';
 import Button from '~/component/Button';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
+import { allMessages } from '~/computed';
 
 const Container = styled.div`
   position: absolute;
@@ -39,36 +40,33 @@ const System = compose(
   inject((provided) => ({ core: provided.core })),
   ConnectReact(
     {
+      messages: allMessages
     }
   )
 )((props) => {
+  const systemManager = props.core.systemManager;
+  const messages = props.messages.slice().reverse();
+  // const messages = [
+  //   {
+  //     key: 'boot'
+  //   }
+  // ];
+  // messages.map(() => {
+  //   console.log(`loop`);
+  // })
+  // console.log(props.messages);
+  // console.log(`Hellooooo`);
+  // console.log(messages);
   return (
     <Container full={props.full || false }>
-      <Message>{ props.messages[5] }</Message>
-      <Message>{ props.messages[4] }</Message>
-      <Message>{ props.messages[3] }</Message>
-      <Message>{ props.messages[2] }</Message>
-      <Message>{ props.messages[1] }</Message>
-      <Message>{ props.messages[0] }</Message>
+      { messages.map((msg, i) => {
+        return (
+          <Message key={i}>{ systemManager.formatMessage(msg) }</Message>
+        );
+      }) }
     </Container>
   );
 });
-
-System.defaultProps = {
-  messages: [
-    'hello',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-    'yo',
-  ]
-};
 
 
 // class System extends React.Component {

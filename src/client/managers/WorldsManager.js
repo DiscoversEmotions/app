@@ -29,15 +29,15 @@ export class WorldsManager {
     if (worldTransition) {
       return;
     }
-    // if (currentWorld === Worlds.Black && webglReady === true) {
-    //   transitionToWorld({ world: Worlds.Room });
-    // }
     if (currentWorld === Worlds.Black && webglReady === true) {
       transitionToWorld({ world: Worlds.Room });
     }
-    if (currentWorld === Worlds.Room && webglReady && webglReady) {
-      transitionToWorld({ world: Worlds.Mind });
-    }
+    // if (currentWorld === Worlds.Black && webglReady === true) {
+    //   transitionToWorld({ world: Worlds.Room });
+    // }
+    // if (currentWorld === Worlds.Room && webglReady && webglReady) {
+    //   transitionToWorld({ world: Worlds.Mind });
+    // }
   }
 
 }

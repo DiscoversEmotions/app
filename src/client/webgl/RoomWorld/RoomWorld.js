@@ -1,4 +1,4 @@
-import { Cube, Ground, RoomSphere } from '~/webgl/meshes';
+import { RoomSphere } from '~/webgl/meshes';
 import { Cameraman } from '~/webgl';
 import { EventUtils } from '~/core';
 import { PointLight, Object3D } from 'three';
@@ -25,18 +25,10 @@ export class RoomWorld {
 
     this.roomSphere = new RoomSphere();
     this.scene.add(this.roomSphere);
-    this.cube1 = new Cube();
-    this.cube1.position.x = 1;
-    this.scene.add(this.cube1);
-    this.cube2 = new Cube();
-    this.cube2.position.x = -1;
-    this.scene.add(this.cube2);
-    this.ground = new Ground();
-    this.ground.position.y = -1;
-    this.scene.add(this.ground);
-    var light = new PointLight();
-    light.position.y = 5;
-    this.scene.add(light);
+
+    this.light = new PointLight();
+    this.light.position.y = 5;
+    this.scene.add(this.light);
 
     this.cameraman.setHorizontalAngle((Math.PI * 1.5));
     this.cameraman.setVerticalAngle(0);
@@ -62,10 +54,6 @@ export class RoomWorld {
   }
 
   update(time, dt) {
-    this.cube1.rotation.x += 0.01;
-    this.cube1.rotation.y += 0.02;
-    this.cube2.rotation.x += 0.02;
-    this.cube2.rotation.y += 0.01;
     this._updateCameraman();
   }
 

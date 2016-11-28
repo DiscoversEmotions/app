@@ -12,7 +12,8 @@ export default {
     nextWorld: `none`,
     prevWorld: `none`,
     webglReady: false,
-    worldTransition: false
+    worldTransition: false,
+    connectedToEyes: false
   },
   signals: {
     setSize: [
@@ -28,14 +29,14 @@ export default {
       set(state`app.nextWorld`, input`world`),
       set(state`app.worldTransition`, true),
       [
-        ...wait(500, [
-          set(state`app.prevWorld`, state`app.world`),
-          set(state`app.world`, input`world`),
-          set(state`app.nextWorld`, `none`)
-        ]),
-        ...wait(1000, [
-          set(state`app.worldTransition`, false)
-        ])
+        wait(500),
+        set(state`app.prevWorld`, state`app.world`),
+        set(state`app.world`, input`world`),
+        set(state`app.nextWorld`, `none`)
+      ],
+      [
+        wait(1000),
+        set(state`app.worldTransition`, false)
       ]
     ]
   }

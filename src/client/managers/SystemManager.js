@@ -1,14 +1,14 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
 import { lastMessage } from '~/computed';
-import { MessagesManager } from './MessagesManager';
+import { MessagesFormatter } from './MessagesFormatter';
 import * as motion from 'popmotion';
 
 export class SystemManager {
 
   constructor(controller) {
     this.controller = controller;
-    this.messagesManager = new MessagesManager(this.controller);
+    this.messagesFormatter = new MessagesFormatter(this.controller);
   }
 
   boot() {
@@ -46,8 +46,13 @@ export class SystemManager {
       });
       break;
     default:
+      console.error(new Error(`Unknow message key : ${lastMessage.key}`));
       throw new Error(`Unknow message key : ${lastMessage.key}`);
     }
+  }
+
+  formatMessage(msg) {
+    return this.messagesFormatter.formatMessage(msg);
   }
 
 }

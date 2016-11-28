@@ -7,7 +7,7 @@ import assets from './modules/assets';
 import keyboard from './modules/keyboard';
 
 export default function createController(core) {
-  return Controller({
+  const controller = Controller({
     devtools: Devtools(),
     modules: { app, system, assets, keyboard },
     providers: [
@@ -16,4 +16,5 @@ export default function createController(core) {
       })
     ]
   });
+  return controller;
 };

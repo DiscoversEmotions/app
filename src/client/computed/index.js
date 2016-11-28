@@ -31,11 +31,11 @@ export const nextRequestedAsset = Computed(
 
 export const lvl1AssetsReady = Computed(
   {
-    lvl1: `assets.lvl1.status`,
+    world2: `assets.world2.status`,
     perso: `assets.perso.status`
   },
-  ({ lvl1, perso }) => {
-    if (lvl1 === AssetStatus.Ready && perso === AssetStatus.Ready) {
+  ({ world2, perso }) => {
+    if (world2 === AssetStatus.Ready && perso === AssetStatus.Ready) {
       return true;
     }
     return false;
@@ -63,5 +63,14 @@ export const lastMessage = Computed(
       return null;
     }
     return _.last(messages);
+  }
+);
+
+export const allMessages = Computed(
+  {
+    messages: `system.messages`
+  },
+  ({ messages }) => {
+    return messages;
   }
 );
