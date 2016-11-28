@@ -5,15 +5,18 @@ import {
   input
 } from 'cerebral/operators';
 
-const KEYS_MAP = {
-
-};
-
-const keys = [``];
-
 export default {
   state: {
+    keys: {
+      left: false,
+      right: false,
+      top: false,
+      bottom: false
+    }
   },
   signals: {
+    setKeyStatus: [
+      set(state`keyboard.keys.${input`keyName`}`, input`keyState`)
+    ]
   }
 };

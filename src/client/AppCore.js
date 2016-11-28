@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
 import { WindowResizeSingleton, ConnectFunction } from '~/core';
-import { AssetsManager, WorldsManager, SystemManager } from '~/managers';
+import { AssetsManager, WorldsManager, SystemManager, KeyboardManager } from '~/managers';
 import { Steps } from '~/types';
 import { Container } from 'cerebral/react';
 import { Provider } from 'react-tunnel';
@@ -37,6 +37,7 @@ export default class AppCore {
     this.assetsManager = new AssetsManager(this.controller);
     this.worldsManager = new WorldsManager(this.controller);
     this.systemManager = new SystemManager(this.controller);
+    this.keyboardManager = new KeyboardManager(this.controller);
 
     // start
     this.mainTask.start();
@@ -44,6 +45,7 @@ export default class AppCore {
     this.assetsManager.boot();
     this.worldsManager.boot();
     this.systemManager.boot();
+    this.keyboardManager.boot();
   }
 
   bootUI(rootElement) {

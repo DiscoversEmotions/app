@@ -2,6 +2,13 @@ import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
 import { lvl1AssetsReady } from '~/computed';
 
+const KEYS_MAP = {
+  40: `down`,
+  38: `up`,
+  37: `left`,
+  39: `right`
+};
+
 export class KeyboardManager {
 
   constructor(controller) {
@@ -9,29 +16,26 @@ export class KeyboardManager {
   }
 
   boot() {
-    this.update({}, this.controller, this);
-    this.bind({}, this.controller, this);
+    this.bind();
   }
 
-  @ConnectMethod(
-    {
-
-    },
-    {
-    }
-  )
-  update({}) {
-
+  bind() {
+    document.addEventListener(`keydown`, (e) => {
+      this.handleKey(e, true);
+    });
+    document.addEventListener(`keyup`, (e) => {
+      this.handleKey(e, false);
+    });
   }
 
-  @ConnectMethod(
-    {},
-    {
-      
+  handleKey(e, isDown) {
+    const setKeyStatus = this.controller.getSignal(`keyboard.setKeyStatus`);
+    if (KEYS_MAP[e.keyCode] !== undefined) {
+      setKeyStatus({
+        keyName: KEYS_MAP[e.keyCode],
+        keyState: isDown
+      });
     }
-  )
-  bind({}) {
-
   }
 
 }

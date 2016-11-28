@@ -25,8 +25,10 @@ export class SystemManager {
     }
   )
   update({ lastMessage, planNextMessage }) {
+    console.log(`Update SystemManager : ${lastMessage.key}`);
     switch (lastMessage.key) {
     case `boot`:
+      console.log(`send yolo message`);
       planNextMessage({
         message: {
           key: `yolo`,

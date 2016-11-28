@@ -46,7 +46,7 @@ export class MindWorld {
 
     this.scene = new Object3D();
 
-    this.level1 = null;
+    this.world1 = null;
 
     this.userPosition = new Object3D();
     this.userPosition.position.set(0, 5, 0);
@@ -131,22 +131,14 @@ export class MindWorld {
   }
 
   mount() {
-    if ( this.level1 === null) {
-      this.level1 = this.app.assetsManager.getAsset(`lvl1`);
-      this.scene.add(this.level1); 
-      this.level1.children[0].material.shading = 1;
-      this.level1.children[1].material.shading = 1;
-      this.scene.add(this.level1);
-      console.log(this.level1);
-      this.level1.position.set(-150, 0, -180);
+    if ( this.world1 === null) {
+      this.world1 = this.app.assetsManager.getAsset(`world1`);
+      this.scene.add(this.world1);
+      // this.world1.children[0].material.shading = 1;
+      // this.world1.children[1].material.shading = 1;
+      // this.world1.position.set(-150, 0, -180);
 
-      var mat = new MeshPhongMaterial({
-        color: 0xdddddd,
-        specular: 0x006299,
-        shininess: 30,
-        shading: FlatShading
-      });
-      this.level1.scale.set(0.1, 0.1, 0.1);
+      // this.world1.scale.set(0.1, 0.1, 0.1);
     }
 
     document.addEventListener(`mousemove`, this._onMouseMove, false);

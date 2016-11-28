@@ -396,6 +396,7 @@ export class AWDLoader {
 
       // Color material
       mat.color.setHex(props.get(1, 0xcccccc));
+      mat.shading = 1;
 
     } else if (type === 2) {
 
