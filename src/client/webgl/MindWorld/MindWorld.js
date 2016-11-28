@@ -132,10 +132,8 @@ export class MindWorld {
 
   mount() {
     if ( this.world1 === null) {
-      this.world1 = this.app.assetsManager.getAsset(`world1`);
+      this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
-      // this.world1.children[0].material.shading = 1;
-      // this.world1.children[1].material.shading = 1;
       // this.world1.position.set(-150, 0, -180);
 
       // this.world1.scale.set(0.1, 0.1, 0.1);
