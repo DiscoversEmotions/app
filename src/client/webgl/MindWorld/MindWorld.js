@@ -28,9 +28,11 @@ import {
 import _ from 'lodash';
 import { Steps, Worlds } from '~/types';
 import {
-  PointerLock
+  PointerLock,
+  ConnectMethod
 } from '~/core';
 import * as motion from 'popmotion';
+
 
 export class MindWorld {
 
@@ -82,10 +84,13 @@ export class MindWorld {
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
-    this._onKeyDown = this._onKeyDown.bind(this);
-    this._onKeyUp = this._onKeyUp.bind(this);
-    this._onMouseDown = this._onMouseDown.bind(this);
-    this._onMouseUp = this._onMouseUp.bind(this);
+    // this._onKeyDown = this._onKeyDown.bind(this);
+    // this._onKeyUp = this._onKeyUp.bind(this);
+    // this._onMouseDown = this._onMouseDown.bind(this);
+    // this._onMouseUp = this._onMouseUp.bind(this);
+
+    this.updateKeyEvent({}, this.controller, this);
+
   }
 
   getCameraman() {
@@ -94,6 +99,18 @@ export class MindWorld {
 
   getScene() {
     return this.scene;
+  }
+
+  // Keyboard Method
+  @ConnectMethod(
+    {
+      keys: `keyboard.keys`,
+    }
+  )
+  updateKeyEvent({ keys }) {
+    if(keys.left){
+      console.log(`Left`);
+    }
   }
 
   update(time, dt) {

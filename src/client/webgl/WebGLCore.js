@@ -135,6 +135,7 @@ export class WebGLCore {
     }
   }
 
+
   initComposer() {
     this.glitchPass = new GlitchPass();
     this.glitchPass.renderToScreen = true;
