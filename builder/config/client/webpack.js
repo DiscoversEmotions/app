@@ -14,7 +14,7 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
     },
     output: {
       path: paths.buildClient,
-      publicPath: '/',
+      publicPath: params.webpack.publicPath,
       pathinfo: true,
     },
     resolve: {

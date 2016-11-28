@@ -58,61 +58,73 @@
       <span></span>
     </div>
     <script type="text/javascript">
+      var numberOfMessages = 8;
       var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
       var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
       window.__START_TIME = currentTime();
       window.__MESSAGES = [];
 
       var container = document.getElementById('basic-boot');
+      // Get spans
+      var spans = [].map.call(container.childNodes, function(element) { return element; })
+      spans = spans.filter(function  (item) {
+        return item.tagName === 'SPAN';
+      });
 
-      function addSpanMessage (content) {
-        var spanElem = document.createElement('span');
-        spanElem.innerHTML = content;
-        container.appendChild(spanElem);
+      function addMessage (msg) {
+        window.__MESSAGES.push(msg);
+        if (window.__MESSAGES.length > numberOfMessages) {
+          window.__MESSAGES = window.__MESSAGES.slice(-numberOfMessages);
+        }
       }
 
-      var messagesRenderer = {
-        boot: function  (msg) {
-          return 'Connecting to the brain'
-        },
-        yolo: function (msg) {
-          return 'Yolo'
+      function renderMessage (msg) {
+        if (msg === undefined) {
+          return '';
+        }
+        switch (msg.key) {
+          case 'boot':
+            return 'Connecting to the brain'
+          case 'yolo':
+            if (msg.progress === 0) {
+              return 'Yolo start';
+            }
+            return 'Yolo ' + msg.progress;
+          default:
+            return ''
+        }
+      }
+
+      function render () {
+        var messagesToDisplay = window.__MESSAGES.slice().reverse();
+        for (var i = 0; i < numberOfMessages; i++) {
+          var msg = messagesToDisplay[i];
+          spans[(numberOfMessages - 1) - i].innerHTML = renderMessage(msg);
         }
       }
 
       function update () {
-        // Remove span
-        var spans = [].map.call(container.childNodes, function(element) { return element; })
-        spans = spans.filter(function  (item) {
-          return item.tagName === 'SPAN';
-        })
-        if (spans.length >= 7) {
-          var spanToRemove = spans.slice(0, -7);
-          for (var i = 0; i < spanToRemove.length; i++) {
-            var span = spanToRemove[i];
-            span.parentElement.removeChild(span);
-          }
-        }
-
         // Add message
         var lastMessage = window.__MESSAGES.length > 0 ? window.__MESSAGES[window.__MESSAGES.length - 1] : null;
         if (lastMessage === null) {
-          var msg = { key: 'boot' };
-          window.__MESSAGES.push();
-          addSpanMessage(messagesRenderer['boot'](msg));
+          addMessage({ key: 'boot' });
+        } else
+        if (lastMessage.key === 'boot') {
+          addMessage({
+            key: 'yolo',
+            progress: 0
+          });
+        } else
+        if (lastMessage.key === 'yolo') {
+          addMessage({
+            key: 'yolo',
+            progress: lastMessage.progress + Math.floor((Math.random() + 1) * 30)
+          });
         }
-        // else
-        // if (lastMessage.key === 'boot') {
-        //   var content = 'This is the yolo !'
-        //   window.__MESSAGES.push({ key: 'yolo' });
-        //   addSpanMessage();
-        // } else
-        // if (lastMessage === 'yolo') {
-        //   MESSAGES.yolo.progress += Math.floor((Math.random() + 1) * 30);
-        //   addSpanMessage(MESSAGES.yolo.content + MESSAGES.yolo.progress);
-        // }
-        window.__BOOT_TIMER = setTimeout(update, 500);
+        render();
+        window.__BOOT_TIMER = setTimeout(update, 300);
       }
+
 
       update();
 

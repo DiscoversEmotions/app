@@ -1,7 +1,8 @@
 module.exports = {
   name: 'Default',
   webpack: {
-    devtool: '#eval-source-map'
+    devtool: '#eval-source-map',
+    publicPath: '/'
   },
   optimize: false,
   watchClient: true,
