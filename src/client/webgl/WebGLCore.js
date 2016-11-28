@@ -47,7 +47,7 @@ export class WebGLCore {
     this.composer.addPass(this.renderPass);
 
     this.worlds = {
-      [Worlds.Room]: new RoomWorld(this.app, this.controller, this.parentElement),
+      [Worlds.Room]: new RoomWorld(this, this.app, this.controller, this.parentElement),
       [Worlds.Mind]: new MindWorld(this.app, this.controller, this.parentElement),
       [Worlds.Memory]: new MemoryWorld(this.app, this.controller, this.parentElement),
       [Worlds.Black]: new BlackWorld(this.app, this.controller, this.parentElement)
@@ -121,10 +121,11 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
+      world: `app.world`,
       worldTransition: `app.worldTransition`
     }
   )
-  updatePass({ worldTransition }) {
+  updatePass({ worldTransition, world }) {
     if (worldTransition) {
       this.glitchPass.enabled = true;
       this.renderPass.renderToScreen = false;

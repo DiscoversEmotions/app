@@ -1,7 +1,7 @@
 import { AssetTypes, AssetStatus } from '~/types';
 import { TextureLoader, ObjectLoader } from 'three';
 import { AWDLoader } from '~/webgl';
-import { ConnectFunction } from '~/core';
+import { ConnectMethod } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
 
 export class AssetsManager {
@@ -9,36 +9,25 @@ export class AssetsManager {
   constructor(controller) {
     this.controller = controller;
     this.assetsData = {};
-    this.updater = ConnectFunction(
-      this.controller,
-      this.mapState.bind(this),
-      this.mapSignals.bind(this)
-    )(
-      this.render.bind(this)
-    );
   }
 
   boot() {
-    this.updater.update({});
+    this.update({}, this.controller, this);
   }
 
-  mapState(props) {
-    return {
+  @ConnectMethod(
+    {
       assets: `assets`,
       requested: requestedAssets,
       queued: queuedAssets,
       next: nextRequestedAsset
-    };
-  }
-
-  mapSignals(props) {
-    return {
+    },
+    {
       requestAsset: `assets.requestAsset`
-    };
-  }
-
-  render({ assets, requested, queued, next, requestAsset }) {
-    if (requested.length <= 1 && queued.length > 0 && next !== null) {
+    }
+  )
+  update({ assets, requested, queued, next, requestAsset }) {
+    if (requested.length <= 3 && queued.length > 0 && next !== null) {
       requestAsset({ asset: next });
     }
   }

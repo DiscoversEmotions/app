@@ -22,7 +22,8 @@ import {
   AnimationMixer,
   AmbientLight,
   MeshPhongMaterial,
-  FlatShading
+  FlatShading,
+  Color
 } from 'three';
 import _ from 'lodash';
 import { Steps, Worlds } from '~/types';
@@ -132,11 +133,13 @@ export class MindWorld {
   mount() {
     if ( this.level1 === null) {
       this.level1 = this.app.assetsManager.getAsset(`lvl1`);
+      this.level1.children[0].material.shading = 1;
+      this.level1.children[1].material.shading = 1;
       this.scene.add(this.level1);
       console.log(this.level1);
       this.level1.position.set(-150, 0, -180);
 
-      this.level1.children[0].material = new MeshPhongMaterial({
+      var mat = new MeshPhongMaterial({
         color: 0xdddddd,
         specular: 0x006299,
         shininess: 30,
