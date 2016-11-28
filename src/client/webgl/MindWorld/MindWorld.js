@@ -47,9 +47,16 @@ export class MindWorld {
 
     this.level1 = null;
 
+    this.userPosition = new Object3D();
+    this.userPosition.position.set(0, 5, 0);
     this.cameraman = new Cameraman(45, 1, 1, 1100);
-    this.cameraman.position.set(0, 10, 40);
     this.cameraman.setVerticalAngle(-0.3);
+    this.user = new Cube();
+    this.user.position.z = 5;
+    this.userPosition.add(this.user);
+    this.userPosition.add(this.cameraman);
+    this.scene.add(this.userPosition);
+
 
     this.light = new PointLight();
     this.light.position.y = 20;
@@ -58,18 +65,10 @@ export class MindWorld {
     this.ambiantLight = new AmbientLight( 0x404040 );
     this.scene.add(this.ambiantLight);
 
-    this.userPosition = new Object3D();
-    this.scene.add(this.userPosition);
-    this.userPosition.add(this.cameraman);
-
     this.tile = new Tile();
     this.scene.add(this.tile);
     this.tile.position.y = 0.1;
     this.tile.position.z = -5;
-
-    this.user = new Cube();
-    // this.user.position.z = 5;
-    this.scene.add(this.user);
 
     this.pointerLock = new PointerLock(document.body);
 
@@ -134,10 +133,12 @@ export class MindWorld {
     if ( this.level1 === null) {
       this.level1 = this.app.assetsManager.getAsset(`lvl1`);
       this.scene.add(this.level1);
+      console.log(this.level1);
+      this.level1.position.set(-150, 0, -180);
 
       this.level1.children[0].material = new MeshPhongMaterial({
         color: 0xdddddd,
-        specular: 0x009900,
+        specular: 0x006299,
         shininess: 30,
         shading: FlatShading
       });
