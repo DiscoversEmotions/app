@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { injectGlobal } from 'styled-components';
 import { compose, ConnectReact } from '~/core';
 import System from '~/component/System';
+import Credits from '~/component/Credits';
 
 require('normalize.css/normalize.css');
 
@@ -23,10 +24,7 @@ const AppContainer = styled.div`
 
 const App = compose(
   ConnectReact(
-    {
-      title: 'app.title',
-      subTitle: 'app.subTitle'
-    }
+    {}
   )
 )((props) => {
   return (
