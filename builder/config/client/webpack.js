@@ -60,7 +60,7 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
       query: babel
     },
     {
-      test: /\.(png|jpg|gif|svg|obj|json|awd$)$/,
+      test: /\.(png|jpg|gif|svg|obj|json|awd|ogg$)$/,
       loader: 'file-loader',
       query: {
         name: '[name].[ext]?[hash]'

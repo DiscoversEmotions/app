@@ -7,7 +7,7 @@ import { AssetStatus, AssetTypes } from '~/types';
 import signals from './signals';
 import _ from 'lodash';
 
-const assets = [
+const assets = [ 
   {
     key: `perso`,
     fileUrl: require(`~/assets/perso.json`),
@@ -28,6 +28,13 @@ const assets = [
     type: AssetTypes.AWD,
     status: AssetStatus.Queued,
     priority: 10,
+  },
+  {
+    key: `memory1`,
+    fileUrl: require(`~/assets/sonSouvenirTest.ogg`),
+    type: AssetTypes.Audio,
+    status: AssetStatus.Queued,
+    priority: 1
   }
 ];
 

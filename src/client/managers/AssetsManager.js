@@ -11,7 +11,7 @@ export class AssetsManager {
     this.assetsData = {};
     this.updater = ConnectFunction(
       this.controller,
-      this.mapState.bind(this),
+      this.mapState.bind(this), 
       this.mapSignals.bind(this)
     )(
       this.render.bind(this)
@@ -35,7 +35,7 @@ export class AssetsManager {
     return {
       requestAsset: `assets.requestAsset`
     };
-  }
+  } 
 
   render({ assets, requested, queued, next, requestAsset }) {
     if (requested.length <= 1 && queued.length > 0 && next !== null) {

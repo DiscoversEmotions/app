@@ -133,7 +133,7 @@ export class MindWorld {
   mount() {
     if ( this.level1 === null) {
       this.level1 = this.app.assetsManager.getAsset(`lvl1`);
-      this.scene.add(this.level1);
+      this.scene.add(this.level1); 
 
       this.level1.children[0].material = new MeshPhongMaterial({
         color: 0xdddddd,

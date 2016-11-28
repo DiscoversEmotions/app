@@ -26,5 +26,8 @@ export const AssetTypes = {
   Obj: `obj`,
   Texture: `texture`,
   AWD: `awd`,
-  Json: `json`
+  Json: `json`,
+  Audio: `audio`
 };
+
+
