@@ -9,14 +9,6 @@ export class AssetsManager {
   constructor(controller) {
     this.controller = controller;
     this.assetsData = {};
-    this.updater = ConnectFunction(
-      this.controller,
-      this.mapState.bind(this), 
-      this.mapSignals.bind(this)
-    )(
-      this.render.bind(this)
-    );
-
   }
 
   boot() {
@@ -32,9 +24,8 @@ export class AssetsManager {
     },
     {
       requestAsset: `assets.requestAsset`
-    };
-  } 
-
+    }
+  )
   update({ assets, requested, queued, next, requestAsset }) {
     if (requested.length <= 3 && queued.length > 0 && next !== null) {
       requestAsset({ asset: next });

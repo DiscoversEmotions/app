@@ -73,10 +73,10 @@
 
       var messagesRenderer = {
         boot: function  (msg) {
-          return
-        }
+          return 'Connecting to the brain'
+        },
         yolo: function (msg) {
-          return ''
+          return 'Yolo'
         }
       }
 
@@ -97,23 +97,20 @@
         // Add message
         var lastMessage = window.__MESSAGES.length > 0 ? window.__MESSAGES[window.__MESSAGES.length - 1] : null;
         if (lastMessage === null) {
-          window.__MESSAGES.push({
-            key: 'boot'
-          });
-          addSpanMessage(content);
-        } else
-        if (lastMessage.key === 'boot') {
-          var content = `This is the yolo !`
-          window.__MESSAGES.push({
-            key: 'yolo',
-            content:
-          });
-          addSpanMessage();
-        } else
-        if (lastMessage === 'yolo') {
-          MESSAGES.yolo.progress += Math.floor((Math.random() + 1) * 30);
-          addSpanMessage(MESSAGES.yolo.content + MESSAGES.yolo.progress);
+          var msg = { key: 'boot' };
+          window.__MESSAGES.push();
+          addSpanMessage(messagesRenderer['boot'](msg));
         }
+        // else
+        // if (lastMessage.key === 'boot') {
+        //   var content = 'This is the yolo !'
+        //   window.__MESSAGES.push({ key: 'yolo' });
+        //   addSpanMessage();
+        // } else
+        // if (lastMessage === 'yolo') {
+        //   MESSAGES.yolo.progress += Math.floor((Math.random() + 1) * 30);
+        //   addSpanMessage(MESSAGES.yolo.content + MESSAGES.yolo.progress);
+        // }
         window.__BOOT_TIMER = setTimeout(update, 500);
       }
 
