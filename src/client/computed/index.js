@@ -42,6 +42,18 @@ export const lvl1AssetsReady = Computed(
   }
 );
 
+export const memory1AssetsReady = Computed(
+  {
+    memory1: `assets.memory1.status`
+  },
+  ({ memory1 }) => {
+    if (memory1 === AssetStatus.Ready) {
+      return true;
+    }
+    return false;
+  }
+);
+
 export const lastMessage = Computed(
   {
     messages: `system.messages`
