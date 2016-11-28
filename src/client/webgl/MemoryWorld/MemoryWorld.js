@@ -1,6 +1,6 @@
 import { Cube } from '~/webgl/meshes';
 import { Cameraman } from '~/webgl';
-import { PointLight, Object3D, Color, AudioListener, Audio, AudioAnalyser, MeshPhongMaterial } from 'three';
+import { PointLight, Object3D, Color, AudioListener, Audio, AudioAnalyser, MeshPhongMaterial, Mesh, BoxGeometry } from 'three';
 
 export class MemoryWorld {
 
@@ -11,13 +11,14 @@ export class MemoryWorld {
 
     this.scene = new Object3D();
     this.cameraman = new Cameraman(45, 1, 1, 1100);
-    this.cameraman.position.set(0, 2, 5);
+    this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);
 
-    this.cube1 = new Cube(this.material_cube1);
-    this.scene.add(this.cube1);
-
+    // this.cube1 = new Cube(this.material_cube1);
     this.material_cube1 = new MeshPhongMaterial( { color: 0xffaa00, shininess: 0 } );
+    this.cube1_geom = new BoxGeometry(1, 1, 1);
+    this.cube1 = new Mesh(this.cube1_geom, this.material_cube1);
+    this.scene.add(this.cube1);
 
     this.light = new PointLight();
     this.light.position.y = 5;
@@ -34,6 +35,7 @@ export class MemoryWorld {
   mount() {
     this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
     this.memorySound.play();
+    this.memorySound.loop = true;
   }
 
   getCameraman() {
@@ -46,7 +48,7 @@ export class MemoryWorld {
 
   getEnvConfig() {
     return {
-      background: new Color(1, 1, 1)
+      background: new Color(0x000000)
     };
   }
 
@@ -54,9 +56,7 @@ export class MemoryWorld {
     this.cube1.rotation.x += 0.01;
     this.cube1.rotation.y += 0.02;
 
-    this.material_cube1.emissive = this.analyser1.getAverageFrequency() / 256;
-
-    console.log(this.analyser1.getAverageFrequency() / 256);
+    this.material_cube1.emissive.b = this.analyser1.getAverageFrequency() / 256;
   }
 
   setSize(width, height) {
