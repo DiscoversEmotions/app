@@ -1,5 +1,5 @@
 import { AssetTypes, AssetStatus } from '~/types';
-import { TextureLoader, ObjectLoader } from 'three';
+import { TextureLoader, ObjectLoader, AudioLoader } from 'three';
 import { AWDLoader } from '~/webgl';
 import { ConnectMethod } from '~/core';
 import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
@@ -40,6 +40,8 @@ export class AssetsManager {
     //   return new OBJLoader(this);
     case AssetTypes.Json:
       return new ObjectLoader(this);
+    case AssetTypes.Audio:
+      return new AudioLoader(this);
     case AssetTypes.AWD:
       return new AWDLoader(this);
     default:

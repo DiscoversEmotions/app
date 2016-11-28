@@ -61,17 +61,7 @@
       var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
       var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
       window.__START_TIME = currentTime();
-      window.__MESSAGES = [
-        'start'
-      ];
-
-      var MESSAGES = {
-        boot: "Connect to the brain",
-        yolo: {
-          content: 'Yolo ',
-          progress: 0
-        }
-      }
+      window.__MESSAGES = [];
 
       var container = document.getElementById('basic-boot');
 
@@ -81,7 +71,17 @@
         container.appendChild(spanElem);
       }
 
+      var messagesRenderer = {
+        boot: function  (msg) {
+          return
+        }
+        yolo: function (msg) {
+          return ''
+        }
+      }
+
       function update () {
+        // Remove span
         var spans = [].map.call(container.childNodes, function(element) { return element; })
         spans = spans.filter(function  (item) {
           return item.tagName === 'SPAN';
@@ -94,14 +94,21 @@
           }
         }
 
-        var lastMessage = window.__MESSAGES[window.__MESSAGES.length - 1];
-        if (lastMessage === 'start') {
-          addSpanMessage(MESSAGES.boot)
-          window.__MESSAGES.push('boot');
+        // Add message
+        var lastMessage = window.__MESSAGES.length > 0 ? window.__MESSAGES[window.__MESSAGES.length - 1] : null;
+        if (lastMessage === null) {
+          window.__MESSAGES.push({
+            key: 'boot'
+          });
+          addSpanMessage(content);
         } else
-        if (lastMessage === 'boot') {
-          addSpanMessage(MESSAGES.yolo.content + MESSAGES.yolo.progress);
-          window.__MESSAGES.push('yolo');
+        if (lastMessage.key === 'boot') {
+          var content = `This is the yolo !`
+          window.__MESSAGES.push({
+            key: 'yolo',
+            content:
+          });
+          addSpanMessage();
         } else
         if (lastMessage === 'yolo') {
           MESSAGES.yolo.progress += Math.floor((Math.random() + 1) * 30);
