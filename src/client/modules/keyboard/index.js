@@ -10,8 +10,8 @@ export default {
     keys: {
       left: false,
       right: false,
-      top: false,
-      bottom: false
+      up: false,
+      down: false
     }
   },
   signals: {
