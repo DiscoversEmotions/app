@@ -84,10 +84,6 @@ export class MindWorld {
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
-    // this._onKeyDown = this._onKeyDown.bind(this);
-    // this._onKeyUp = this._onKeyUp.bind(this);
-    // this._onMouseDown = this._onMouseDown.bind(this);
-    // this._onMouseUp = this._onMouseUp.bind(this);
 
     this.updateKeyEvent({}, this.controller, this);
 
@@ -151,26 +147,13 @@ export class MindWorld {
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world1`);
       this.scene.add(this.world1);
-      // this.world1.children[0].material.shading = 1;
-      // this.world1.children[1].material.shading = 1;
-      // this.world1.position.set(-150, 0, -180);
-
-      // this.world1.scale.set(0.1, 0.1, 0.1);
     }
 
     document.addEventListener(`mousemove`, this._onMouseMove, false);
-    document.addEventListener(`keydown`, this._onKeyDown, false);
-    document.addEventListener(`keyup`, this._onKeyUp, false);
-    document.addEventListener(`mousedown`, this._onMouseDown, false);
-    document.addEventListener(`mouseup`, this._onMouseUp, false);
   }
 
   unmount() {
     document.removeEventListener(`mousemove`, this._onMouseMove, false);
-    document.removeEventListener(`keydown`, this._onKeyDown, false);
-    document.removeEventListener(`keyup`, this._onKeyUp, false);
-    document.removeEventListener(`mousedown`, this._onMouseDown, false);
-    document.removeEventListener(`mouseup`, this._onMouseUp, false);
   }
 
   setSize(width, height) {
@@ -186,44 +169,7 @@ export class MindWorld {
 
     this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, -0.5, 0);
   }
-
-  _onKeyDown(e) {
-    switch (e.keyCode) {
-    case 38: // up
-    case 90: // z
-      // this.store.actions.movement.setForward(1);
-      break;
-    case 37: //left
-    case 81: //q
-      // this.store.actions.movement.setLeft(1);
-      break;
-    case 40: //back
-    case 83: //s
-      // this.store.actions.movement.setForward(-1);
-      break;
-    case 39: //right
-    case 68: //d
-      // this.store.actions.movement.setLeft(-1);
-      break;
-    };
-  }
-
-  _onKeyUp(e) {
-    switch (e.keyCode) {
-    case 38: // up
-    case 90: // w
-    case 40: //back
-    case 83: //s
-      // this.store.actions.movement.setForward(0);
-      break;
-    case 37: //left
-    case 81: //q
-    case 39: //right
-    case 68: //d
-      // this.store.actions.movement.setLeft(0);
-      break;
-    };
-  }
+  
 
   _onMouseDown(e) {
     // this.store.actions.movement.setForward(1);
