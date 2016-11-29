@@ -23,7 +23,8 @@ import {
   AmbientLight,
   MeshPhongMaterial,
   FlatShading,
-  Color
+  Color,
+  PointLightHelper
 } from 'three';
 import _ from 'lodash';
 import { Steps, Worlds } from '~/types';
@@ -47,9 +48,10 @@ export class MindWorld {
     };
 
     this.scene = new Object3D();
+    this.scene.name = `MindWorld-scene`;
 
     this.world1 = null;
-    this.persoFinal = null;
+    this.perso = null;
 
     this.userPosition = new Object3D();
     // this.userPosition.position.set(0, 5, 0);
@@ -64,7 +66,10 @@ export class MindWorld {
     this.light.position.y = 20;
     this.scene.add(this.light);
 
-    this.ambiantLight = new AmbientLight( 0x404040 );
+    this.lightHelper = new PointLightHelper(this.light);
+    this.scene.add(this.lightHelper);
+
+    this.ambiantLight = new AmbientLight( 0xffffff );
     this.scene.add(this.ambiantLight);
 
     this.tile = new Tile();
@@ -88,7 +93,12 @@ export class MindWorld {
 
     this.updateKeyEvent({}, this.controller, this);
 
-    this.persoMaterial = new MeshStandardMaterial();
+    this.persoMaterial = new MeshPhongMaterial({
+      color: 0xff0000,
+      specular: 0x009900,
+      shininess: 30,
+      shading: 1
+    });
   }
 
   getCameraman() {
@@ -124,18 +134,21 @@ export class MindWorld {
       left: 0
     };
 
-    if(this.userLeft && !this.userRight || this.userQ && !this.userD){
+    if((this.userLeft && !this.userRight) || (this.userQ && !this.userD)) {
       movement.left = 1;
-    } 
-    if(this.userRight && !this.userLeft || this.userD && !this.userQ){
+    }
+    if((this.userRight && !this.userLeft) || (this.userD && !this.userQ)) {
       movement.left = -1;
     }
-    if(this.userUp && !this.userDown || this.userZ && !this.userS){
+    if((this.userUp && !this.userDown) || (this.userZ && !this.userS)) {
       movement.forward = 1;
     }
-    if(this.userDown && !this.userUp || this.userS && !this.userZ){
+    if((this.userDown && !this.userUp) || (this.userS && !this.userZ)) {
       movement.forward = -1;
     }
+
+    this.light.position.x = Math.sin(time/5000) * 100;
+    this.light.position.z = Math.cos(time/5000) * 100;
 
     this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
     this.userPosition.translateX(-(dt * 0.01) * movement.left);
@@ -143,7 +156,7 @@ export class MindWorld {
       { y: movement.forward, x: 0 },
       { y: 0, x: -movement.left}
     ));
-    this.persoFinalMesh.rotation.y = angle;
+    this.persoMesh.rotation.y = angle;
 
     // Collision with ground
     this.raycaster.ray.origin.copy(this.userPosition.position);
@@ -163,8 +176,6 @@ export class MindWorld {
       this.mixerFinal.update(time, dt);
     }
 
-
-
     this.idle.play();
 
   }
@@ -178,19 +189,15 @@ export class MindWorld {
       this.collidableMeshList.push(this.ground);
     }
 
-    if(this.persoFinal === null){
+    if(this.perso === null){
 
-      this.persoFinal = this.app.assetsManager.getAsset(`perso`).children[0];
-      this.persoFinalMesh = new SkinnedMesh(this.persoFinal.geometry, this.persoMaterial);
-      this.persoFinalMesh.scale.set(0.015, 0.015, 0.015);
-      this.persoFinalMesh.position.y = 0;
-      this.persoFinalMesh.rotation.set(0, 0, 0);
+      this.perso = this.app.assetsManager.getAsset(`perso`).children[0];
+      this.persoMesh = new SkinnedMesh(this.perso.geometry, this.persoMaterial);
+      this.persoMesh.scale.set(0.015, 0.015, 0.015);
+      this.userPosition.add(this.persoMesh);
 
-      this.scene.add(this.persoFinalMesh);
-      this.userPosition.add(this.persoFinalMesh);
-
-      this.mixer = new AnimationMixer(this.persoFinalMesh);
-      this.idle = this.mixer.clipAction(this.persoFinalMesh.geometry.animations[0]);
+      this.mixer = new AnimationMixer(this.persoMesh);
+      this.idle = this.mixer.clipAction(this.persoMesh.geometry.animations[0]);
 
     }
 
@@ -212,9 +219,10 @@ export class MindWorld {
     this.cameramanRotation.hori -= movementX * 0.003;
     this.cameramanRotation.vert -= movementY * 0.003;
 
-    this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, -0.5, 0);
+    // this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, -0.5, 0);
+    this.cameramanRotation.vert = this.cameramanRotation.vert;
   }
-  
+
 
   _onMouseDown(e) {
     // this.store.actions.movement.setForward(1);

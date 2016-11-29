@@ -9,6 +9,7 @@ export class BlackWorld {
     this.parentElement = parentElement;
 
     this.scene = new Object3D();
+    this.scene.name = `BlackWorld-scene`;
 
     this.cameraman = new Cameraman(45, 1, 1, 1100);
   }

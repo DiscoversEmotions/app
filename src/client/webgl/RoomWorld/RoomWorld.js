@@ -18,6 +18,7 @@ export class RoomWorld {
     this.mousePos = { x: 0, y: 0 };
 
     this.scene = new Object3D();
+    this.scene.name = `RoomWorld-scene`;
 
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 2, -5);
