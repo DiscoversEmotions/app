@@ -9,31 +9,26 @@ import { allMessages } from '~/computed';
 
 const Container = styled.div`
   position: absolute;
-  height: ${ (props) => !props.full ? `120px` : `300px` };
+  height: ${ (props) => !props.full ? `156px` : `400px` };
   width: ${ (props) => !props.full ? `500px` : `500px` };
-  bottom: ${ (props) => !props.full ? `2%` : `50%` };
-  right: ${ (props) => !props.full ? `2%` : `50%` };
-  background: rgba(0, 0, 0, 0.68);
-  padding: 10px;
+  bottom: ${ (props) => !props.full ? `20px` : `50%` };
+  right: ${ (props) => !props.full ? `20px` : `50%` };
+  padding: 0;
   transition-duration: .3s;
-  font-family: monospace;
+  font-family: 'Anonymous Pro', monospace;
   color: white;
   text-align: right;
   line-height: 1.5;
   transform: translate(${ (props) => !props.full ? `0, 0` : `50%, 50%` });
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
 `;
 
 const Message = styled.div`
-  height: 20px;
-  font-family: monospace;
+  height: 26px;
+  font-family: 'Anonymous Pro', monospace;
   text-align: right;
   padding: 0;
   margin: 0;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.55);
 `;
 
 const System = compose(

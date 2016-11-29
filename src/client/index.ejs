@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <link href="https://fonts.googleapis.com/css?family=Anonymous+Pro" rel="stylesheet">
     <style>
       html, body {
         height: 100%;
@@ -25,17 +26,17 @@
       }
       #basic-boot {
         position: fixed;
-        padding: 10px 20px;
-        bottom: 2%;
-        right: 2%;
-        height: 120px;
+        padding: 0;
+        bottom: 20px;
+        right: 20px;
+        height: 156px;
         width: 400px;
         overflow: hidden;
       }
-      #basic-boot span {
-        height: 20px;
+      #basic-boot div {
+        height: 26px;
         display: block;
-        font-family: monospace;
+        font-family: 'Anonymous Pro', monospace;
         text-align: right;
         padding: 0;
         margin: 0;
@@ -47,14 +48,14 @@
     <div id="app-canvas"></div>
     <div id="app-ui"></div>
     <div id="basic-boot">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
     <script type="text/javascript">
       var numberOfMessages = 6;
@@ -64,10 +65,10 @@
       var BASIC_BOOT_STOPED = false;
 
       var container = document.getElementById('basic-boot');
-      // Get spans
-      var spans = [].map.call(container.childNodes, function(element) { return element; })
-      spans = spans.filter(function  (item) {
-        return item.tagName === 'SPAN';
+      // Get messagesElems
+      var messagesElems = [].map.call(container.childNodes, function(element) { return element; })
+      messagesElems = messagesElems.filter(function  (item) {
+        return item.tagName === 'DIV';
       });
 
       window.__START_TIME = currentTime();
@@ -98,7 +99,7 @@
         var messagesToDisplay = window.__MESSAGES.slice().reverse();
         for (var i = 0; i < numberOfMessages; i++) {
           var msg = messagesToDisplay[i];
-          spans[(numberOfMessages - 1) - i].innerHTML = renderMessage(msg);
+          messagesElems[(numberOfMessages - 1) - i].innerHTML = renderMessage(msg);
         }
       }
 
@@ -128,9 +129,13 @@
         BOOT_TIMER = setTimeout(update, time);
       }
 
-      update();
-
+      document.addEventListener("DOMContentLoaded", function(event) {
+        update();
+      });
     </script>
+    <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+    <script async src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+    <% } %>
   </body>
 
 </html>

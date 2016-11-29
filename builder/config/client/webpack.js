@@ -88,7 +88,7 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
       title: params.pageTitle,
       filename: 'index.html',
       chunks: ['app', 'vendor'],
-      inject: 'body',
+      inject: false,
       minify: {
         collapseWhitespace: true
       }
