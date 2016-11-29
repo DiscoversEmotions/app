@@ -38,3 +38,6 @@ jspm_packages
 
 # build
 build
+
+# Stats
+builder/stats.json

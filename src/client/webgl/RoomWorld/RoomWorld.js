@@ -47,10 +47,12 @@ export class RoomWorld {
   }
 
   mount() {
+    console.log(`mount Room`);
     document.addEventListener(`mousemove`, this._onMouseMove, false);
   }
 
   unmount() {
+    console.log(`unmount Room`);
     document.removeEventListener(`mousemove`, this._onMouseMove, false);
   }
 

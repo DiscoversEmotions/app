@@ -79,7 +79,9 @@
       window.__STOP_BASIC_BOOT = function  () {
         BASIC_BOOT_STOPED = true;
         clearTimeout(window.BOOT_TIMER);
-        container.parentElement.removeChild(container);
+        if (container) {
+          container.parentElement.removeChild(container);
+        }
       }
 
       function addMessage (msg) {

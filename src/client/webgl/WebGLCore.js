@@ -40,6 +40,7 @@ export class WebGLCore {
     this.nextWorld = null;
 
     this.scene = new Scene();
+
     console.log(this.scene);
     this.scene.fog = new Fog( 0xefd1b5, 0, 30 );
 
@@ -173,7 +174,6 @@ export class WebGLCore {
   switchWorld(nextWorld) {
     this.unmountWorld(this.currentWorld);
     this.mountWorld(nextWorld);
-    // this.store.actions.world.startTransition();
   }
 
   useEnvConfig(config) {
