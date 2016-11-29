@@ -5,14 +5,15 @@ import {
   input,
   wait
 } from 'cerebral/operators';
-import { planNextMessage } from './actions';
+import { planNextMessage, updateLastMessage } from './actions';
 
 export default {
   state: {
     messages: window.__MESSAGES,
     numberOfLines: 6,
     readyForNextMessage: true,
-    bootDone: false
+    bootDone: false,
+    findErrorDone: false
   },
   signals: {
     pushMessage: [
@@ -21,8 +22,14 @@ export default {
     planNextMessage: [
       planNextMessage
     ],
+    updateLastMessage: [
+      updateLastMessage
+    ],
     setBootDone: [
       set(state`system.bootDone`, true)
+    ],
+    setFindErrorDone: [
+      set(state`system.findErrorDone`, true)
     ]
   }
 };

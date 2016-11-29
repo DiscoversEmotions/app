@@ -35,6 +35,7 @@
       }
       #basic-boot div {
         height: 26px;
+        font-size: 16px;
         display: block;
         font-family: 'Anonymous Pro', monospace;
         text-align: right;
@@ -73,7 +74,7 @@
 
       window.__START_TIME = currentTime();
       window.__MESSAGES = [
-        { key: 'boot', progress: 0 }
+        { key: 'boot' }
       ];
       window.__STOP_BASIC_BOOT = function  () {
         BASIC_BOOT_STOPED = true;
@@ -92,7 +93,12 @@
         if (msg === undefined) {
           return '';
         }
-        return 'Booting System... ' + Math.floor(msg.progress) + ' / 100';
+        if (msg.key === `boot`) {
+          return `Start Booting System`;
+        }
+        if (msg.key === `boot-progress`) {
+          return 'Booting System... ' + Math.floor(msg.progress) + ' / 100';
+        }
       }
 
       function render () {
@@ -108,24 +114,26 @@
         console.log('BASIC_BOOT_STOPED', BASIC_BOOT_STOPED);
         // Add message
         var lastMessage = window.__MESSAGES[window.__MESSAGES.length - 1];
-        var nextProgress = lastMessage.progress + (2 + Math.floor(Math.random() * 3));
-        if (lastMessage.progress > 70) {
-          nextProgress = lastMessage.progress + (1 + Math.floor(Math.random() * 3));
+        if (lastMessage.key === `boot`) {
+          addMessage({ key: 'boot-progress', progress: 0 });
+        } else {
+          var nextProgress = lastMessage.progress + 1;
+          if (nextProgress > 99) {
+            nextProgress = 99;
+          }
+          var time = 100;
+          if (nextProgress > 80) {
+            time = 100 + Math.pow(1.15, nextProgress - 40);
+          }
+          window.__MESSAGES[window.__MESSAGES.length - 1].progress = nextProgress;
+          if (nextProgress === 99) {
+            return; // stop loop
+          }
+          // addMessage({ key: 'boot', progress: nextProgress });
         }
-        if (lastMessage.progress > 90) {
-          nextProgress = lastMessage.progress + (1 + Math.floor(Math.random() * 2));
-        }
-        var time = 100;
-        if (nextProgress > 99) {
-          nextProgress = 99;
-        }
-        if (nextProgress > 80) {
-          time = 100 + Math.pow(1.15, nextProgress - 40);
-        }
-        if (nextProgress === 99) {
-          return;
-        }
-        addMessage({ key: 'boot', progress: nextProgress });
+
+
+
         BOOT_TIMER = setTimeout(update, time);
       }
 

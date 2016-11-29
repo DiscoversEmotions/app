@@ -50,6 +50,7 @@ export class AssetsManager {
   }
 
   setAsset(key, ressource) {
+    console.log(ressource);
     if (this.assetsData[key] !== undefined) {
       throw new Error(`Asset '${key}' already exist !`);
     }

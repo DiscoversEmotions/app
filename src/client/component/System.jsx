@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Steps } from '~/types';
 import _ from 'lodash';
 import Button from '~/component/Button';
+import Message from '~/component/Message';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { allMessages } from '~/computed';
@@ -20,15 +21,6 @@ const Container = styled.div`
   text-align: right;
   line-height: 1.5;
   transform: translate(${ (props) => !props.full ? `0, 0` : `50%, 50%` });
-`;
-
-const Message = styled.div`
-  height: 26px;
-  font-family: 'Anonymous Pro', monospace;
-  text-align: right;
-  padding: 0;
-  margin: 0;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.55);
 `;
 
 const System = compose(
@@ -59,9 +51,11 @@ const System = compose(
         (() => {
           const result = [];
           for (var i = 0; i < props.numberOfLines; i++) {
-            const msg = messages[i]
+            const msg = messages[i] !== undefined ? messages[i] : { key: `empty` };
             result.push(
-              <Message key={i}>{ systemManager.formatMessage(msg) }</Message>
+              <Message key={i} type={ systemManager.getMessageType(msg) }>
+                { systemManager.formatMessage(msg) }
+              </Message>
             );
           }
           return result.reverse();
