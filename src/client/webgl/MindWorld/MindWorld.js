@@ -80,6 +80,8 @@ export class MindWorld {
     this.mixer;
     this.mixerArray = [];
 
+    this.collidableMeshList = [];
+
     this.scene.updateMatrixWorld(true);
 
     // Bind
@@ -105,22 +107,15 @@ export class MindWorld {
     }
   )
   updateKeyEvent({ keys }) {
-    if(keys.left){
-      this.userLeft = true;
-    } else if (keys.right){
-      this.userRight = true;
-    } else if (keys.down){
-      this.userDown = true;
-    } else if (keys.up){
-      this.userUp = true;
-    }
+    this.userLeft = keys.left;
+    this.userRight = keys.right;
+    this.userDown = keys.down;
+    this.userUp = keys.up;
+    this.userZ = keys.z;
+    this.userS = keys.s;
+    this.userQ = keys.q;
+    this.userD = keys.d;
 
-    else {
-      this.userLeft = false;
-      this.userRight = false;
-      this.userDown = false;
-      this.userUp = false;
-    }
   }
 
   update(time, dt) {
@@ -131,16 +126,16 @@ export class MindWorld {
     };
     this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
     this.userPosition.translateX(-(dt * 0.01) * movement.left);
-    // const angle = motion.calc.degreesToRadians(motion.calc.angle(
-    //   { y: movement.forward, x: 0 },
-    //   { y: 0, x: -movement.left}
-    // ));
-    // this.persoFinalMesh.rotation.y = angle;
+    const angle = motion.calc.degreesToRadians(motion.calc.angle(
+      { y: movement.forward, x: 0 },
+      { y: 0, x: -movement.left}
+    ));
+    this.persoFinalMesh.rotation.y = angle;
 
     // Collision with ground
-    // this.raycaster.ray.origin.copy(this.userPosition.position);
-    // this.raycaster.ray.origin.y += 5;
-    // this.raycaster.ray.direction.set(0, -1, 0);
+    this.raycaster.ray.origin.copy(this.userPosition.position);
+    this.raycaster.ray.origin.y += 5;
+    this.raycaster.ray.direction.set(0, -1, 0);
     // this.collisionResults = this.raycaster.intersectObjects([this.ground], true);
     // if (this.collisionResults.length) {
     //   this.userPosition.position.y = this.collisionResults[0].point.y;
@@ -155,18 +150,20 @@ export class MindWorld {
       this.mixerFinal.update(time, dt);
     }
 
-    if(this.userLeft){
+    if(this.userLeft && !this.userRight || this.userQ && !this.userD){
       this.userPosition.translateX(-(dt * 0.01));
     } 
-    else if(this.userRight){
+    if(this.userRight && !this.userLeft || this.userD && !this.userQ){
       this.userPosition.translateX((dt * 0.01));
-    } 
-    else if(this.userUp){
+    }
+    if(this.userUp && !this.userDown || this.userZ && !this.userS){
       this.userPosition.translateZ(-(dt * 0.01));
     }
-    else if(this.userDown){
+    if(this.userDown && !this.userUp || this.userS && !this.userZ){
       this.userPosition.translateZ((dt * 0.01));
     }
+
+    this.idle.play();
 
   }
 
@@ -175,6 +172,12 @@ export class MindWorld {
       this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
 
+      // console.log(this.world1.children[0]);
+
+      // Object.keys(this.world1.children[0]).forEach(function (key) {
+      //    console.log(this.world1.children[0][key]);
+      // });
+
       this.persoFinal = this.app.assetsManager.getAsset(`perso`).children[0];
       this.persoFinalMesh = new SkinnedMesh(this.persoFinal.geometry, this.persoMaterial);
       this.persoFinalMesh.scale.set(0.015, 0.015, 0.015);
@@ -182,10 +185,12 @@ export class MindWorld {
       this.persoFinalMesh.rotation.set(0, 0, 0);
 
       // console.log(this.persoFinalMesh);
-
       this.scene.add(this.persoFinalMesh);
       this.userPosition.add(this.persoFinalMesh);
 
+      this.mixer = new AnimationMixer(this.persoFinalMesh);
+      this.idle = this.mixer.clipAction(this.persoFinalMesh.geometry.animations[0]);
+      // console.log(this.idle);
       // this.world1.position.set(-150, 0, -180);
 
       // this.world1.scale.set(0.1, 0.1, 0.1);

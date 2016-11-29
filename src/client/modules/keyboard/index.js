@@ -11,7 +11,11 @@ export default {
       left: false,
       right: false,
       up: false,
-      down: false
+      down: false,
+      z: false,
+      s: false,
+      q: false,
+      d: false
     }
   },
   signals: {
