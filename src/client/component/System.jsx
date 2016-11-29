@@ -10,7 +10,7 @@ import { allMessages } from '~/computed';
 const Container = styled.div`
   position: absolute;
   height: ${ (props) => !props.full ? `120px` : `300px` };
-  width: ${ (props) => !props.full ? `300px` : `500px` };
+  width: ${ (props) => !props.full ? `500px` : `500px` };
   bottom: ${ (props) => !props.full ? `2%` : `50%` };
   right: ${ (props) => !props.full ? `2%` : `50%` };
   background: rgba(0, 0, 0, 0.68);
@@ -40,7 +40,8 @@ const System = compose(
   inject((provided) => ({ core: provided.core })),
   ConnectReact(
     {
-      messages: allMessages
+      messages: allMessages,
+      numberOfLines: `system.numberOfLines`
     }
   )
 )((props) => {
@@ -59,11 +60,18 @@ const System = compose(
   // console.log(messages);
   return (
     <Container full={props.full || false }>
-      { messages.map((msg, i) => {
-        return (
-          <Message key={i}>{ systemManager.formatMessage(msg) }</Message>
-        );
-      }) }
+      {
+        (() => {
+          const result = [];
+          for (var i = 0; i < props.numberOfLines; i++) {
+            const msg = messages[i]
+            result.push(
+              <Message key={i}>{ systemManager.formatMessage(msg) }</Message>
+            );
+          }
+          return result.reverse();
+        })()
+      }
     </Container>
   );
 });

@@ -74,3 +74,23 @@ export const allMessages = Computed(
     return messages;
   }
 );
+
+export const roomAssetsReady = Computed(
+  {
+    room: `assets.room.status`,
+    webglReady: `app.webglReady`
+  },
+  ({ room, webglReady }) => {
+    return (room === AssetStatus.Ready && webglReady);
+  }
+);
+
+export const canStartRoom = Computed(
+  {
+    roomAssetsReady: roomAssetsReady,
+    bootDone: `system.bootDone`
+  },
+  ({ roomAssetsReady, bootDone }) => {
+    return (roomAssetsReady && bootDone);
+  }
+);

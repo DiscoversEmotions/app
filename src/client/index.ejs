@@ -25,9 +25,10 @@
       }
       #basic-boot {
         position: fixed;
-        right: 20px;
-        bottom: 20px;
-        height: 160px;
+        padding: 10px 20px;
+        bottom: 2%;
+        right: 2%;
+        height: 120px;
         width: 400px;
         overflow: hidden;
       }
@@ -44,9 +45,7 @@
 
   <body>
     <div id="app-canvas"></div>
-    <div id="app-ui">
-      [here should be a very cool loader]
-    </div>
+    <div id="app-ui"></div>
     <div id="basic-boot">
       <span></span>
       <span></span>
@@ -58,7 +57,7 @@
       <span></span>
     </div>
     <script type="text/javascript">
-      var numberOfMessages = 8;
+      var numberOfMessages = 6;
       var HAS_PERFORMANCE_NOW = (typeof performance !== 'undefined' && performance.now);
       var currentTime = HAS_PERFORMANCE_NOW ? () => performance.now() : () => new Date().getTime();
       var BOOT_TIMER = null;
@@ -73,7 +72,7 @@
 
       window.__START_TIME = currentTime();
       window.__MESSAGES = [
-        { key: 'boot' }
+        { key: 'boot', progress: 0 }
       ];
       window.__STOP_BASIC_BOOT = function  () {
         BASIC_BOOT_STOPED = true;
@@ -92,17 +91,7 @@
         if (msg === undefined) {
           return '';
         }
-        switch (msg.key) {
-          case 'boot':
-            return 'Booting System...'
-          case 'yolo':
-            if (msg.progress === 0) {
-              return 'Yolo start';
-            }
-            return 'Yolo ' + msg.progress;
-          default:
-            return ''
-        }
+        return 'Booting System... ' + Math.floor(msg.progress) + ' / 100';
       }
 
       function render () {
@@ -114,29 +103,32 @@
       }
 
       function update () {
+        render();
         console.log('BASIC_BOOT_STOPED', BASIC_BOOT_STOPED);
         // Add message
         var lastMessage = window.__MESSAGES[window.__MESSAGES.length - 1];
-        switch (lastMessage.key) {
-          case 'boot':
-            addMessage({
-              key: 'yolo',
-              progress: 0
-            });
-            break;
-          case 'yolo':
-            addMessage({
-              key: 'yolo',
-              progress: lastMessage.progress + Math.floor((Math.random() + 1) * 30)
-            });
-            break;
+        var nextProgress = lastMessage.progress + (2 + Math.floor(Math.random() * 3));
+        if (lastMessage.progress > 70) {
+          nextProgress = lastMessage.progress + (1 + Math.floor(Math.random() * 3));
         }
-        render();
-        BOOT_TIMER = setTimeout(update, 300);
+        if (lastMessage.progress > 90) {
+          nextProgress = lastMessage.progress + (1 + Math.floor(Math.random() * 2));
+        }
+        var time = 100;
+        if (nextProgress > 99) {
+          nextProgress = 99;
+        }
+        if (nextProgress > 80) {
+          time = 100 + Math.pow(1.15, nextProgress - 40);
+        }
+        if (nextProgress === 99) {
+          return;
+        }
+        addMessage({ key: 'boot', progress: nextProgress });
+        BOOT_TIMER = setTimeout(update, time);
       }
 
-      render();
-      BOOT_TIMER = setTimeout(update, 300);
+      update();
 
     </script>
   </body>

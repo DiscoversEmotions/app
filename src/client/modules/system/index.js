@@ -2,13 +2,17 @@ import {
   state,
   set,
   push,
-  input
+  input,
+  wait
 } from 'cerebral/operators';
 import { planNextMessage } from './actions';
 
 export default {
   state: {
-    messages: window.__MESSAGES
+    messages: window.__MESSAGES,
+    numberOfLines: 6,
+    readyForNextMessage: true,
+    bootDone: false
   },
   signals: {
     pushMessage: [
@@ -16,6 +20,9 @@ export default {
     ],
     planNextMessage: [
       planNextMessage
+    ],
+    setBootDone: [
+      set(state`system.bootDone`, true)
     ]
   }
 };
