@@ -152,8 +152,8 @@ export class MindWorld {
     this.light.position.x = Math.sin(time/5000) * 100;
     this.light.position.z = Math.cos(time/5000) * 100;
 
-    this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
-    this.userPosition.translateX(-(dt * 0.01) * movement.left);
+    this.userPosition.translateZ(-(dt * 0.010) * movement.forward);
+    this.userPosition.translateX(-(dt * 0.010) * movement.left);
     const angle = motion.calc.degreesToRadians(motion.calc.angle(
       { y: movement.forward, x: 0 },
       { y: 0, x: -movement.left}
