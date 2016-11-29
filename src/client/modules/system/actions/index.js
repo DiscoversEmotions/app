@@ -11,7 +11,7 @@ export function planNextMessage ({ state, input, controller }) {
       } else {
         messages.push(input.message);
       }
-      state.set(`system.messages`, messages.slice(-8));
+      state.set(`system.messages`, messages.slice(-100));
       state.set(`system.readyForNextMessage`, true);
       resolve();
     }, time);

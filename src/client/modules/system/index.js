@@ -10,7 +10,7 @@ import { planNextMessage, updateLastMessage } from './actions';
 export default {
   state: {
     messages: window.__MESSAGES,
-    numberOfLines: 6,
+    numberOfLines: 10,
     readyForNextMessage: true,
     bootDone: false,
     findErrorDone: false

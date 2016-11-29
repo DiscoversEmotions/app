@@ -108,7 +108,7 @@ export class SystemManager {
   }
 
   udateFindError(context) {
-    const { lastMessage, planNextMessage, updateLastMessage, world1AssetsReady, messages } = context;
+    const { lastMessage, planNextMessage, updateLastMessage, world1AssetsReady, messages, setFindErrorDone } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
@@ -181,6 +181,10 @@ export class SystemManager {
         updateMessage(`load-emotions-progress`, { progress: nextProgress }, time);
       }
       return;
+    }
+
+    if (lastMessage.key === `load-emotions-done`) {
+      setFindErrorDone();
     }
   }
 

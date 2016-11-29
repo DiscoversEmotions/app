@@ -10,7 +10,7 @@ import { allMessages } from '~/computed';
 
 const Container = styled.div`
   position: absolute;
-  height: ${ (props) => !props.full ? `156px` : `400px` };
+  height: ${ (props) => !props.full ? (props.numberOfLines * 26) + `px` : `400px` };
   width: ${ (props) => !props.full ? `500px` : `500px` };
   bottom: ${ (props) => !props.full ? `20px` : `50%` };
   right: ${ (props) => !props.full ? `20px` : `50%` };
@@ -46,7 +46,7 @@ const System = compose(
   // console.log(`Hellooooo`);
   // console.log(messages);
   return (
-    <Container full={props.full || false }>
+    <Container full={props.full || false } numberOfLines={ props.numberOfLines }>
       {
         (() => {
           const result = [];
