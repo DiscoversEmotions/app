@@ -64,7 +64,8 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
       loader: 'file-loader',
       query: {
         name: '[name].[ext]?[hash]'
-      }
+      },
+      exclude: /node_modules/
     },
     {
       test: /\.(glsl|vert|frag)$/,
