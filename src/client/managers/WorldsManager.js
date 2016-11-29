@@ -19,15 +19,14 @@ export class WorldsManager {
       webglReady: `app.webglReady`,
       worldTransition: `app.worldTransition`,
       connectedToEyes: `app.connectedToEyes`,
-      canStartRoom: canStartRoom,
-      memory1AssetsReady: memory1AssetsReady
+      canStartRoom: canStartRoom
     },
     {
       transitionToWorld: `app.transitionToWorld`
     }
   )
   update({
-    currentWorld, nextWorld, worldTransition, webglReady, canStartRoom, transitionToWorld, memory1AssetsReady,
+    currentWorld, nextWorld, worldTransition, webglReady, canStartRoom, transitionToWorld,
     connectedToEyes
   }) {
     if (worldTransition) {

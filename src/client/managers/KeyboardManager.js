@@ -1,6 +1,5 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
-import { lvl1AssetsReady } from '~/computed';
 
 const KEYS_MAP = {
   83: `s`,

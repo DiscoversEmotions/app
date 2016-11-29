@@ -1,6 +1,6 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
-import { lastMessage, roomAssetsReady } from '~/computed';
+import { lastMessage, roomAssetsReady, world1AssetsReady } from '~/computed';
 import * as motion from 'popmotion';
 
 const NUMBER_OF_MEMORIES = 482;
@@ -23,8 +23,10 @@ export class SystemManager {
       readyForNextMessage: `system.readyForNextMessage`,
       bootDone: `system.bootDone`,
       findErrorDone: `system.findErrorDone`,
+      messages: `system.messages`,
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
+      world1AssetsReady: world1AssetsReady,
     },
     {
       planNextMessage: `system.planNextMessage`,
@@ -49,9 +51,9 @@ export class SystemManager {
   }
 
   updateBoot(context) {
-    const { lastMessage, planNextMessage, readyForNextMessage, roomAssetsReady, setBootDone, bootDone, updateLastMessage } = context;
+    const { lastMessage, planNextMessage, roomAssetsReady, setBootDone, bootDone, updateLastMessage, messages } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
-    const updateMessage = (message, time = 300) => updateLastMessage({ message: message, time: time });
+    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     if (lastMessage.key === `boot`) {
       nextMessage({ key: `boot-progress`, progress: 0 }, 200);
@@ -71,7 +73,7 @@ export class SystemManager {
       if (roomAssetsReady) {
         time = 50;
       }
-      updateMessage({ progress: nextProgress }, time);
+      updateMessage(`boot-progress`, { progress: nextProgress }, time);
     }
 
     if (lastMessage.key === `boot-done`) {
@@ -99,25 +101,25 @@ export class SystemManager {
       if (nextProgress > 100) {
         nextProgress = 100;
       }
-      updateMessage({ progress: nextProgress }, time);
+      updateMessage(`connect-eyes-progress`, { progress: nextProgress }, time);
       return;
     }
 
   }
 
   udateFindError(context) {
-    const { lastMessage, planNextMessage, readyForNextMessage, roomAssetsReady, setBootDone, bootDone, updateLastMessage } = context;
+    const { lastMessage, planNextMessage, updateLastMessage, world1AssetsReady, messages } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
-    const updateMessage = (message, time = 300) => updateLastMessage({ message: message, time: time });
+    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     if (lastMessage.key === `connect-eyes-done`) {
-      nextMessage({ key: `connect-memory-progress`, progress: 0 }, 100);
+      nextMessage({ key: `load-memory-progress`, progress: 0 }, 100);
       return;
     }
 
-    if (lastMessage.key === `connect-memory-progress`) {
+    if (lastMessage.key === `load-memory-progress`) {
       if (lastMessage.progress === NUMBER_OF_MEMORIES) {
-        nextMessage({ key: `connect-memory-done` }, 100);
+        nextMessage({ key: `load-memory-done` }, 100);
         return;
       }
       var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(10, 34));
@@ -125,53 +127,61 @@ export class SystemManager {
       if (nextProgress > NUMBER_OF_MEMORIES) {
         nextProgress = NUMBER_OF_MEMORIES;
       }
-      updateMessage({ progress: nextProgress }, time);
+      if (!world1AssetsReady) {
+        if (nextProgress > NUMBER_OF_MEMORIES - 1) {
+          nextProgress = NUMBER_OF_MEMORIES - 1;
+        }
+        if (lastMessage.progress > NUMBER_OF_MEMORIES * 0.5) {
+          nextProgress = lastMessage.progress + Math.floor(motion.calc.random(4, 15));
+          time = Math.floor(motion.calc.random(100, 400));
+        }
+        if (lastMessage.progress > NUMBER_OF_MEMORIES * 0.7) {
+          nextProgress = lastMessage.progress + 1;
+          time = Math.floor(motion.calc.random(400, 700));
+        }
+      }
+      updateMessage(`load-memory-progress`, { progress: nextProgress }, time);
       return;
     }
 
-    if (lastMessage.key === `connect-memory-done`) {
-      console.log(`TODO`);
+    if (lastMessage.key === `load-memory-done`) {
+      nextMessage({ key: `load-emotions-progress`, progress: 0 }, 500);
+      return;
     }
 
-    // if (lastMessage.key === `connect-eyes`) {
-    //   nextMessage({ key: `connect-memory`, step: 0 });
-    //   return;
-    // }
-    // if (lastMessage.key === `connect-memory`) {
-    //   if (lastMessage.step >= 6) {
-    //     return;
-    //   }
-    //   var nextStep = lastMessage.step + 1;
-    //   var time = 1000;
-    //   var memories = 1;
-    //   var emotions = 1;
-    //   if (lastMessage.step === 1) {
-    //     time = 100 + Math.random() * 200;
-    //     memories = lastMessage.memories + Math.floor(20 + (Math.random() * 30));
-    //     nextStep = lastMessage.step;
-    //     if (memories >= NUMBER_OF_MEMORIES) {
-    //       memories = NUMBER_OF_MEMORIES;
-    //       nextStep += 1;
-    //     }
-    //   }
-    //   if (lastMessage.step === 5) {
-    //     time = 100 + Math.random() * 200;
-    //     emotions = lastMessage.emotions + 1;
-    //     nextStep = lastMessage.step;
-    //     if (emotions >= NUMBER_OF_EMOTIONS) {
-    //       emotions = NUMBER_OF_EMOTIONS;
-    //       nextStep += 1;
-    //     }
-    //   }
-    //
-    //   const message = { key: `connect-memory`, step: nextStep, memories, emotions };
-    //   if (nextStep === lastMessage.step) {
-    //     updateMessage(message, time);
-    //   } else {
-    //     nextMessage(message, time);
-    //   }
-    //   return;
-    // }
+    if (lastMessage.key === `load-emotions-progress`) {
+      if (lastMessage.progress === NUMBER_OF_EMOTIONS) {
+        nextMessage({ key: `load-emotions-done` }, 100);
+        return;
+      }
+      var nextProgress = lastMessage.progress + 1;
+      var time = Math.floor(motion.calc.random(50, 200));
+      if (nextProgress > NUMBER_OF_MEMORIES) {
+        nextProgress = NUMBER_OF_MEMORIES;
+      }
+      if (lastMessage.progress === 10) {
+        nextMessage([
+          { key: `load-emotions-error` },
+          { key: `load-emotions-error-love` },
+          { key: `load-emotions-progress`, progress: nextProgress }
+        ], time);
+      } else if (lastMessage.progress === 15) {
+        nextMessage([
+          { key: `load-emotions-error` },
+          { key: `load-emotions-error-anger` },
+          { key: `load-emotions-progress`, progress: nextProgress }
+        ], time);
+      } else if (lastMessage.progress === 27) {
+        nextMessage([
+          { key: `load-emotions-error` },
+          { key: `load-emotions-error-sadness` },
+          { key: `load-emotions-progress`, progress: nextProgress }
+        ], time);
+      } else {
+        updateMessage(`load-emotions-progress`, { progress: nextProgress }, time);
+      }
+      return;
+    }
   }
 
   formatMessage(msg) {
@@ -183,19 +193,21 @@ export class SystemManager {
   }
 
   getMessageType(msg) {
-    if (msg.key === `connect-memory`) {
-      if ([2, 4, 6].indexOf(msg.step) > -1) {
-        return `success`;
-      }
-      if ([].indexOf(msg.step) > -1) {
-        return `error`;
-      }
-    }
-    if (
-      (msg.key === `boot` || msg.key === `connect-eyes`) &&
-      msg.progress >= 100
-    ) {
+    if ([
+      `boot-done`,
+      `connect-eyes-done`,
+      `load-memory-done`
+    ].indexOf(msg.key) > -1) {
       return `success`;
+    }
+    if ([
+      `load-emotions-error`,
+      `load-emotions-error-love`,
+      `load-emotions-error-anger`,
+      `load-emotions-error-sadness`,
+      `load-emotions-done`
+    ].indexOf(msg.key) > -1) {
+      return `error`;
     }
     return `normal`;
   }
@@ -209,33 +221,18 @@ export class SystemManager {
     case `connect-eyes`: return (msg) => (`Connecting to the ocular system`);
     case `connect-eyes-progress`: return (msg) => (`Connecting to the ocular system... ${ Math.floor(msg.progress) } / 100`);
     case `connect-eyes-done`: return (msg) => (`Ocular system connected`);
-    case `connect-memory-progress`: return (msg) => (`Retrieving memories... ${msg.progress} / ${NUMBER_OF_MEMORIES}`);
-    case `connect-memory-done`: return (msg) => (`${NUMBER_OF_MEMORIES} memories retrieved - No error`);
+    case `load-memory-progress`: return (msg) => (`Retrieving memories... ${msg.progress} / ${NUMBER_OF_MEMORIES}`);
+    case `load-memory-done`: return (msg) => (`${NUMBER_OF_MEMORIES} / ${NUMBER_OF_MEMORIES} memories retrieved - No error`);
+    case `load-emotions-progress`: return (msg) => (`Retrieving emotions... ${msg.progress} / ${NUMBER_OF_EMOTIONS}`);
+    case `load-emotions-error`: return (msg) => (`Warning: The following emotion is missing :`);
+    case `load-emotions-error-love`: return (msg) => (`Love [/system/emotions/love.dg]`);
+    case `load-emotions-error-anger`: return (msg) => (`Anger [/system/emotions/anger.dg]`);
+    case `load-emotions-error-sadness`: return (msg) => (`Sadness [/system/emotions/sadness.dg]`);
+    case `load-emotions-done`: return (msg) => (`${NUMBER_OF_EMOTIONS - 3} / ${NUMBER_OF_EMOTIONS} emotions retrieved - 3 errors`);
     default:
       console.error(new Error(`Message key ${msg.key} ??`));
       throw new Error(`Message key ${msg.key} ??`);
     }
-  }
-
-  connectMemoryRenderer(msg) {
-    if (msg.step === 1) {
-      return `Retrieving memories... ${msg.memories} / ${NUMBER_OF_MEMORIES}`;
-    }
-    if (msg.step === 5) {
-      return `Retrieving emotions... ${msg.emotions} / ${NUMBER_OF_EMOTIONS}`;
-    }
-    switch (msg.step) {
-    case 0: return `Connecting to memory...`;
-    // case 1:
-    case 2: return `Retrieving memories... OK`;
-    case 3: return `Updating analysis rules...`;
-    case 4: return `Analysis rules are up to date`;
-    // case 5: return `Retrieving emotions... 1/47`;
-    case 6: return `Retrieving emotions... OK`;
-    default:
-      return ``;
-    }
-
   }
 
 }

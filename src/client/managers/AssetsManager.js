@@ -2,7 +2,7 @@ import { AssetTypes, AssetStatus } from '~/types';
 import { TextureLoader, ObjectLoader, AudioLoader } from 'three';
 import { AWDLoader } from '~/webgl';
 import { ConnectMethod } from '~/core';
-import { requestedAssets, queuedAssets, nextRequestedAsset } from '~/computed';
+import { requestedAssets, queuedAssets, nextQueuedAsset } from '~/computed';
 
 export class AssetsManager {
 
@@ -20,7 +20,7 @@ export class AssetsManager {
       assets: `assets`,
       requested: requestedAssets,
       queued: queuedAssets,
-      next: nextRequestedAsset
+      next: nextQueuedAsset
     },
     {
       requestAsset: `assets.requestAsset`

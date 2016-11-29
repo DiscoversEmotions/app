@@ -16,7 +16,7 @@ export const queuedAssets = Computed(
   ({assets}) => _(assets).filter((asset) => (asset.status === AssetStatus.Queued)).value()
 );
 
-export const nextRequestedAsset = Computed(
+export const nextQueuedAsset = Computed(
   {
     queued: queuedAssets
   },
@@ -26,31 +26,6 @@ export const nextRequestedAsset = Computed(
       return _.head(queuedByPriority);
     }
     return null;
-  }
-);
-
-export const lvl1AssetsReady = Computed(
-  {
-    world2: `assets.world2.status`,
-    perso: `assets.perso.status`
-  },
-  ({ world2, perso }) => {
-    if (world2 === AssetStatus.Ready && perso === AssetStatus.Ready) {
-      return true;
-    }
-    return false;
-  }
-);
-
-export const memory1AssetsReady = Computed(
-  {
-    memory1: `assets.memory1.status`
-  },
-  ({ memory1 }) => {
-    if (memory1 === AssetStatus.Ready) {
-      return true;
-    }
-    return false;
   }
 );
 
@@ -92,5 +67,24 @@ export const canStartRoom = Computed(
   },
   ({ roomAssetsReady, bootDone }) => {
     return (roomAssetsReady && bootDone);
+  }
+);
+
+export const world1AssetsReady = Computed(
+  {
+    perso: `assets.perso.status`,
+    world1: `assets.world1.status`,
+    world2: `assets.world2.status`,
+    world3: `assets.world3.status`,
+    memory1: `assets.memory1.status`
+  },
+  ({ perso, world1, world2, world3, memory1 }) => {
+    return (
+      perso == AssetStatus.Ready &&
+      world1 == AssetStatus.Ready &&
+      world2 == AssetStatus.Ready &&
+      world3 == AssetStatus.Ready &&
+      memory1 == AssetStatus.Ready
+    );
   }
 );
