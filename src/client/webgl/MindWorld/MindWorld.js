@@ -103,6 +103,12 @@ export class MindWorld {
     });
   }
 
+  getEnvConfig() {
+    return {
+      fogDensity: 0.05
+    };
+  }
+
   getCameraman() {
     return this.cameraman;
   }

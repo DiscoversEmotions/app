@@ -1,7 +1,7 @@
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import * as motion from 'popmotion';
 import _ from 'lodash';
-import { Vector3, Color, Fog } from 'three';
+import { Vector3, Color, FogExp2 } from 'three';
 import { Worlds } from '~/types';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scene } from './Scene';
@@ -33,7 +33,8 @@ export class WebGLCore {
     this.controller = controller;
 
     this.defaultEnvConfig = {
-      background: new Color(0, 0, 0)
+      background: new Color(0, 0, 0),
+      fogDensity: 0
     };
 
     this.world = null;
@@ -42,7 +43,7 @@ export class WebGLCore {
     this.scene = new Scene();
 
     console.log(this.scene);
-    this.scene.fog = new Fog( 0xefd1b5, 0, 30 );
+    this.scene.fog = new FogExp2(0xffffff, 0.1);
 
     this.renderer = new Renderer();
     this.composer = new EffectComposer(this.renderer);
@@ -178,6 +179,7 @@ export class WebGLCore {
 
   useEnvConfig(config) {
     this.scene.background = config.background;
+    this.scene.fog.density = config.fogDensity;
   }
 
 }

@@ -1,7 +1,7 @@
-import { RoomSphere } from '~/webgl/meshes';
 import { Cameraman } from '~/webgl';
 import { EventUtils } from '~/core';
-import { PointLight, Object3D } from 'three';
+import { Cube } from '~/webgl/meshes';
+import { PointLight, Object3D, Mesh, MeshBasicMaterial, SphereGeometry, AxisHelper, TextureLoader } from 'three';
 import _ from 'lodash';
 
 export class RoomWorld {
@@ -17,25 +17,30 @@ export class RoomWorld {
     this.height = 600;
     this.mousePos = { x: 0, y: 0 };
 
+    this.roomSphere = null;
+
     this.scene = new Object3D();
     this.scene.name = `RoomWorld-scene`;
 
     this.cameraman = new Cameraman(45, 1, 1, 1100);
-    this.cameraman.position.set(0, 2, -5);
+    this.cameraman.position.set(0, 0, 0);
     this.scene.add(this.cameraman);
 
-    this.roomSphere = new RoomSphere();
-    this.scene.add(this.roomSphere);
-
     this.light = new PointLight();
-    this.light.position.y = 5;
+    // this.light.position.y = 5;
     this.scene.add(this.light);
 
-    this.cameraman.setHorizontalAngle((Math.PI * 1.5));
-    this.cameraman.setVerticalAngle(0);
+    // this.cameraman.setHorizontalAngle((Math.PI * 1.5));
+    // this.cameraman.setVerticalAngle(0);
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000/60);
+  }
+
+  getEnvConfig() {
+    return {
+      fogDensity: 0
+    };
   }
 
   getCameraman() {
@@ -48,6 +53,17 @@ export class RoomWorld {
 
   mount() {
     console.log(`mount Room`);
+    if (this.roomSphere === null) {
+      var geom = new SphereGeometry(50, 60, 60);
+      geom.scale( -1, 1, 1 );
+      const roomTexture = this.app.assetsManager.getAsset(`room`);
+      var material = new MeshBasicMaterial({
+        map: roomTexture
+      });
+      this.roomSphere = new Mesh(geom, material);
+      this.scene.add(this.roomSphere);
+    }
+
     document.addEventListener(`mousemove`, this._onMouseMove, false);
   }
 
