@@ -51,12 +51,13 @@ export class MindWorld {
     this.world1 = null;
 
     this.userPosition = new Object3D();
-    this.userPosition.position.set(0, 5, 0);
+    // this.userPosition.position.set(0, 5, 0);
     this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.cameraman.position.set(0, 3, 7);
     this.cameraman.setVerticalAngle(-0.3);
-    this.user = new Cube();
+    // this.user = new Cube();
     // this.user.position.z = 5;
-    this.userPosition.add(this.user);
+    // this.userPosition.add(this.user);
     this.userPosition.add(this.cameraman);
     this.scene.add(this.userPosition);
 
@@ -86,6 +87,7 @@ export class MindWorld {
 
     this.updateKeyEvent({}, this.controller, this);
 
+    this.persoMaterial = new MeshStandardMaterial();
   }
 
   getCameraman() {
@@ -172,6 +174,17 @@ export class MindWorld {
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
+
+      this.persoFinal = this.app.assetsManager.getAsset(`perso`).children[0];
+      this.persoFinalMesh = new SkinnedMesh(this.persoFinal.geometry, this.persoMaterial);
+      this.persoFinalMesh.scale.set(0.015, 0.015, 0.015);
+      this.persoFinalMesh.position.y = 0;
+      this.persoFinalMesh.rotation.set(0, 0, 0);
+
+      // console.log(this.persoFinalMesh);
+
+      this.scene.add(this.persoFinalMesh);
+      this.userPosition.add(this.persoFinalMesh);
 
       // this.world1.position.set(-150, 0, -180);
 
