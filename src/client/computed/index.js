@@ -1,5 +1,5 @@
 import { Computed } from 'cerebral';
-import { AssetStatus } from '~/types';
+import { AssetStatus, Worlds } from '~/types';
 import _ from 'lodash';
 
 export const requestedAssets = Computed(
@@ -85,6 +85,19 @@ export const world1AssetsReady = Computed(
       world2 == AssetStatus.Ready &&
       world3 == AssetStatus.Ready &&
       memory1 == AssetStatus.Ready
+    );
+  }
+);
+
+export const showModal = Computed(
+  {
+    world: `app.world`,
+    findErrorDone: `system.findErrorDone`
+  },
+  ({ world, findErrorDone }) => {
+    return (
+      world === Worlds.Room &&
+      findErrorDone
     );
   }
 );

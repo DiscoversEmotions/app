@@ -10,17 +10,16 @@ import { allMessages } from '~/computed';
 
 const Container = styled.div`
   position: absolute;
-  height: ${ (props) => !props.full ? (props.numberOfLines * 26) + `px` : `400px` };
-  width: ${ (props) => !props.full ? `500px` : `500px` };
-  bottom: ${ (props) => !props.full ? `20px` : `50%` };
-  right: ${ (props) => !props.full ? `20px` : `50%` };
+  height: ${ (props) => (props.numberOfLines * 26) + `px` };
+  width: 500px;
+  bottom: 20px;
+  right: 40px;
   padding: 0;
-  transition-duration: .3s;
   font-family: 'Anonymous Pro', monospace;
   color: white;
   text-align: right;
   line-height: 1.5;
-  transform: translate(${ (props) => !props.full ? `0, 0` : `50%, 50%` });
+  z-index: 500;
 `;
 
 const System = compose(
@@ -34,17 +33,6 @@ const System = compose(
 )((props) => {
   const systemManager = props.core.systemManager;
   const messages = props.messages.slice().reverse();
-  // const messages = [
-  //   {
-  //     key: 'boot'
-  //   }
-  // ];
-  // messages.map(() => {
-  //   console.log(`loop`);
-  // })
-  // console.log(props.messages);
-  // console.log(`Hellooooo`);
-  // console.log(messages);
   return (
     <Container full={props.full || false } numberOfLines={ props.numberOfLines }>
       {
@@ -64,74 +52,5 @@ const System = compose(
     </Container>
   );
 });
-
-
-// class System extends React.Component {
-//   render() {
-//     return (
-//       <StyledDiv full={this.props.full || true }>
-//         { this.renderContent() }
-//       </StyledDiv>
-//     );
-//   }
-//
-//   renderContent() {
-//     return null;
-//     // console.log(this.props.step);
-//     // switch (this.props.step) {
-//     //   case Steps.Boot:
-//     //     return this.renderBoot();
-//     //   case Steps.MissingFiles:
-//     //     return this.renderMissingFiles();
-//     //   case Steps.RecoveryWillStart:
-//     //     return this.renderRecoveryWillStart();
-//     //   case Steps.RecoveryLvl1Done:
-//     //     return this.renderRecoveryLvl1Done();
-//     //   default:
-//     //     return null;
-//     // }
-//   }
-//
-//   // renderBoot() {
-//   //   return (
-//   //     <div>
-//   //       <Button>
-//   //         Yolo
-//   //       </Button>
-//   //       { this.props.messages.map(msg => (
-//   //         <p key={ msg.id }>{ msg.value }</p>
-//   //       )) }
-//   //     </div>
-//   //   );
-//   // }
-//   //
-//   // renderMissingFiles() {
-//   //   return (
-//   //     <Button onClick={() => this.props.startRecovery() }>
-//   //       Start Recovery
-//   //     </Button>
-//   //   );
-//   // }
-//   //
-//   // renderRecoveryWillStart() {
-//   //   return (
-//   //     <div>
-//   //       <p>Are you ready</p>
-//   //       <Button onClick={() => this.props.setStep(Steps.RecoveryLvl1) }>
-//   //         Go !
-//   //       </Button>
-//   //     </div>
-//   //   );
-//   // }
-//   //
-//   // renderRecoveryLvl1Done() {
-//   //   return (
-//   //     <div>
-//   //       <h2>Emotion recovered !</h2>
-//   //     </div>
-//   //   );
-//   // }
-//
-// }
 
 export default System;

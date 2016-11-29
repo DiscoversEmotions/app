@@ -28,7 +28,7 @@
         position: fixed;
         padding: 0;
         bottom: 20px;
-        right: 20px;
+        right: 40px;
         height: 156px;
         width: 400px;
         overflow: hidden;
@@ -133,10 +133,7 @@
           if (nextProgress === 99) {
             return; // stop loop
           }
-          // addMessage({ key: 'boot', progress: nextProgress });
         }
-
-
 
         BOOT_TIMER = setTimeout(update, time);
       }
@@ -145,9 +142,6 @@
         update();
       });
     </script>
-    <% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-    <script async src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
-    <% } %>
   </body>
 
 </html>
