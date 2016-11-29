@@ -3,14 +3,14 @@ import { Worlds } from '~/types';
 import { lvl1AssetsReady } from '~/computed';
 
 const KEYS_MAP = {
-  83: `down`,
+  83: `s`,
   40: `down`,
-  90: `up`,
+  90: `z`,
   38: `up`,
   37: `left`,
-  81: `left`,
+  81: `q`,
   39: `right`,
-  68: `right`
+  68: `d`
 };
 
 export class KeyboardManager {
