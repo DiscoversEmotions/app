@@ -1,7 +1,7 @@
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import * as motion from 'popmotion';
 import _ from 'lodash';
-import { Vector3, Color } from 'three';
+import { Vector3, Color, Fog } from 'three';
 import { Worlds } from '~/types';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scene } from './Scene';
@@ -41,6 +41,8 @@ export class WebGLCore {
 
     this.scene = new Scene();
     console.log(this.scene);
+    this.scene.fog = new Fog( 0xefd1b5, 0, 30 );
+
     this.renderer = new Renderer();
     this.composer = new EffectComposer(this.renderer);
     this.renderPass = new RenderPass(this.scene, this.camera);

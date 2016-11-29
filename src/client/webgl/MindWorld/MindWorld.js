@@ -72,10 +72,10 @@ export class MindWorld {
     this.ambiantLight = new AmbientLight( 0xffffff );
     this.scene.add(this.ambiantLight);
 
-    this.tile = new Tile();
-    this.scene.add(this.tile);
-    this.tile.position.y = 0.1;
-    this.tile.position.z = -5;
+    // this.tile = new Tile();
+    // this.scene.add(this.tile);
+    // this.tile.position.y = 0.1;
+    // this.tile.position.z = -5;
 
     this.pointerLock = new PointerLock(document.body);
 
@@ -85,6 +85,8 @@ export class MindWorld {
     this.mixerArray = [];
 
     this.collidableMeshList = [];
+
+    this.isMouseDown = false;
 
     this.scene.updateMatrixWorld(true);
 
@@ -134,13 +136,13 @@ export class MindWorld {
       left: 0
     };
 
-    if((this.userLeft && !this.userRight) || (this.userQ && !this.userD)) {
+    if((this.userLeft && !this.userRight) || (this.userQ && !this.userD)){
       movement.left = 1;
     }
     if((this.userRight && !this.userLeft) || (this.userD && !this.userQ)) {
       movement.left = -1;
     }
-    if((this.userUp && !this.userDown) || (this.userZ && !this.userS)) {
+    if((this.userUp && !this.userDown) || (this.userZ && !this.userS)){
       movement.forward = 1;
     }
     if((this.userDown && !this.userUp) || (this.userS && !this.userZ)) {
@@ -202,6 +204,7 @@ export class MindWorld {
     }
 
     document.addEventListener(`mousemove`, this._onMouseMove, false);
+
   }
 
   unmount() {

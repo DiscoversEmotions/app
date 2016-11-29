@@ -31,12 +31,17 @@ export class MemoryWorld {
 
     this.analyser1 = new AudioAnalyser(this.memorySound, 32);
 
+    this.isPlaySound = false;
+
   }
 
   mount() {
-    this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
-    this.memorySound.play();
-    this.memorySound.loop = true;
+    if (this.isPlaySound == false){
+
+      this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
+      this.memorySound.play();
+
+    }
   }
 
   getCameraman() {
