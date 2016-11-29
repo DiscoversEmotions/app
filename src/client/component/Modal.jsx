@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Steps } from '~/types';
 import _ from 'lodash';
 import Button from '~/component/Button';
 import Message from '~/component/Message';

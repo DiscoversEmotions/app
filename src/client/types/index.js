@@ -1,12 +1,3 @@
-export const Steps = {
-  PreBoot: `pre-boot`,
-  Boot: `boot`,
-  MissingFiles: `missing-files`,
-  RecoveryWillStart: `recovery-will-start`,
-  RecoveryLvl1: `recovery-lvl-1`,
-  RecoveryLvl1Done: `recovery-lvl-1-done`,
-  RecoveryLvl2: `recovery-lvl-2`
-};
 
 export const Worlds = {
   Black: `black`,
@@ -29,5 +20,3 @@ export const AssetTypes = {
   Json: `json`,
   Audio: `audio`
 };
-
-

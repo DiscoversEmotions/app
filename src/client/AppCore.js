@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
 import { WindowResizeSingleton, ConnectFunction } from '~/core';
 import { AssetsManager, WorldsManager, SystemManager, KeyboardManager } from '~/managers';
-import { Steps } from '~/types';
 import { Container } from 'cerebral/react';
 import { Provider } from 'react-tunnel';
 

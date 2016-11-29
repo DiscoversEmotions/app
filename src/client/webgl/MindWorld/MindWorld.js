@@ -27,7 +27,7 @@ import {
   PointLightHelper
 } from 'three';
 import _ from 'lodash';
-import { Steps, Worlds } from '~/types';
+import { Worlds } from '~/types';
 import {
   PointerLock,
   ConnectMethod
