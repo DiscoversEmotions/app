@@ -22,7 +22,7 @@ export class MemoryWorld {
 
     this.light = new PointLight();
     this.light.position.y = 5;
-    this.scene.add(this.light);
+    // this.scene.add(this.light);
 
     this.audioListener = new AudioListener();
     this.memorySound = new Audio(this.audioListener);

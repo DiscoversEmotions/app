@@ -40,6 +40,7 @@ export class WebGLCore {
     this.nextWorld = null;
 
     this.scene = new Scene();
+    console.log(this.scene);
     this.renderer = new Renderer();
     this.composer = new EffectComposer(this.renderer);
     this.renderPass = new RenderPass(this.scene, this.camera);
