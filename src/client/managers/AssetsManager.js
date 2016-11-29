@@ -50,7 +50,6 @@ export class AssetsManager {
   }
 
   setAsset(key, ressource) {
-    console.log(ressource);
     if (this.assetsData[key] !== undefined) {
       throw new Error(`Asset '${key}' already exist !`);
     }
@@ -59,7 +58,6 @@ export class AssetsManager {
 
   getAsset(key) {
     const status = this.controller.getState(`assets.${key}.status`);
-    console.log(status);
     if (status === AssetStatus.Ready && !_.isNil(this.assetsData[key])) {
       return this.assetsData[key];
     }

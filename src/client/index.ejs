@@ -111,7 +111,9 @@
 
       function update () {
         render();
-        console.log('BASIC_BOOT_STOPED', BASIC_BOOT_STOPED);
+        if (BASIC_BOOT_STOPED) {
+          return;
+        }
         // Add message
         var lastMessage = window.__MESSAGES[window.__MESSAGES.length - 1];
         if (lastMessage.key === `boot`) {

@@ -24,8 +24,7 @@ export default class AppCore {
       onUpdate: this.update.bind(this),
       onRender: this.render.bind(this),
       onStart: () => {
-        console.log(`start !`);
-        console.log(window.__START_TIME);
+        // console.log(window.__START_TIME);
       }
     });
     this.controller = createController(this);

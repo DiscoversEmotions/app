@@ -75,8 +75,8 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `boot-done`) {
-      console.log(`TODO`);
       nextMessage({ key: `connect-eyes` }, 500);
+      return;
     }
 
     if (lastMessage.key === `connect-eyes`) {
@@ -97,7 +97,7 @@ export class SystemManager {
         time = 300 + Math.pow(1.068, lastMessage.progress);
       }
       if (nextProgress > 100) {
-        nextProgress = 100
+        nextProgress = 100;
       }
       updateMessage({ progress: nextProgress }, time);
       return;
@@ -130,7 +130,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `connect-memory-done`) {
-
+      console.log(`TODO`);
     }
 
     // if (lastMessage.key === `connect-eyes`) {
@@ -203,7 +203,7 @@ export class SystemManager {
   getMessageRenderer(msg) {
     switch (msg.key) {
     case `empty`: return (msg) => (``);
-    case `boot`: return (msg) => (`Start Booting System`)
+    case `boot`: return (msg) => (`Start Booting System`);
     case `boot-progress`: return (msg) => (`Booting System... ${msg.progress} / 100`);
     case `boot-done`: return (msg) => (`System booted`);
     case `connect-eyes`: return (msg) => (`Connecting to the ocular system`);
