@@ -1,11 +1,10 @@
 import * as motion from 'popmotion';
 import _ from 'lodash';
-import { Vector3, Color, FogExp2 } from 'three';
+import { Vector3, Color, FogExp2, Scene } from 'three';
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
-import { Worlds } from '~/types';
-import { RoomWorld, MindWorld, MemoryWorld, BlackWorld } from './worlds';
-import { Scene } from './Scene';
+import { Scenes } from '~/types';
+import { RoomWorld, MindWorld, MemoryWorld, BlackWorld } from './scenes';
 import { Renderer } from './Renderer';
 
 export class WebGLCore {
@@ -22,25 +21,25 @@ export class WebGLCore {
       fogColor: new Color(0, 0, 0)
     };
 
-    this.world = null;
-    this.nextWorld = null;
+    this.currentSceneName = null;
+    this.nextSceneName = null;
 
-    this.scene = new Scene();
+    this.coreScene = new Scene();
 
-    console.log(this.scene);
-    this.scene.fog = new FogExp2(0xfff1ce, 0.1);
+    console.log(this.coreScene);
+    this.coreScene.fog = new FogExp2(0xfff1ce, 0.1);
 
     this.renderer = new Renderer();
     this.composer = new EffectComposer(this.renderer);
-    this.renderPass = new RenderPass(this.scene, this.camera);
+    this.renderPass = new RenderPass(this.coreScene, this.camera);
     this.renderPass.renderToScreen = true;
     this.composer.addPass(this.renderPass);
 
-    this.worlds = {
-      [Worlds.Room]: new RoomWorld(this, this.app, this.controller, this.parentElement),
-      [Worlds.Mind]: new MindWorld(this.app, this.controller, this.parentElement),
-      [Worlds.Memory]: new MemoryWorld(this.app, this.controller, this.parentElement),
-      [Worlds.Black]: new BlackWorld(this.app, this.controller, this.parentElement)
+    this.scenesList = {
+      [Scenes.Room]: new RoomWorld(this, this.app, this.controller, this.parentElement),
+      [Scenes.Mind]: new MindWorld(this.app, this.controller, this.parentElement),
+      [Scenes.Memory]: new MemoryWorld(this.app, this.controller, this.parentElement),
+      [Scenes.Black]: new BlackWorld(this.app, this.controller, this.parentElement)
     };
 
     // Append to DOM
@@ -48,21 +47,21 @@ export class WebGLCore {
 
     this.initComposer();
     this.resize({}, this.controller, this);
-    this.updateWorld({}, this.controller, this);
+    this.updateScene({}, this.controller, this);
     this.updatePass({}, this.controller, this);
   }
 
   update(time, dt) {
-    if (this.world) {
-      this.worlds[this.world].update(time, dt);
+    if (this.currentSceneName) {
+      this.scenesList[this.currentSceneName].update(time, dt);
     }
   }
 
   render(time, dt) {
-    if (this.world === null) {
+    if (this.currentSceneName === null) {
       return;
     }
-    var cameraman = this.worlds[this.world].getCameraman();
+    var cameraman = this.scenesList[this.currentSceneName].getCameraman();
     this.renderPass.camera = cameraman.getCamera();
     this.composer.render(dt);
   }
@@ -73,9 +72,9 @@ export class WebGLCore {
   resize(props) {
     this.width = props.size.width;
     this.height = props.size.height;
-    _.forEach(this.worlds, (world) => {
-      if (_.isFunction(world.setSize)) {
-        world.setSize(this.width, this.height);
+    _.forEach(this.scenesList, (scene) => {
+      if (_.isFunction(scene.setSize)) {
+        scene.setSize(this.width, this.height);
       }
     });
     this.composer.setSize(this.width, this.height);
@@ -84,29 +83,28 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
-      world: `app.world`,
-      nextWorld: `app.nextWorld`
+      currentSceneName: `app.currentSceneName`,
+      nextSceneName: `app.nextSceneName`
     }
   )
-  updateWorld({ world, nextWorld }) {
+  updateScene({ currentSceneName, nextSceneName }) {
     // Init
-    if (this.world === null) {
-      this.mountWorld(world);
-    } else if (this.world !== world) {
-      this.switchWorld(world);
+    if (this.currentSceneName === null) {
+      this.mountScene(currentSceneName);
+    } else if (this.currentSceneName !== currentSceneName) {
+      this.switchScene(currentSceneName);
     }
-    this.world = world;
-    this.nextWorld = nextWorld;
+    this.currentSceneName = currentSceneName;
+    this.nextSceneName = nextSceneName;
   }
 
   @ConnectMethod(
     {
-      world: `app.world`,
-      worldTransition: `app.worldTransition`
+      sceneTransition: `app.sceneTransition`
     }
   )
-  updatePass({ worldTransition, world }) {
-    if (worldTransition) {
+  updatePass({ sceneTransition }) {
+    if (sceneTransition) {
       this.glitchPass.enabled = true;
       this.renderPass.renderToScreen = false;
     } else {
@@ -124,38 +122,38 @@ export class WebGLCore {
     this.composer.addPass(this.glitchPass);
   }
 
-  mountWorld(worldName) {
-    const worldScene = this.worlds[worldName].getScene();
-    if (_.isFunction(this.worlds[worldName].mount)) {
-      this.worlds[worldName].mount();
+  mountScene(sceneName) {
+    const scene = this.scenesList[sceneName].getScene();
+    if (_.isFunction(this.scenesList[sceneName].mount)) {
+      this.scenesList[sceneName].mount();
     }
-    if (_.isFunction(this.worlds[worldName].getEnvConfig)) {
-      const envConfig = Object.assign({}, this.defaultEnvConfig, this.worlds[worldName].getEnvConfig());
+    if (_.isFunction(this.scenesList[sceneName].getEnvConfig)) {
+      const envConfig = Object.assign({}, this.defaultEnvConfig, this.scenesList[sceneName].getEnvConfig());
       this.useEnvConfig(envConfig);
     } else {
       this.useEnvConfig(this.defaultEnvConfig);
     }
-    this.scene.add(worldScene);
-    this.currentWorld = worldName;
+    this.coreScene.add(scene);
+    this.currentSceneName = sceneName;
   }
 
-  unmountWorld(worldName, time) {
-    const worldScene = this.worlds[worldName].getScene();
-    if (_.isFunction(this.worlds[worldName].unmount)) {
-      this.worlds[worldName].unmount(time);
+  unmountScene(sceneName, time) {
+    const scene = this.scenesList[sceneName].getScene();
+    if (_.isFunction(this.scenesList[sceneName].unmount)) {
+      this.scenesList[sceneName].unmount(time);
     }
-    this.scene.remove(worldScene);
+    this.coreScene.remove(scene);
   }
 
-  switchWorld(nextWorld) {
-    this.unmountWorld(this.currentWorld);
-    this.mountWorld(nextWorld);
+  switchScene(nextSceneName) {
+    this.unmountScene(this.currentSceneName);
+    this.mountScene(nextSceneName);
   }
 
   useEnvConfig(config) {
-    this.scene.background = config.background;
-    this.scene.fog.density = config.fogDensity;
-    this.scene.fog.color = config.fogColor;
+    this.coreScene.background = config.background;
+    this.coreScene.fog.density = config.fogDensity;
+    this.coreScene.fog.color = config.fogColor;
   }
 
 }

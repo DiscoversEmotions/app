@@ -1,5 +1,5 @@
 import { state, set, debounce, when, wait, merge, input } from 'cerebral/operators';
-import { Worlds } from '~/types';
+import { Scenes } from '~/types';
 import { getDuration } from './actions';
 
 export default {
@@ -8,11 +8,11 @@ export default {
       width: 600,
       height: 600
     },
-    world: Worlds.Black,
-    nextWorld: `none`,
-    prevWorld: `none`,
+    currentSceneName: Scenes.Black,
+    nextSceneName: Scenes.None,
+    prevSceneName: Scenes.None,
     webglReady: false,
-    worldTransition: false,
+    sceneTransition: false,
     connectedToEyes: false,
     recoveryStarted: false,
     pointerLock: false
@@ -20,19 +20,18 @@ export default {
   signals: {
     setSize: [ merge(state`app.size`, { width: input`width`, height: input`height` }) ],
     webglReady: [ set(state`app.webglReady`, true) ],
-    setCurrentWorld: [ set(state`app.world`, input`world`) ],
-    transitionToWorld: [
-      set(state`app.nextWorld`, input`world`),
-      set(state`app.worldTransition`, true),
+    transitionToScene: [
+      set(state`app.nextSceneName`, input`scene`),
+      set(state`app.sceneTransition`, true),
       [
         wait(500),
-        set(state`app.prevWorld`, state`app.world`),
-        set(state`app.world`, input`world`),
-        set(state`app.nextWorld`, `none`)
+        set(state`app.prevSceneName`, state`app.currentSceneName`),
+        set(state`app.currentSceneName`, input`scene`),
+        set(state`app.nextSceneName`, `none`)
       ],
       [
         wait(1000),
-        set(state`app.worldTransition`, false)
+        set(state`app.sceneTransition`, false)
       ]
     ],
     startRecovery: [ set(state`app.recoveryStarted`, true) ],

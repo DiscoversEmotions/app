@@ -21,7 +21,6 @@ export class RoomWorld {
     this.roomSphere = null;
 
     this.scene = new Object3D();
-    this.scene.name = `RoomWorld-scene`;
 
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 0, 0);

@@ -1,4 +1,4 @@
 export * from './AssetsManager';
-export * from './WorldsManager';
+export * from './ScenesManager';
 export * from './SystemManager';
 export * from './KeyboardManager';

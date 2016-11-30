@@ -11,7 +11,6 @@ export class MemoryWorld {
     this.parentElement = parentElement;
 
     this.scene = new Object3D();
-    this.scene.name = `MemoryWorld-scene`;
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);

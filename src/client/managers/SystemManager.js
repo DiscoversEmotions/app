@@ -1,6 +1,5 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
-import { Worlds } from '~/types';
-import { lastMessage, roomAssetsReady, world1AssetsReady } from '~/computed';
+import { lastMessage, roomAssetsReady, mind1AssetsReady } from '~/computed';
 import * as motion from 'popmotion';
 
 const NUMBER_OF_MEMORIES = 482;
@@ -19,14 +18,13 @@ export class SystemManager {
 
   @ConnectMethod(
     {
-      currentWorld: `app.world`,
       readyForNextMessage: `system.readyForNextMessage`,
       bootDone: `system.bootDone`,
       findErrorDone: `system.findErrorDone`,
       messages: `system.messages`,
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
-      world1AssetsReady: world1AssetsReady,
+      mind1AssetsReady: mind1AssetsReady,
     },
     {
       planNextMessage: `system.planNextMessage`,
@@ -36,7 +34,7 @@ export class SystemManager {
     }
   )
   update(context) {
-    const { readyForNextMessage, bootDone, findErrorDone, currentWorld } = context;
+    const { readyForNextMessage, bootDone, findErrorDone } = context;
     if (readyForNextMessage === false) {
       return;
     }
@@ -108,7 +106,7 @@ export class SystemManager {
   }
 
   udateFindError(context) {
-    const { lastMessage, planNextMessage, updateLastMessage, world1AssetsReady, messages, setFindErrorDone } = context;
+    const { lastMessage, planNextMessage, updateLastMessage, mind1AssetsReady, messages, setFindErrorDone } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
@@ -127,7 +125,7 @@ export class SystemManager {
       if (nextProgress > NUMBER_OF_MEMORIES) {
         nextProgress = NUMBER_OF_MEMORIES;
       }
-      if (!world1AssetsReady) {
+      if (!mind1AssetsReady) {
         if (nextProgress > NUMBER_OF_MEMORIES - 1) {
           nextProgress = NUMBER_OF_MEMORIES - 1;
         }

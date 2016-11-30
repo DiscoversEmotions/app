@@ -1,5 +1,5 @@
 import { Computed } from 'cerebral';
-import { AssetStatus, Worlds } from '~/types';
+import { AssetStatus, Scenes } from '~/types';
 import _ from 'lodash';
 
 export const requestedAssets = Computed(
@@ -70,7 +70,7 @@ export const canStartRoom = Computed(
   }
 );
 
-export const world1AssetsReady = Computed(
+export const mind1AssetsReady = Computed(
   {
     perso: `assets.perso.status`,
     world1: `assets.world1.status`,
@@ -91,12 +91,12 @@ export const world1AssetsReady = Computed(
 
 export const showModal = Computed(
   {
-    world: `app.world`,
+    currentSceneName: `app.currentSceneName`,
     findErrorDone: `system.findErrorDone`
   },
-  ({ world, findErrorDone }) => {
+  ({ currentSceneName, findErrorDone }) => {
     return (
-      world === Worlds.Room &&
+      currentSceneName === Scenes.Room &&
       findErrorDone
     );
   }
@@ -104,12 +104,12 @@ export const showModal = Computed(
 
 export const shouldBePointerLocked = Computed(
   {
-    world: `app.world`
+    currentSceneName: `app.currentSceneName`
   },
-  ({ world }) => {
+  ({ currentSceneName }) => {
     return (
-      world === Worlds.Mind ||
-      world === Worlds.Memory
+      currentSceneName === Scenes.Mind ||
+      currentSceneName === Scenes.Memory
     );
   }
 );

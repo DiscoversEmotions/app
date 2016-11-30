@@ -1,5 +1,6 @@
 
-export const Worlds = {
+export const Scenes = {
+  None: `none`,
   Black: `black`,
   Room: `room`,
   Mind: `mind`,

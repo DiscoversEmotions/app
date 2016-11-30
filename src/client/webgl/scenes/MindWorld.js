@@ -4,7 +4,6 @@ import {
   Color, SphereGeometry, BackSide, Mesh, Vector3, Box3
 } from 'three';
 import _ from 'lodash';
-import { Worlds } from '~/types';
 import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
 
@@ -23,7 +22,6 @@ export class MindWorld {
     };
 
     this.scene = new Object3D();
-    this.scene.name = `MindWorld-scene`;
 
     this.world1 = null;
     this.perso = null;

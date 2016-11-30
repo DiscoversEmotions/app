@@ -4,7 +4,7 @@ import DOMEvents from 'dom-events';
 import debounce from 'lodash/debounce';
 import * as motion from 'popmotion';
 import { ConnectMethod, PointerLock } from '~/core';
-import { AssetsManager, WorldsManager, SystemManager, KeyboardManager } from '~/managers';
+import { AssetsManager, ScenesManager, SystemManager, KeyboardManager } from '~/managers';
 import { Container } from 'cerebral/react';
 import { Provider } from 'react-tunnel';
 import { shouldBePointerLocked } from '~/computed';
@@ -32,13 +32,13 @@ export default class AppCore {
 
     // Managers
     this.assetsManager = new AssetsManager(this.controller);
-    this.worldsManager = new WorldsManager(this.controller);
+    this.scenesManager = new ScenesManager(this.controller);
     this.systemManager = new SystemManager(this.controller);
     this.keyboardManager = new KeyboardManager(this.controller);
 
     // Boot Managers
     this.assetsManager.boot();
-    this.worldsManager.boot();
+    this.scenesManager.boot();
     this.systemManager.boot();
     this.keyboardManager.boot();
 
@@ -69,7 +69,6 @@ export default class AppCore {
       () => (this.controller.getSignal(`app.stopPointerLock`)())
     );
     DOMEvents.on(document.body, `click`, () => {
-      console.log(`click`, this.shouldBePointerLocked);
       if (this.shouldBePointerLocked) {
         this.pointerLock.tryActivate();
       }

@@ -1,5 +1,4 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
-import { Worlds } from '~/types';
 
 const KEYS_MAP = {
   83: `s`,
