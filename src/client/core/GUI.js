@@ -2,22 +2,10 @@ import oui from 'ouioui';
 import _ from 'lodash';
 import raf from 'raf';
 
-let guiSingletonInstance = null;
-
 /**
  * GUI class
  */
-export class GUISingleton {
-
-  /**
-   *
-   */
-  static getInstance() {
-    if (guiSingletonInstance === null) {
-      guiSingletonInstance = new GUISingleton();
-    }
-    return guiSingletonInstance;
-  }
+export class GUI {
 
   /**
    * constructor method

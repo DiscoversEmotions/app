@@ -1,5 +1,4 @@
-export * from './WindowResizeSingleton';
-export * from './GUISingleton';
-
 export * from './decorator';
-export * from './utils';
+export * from './EventUtils';
+export * from './PointerLock';
+export * from './GUI';

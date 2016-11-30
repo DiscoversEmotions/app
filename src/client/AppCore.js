@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import DOMEvents from 'dom-events';
+import debounce from 'lodash/debounce';
 import * as motion from 'popmotion';
-import { WindowResizeSingleton, ConnectFunction, PointerLock } from '~/core';
+import { ConnectFunction, PointerLock } from '~/core';
 import { AssetsManager, WorldsManager, SystemManager, KeyboardManager } from '~/managers';
 import { Container } from 'cerebral/react';
 import { Provider } from 'react-tunnel';
+
 
 /**
  * Core class
@@ -19,37 +22,54 @@ export default class AppCore {
     this.webGLCore = null;
     this.rootElement = null;
 
-    this.mainTask = motion.task({
-      onUpdate: this.update.bind(this),
-      onRender: this.render.bind(this),
-      onStart: () => {
-        // console.log(window.__START_TIME);
-      }
-    });
+    this.pointerLock = null;
+    this.mainTask = null;
+
+    // Controller
     this.controller = createController(this);
 
-    WindowResizeSingleton.getInstance().add((width, height) => {
-      this.controller.getSignal(`app.setSize`)({ width, height });
-    });
-
+    // Managers
     this.assetsManager = new AssetsManager(this.controller);
     this.worldsManager = new WorldsManager(this.controller);
     this.systemManager = new SystemManager(this.controller);
     this.keyboardManager = new KeyboardManager(this.controller);
 
+    // Boot Managers
+    this.assetsManager.boot();
+    this.worldsManager.boot();
+    this.systemManager.boot();
+    this.keyboardManager.boot();
+
+    // PointerLock
+    this.initPointerLock();
+
+    // Resize
+    this.initResize();
+
+    // start
+    this.initTask();
+
+    this.mainTask.start();
+  }
+
+  initResize() {
+    DOMEvents.on(window, `resize`, debounce(this.handleResize.bind(this), 100));
+    this.handleResize();
+  }
+
+  initPointerLock() {
     this.pointerLock = new PointerLock(
       document.body,
       () => (this.controller.getSignal(`app.startPointerLock`)()),
       () => (this.controller.getSignal(`app.stopPointerLock`)())
     );
+  }
 
-    // start
-    this.mainTask.start();
-
-    this.assetsManager.boot();
-    this.worldsManager.boot();
-    this.systemManager.boot();
-    this.keyboardManager.boot();
+  initTask() {
+    this.mainTask = motion.task({
+      onUpdate: this.update.bind(this),
+      onRender: this.render.bind(this)
+    });
   }
 
   bootUI(rootElement) {
@@ -94,6 +114,13 @@ export default class AppCore {
     if (this.webGLCore) {
       this.webGLCore.update(time, dt);
     }
+  }
+
+  handleResize() {
+    this.controller.getSignal(`app.setSize`)({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
   }
 
 }

@@ -1,5 +1,4 @@
 import { Mesh } from 'three';
-import { GUISingleton } from '~/core/utils';
 import CubeBufferGeometry from './CubeBufferGeometry';
 import CubeMaterial from './CubeMaterial';
 

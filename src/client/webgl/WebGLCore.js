@@ -5,12 +5,9 @@ import { Vector3, Color, FogExp2 } from 'three';
 import { Worlds } from '~/types';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scene } from './Scene';
+import { RoomWorld, MindWorld, MemoryWorld, BlackWorld } from './worlds';
 import { Renderer } from './Renderer';
 
-import { RoomWorld } from './RoomWorld';
-import { MindWorld } from './MindWorld';
-import { MemoryWorld } from './MemoryWorld';
-import { BlackWorld } from './BlackWorld';
 
 // interface World {
 //   constructor(store)
