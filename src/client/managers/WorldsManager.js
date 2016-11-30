@@ -1,6 +1,6 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Worlds } from '~/types';
-import { canStartRoom, memory1AssetsReady } from '~/computed';
+import { canStartRoom, memory1AssetsReady, world1AssetsReady } from '~/computed';
 
 export class WorldsManager {
 
@@ -20,7 +20,8 @@ export class WorldsManager {
       worldTransition: `app.worldTransition`,
       connectedToEyes: `app.connectedToEyes`,
       recoveryStarted: `app.recoveryStarted`,
-      canStartRoom: canStartRoom
+      canStartRoom: canStartRoom,
+      world1AssetsReady: world1AssetsReady
     },
     {
       transitionToWorld: `app.transitionToWorld`
@@ -28,7 +29,7 @@ export class WorldsManager {
   )
   update({
     currentWorld, nextWorld, worldTransition, webglReady, canStartRoom, transitionToWorld,
-    connectedToEyes, recoveryStarted
+    connectedToEyes, recoveryStarted, world1AssetsReady
   }) {
     if (worldTransition) {
       return;
@@ -39,12 +40,11 @@ export class WorldsManager {
     if (currentWorld === Worlds.Room && recoveryStarted) {
       transitionToWorld({ world: Worlds.Mind });
     }
-    // if (currentWorld === Worlds.Black && webglReady === true) {
-    //   transitionToWorld({ world: Worlds.Room });
-    // }
-    // if (currentWorld === Worlds.Room && webglReady) {
-    //   transitionToWorld({ world: Worlds.Mind });
-    // }
+
+    // DEV
+    if (currentWorld !== Worlds.Mind && world1AssetsReady) {
+      transitionToWorld({ world: Worlds.Mind });
+    }
   }
 
 }

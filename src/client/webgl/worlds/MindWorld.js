@@ -1,7 +1,7 @@
 import { Cameraman, OBJLoader } from '~/webgl';
 import {
-  PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, AmbientLight, MeshPhongMaterial,
-  Color, PointLightHelper, SphereGeometry, BackSide, Mesh
+  PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, MeshPhongMaterial,
+  Color, SphereGeometry, BackSide, Mesh
 } from 'three';
 import _ from 'lodash';
 import { Worlds } from '~/types';
@@ -38,12 +38,6 @@ export class MindWorld {
     this.light = new PointLight();
     this.light.position.y = 20;
     this.scene.add(this.light);
-
-    this.lightHelper = new PointLightHelper(this.light);
-    this.scene.add(this.lightHelper);
-
-    this.ambiantLight = new AmbientLight( 0xffffff );
-    this.scene.add(this.ambiantLight);
 
     this.raycaster = new Raycaster();
 
@@ -167,9 +161,14 @@ export class MindWorld {
       this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
 
-      //RAYCAST GROUND
-      this.ground = this.world1.children[5];
-      this.rocks = this.world1.children[0];
+      this.world1.traverseVisible((item) => {
+        if (item.name === `sol`) {
+          this.ground = item;
+        }
+        if (item.name === `rock`) {
+          this.rocks = item;
+        }
+      });
 
       this.collidableMeshList.push(this.ground);
       this.collidableMeshList.push(this.rocks);

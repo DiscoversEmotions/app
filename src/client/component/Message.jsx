@@ -15,16 +15,7 @@ function getColor (type) {
 }
 
 function getShadowColor (type) {
-  switch (type) {
-    case `normal`:
-      return `rgba(0, 0, 0, 0.5)`;
-    case `error`:
-      return `rgba(255, 255, 255, 0.5)`;
-    case `success`:
-      return `rgba(255, 255, 255, 0.5)`;
-    default:
-      return `rgba(0, 0, 0, 0.5)`;
-  }
+  return `rgba(0, 0, 0, 0.5)`;
 }
 
 const Message = styled.div`
