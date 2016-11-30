@@ -97,16 +97,6 @@ export class WebGLCore {
     }
     this.world = world;
     this.nextWorld = nextWorld;
-    // const nextWorld = this.store.computedState.get(`world`);
-    // if (nextWorld !== this.currentWorld) {
-    //   if (this.currentWorld === null) {
-    //     this.mountWorld(nextWorld, time);
-    //   } else {
-    //     this.switchWorld(nextWorld, time);
-    //   }
-    // }
-    // // Update worlds
-    // this.worlds[this.currentWorld].update(time, dt);
   }
 
   @ConnectMethod(

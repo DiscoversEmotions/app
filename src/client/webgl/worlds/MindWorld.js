@@ -1,12 +1,14 @@
 import { Cameraman, OBJLoader } from '~/webgl';
 import {
   PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, MeshPhongMaterial,
-  Color, SphereGeometry, BackSide, Mesh
+  Color, SphereGeometry, BackSide, Mesh, Vector3, Box3
 } from 'three';
 import _ from 'lodash';
 import { Worlds } from '~/types';
 import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
+
+console.log(Box3);
 
 export class MindWorld {
 
@@ -29,7 +31,7 @@ export class MindWorld {
     this.ground = null;
 
     this.userPosition = new Object3D();
-    // this.userPosition.position.set(0, 5, 0);
+    this.userPosition.position.set(0, 5, 0);
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 3, 7);
     this.cameraman.setVerticalAngle(-0.3);
@@ -138,9 +140,11 @@ export class MindWorld {
     this.persoMesh.rotation.y = angle;
 
     // Collision with ground
-    this.raycaster.ray.origin.copy(this.userPosition.position);
+    this.raycaster.set(
+      this.userPosition.position,
+      new Vector3(0, -1, 0)
+    );
     this.raycaster.ray.origin.y += 5;
-    this.raycaster.ray.direction.set(0, -1, 0);
     this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision, true);
     if (this.collisionGroundResults.length) {
       this.userPosition.position.y = this.collisionGroundResults[0].point.y;
@@ -165,11 +169,10 @@ export class MindWorld {
   }
 
   mount() {
-    console.log(`Mount mind world`);
-
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
+      this.world1.updateMatrixWorld();
 
       this.world1.traverseVisible((item) => {
         console.log(item.name);
@@ -189,6 +192,7 @@ export class MindWorld {
 
       this.groundCollision.push(this.ground, this.rocks);
       this.tileCollision.push(this.tile);
+      console.log(this.tile);
 
       //SKY
       this.skyGeo = new SphereGeometry(100, 60, 60);
