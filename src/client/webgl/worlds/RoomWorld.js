@@ -12,8 +12,10 @@ export class RoomWorld {
     this.parentElement = parentElement;
 
     this.camVert = 0;
-    this.width = 600;
-    this.height = 600;
+    this.size = {
+      width: 600,
+      height: 600
+    };
     this.mousePos = { x: 0, y: 0 };
 
     this.roomSphere = null;
@@ -24,13 +26,6 @@ export class RoomWorld {
     this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 0, 0);
     this.scene.add(this.cameraman);
-
-    this.light = new PointLight();
-    // this.light.position.y = 5;
-    this.scene.add(this.light);
-
-    // this.cameraman.setHorizontalAngle((Math.PI * 1.5));
-    // this.cameraman.setVerticalAngle(0);
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000/60);
@@ -51,7 +46,7 @@ export class RoomWorld {
   }
 
   mount() {
-    console.log(`mount Room`); 
+    console.log(`mount Room`);
     if (this.roomSphere === null) {
       var geom = new SphereGeometry(50, 60, 60);
       geom.scale( -1, 1, 1 );
@@ -76,15 +71,14 @@ export class RoomWorld {
   }
 
   setSize(width, height) {
-    this.width = width;
-    this.height = height;
+    this.size = { width, height };
     this.cameraman.setSize(width, height);
   }
 
   _onMouseMove(e) {
     const offset = EventUtils.getOffsetOf(e, this.parentElement);
-    this.mousePos.x = ((offset.x / this.width) * 2) - 1;
-    this.mousePos.y = ((offset.y / this.height) * 2) - 1;
+    this.mousePos.x = ((offset.x / this.size.width) * 2) - 1;
+    this.mousePos.y = ((offset.y / this.size.height) * 2) - 1;
   }
 
   _updateCameraman() {

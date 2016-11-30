@@ -162,9 +162,6 @@ export class MindWorld {
       this.collidableMeshList.push(this.ground);
 
       const world1Texture = this.app.assetsManager.getAsset(`world1-skybox`);
-      // console.log(world1Texture);
-
-
     }
 
     if(this.perso === null){
