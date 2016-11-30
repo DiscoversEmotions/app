@@ -1,7 +1,7 @@
 import { Cameraman, OBJLoader } from '~/webgl';
 import {
   PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, AmbientLight, MeshPhongMaterial,
-  Color, PointLightHelper, SphereGeometry
+  Color, PointLightHelper, SphereGeometry, BackSide
 } from 'three';
 import _ from 'lodash';
 import { Worlds } from '~/types';
@@ -71,7 +71,8 @@ export class MindWorld {
 
   getEnvConfig() {
     return {
-      fogDensity: 0.05
+      fogDensity: 0.05,
+      fogColor: new Color(0x000000)
     };
   }
 
@@ -158,10 +159,17 @@ export class MindWorld {
       this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
 
+      //RAYCAST GROUND
       this.ground = this.world1.children[5];
       this.collidableMeshList.push(this.ground);
 
-      const world1Texture = this.app.assetsManager.getAsset(`world1-skybox`);
+      //SKY
+      this.skyGeo = new SphereGeometry(100, 60, 60);
+      this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
+      this.skyMaterial.side = BackSide;
+
+      this.sky = new Mesh(this.skyGeo, this.skyMaterial);
+      this.scene.add(this.sky);
     }
 
     if(this.perso === null){

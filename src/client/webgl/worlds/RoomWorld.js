@@ -1,6 +1,6 @@
 import { Cameraman } from '~/webgl';
 import { EventUtils } from '~/core';
-import { PointLight, Object3D, Mesh, MeshBasicMaterial, SphereGeometry } from 'three';
+import { PointLight, Object3D, Mesh, MeshBasicMaterial, SphereGeometry, Color } from 'three';
 import _ from 'lodash';
 
 export class RoomWorld {
@@ -33,7 +33,8 @@ export class RoomWorld {
 
   getEnvConfig() {
     return {
-      fogDensity: 0
+      fogDensity: 0,
+      fogColor: new Color(0x000000)
     };
   }
 
