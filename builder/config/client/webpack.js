@@ -16,6 +16,7 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
       path: paths.buildClient,
       publicPath: params.webpack.publicPath,
       pathinfo: true,
+      filename: '[name].[hash].bundle.js'
     },
     resolve: {
       alias: {
@@ -60,17 +61,17 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
       query: babel
     },
     {
+      test: /\.json$/,
+      loader: 'json-loader',
+      exclude: /src/
+    },
+    {
       test: /\.(png|jpg|gif|svg|obj|json|awd|ogg$)$/,
       loader: 'file-loader',
       query: {
-        name: '[name].[ext]?[hash]'
+        name: '[name]-[hash].[ext]'
       },
       exclude: /node_modules/
-    },
-    {
-      test: /\.json$/,
-      loader: 'json-loader',
-      include: /node_modules/
     },
     {
       test: /\.(glsl|vert|frag)$/,
