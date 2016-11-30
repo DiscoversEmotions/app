@@ -28,6 +28,7 @@
     "fs-jetpack": "^0.10.1",
     "html-to-vdom": "^0.7.0",
     "html-webpack-plugin": "^2.24.1",
+    "json-loader": "^0.5.4",
     "main-loop": "^3.4.0",
     "node-sass": "^3.13.0",
     "node-sass-middleware": "^0.9.8",

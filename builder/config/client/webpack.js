@@ -68,6 +68,11 @@ module.exports = function (paths, params, babel, eslint, cssModules, vendors) {
       exclude: /node_modules/
     },
     {
+      test: /\.json$/,
+      loader: 'json-loader',
+      include: /node_modules/
+    },
+    {
       test: /\.(glsl|vert|frag)$/,
       loader: 'webpack-glsl-loader',
       options: {
