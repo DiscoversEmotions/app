@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import Button from '~/component/Button';
 import Message from '~/component/Message';
+import NeedRecovery from '~/component/NeedRecovery';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
-import { allMessages } from '~/computed';
+import { lastMessage } from '~/computed';
 
 const Container = styled.div`
   position: absolute;
@@ -20,13 +21,23 @@ const Container = styled.div`
 
 const Modal = compose(
   inject((provided) => ({ core: provided.core })),
-  // ConnectReact(
-  //   {}
-  // )
+  ConnectReact(
+    {
+      lastMessage: lastMessage
+    }
+  )
 )((props) => {
+  console.log(props.lastMessage);
   return (
     <Container>
-      This is a modal
+      {
+        (() => {
+          if (props.lastMessage.key === `load-emotions-done`) {
+            return <NeedRecovery />;
+          }
+          return null;
+        })()
+      }
     </Container>
   );
 });

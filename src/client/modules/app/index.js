@@ -13,18 +13,14 @@ export default {
     prevWorld: `none`,
     webglReady: false,
     worldTransition: false,
-    connectedToEyes: false
+    connectedToEyes: false,
+    recoveryStarted: false,
+    pointerLock: false
   },
   signals: {
-    setSize: [
-      merge(state`app.size`, { width: input`width`, height: input`height` })
-    ],
-    webglReady: [
-      set(state`app.webglReady`, true)
-    ],
-    setCurrentWorld: [
-      set(state`app.world`, input`world`)
-    ],
+    setSize: [ merge(state`app.size`, { width: input`width`, height: input`height` }) ],
+    webglReady: [ set(state`app.webglReady`, true) ],
+    setCurrentWorld: [ set(state`app.world`, input`world`) ],
     transitionToWorld: [
       set(state`app.nextWorld`, input`world`),
       set(state`app.worldTransition`, true),
@@ -38,6 +34,9 @@ export default {
         wait(1000),
         set(state`app.worldTransition`, false)
       ]
-    ]
+    ],
+    startRecovery: [ set(state`app.recoveryStarted`, true) ],
+    startPointerLock: [ set(state`app.pointerLock`, true) ],
+    stopPointerLock: [ set(state`app.pointerLock`, false) ]
   }
 };

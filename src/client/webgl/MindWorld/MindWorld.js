@@ -29,7 +29,6 @@ import {
 import _ from 'lodash';
 import { Worlds } from '~/types';
 import {
-  PointerLock,
   ConnectMethod
 } from '~/core';
 import * as motion from 'popmotion';
@@ -71,13 +70,6 @@ export class MindWorld {
 
     this.ambiantLight = new AmbientLight( 0xffffff );
     this.scene.add(this.ambiantLight);
-
-    // this.tile = new Tile();
-    // this.scene.add(this.tile);
-    // this.tile.position.y = 0.1;
-    // this.tile.position.z = -5;
-
-    this.pointerLock = new PointerLock(document.body);
 
     this.raycaster = new Raycaster();
 
@@ -176,7 +168,6 @@ export class MindWorld {
     }
 
     this._updateCameraman();
-    this._updateMenu();
 
     // Annin
     this.mixerFinal = this.mixerArray[0];
@@ -247,20 +238,5 @@ export class MindWorld {
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
 
   }
-
-  _updateMenu() {
-
-  }
-
-  // _updatePointerLock(state) {
-  //   const shouldBe = [Worlds.Mind].indexOf(this.store.getComputed(`world`)) > -1;
-  //   if(shouldBe !== this.pointerLock.isActivated()) {
-  //     if (shouldBe) {
-  //       this.pointerLock.tryActivate();
-  //     } else {
-  //       this.pointerLock.deactivate();
-  //     }
-  //   }
-  // }
 
 }

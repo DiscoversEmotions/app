@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as motion from 'popmotion';
-import { WindowResizeSingleton, ConnectFunction } from '~/core';
+import { WindowResizeSingleton, ConnectFunction, PointerLock } from '~/core';
 import { AssetsManager, WorldsManager, SystemManager, KeyboardManager } from '~/managers';
 import { Container } from 'cerebral/react';
 import { Provider } from 'react-tunnel';
@@ -36,6 +36,12 @@ export default class AppCore {
     this.worldsManager = new WorldsManager(this.controller);
     this.systemManager = new SystemManager(this.controller);
     this.keyboardManager = new KeyboardManager(this.controller);
+
+    this.pointerLock = new PointerLock(
+      document.body,
+      () => (this.controller.getSignal(`app.startPointerLock`)()),
+      () => (this.controller.getSignal(`app.stopPointerLock`)())
+    );
 
     // start
     this.mainTask.start();

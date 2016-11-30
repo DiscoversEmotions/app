@@ -1,7 +1,9 @@
 export class PointerLock {
 
-  constructor(elem) {
+  constructor(elem, onLock, onUnlock) {
     this.elem = elem;
+    this.onLock = onLock;
+    this.onUnlock = onUnlock;
 
     // Bind
     this._requestPointerLock = this._requestPointerLock.bind(this);
@@ -37,12 +39,19 @@ export class PointerLock {
   }
 
   _pointerLockChange() {
-    if (document.mozPointerLockElement === this.elem ||
-      document.webkitPointerLockElement === this.elem) {
-      console.log(`Pointer Lock was successful.`);
+    if (
+      document.pointerLockElement === this.elem ||
+      document.mozPointerLockElement === this.elem ||
+      document.webkitPointerLockElement === this.elem
+    ) {
+      // console.log(`Pointer Lock was successful.`);
+      if (this.onLock) {
+        this.onLock();
+      }
     } else {
-      // silently fail
-      // console.log(`Pointer Lock was lost.`);
+      if (this.onUnlock) {
+        this.onUnlock();
+      }
     }
   }
 

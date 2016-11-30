@@ -16,20 +16,10 @@ export default {
     findErrorDone: false
   },
   signals: {
-    pushMessage: [
-      push(state`system.messages`, input`message`)
-    ],
-    planNextMessage: [
-      planNextMessage
-    ],
-    updateLastMessage: [
-      updateLastMessage
-    ],
-    setBootDone: [
-      set(state`system.bootDone`, true)
-    ],
-    setFindErrorDone: [
-      set(state`system.findErrorDone`, true)
-    ]
+    pushMessage: [ push(state`system.messages`, input`message`) ],
+    planNextMessage: [ planNextMessage ],
+    updateLastMessage: [ updateLastMessage ],
+    setBootDone: [ set(state`system.bootDone`, true) ],
+    setFindErrorDone: [ set(state`system.findErrorDone`, true) ]
   }
 };
