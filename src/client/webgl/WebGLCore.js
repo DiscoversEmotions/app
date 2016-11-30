@@ -31,7 +31,8 @@ export class WebGLCore {
 
     this.defaultEnvConfig = {
       background: new Color(0, 0, 0),
-      fogDensity: 0
+      fogDensity: 0,
+      fogColor: new Color(0, 0, 0)
     };
 
     this.world = null;
@@ -177,6 +178,7 @@ export class WebGLCore {
   useEnvConfig(config) {
     this.scene.background = config.background;
     this.scene.fog.density = config.fogDensity;
+    this.scene.fog.color = config.fogColor;
   }
 
 }
