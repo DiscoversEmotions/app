@@ -39,11 +39,7 @@ export class PointerLock {
   }
 
   _pointerLockChange() {
-    if (
-      document.pointerLockElement === this.elem ||
-      document.mozPointerLockElement === this.elem ||
-      document.webkitPointerLockElement === this.elem
-    ) {
+    if (this.isActivated()) {
       // console.log(`Pointer Lock was successful.`);
       if (this.onLock) {
         this.onLock();
@@ -77,12 +73,18 @@ export class PointerLock {
   }
 
   isActivated() {
-    return document.pointerLockElement === this.elem;
+    return (
+      document.pointerLockElement === this.elem ||
+      document.mozPointerLockElement === this.elem ||
+      document.webkitPointerLockElement === this.elem
+    );
   }
 
   tryActivate() {
     // this._requestFullscreen();
-    this._requestPointerLock();
+    if (this.isActivated() === false) {
+      this._requestPointerLock();
+    }
   }
 
   deactivate() {

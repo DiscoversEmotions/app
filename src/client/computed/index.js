@@ -101,3 +101,15 @@ export const showModal = Computed(
     );
   }
 );
+
+export const shouldBePointerLocked = Computed(
+  {
+    world: `app.world`
+  },
+  ({ world }) => {
+    return (
+      world === Worlds.Mind ||
+      world === Worlds.Memory
+    );
+  }
+);

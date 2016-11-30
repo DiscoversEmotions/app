@@ -22,6 +22,7 @@ const NeedRecovery = compose(
       3 error :/
       <Button onClick={() => {
         props.startRecovery();
+        // Need to put that here because pointerLock must be based on a click
         props.core.pointerLock.tryActivate();
       }}>Start Recovery process</Button>
     </div>

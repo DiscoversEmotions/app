@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import DOMEvents from 'dom-events';
 import debounce from 'lodash/debounce';
 import * as motion from 'popmotion';
-import { ConnectFunction, PointerLock } from '~/core';
+import { ConnectMethod, PointerLock } from '~/core';
 import { AssetsManager, WorldsManager, SystemManager, KeyboardManager } from '~/managers';
 import { Container } from 'cerebral/react';
 import { Provider } from 'react-tunnel';
+import { shouldBePointerLocked } from '~/computed';
 
 
 /**
@@ -23,6 +24,7 @@ export default class AppCore {
     this.rootElement = null;
 
     this.pointerLock = null;
+    this.shouldBePointerLocked = false;
     this.mainTask = null;
 
     // Controller
@@ -46,6 +48,9 @@ export default class AppCore {
     // Resize
     this.initResize();
 
+    // State Update
+    this.stateUpdate({}, this.controller, this);
+
     // start
     this.initTask();
 
@@ -63,6 +68,12 @@ export default class AppCore {
       () => (this.controller.getSignal(`app.startPointerLock`)()),
       () => (this.controller.getSignal(`app.stopPointerLock`)())
     );
+    DOMEvents.on(document.body, `click`, () => {
+      console.log(`click`, this.shouldBePointerLocked);
+      if (this.shouldBePointerLocked) {
+        this.pointerLock.tryActivate();
+      }
+    });
   }
 
   initTask() {
@@ -121,6 +132,15 @@ export default class AppCore {
       width: window.innerWidth,
       height: window.innerHeight
     });
+  }
+
+  @ConnectMethod(
+    {
+      shouldBePointerLocked: shouldBePointerLocked
+    }
+  )
+  stateUpdate({ shouldBePointerLocked }) {
+    this.shouldBePointerLocked = shouldBePointerLocked;
   }
 
 }
