@@ -1,25 +1,12 @@
-import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import * as motion from 'popmotion';
 import _ from 'lodash';
 import { Vector3, Color, FogExp2 } from 'three';
-import { Worlds } from '~/types';
+import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
-import { Scene } from './Scene';
+import { Worlds } from '~/types';
 import { RoomWorld, MindWorld, MemoryWorld, BlackWorld } from './worlds';
+import { Scene } from './Scene';
 import { Renderer } from './Renderer';
-
-
-// interface World {
-//   constructor(store)
-//   getScene()
-//   getCameraman()
-//   update()
-// }
-
-
-function noop (yolo) {
-  return yolo;
-}
 
 export class WebGLCore {
 
