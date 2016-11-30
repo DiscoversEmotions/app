@@ -45,6 +45,9 @@ module.exports = function buildClient (config, readline, monitor) {
         });
       } else {
         // Build prod
+        if (jetpack.exists(paths.buildClient)) {
+          jetpack.remove(paths.buildClient);
+        }
         compiler.run(function(err, stats) {
 
           console.log(stats.toString({
@@ -62,9 +65,6 @@ module.exports = function buildClient (config, readline, monitor) {
             resolve();
           }
         });
-        // if (jetpack.exists(paths.build)) {
-        //   return jetpack.removeAsync(paths.build);
-        // }
         // console.error(`${paths.build} does not exist !`);
         // return;
       }

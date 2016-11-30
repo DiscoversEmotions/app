@@ -1,40 +1,12 @@
-import {
-  Cube,
-  Ground,
-  Tile
-} from '~/webgl/meshes';
-import {
-  Cameraman,
-  OBJLoader 
-} from '~/webgl';
-import {
-  PointLight,
-  Object3D,
-  LoadingManager,
-  Mesh,
-  Raycaster,
-  JSONLoader,
-  SkinnedMesh,
-  MeshFaceMaterial,
-  MeshStandardMaterial,
-  ObjectLoader,
-  Vector3,
-  AnimationMixer,
-  AmbientLight,
-  MeshPhongMaterial,
-  FlatShading,
-  Color,
-  PointLightHelper,
-  SphereGeometry,
-  BackSide
+import { Cameraman, OBJLoader } from '~/webgl';
+import { 
+  PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, AmbientLight, MeshPhongMaterial,
+  Color, PointLightHelper, SphereGeometry, BackSide
 } from 'three';
 import _ from 'lodash';
 import { Worlds } from '~/types';
-import {
-  ConnectMethod
-} from '~/core';
+import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
-
 
 export class MindWorld {
 
