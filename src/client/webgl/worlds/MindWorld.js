@@ -25,6 +25,8 @@ export class MindWorld {
 
     this.world1 = null;
     this.perso = null;
+    this.rocks = null;
+    this.ground = null;
 
     this.userPosition = new Object3D();
     // this.userPosition.position.set(0, 5, 0);
@@ -39,12 +41,19 @@ export class MindWorld {
     this.light.position.y = 20;
     this.scene.add(this.light);
 
+    this.light2 = new PointLight();
+    this.light2.position.y = 40;
+    this.light2.intensity = 0.5;
+    this.scene.add(this.light2);
+
     this.raycaster = new Raycaster();
 
     this.mixer;
     this.mixerArray = [];
 
-    this.collidableMeshList = [];
+    this.groundCollision = [];
+
+    this.tileCollision = [];
 
     this.isMouseDown = false;
 
@@ -61,11 +70,12 @@ export class MindWorld {
       shininess: 30,
       shading: 1
     });
+
   }
 
   getEnvConfig() {
     return {
-      fogDensity: 0.05,
+      fogDensity: 0.02,
       fogColor: new Color(0x000000)
     };
   }
@@ -131,10 +141,16 @@ export class MindWorld {
     this.raycaster.ray.origin.copy(this.userPosition.position);
     this.raycaster.ray.origin.y += 5;
     this.raycaster.ray.direction.set(0, -1, 0);
-    this.collisionResults = this.raycaster.intersectObjects(this.collidableMeshList, true);
-    if (this.collisionResults.length) {
-      this.userPosition.position.y = this.collisionResults[0].point.y;
+    this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision, true);
+    if (this.collisionGroundResults.length) {
+      this.userPosition.position.y = this.collisionGroundResults[0].point.y;
     }
+    this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision, true);
+    if (this.collisionTileResults.length) {
+      // Why is this triggered when the scene start ?
+      console.log(`Collision with tile !`);
+    }
+
 
     this._updateCameraman();
 
@@ -149,21 +165,30 @@ export class MindWorld {
   }
 
   mount() {
+    console.log(`Mount mind world`);
+
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.scene.add(this.world1);
 
       this.world1.traverseVisible((item) => {
+        console.log(item.name);
         if (item.name === `sol`) {
           this.ground = item;
         }
         if (item.name === `rock`) {
           this.rocks = item;
         }
+        if (item.name === `Cube.11`) {
+          this.tile = item;
+        }
       });
+      if (this.ground === null || this.rocks === null || this.tile === null) {
+        throw new Error(`Missing someting in awd !`);
+      }
 
-      this.collidableMeshList.push(this.ground);
-      this.collidableMeshList.push(this.rocks);
+      this.groundCollision.push(this.ground, this.rocks);
+      this.tileCollision.push(this.tile);
 
       //SKY
       this.skyGeo = new SphereGeometry(100, 60, 60);
