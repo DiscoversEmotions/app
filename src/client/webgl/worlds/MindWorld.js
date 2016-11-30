@@ -61,6 +61,14 @@ export class MindWorld {
 
     this.scene.updateMatrixWorld(true);
 
+    //SKY
+    this.skyGeo = new SphereGeometry(100, 60, 60);
+    this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
+    this.skyMaterial.side = BackSide;
+
+    this.sky = new Mesh(this.skyGeo, this.skyMaterial);
+    this.scene.add(this.sky);
+
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
 
@@ -194,13 +202,6 @@ export class MindWorld {
       this.tileCollision.push(this.tile);
       console.log(this.tile);
 
-      //SKY
-      this.skyGeo = new SphereGeometry(100, 60, 60);
-      this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
-      this.skyMaterial.side = BackSide;
-
-      this.sky = new Mesh(this.skyGeo, this.skyMaterial);
-      this.scene.add(this.sky);
     }
 
     if(this.perso === null){
