@@ -4,7 +4,7 @@ import { Vector3, Color, FogExp2, Scene } from 'three';
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scenes } from '~/types';
-import { RoomWorld, MindWorld, MemoryWorld, BlackWorld } from './scenes';
+import { RoomScene, Mind1Scene, Memory1Scene, BootScene } from './scenes';
 import { Renderer } from './Renderer';
 
 export class WebGLCore {
@@ -12,7 +12,6 @@ export class WebGLCore {
   constructor(app, parentElement, controller) {
     this.app = app;
     this.parentElement = parentElement;
-
     this.controller = controller;
 
     this.defaultEnvConfig = {
@@ -35,12 +34,14 @@ export class WebGLCore {
     this.renderPass.renderToScreen = true;
     this.composer.addPass(this.renderPass);
 
-    this.scenesList = {
-      [Scenes.Room]: new RoomWorld(this, this.app, this.controller, this.parentElement),
-      [Scenes.Mind]: new MindWorld(this.app, this.controller, this.parentElement),
-      [Scenes.Memory]: new MemoryWorld(this.app, this.controller, this.parentElement),
-      [Scenes.Black]: new BlackWorld(this.app, this.controller, this.parentElement)
-    };
+    this.scenesList = _.mapValues({
+      [Scenes.Room]: RoomScene,
+      [Scenes.Mind]: Mind1Scene,
+      [Scenes.Memory]: Memory1Scene,
+      [Scenes.Black]: BootScene
+    }, (value, key) => {
+      return new value(key, this, this.app, this.controller, this.parentElement);
+    });
 
     // Append to DOM
     this.parentElement.appendChild( this.renderer.domElement );

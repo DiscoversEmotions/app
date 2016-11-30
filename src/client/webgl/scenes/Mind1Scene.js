@@ -1,27 +1,21 @@
-import { Cameraman, OBJLoader } from '~/webgl';
 import {
   PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, MeshPhongMaterial,
-  Color, SphereGeometry, BackSide, Mesh, Vector3, Box3
+  Color, SphereGeometry, BackSide, Mesh, Vector3
 } from 'three';
 import _ from 'lodash';
 import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
+import { Scene } from './Scene';
 
-console.log(Box3);
+export class Mind1Scene extends Scene {
 
-export class MindWorld {
-
-  constructor(app, controller, parentElement) {
-    this.app = app;
-    this.controller = controller;
-    this.parentElement = parentElement;
+  constructor(...args) {
+    super(...args);
 
     this.cameramanRotation = {
       vert: 0,
       hori: 0
     };
-
-    this.scene = new Object3D();
 
     this.world1 = null;
     this.perso = null;
@@ -30,12 +24,11 @@ export class MindWorld {
 
     this.userPosition = new Object3D();
     this.userPosition.position.set(0, 5, 0);
-    this.cameraman = new Cameraman(45, 1, 1, 1100);
+    this.scene.add(this.userPosition);
+
     this.cameraman.position.set(0, 3, 7);
     this.cameraman.setVerticalAngle(-0.3);
-
     this.userPosition.add(this.cameraman);
-    this.scene.add(this.userPosition);
 
     this.light = new PointLight();
     this.light.position.y = 20;
@@ -48,16 +41,11 @@ export class MindWorld {
 
     this.raycaster = new Raycaster();
 
-    this.mixer;
+    this.mixer = null;
     this.mixerArray = [];
-
     this.groundCollision = [];
-
     this.tileCollision = [];
-
     this.isMouseDown = false;
-
-    this.scene.updateMatrixWorld(true);
 
     //SKY
     this.skyGeo = new SphereGeometry(100, 60, 60);
@@ -88,14 +76,6 @@ export class MindWorld {
     };
   }
 
-  getCameraman() {
-    return this.cameraman;
-  }
-
-  getScene() {
-    return this.scene;
-  }
-
   // Keyboard Method
   @ConnectMethod(
     {
@@ -111,7 +91,6 @@ export class MindWorld {
     this.userS = keys.s;
     this.userQ = keys.q;
     this.userD = keys.d;
-
   }
 
   update(time, dt) {
@@ -222,10 +201,6 @@ export class MindWorld {
     document.removeEventListener(`mousemove`, this._onMouseMove, false);
   }
 
-  setSize(width, height) {
-    this.cameraman.setSize(width, height);
-  }
-
   _onMouseMove(e) {
     var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
     var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
@@ -250,7 +225,6 @@ export class MindWorld {
     // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
     this.userPosition.rotation.y = this.cameramanRotation.hori;
     this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
-
   }
 
 }

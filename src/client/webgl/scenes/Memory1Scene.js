@@ -1,17 +1,13 @@
-import { Cameraman } from '~/webgl';
 import {
   PointLight, Object3D, AudioListener, Audio, AudioAnalyser, MeshPhongMaterial, Mesh, BoxGeometry
 } from 'three';
+import { Scene } from './Scene';
 
-export class MemoryWorld {
+export class Memory1Scene extends Scene {
 
-  constructor(app, controller, parentElement) {
-    this.app = app;
-    this.controller = controller;
-    this.parentElement = parentElement;
+  constructor(...args) {
+    super(...args);
 
-    this.scene = new Object3D();
-    this.cameraman = new Cameraman(45, 1, 1, 1100);
     this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);
 
@@ -44,14 +40,6 @@ export class MemoryWorld {
     }
   }
 
-  getCameraman() {
-    return this.cameraman;
-  }
-
-  getScene() {
-    return this.scene;
-  }
-
   getEnvConfig() {
     return {
       background: 0x000000
@@ -67,10 +55,6 @@ export class MemoryWorld {
     this.material_cube1.emissive.b = audioLvl;
     const scale = 1 + audioLvl;
     this.cube1.scale.set(scale, scale, scale);
-  }
-
-  setSize(width, height) {
-    this.cameraman.setSize(width, height);
   }
 
 }

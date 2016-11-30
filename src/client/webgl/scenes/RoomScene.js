@@ -1,30 +1,17 @@
-import { Cameraman } from '~/webgl';
 import { EventUtils } from '~/core';
 import { PointLight, Object3D, Mesh, MeshBasicMaterial, SphereGeometry, Color } from 'three';
 import _ from 'lodash';
+import { Scene } from './Scene';
 
-export class RoomWorld {
+export class RoomScene extends Scene {
 
-  constructor(core, app, controller, parentElement) {
-    this.app = app;
-    this.core = core;
-    this.controller = controller;
-    this.parentElement = parentElement;
+  constructor(...args) {
+    super(...args);
 
     this.camVert = 0;
-    this.size = {
-      width: 600,
-      height: 600
-    };
     this.mousePos = { x: 0, y: 0 };
 
     this.roomSphere = null;
-
-    this.scene = new Object3D();
-
-    this.cameraman = new Cameraman(45, 1, 1, 1100);
-    this.cameraman.position.set(0, 0, 0);
-    this.scene.add(this.cameraman);
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000/60);
@@ -37,16 +24,7 @@ export class RoomWorld {
     };
   }
 
-  getCameraman() {
-    return this.cameraman;
-  }
-
-  getScene() {
-    return this.scene;
-  }
-
   mount() {
-    console.log(`mount Room`);
     if (this.roomSphere === null) {
       var geom = new SphereGeometry(50, 60, 60);
       geom.scale( -1, 1, 1 );
@@ -62,17 +40,11 @@ export class RoomWorld {
   }
 
   unmount() {
-    console.log(`unmount Room`);
     document.removeEventListener(`mousemove`, this._onMouseMove, false);
   }
 
   update(time, dt) {
     this._updateCameraman();
-  }
-
-  setSize(width, height) {
-    this.size = { width, height };
-    this.cameraman.setSize(width, height);
   }
 
   _onMouseMove(e) {
