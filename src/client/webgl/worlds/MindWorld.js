@@ -56,6 +56,14 @@ export class MindWorld {
 
     this.scene.updateMatrixWorld(true);
 
+    //SKY
+    this.skyGeo = new SphereGeometry(100, 60, 60);
+    this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
+    this.skyMaterial.side = BackSide;
+
+    this.sky = new Mesh(this.skyGeo, this.skyMaterial);
+    this.scene.add(this.sky);
+
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
 
@@ -71,7 +79,7 @@ export class MindWorld {
 
   getEnvConfig() {
     return {
-      fogDensity: 0.05,
+      fogDensity: 0.04,
       fogColor: new Color(0x000000)
     };
   }
@@ -166,13 +174,6 @@ export class MindWorld {
       this.collidableMeshList.push(this.ground);
       this.collidableMeshList.push(this.rocks);
 
-      //SKY
-      this.skyGeo = new SphereGeometry(100, 60, 60);
-      this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
-      this.skyMaterial.side = BackSide;
-
-      this.sky = new Mesh(this.skyGeo, this.skyMaterial);
-      this.scene.add(this.sky);
     }
 
     if(this.perso === null){
