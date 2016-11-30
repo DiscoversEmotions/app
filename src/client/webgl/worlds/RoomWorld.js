@@ -52,7 +52,7 @@ export class RoomWorld {
   }
 
   mount() {
-    console.log(`mount Room`);
+    console.log(`mount Room`); 
     if (this.roomSphere === null) {
       var geom = new SphereGeometry(50, 60, 60);
       geom.scale( -1, 1, 1 );

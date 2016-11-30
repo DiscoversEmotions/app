@@ -30,6 +30,13 @@ const assets = [
     priority: 10,
   },
   {
+    key: `world1-skybox`,
+    fileUrl: require(`~/assets/skybox.png`),
+    type: AssetTypes.Texture,
+    status: AssetStatus.Queued,
+    priority: 10
+  },
+  {
     key: `world2`,
     fileUrl: require(`~/assets/world2.awd`),
     type: AssetTypes.AWD,

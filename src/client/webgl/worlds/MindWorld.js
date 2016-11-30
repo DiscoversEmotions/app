@@ -5,7 +5,7 @@ import {
 } from '~/webgl/meshes';
 import {
   Cameraman,
-  OBJLoader
+  OBJLoader 
 } from '~/webgl';
 import {
   PointLight,
@@ -24,7 +24,8 @@ import {
   MeshPhongMaterial,
   FlatShading,
   Color,
-  PointLightHelper
+  PointLightHelper,
+  SphereGeometry
 } from 'three';
 import _ from 'lodash';
 import { Worlds } from '~/types';
@@ -186,6 +187,11 @@ export class MindWorld {
 
       this.ground = this.world1.children[5];
       this.collidableMeshList.push(this.ground);
+
+      const world1Texture = this.app.assetsManager.getAsset(`world1-skybox`);
+      // console.log(world1Texture);
+      
+
     }
 
     if(this.perso === null){

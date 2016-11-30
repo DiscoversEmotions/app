@@ -40,7 +40,7 @@ export class WebGLCore {
     this.scene = new Scene();
 
     console.log(this.scene);
-    this.scene.fog = new FogExp2(0xffffff, 0.1);
+    this.scene.fog = new FogExp2(0xfff1ce, 0.1);
 
     this.renderer = new Renderer();
     this.composer = new EffectComposer(this.renderer);
