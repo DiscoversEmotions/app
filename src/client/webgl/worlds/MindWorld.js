@@ -1,7 +1,7 @@
 import { Cameraman, OBJLoader } from '~/webgl';
 import {
   PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, AmbientLight, MeshPhongMaterial,
-  Color, PointLightHelper, SphereGeometry, BackSide
+  Color, PointLightHelper, SphereGeometry, BackSide, Mesh
 } from 'three';
 import _ from 'lodash';
 import { Worlds } from '~/types';
@@ -161,7 +161,10 @@ export class MindWorld {
 
       //RAYCAST GROUND
       this.ground = this.world1.children[5];
+      this.rocks = this.world1.children[0];
+
       this.collidableMeshList.push(this.ground);
+      this.collidableMeshList.push(this.rocks);
 
       //SKY
       this.skyGeo = new SphereGeometry(100, 60, 60);
