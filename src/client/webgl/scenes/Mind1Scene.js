@@ -75,7 +75,7 @@ export class Mind1Scene extends Scene {
 
   getEnvConfig() {
     return {
-      fogDensity: 0.0,
+      fogDensity: 0.03,
       fogColor: new Color(0x000000)
     };
   }
@@ -120,8 +120,8 @@ export class Mind1Scene extends Scene {
     this.light.position.x = Math.sin(time/5000) * 100;
     this.light.position.z = Math.cos(time/5000) * 100;
 
-    this.userPosition.translateZ(-(dt * 0.10) * movement.forward);
-    this.userPosition.translateX(-(dt * 0.10) * movement.left);
+    this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
+    this.userPosition.translateX(-(dt * 0.01) * movement.left);
     const angle = motion.calc.degreesToRadians(motion.calc.angle(
       { y: movement.forward, x: 0 },
       { y: 0, x: -movement.left}
@@ -133,7 +133,7 @@ export class Mind1Scene extends Scene {
       this.userPosition.position,
       new Vector3(0, -1, 0)
     );
-    this.raycaster.ray.origin.y += 20;
+    this.raycaster.ray.origin.y += 50;
     this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision, true);
     if (this.collisionGroundResults.length) {
       this.userPosition.position.y = this.collisionGroundResults[0].point.y;
@@ -160,6 +160,7 @@ export class Mind1Scene extends Scene {
   mount() {
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world1`);
+      this.world1.scale.set(0.3, 0.3, 0.3);
       this.scene.add(this.world1);
 
       // this.world1.updateMatrixWorld();
