@@ -32,17 +32,17 @@ export class Mind1Scene extends Scene {
 
     this.persoLight = new PointLight();
     this.persoLight.position.y = 2;
-    this.persoLight.intensity = 0.4;
+    this.persoLight.intensity = 1;
     this.userPosition.add(this.persoLight);
 
-    this.light = new PointLight();
-    this.light.position.y = 20;
-    this.scene.add(this.light);
+    // this.light = new PointLight();
+    // this.light.position.y = 20;
+    // this.scene.add(this.light);
 
-    this.light2 = new PointLight();
-    this.light2.position.y = 1000;
-    this.light2.intensity = 0.3;
-    this.scene.add(this.light2);
+    // this.light2 = new PointLight();
+    // this.light2.position.y = 1000;
+    // this.light2.intensity = 0.3;
+    // this.scene.add(this.light2);
 
     this.raycaster = new Raycaster();
 
@@ -75,7 +75,7 @@ export class Mind1Scene extends Scene {
 
   getEnvConfig() {
     return {
-      fogDensity: 0.03,
+      fogDensity: 0.015,
       fogColor: new Color(0x000000)
     };
   }
@@ -117,8 +117,8 @@ export class Mind1Scene extends Scene {
       movement.forward = -1;
     }
 
-    this.light.position.x = Math.sin(time/5000) * 100;
-    this.light.position.z = Math.cos(time/5000) * 100;
+    // this.light.position.x = Math.sin(time/5000) * 100;
+    // this.light.position.z = Math.cos(time/5000) * 100;
 
     this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
     this.userPosition.translateX(-(dt * 0.01) * movement.left);
@@ -160,11 +160,9 @@ export class Mind1Scene extends Scene {
   mount() {
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world1`);
-      this.world1.scale.set(0.3, 0.3, 0.3);
+      this.world1.scale.set(0.1, 0.1, 0.1);
       this.scene.add(this.world1);
-
-      // this.world1.updateMatrixWorld();
-      console.log(this.world1);
+      this.world1.updateMatrixWorld();
 
       this.world1.traverseVisible((item) => {
         console.log(item.name);
