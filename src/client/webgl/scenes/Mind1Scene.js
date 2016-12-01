@@ -19,8 +19,8 @@ export class Mind1Scene extends Scene {
 
     this.world1 = null;
     this.perso = null;
-    this.rocks = null;
     this.ground = null;
+    this.tile = null;
 
     this.userPosition = new Object3D();
     this.userPosition.position.set(0, 5, 0);
@@ -30,14 +30,19 @@ export class Mind1Scene extends Scene {
     this.cameraman.setVerticalAngle(-0.3);
     this.userPosition.add(this.cameraman);
 
-    this.light = new PointLight();
-    this.light.position.y = 20;
-    this.scene.add(this.light);
+    this.persoLight = new PointLight();
+    this.persoLight.position.y = 2;
+    this.persoLight.intensity = 1;
+    this.userPosition.add(this.persoLight);
 
-    this.light2 = new PointLight();
-    this.light2.position.y = 40;
-    this.light2.intensity = 0.5;
-    this.scene.add(this.light2);
+    // this.light = new PointLight();
+    // this.light.position.y = 20;
+    // this.scene.add(this.light);
+
+    // this.light2 = new PointLight();
+    // this.light2.position.y = 1000;
+    // this.light2.intensity = 0.3;
+    // this.scene.add(this.light2);
 
     this.raycaster = new Raycaster();
 
@@ -51,9 +56,8 @@ export class Mind1Scene extends Scene {
     this.skyGeo = new SphereGeometry(100, 60, 60);
     this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
     this.skyMaterial.side = BackSide;
-
     this.sky = new Mesh(this.skyGeo, this.skyMaterial);
-    this.scene.add(this.sky);
+    // this.scene.add(this.sky);
 
     // Bind
     this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
@@ -71,7 +75,7 @@ export class Mind1Scene extends Scene {
 
   getEnvConfig() {
     return {
-      fogDensity: 0.02,
+      fogDensity: 0.015,
       fogColor: new Color(0x000000)
     };
   }
@@ -113,11 +117,11 @@ export class Mind1Scene extends Scene {
       movement.forward = -1;
     }
 
-    this.light.position.x = Math.sin(time/5000) * 100;
-    this.light.position.z = Math.cos(time/5000) * 100;
+    // this.light.position.x = Math.sin(time/5000) * 100;
+    // this.light.position.z = Math.cos(time/5000) * 100;
 
-    this.userPosition.translateZ(-(dt * 0.010) * movement.forward);
-    this.userPosition.translateX(-(dt * 0.010) * movement.left);
+    this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
+    this.userPosition.translateX(-(dt * 0.01) * movement.left);
     const angle = motion.calc.degreesToRadians(motion.calc.angle(
       { y: movement.forward, x: 0 },
       { y: 0, x: -movement.left}
@@ -129,7 +133,7 @@ export class Mind1Scene extends Scene {
       this.userPosition.position,
       new Vector3(0, -1, 0)
     );
-    this.raycaster.ray.origin.y += 5;
+    this.raycaster.ray.origin.y += 50;
     this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision, true);
     if (this.collisionGroundResults.length) {
       this.userPosition.position.y = this.collisionGroundResults[0].point.y;
@@ -155,7 +159,8 @@ export class Mind1Scene extends Scene {
 
   mount() {
     if ( this.world1 === null) {
-      this.world1 = this.app.assetsManager.getAsset(`world2`);
+      this.world1 = this.app.assetsManager.getAsset(`world1`);
+      this.world1.scale.set(0.1, 0.1, 0.1);
       this.scene.add(this.world1);
       this.world1.updateMatrixWorld();
 
@@ -164,18 +169,20 @@ export class Mind1Scene extends Scene {
         if (item.name === `sol`) {
           this.ground = item;
         }
-        if (item.name === `rock`) {
-          this.rocks = item;
-        }
-        if (item.name === `Cube.11`) {
+        if (item.name === `zone-action`) {
           this.tile = item;
         }
+        if (item.name === `pont`) {
+          console.log(`pont !!`, item);
+          this.groundCollision.push(item);
+        }
       });
-      if (this.ground === null || this.rocks === null || this.tile === null) {
+      if (this.ground === null || this.tile === null) {
         throw new Error(`Missing someting in awd !`);
       }
+      console.log(this.ground);
 
-      this.groundCollision.push(this.ground, this.rocks);
+      this.groundCollision.push(this.ground);
       this.tileCollision.push(this.tile);
       console.log(this.tile);
 

@@ -25,7 +25,6 @@ export class WebGLCore {
 
     this.coreScene = new Scene();
 
-    console.log(this.coreScene);
     this.coreScene.fog = new FogExp2(0xfff1ce, 0.1);
 
     this.renderer = new Renderer();
