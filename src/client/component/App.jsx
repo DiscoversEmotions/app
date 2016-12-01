@@ -33,9 +33,10 @@ const App = compose(
 )((props) => {
   return (
     <AppContainer>
-      <System />
-      { props.showModal && <Modal /> }
+       <System />
+       { props.showModal && <Modal /> }
     </AppContainer>
+
   );
 });
 
