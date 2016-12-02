@@ -18,7 +18,7 @@ export class Memory1Scene extends Scene {
 
     this.light = new PointLight();
     this.light.position.y = 5;
-    // this.scene.add(this.light);
+    this.scene.add(this.light);
 
     this.audioListener = new AudioListener();
     this.memorySound = new Audio(this.audioListener);
@@ -27,16 +27,12 @@ export class Memory1Scene extends Scene {
     this.analyser1 = new AudioAnalyser(this.memorySound, 32);
 
     this.isPlaySound = false;
-
   }
 
   mount() {
-
     if (this.isPlaySound == false){
-
       this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
       this.memorySound.play();
-
     }
   }
 

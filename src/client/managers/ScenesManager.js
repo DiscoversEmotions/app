@@ -18,6 +18,7 @@ export class ScenesManager {
       nextSceneName: `app.nextSceneName`,
       sceneTransition: `app.sceneTransition`,
       recoveryStarted: `app.recoveryStarted`,
+      recoveryProgress: `app.recoveryProgress`,
       canStartRoom: canStartRoom,
       mind1AssetsReady: mind1AssetsReady
     },
@@ -27,7 +28,7 @@ export class ScenesManager {
   )
   update({
     currentSceneName, nextSceneName, sceneTransition, canStartRoom, transitionToScene,
-    recoveryStarted, mind1AssetsReady
+    recoveryStarted, mind1AssetsReady, recoveryProgress
   }) {
     if (sceneTransition) {
       return;
@@ -35,14 +36,17 @@ export class ScenesManager {
     if (currentSceneName === Scenes.Black && canStartRoom) {
       transitionToScene({ scene: Scenes.Room });
     }
-    if (currentSceneName === Scenes.Room && recoveryStarted) {
-      transitionToScene({ scene: Scenes.Mind });
+    if (currentSceneName === Scenes.Room && recoveryStarted && recoveryProgress.lvl1 === false) {
+      transitionToScene({ scene: Scenes.Lvl1 });
+    }
+    if (currentSceneName === Scenes.Lvl1 && recoveryProgress.lvl1 === true) {
+      transitionToScene({ scene: Scenes.Memory1 });
     }
 
     // DEV
-    if (currentSceneName !== Scenes.Mind && mind1AssetsReady) {
-      transitionToScene({ scene: Scenes.Mind });
-    }
+    // if (currentSceneName !== Scenes.Lvl1 && mind1AssetsReady) {
+    //   transitionToScene({ scene: Scenes.Lvl1 });
+    // }
   }
 
 }

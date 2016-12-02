@@ -108,8 +108,8 @@ export const shouldBePointerLocked = Computed(
   },
   ({ currentSceneName }) => {
     return (
-      currentSceneName === Scenes.Mind ||
-      currentSceneName === Scenes.Memory
+      currentSceneName === Scenes.Lvl1 ||
+      currentSceneName === Scenes.Memory1
     );
   }
 );

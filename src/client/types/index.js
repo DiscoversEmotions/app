@@ -3,8 +3,10 @@ export const Scenes = {
   None: `none`,
   Black: `black`,
   Room: `room`,
-  Mind: `mind`,
-  Memory: `memory`
+  Lvl1: `lvl1`,
+  Memory1: `memory1`,
+  Lvl2: `lvl2`,
+  Memory2: `memory2`
 };
 
 export const AssetStatus = {

@@ -15,7 +15,12 @@ export default {
     sceneTransition: false,
     connectedToEyes: false,
     recoveryStarted: false,
-    pointerLock: false
+    pointerLock: false,
+    recoveryProgress: {
+      lvl1: false,
+      lvl2: false,
+      lvl3: false
+    }
   },
   signals: {
     setSize: [ merge(state`app.size`, { width: input`width`, height: input`height` }) ],
@@ -36,6 +41,7 @@ export default {
     ],
     startRecovery: [ set(state`app.recoveryStarted`, true) ],
     startPointerLock: [ set(state`app.pointerLock`, true) ],
-    stopPointerLock: [ set(state`app.pointerLock`, false) ]
+    stopPointerLock: [ set(state`app.pointerLock`, false) ],
+    setRecoveryStepDone: [ set(state`app.recoveryProgress.${input`step`}`, true) ]
   }
 };
