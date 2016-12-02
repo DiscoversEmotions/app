@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Button from '~/component/Button';
-import Message from '~/component/Message';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 

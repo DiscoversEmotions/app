@@ -89,27 +89,14 @@ export const mind1AssetsReady = Computed(
   }
 );
 
-export const showModal = Computed(
-  {
-    currentSceneName: `app.currentSceneName`,
-    findErrorDone: `system.findErrorDone`
-  },
-  ({ currentSceneName, findErrorDone }) => {
-    return (
-      currentSceneName === Scenes.Room &&
-      findErrorDone
-    );
-  }
-);
-
 export const shouldBePointerLocked = Computed(
   {
     currentSceneName: `app.currentSceneName`
   },
   ({ currentSceneName }) => {
     return (
-      currentSceneName === Scenes.Mind ||
-      currentSceneName === Scenes.Memory
+      currentSceneName === Scenes.Lvl1 ||
+      currentSceneName === Scenes.Memory1
     );
   }
 );

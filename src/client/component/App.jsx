@@ -3,8 +3,6 @@ import styled, { injectGlobal } from 'styled-components';
 import { compose, ConnectReact } from '~/core';
 import System from '~/component/System';
 import Credits from '~/component/Credits';
-import Modal from '~/component/Modal';
-import { showModal } from '~/computed';
 
 require('normalize.css/normalize.css');
 
@@ -25,18 +23,14 @@ const AppContainer = styled.div`
 `;
 
 const App = compose(
-  ConnectReact(
-    {
-      showModal: showModal
-    }
-  )
+  // ConnectReact(
+  //   {}
+  // )
 )((props) => {
   return (
     <AppContainer>
-       <System />
-       { props.showModal && <Modal /> }
+      <System />
     </AppContainer>
-
   );
 });
 

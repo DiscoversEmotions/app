@@ -7,7 +7,7 @@ import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
 import { Scene } from './Scene';
 
-export class Mind1Scene extends Scene {
+export class Lvl1Scene extends Scene {
 
   constructor(...args) {
     super(...args);
@@ -34,15 +34,6 @@ export class Mind1Scene extends Scene {
     this.persoLight.position.y = 2;
     this.persoLight.intensity = 1;
     this.userPosition.add(this.persoLight);
-
-    // this.light = new PointLight();
-    // this.light.position.y = 20;
-    // this.scene.add(this.light);
-
-    // this.light2 = new PointLight();
-    // this.light2.position.y = 1000;
-    // this.light2.intensity = 0.3;
-    // this.scene.add(this.light2);
 
     this.raycaster = new Raycaster();
 
@@ -146,6 +137,9 @@ export class Mind1Scene extends Scene {
     if (this.collisionTileResults.length) {
       // Why is this triggered when the scene start ?
       console.log(`Collision with tile !`);
+      const setRecoveryStepDone = this.controller.getSignal(`app.setRecoveryStepDone`);
+      console.log(setRecoveryStepDone);
+      setRecoveryStepDone({ step: `lvl1` });
     }
 
 

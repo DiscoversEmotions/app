@@ -8,6 +8,8 @@ export class RoomScene extends Scene {
   constructor(...args) {
     super(...args);
 
+    this.scene.add(this.cameraman);
+
     this.camVert = 0;
     this.mousePos = { x: 0, y: 0 };
 
