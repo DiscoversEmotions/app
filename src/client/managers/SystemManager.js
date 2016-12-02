@@ -196,15 +196,15 @@ export class SystemManager {
 
   getMessageType(msg) {
     if (_.includes([`boot-done`, `connect-eyes-done`, `load-memory-done`], msg.key)) {
-      return { key: `message`, type: `success`};
+      return { key: `message`, type: `success`, height: 30 };
     }
     if (_.includes([
       `load-emotions-error`, `load-emotions-error-love`, `load-emotions-error-anger`,
       `load-emotions-error-sadness`, `load-emotions-done`
     ], msg.key)) {
-      return { key: `message`, type: `error`};
+      return { key: `message`, type: `error`, height: 30 };
     }
-    return { key: `message`, type: `normal`};
+    return { key: `message`, type: `normal`, height: 30 };
   }
 
   getMessageRenderer(msg) {
