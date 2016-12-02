@@ -59,23 +59,19 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `boot-progress`) {
-      if (lastMessage.progress === 100) {
-        nextMessage({ key: `boot-done` }, 100);
-        return;
+      if (lastMessage.progress < 100) {
+        var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(4, 21));
+        if (nextProgress > 100) {
+          nextProgress = 100;
+        }
+        var time = Math.floor(motion.calc.random(200, 500));
+        if (roomAssetsReady) {
+          time = 50;
+        }
+        updateMessage(`boot-progress`, { progress: nextProgress }, time);
+      } else {
+        nextMessage({ key: `connect-eyes` }, 100);
       }
-      var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(4, 21));
-      if (nextProgress > 100) {
-        nextProgress = 100;
-      }
-      var time = Math.floor(motion.calc.random(200, 500));
-      if (roomAssetsReady) {
-        time = 50;
-      }
-      updateMessage(`boot-progress`, { progress: nextProgress }, time);
-    }
-
-    if (lastMessage.key === `boot-done`) {
-      nextMessage({ key: `connect-eyes` }, 500);
       return;
     }
 
@@ -85,21 +81,20 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `connect-eyes-progress`) {
-      if (lastMessage.progress === 100) {
-        nextMessage({ key: `connect-eyes-done` }, 100);
+      if (lastMessage.progress < 100) {
+        var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(2, 14));
+        var time = Math.floor(motion.calc.random(50, 200));
+        if (!roomAssetsReady) {
+          nextProgress = lastMessage.progress + 1;
+          time = 300 + Math.pow(1.068, lastMessage.progress);
+        }
+        if (nextProgress > 100) {
+          nextProgress = 100;
+        }
+        updateMessage(`connect-eyes-progress`, { progress: nextProgress }, time);
+      } else {
         setBootDone();
-        return;
       }
-      var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(2, 14));
-      var time = Math.floor(motion.calc.random(50, 200));
-      if (!roomAssetsReady) {
-        nextProgress = lastMessage.progress + 1;
-        time = 300 + Math.pow(1.068, lastMessage.progress);
-      }
-      if (nextProgress > 100) {
-        nextProgress = 100;
-      }
-      updateMessage(`connect-eyes-progress`, { progress: nextProgress }, time);
       return;
     }
 
@@ -110,79 +105,70 @@ export class SystemManager {
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
-    if (lastMessage.key === `connect-eyes-done`) {
+    if (lastMessage.key === `connect-eyes-progress`) {
       nextMessage({ key: `load-memory-progress`, progress: 0 }, 100);
       return;
     }
 
     if (lastMessage.key === `load-memory-progress`) {
-      if (lastMessage.progress === NUMBER_OF_MEMORIES) {
-        nextMessage({ key: `load-memory-done` }, 100);
-        return;
-      }
-      var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(10, 34));
-      var time = Math.floor(motion.calc.random(50, 200));
-      if (nextProgress > NUMBER_OF_MEMORIES) {
-        nextProgress = NUMBER_OF_MEMORIES;
-      }
-      if (!mind1AssetsReady) {
-        if (nextProgress > NUMBER_OF_MEMORIES - 1) {
-          nextProgress = NUMBER_OF_MEMORIES - 1;
+      if (lastMessage.progress < NUMBER_OF_MEMORIES) {
+        var nextProgress = lastMessage.progress + Math.floor(motion.calc.random(10, 34));
+        var time = Math.floor(motion.calc.random(50, 200));
+        if (nextProgress > NUMBER_OF_MEMORIES) {
+          nextProgress = NUMBER_OF_MEMORIES;
         }
-        if (lastMessage.progress > NUMBER_OF_MEMORIES * 0.5) {
-          nextProgress = lastMessage.progress + Math.floor(motion.calc.random(4, 15));
-          time = Math.floor(motion.calc.random(100, 400));
+        if (!mind1AssetsReady) {
+          if (nextProgress > NUMBER_OF_MEMORIES - 1) {
+            nextProgress = NUMBER_OF_MEMORIES - 1;
+          }
+          if (lastMessage.progress > NUMBER_OF_MEMORIES * 0.5) {
+            nextProgress = lastMessage.progress + Math.floor(motion.calc.random(4, 15));
+            time = Math.floor(motion.calc.random(100, 400));
+          }
+          if (lastMessage.progress > NUMBER_OF_MEMORIES * 0.7) {
+            nextProgress = lastMessage.progress + 1;
+            time = Math.floor(motion.calc.random(400, 700));
+          }
         }
-        if (lastMessage.progress > NUMBER_OF_MEMORIES * 0.7) {
-          nextProgress = lastMessage.progress + 1;
-          time = Math.floor(motion.calc.random(400, 700));
-        }
+        updateMessage(`load-memory-progress`, { progress: nextProgress }, time);
+      } else {
+        nextMessage({ key: `load-emotions-progress`, progress: 0 }, 100);
       }
-      updateMessage(`load-memory-progress`, { progress: nextProgress }, time);
-      return;
-    }
-
-    if (lastMessage.key === `load-memory-done`) {
-      nextMessage({ key: `load-emotions-progress`, progress: 0 }, 500);
       return;
     }
 
     if (lastMessage.key === `load-emotions-progress`) {
-      if (lastMessage.progress === NUMBER_OF_EMOTIONS) {
-        nextMessage({ key: `load-emotions-done` }, 100);
-        return;
-      }
-      var nextProgress = lastMessage.progress + 1;
-      var time = Math.floor(motion.calc.random(50, 200));
-      if (nextProgress > NUMBER_OF_MEMORIES) {
-        nextProgress = NUMBER_OF_MEMORIES;
-      }
-      if (lastMessage.progress === 10) {
-        nextMessage([
-          { key: `load-emotions-error` },
-          { key: `load-emotions-error-love` },
-          { key: `load-emotions-progress`, progress: nextProgress }
-        ], time);
-      } else if (lastMessage.progress === 15) {
-        nextMessage([
-          { key: `load-emotions-error` },
-          { key: `load-emotions-error-anger` },
-          { key: `load-emotions-progress`, progress: nextProgress }
-        ], time);
-      } else if (lastMessage.progress === 27) {
-        nextMessage([
-          { key: `load-emotions-error` },
-          { key: `load-emotions-error-sadness` },
-          { key: `load-emotions-progress`, progress: nextProgress }
-        ], time);
-      } else {
+      if (lastMessage.progress < NUMBER_OF_EMOTIONS) {
+        var nextProgress = lastMessage.progress + 1;
+        var time = Math.floor(motion.calc.random(50, 200));
+        if (nextProgress > NUMBER_OF_MEMORIES) {
+          nextProgress = NUMBER_OF_MEMORIES;
+        }
+        // if (lastMessage.progress === 10) {
+        //   nextMessage([
+        //     { key: `load-emotions-error` },
+        //     { key: `load-emotions-error-love` },
+        //     { key: `load-emotions-progress`, progress: nextProgress }
+        //   ], time);
+        // } else if (lastMessage.progress === 15) {
+        //   nextMessage([
+        //     { key: `load-emotions-error` },
+        //     { key: `load-emotions-error-anger` },
+        //     { key: `load-emotions-progress`, progress: nextProgress }
+        //   ], time);
+        // } else if (lastMessage.progress === 27) {
+        //   nextMessage([
+        //     { key: `load-emotions-error` },
+        //     { key: `load-emotions-error-sadness` },
+        //     { key: `load-emotions-progress`, progress: nextProgress }
+        //   ], time);
+        // } else {
+        // }
         updateMessage(`load-emotions-progress`, { progress: nextProgress }, time);
+      } else {
+        setFindErrorDone();
       }
       return;
-    }
-
-    if (lastMessage.key === `load-emotions-done`) {
-      setFindErrorDone();
     }
   }
 

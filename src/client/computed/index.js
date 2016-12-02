@@ -89,19 +89,6 @@ export const mind1AssetsReady = Computed(
   }
 );
 
-export const showModal = Computed(
-  {
-    currentSceneName: `app.currentSceneName`,
-    findErrorDone: `system.findErrorDone`
-  },
-  ({ currentSceneName, findErrorDone }) => {
-    return (
-      currentSceneName === Scenes.Room &&
-      findErrorDone
-    );
-  }
-);
-
 export const shouldBePointerLocked = Computed(
   {
     currentSceneName: `app.currentSceneName`
