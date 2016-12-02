@@ -8,8 +8,8 @@ import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { lastMessage } from '~/computed';
 
-const SimpleMessage = compose(
-  // inject((provided) => ({ core: provided.core })),
+const MessageSimple = compose(
+  inject((provided) => ({ core: provided.core })),
   // ConnectReact(
   //   {
   //     lastMessage: lastMessage
@@ -18,10 +18,10 @@ const SimpleMessage = compose(
 )((props) => {
   const msg = props.msg;
   return (
-    <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={200} >
-      Message
+    <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={ msg.width || 300 } >
+      { props.core.systemManager.formatMessage(msg) }
     </MessageBox>
   );
 });
 
-export default SimpleMessage;
+export default MessageSimple;

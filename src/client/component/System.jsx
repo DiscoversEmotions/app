@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Button from '~/component/Button';
-import SimpleMessage from '~/component/SimpleMessage';
+import MessageSimple from '~/component/MessageSimple';
+import MessageConsole from '~/component/MessageConsole';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { allMessages } from '~/computed';
 
-const MESSAGES_MARGIN = 5;
+const MESSAGES_MARGIN = 10;
 
 const Container = styled.div`
   position: absolute;
@@ -33,18 +34,12 @@ const System = compose(
 )((props) => {
   const systemManager = props.core.systemManager;
   var distFromBottom = MESSAGES_MARGIN;
-  const messages = props.messages.map(msg => {
+  const messages = props.messages.slice(-8).map(msg => Object.assign({}, msg));
+  _.forEachRight(messages, (msg) => {
     const msgType = systemManager.getMessageType(msg);
-    const result = Object.assign(
-      {},
-      msg,
-      {
-        msgType,
-        distFromBottom
-      }
-    );
+    msg.msgType = msgType;
+    msg.distFromBottom = distFromBottom;
     distFromBottom += MESSAGES_MARGIN + msgType.height;
-    return result;
   });
 
   return (
@@ -52,7 +47,8 @@ const System = compose(
       {
         messages.map(msg => {
           switch (msg.msgType.key) {
-            case `message`: return <SimpleMessage msg={msg} />
+            case `simple`: return <MessageSimple msg={msg} />;
+            case `console`: return <MessageConsole msg={msg} />;
             default: return null;
           }
         })
