@@ -20,6 +20,18 @@ const AppContainer = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
+
+    &:after{
+      background: url( 'http://s.cdpn.io/1715/noise-1.png' )
+      position: absolute
+      content: ''
+      z-index: 1
+      opacity: 0.8
+      height: 100%
+      width: 100%
+      left: 0
+      top: 0
+  }
 `;
 
 const App = compose(

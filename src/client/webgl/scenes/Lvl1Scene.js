@@ -30,9 +30,11 @@ export class Lvl1Scene extends Scene {
     this.cameraman.setVerticalAngle(-0.3);
     this.userPosition.add(this.cameraman);
 
-    this.persoLight = new PointLight();
+    this.persoLight = new PointLight({
+      color: 0xff0000
+    });
     this.persoLight.position.y = 2;
-    this.persoLight.intensity = 1;
+    this.persoLight.intensity = 1.5;
     this.userPosition.add(this.persoLight);
 
     this.raycaster = new Raycaster();
@@ -64,13 +66,13 @@ export class Lvl1Scene extends Scene {
 
     this.particles = null;
     this.particlesGeom = new Geometry();
-    this.particleCount = 150;
+    this.particleCount = 80;
 
   }
 
   getEnvConfig() {
     return {
-      fogDensity: 0.05,
+      fogDensity: 0.03,
       fogColor: new Color(0x000000)
     };
   }
@@ -153,23 +155,22 @@ export class Lvl1Scene extends Scene {
 
     this.idle.play();
 
-    this.particleSystem.rotation.y -= 0.0005;
+    this.particleSystem.rotation.y -= 0.0003;
 
     this.pCount = this.particleCount;
-    this.particleSystem.position.set(-5, -5, -25);
+    this.particleSystem.position.set(-5, -5, -40);
 
   }
 
   mount() {
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world1`);
-      this.world1.scale.set(0.1, 0.1, 0.1);
       this.scene.add(this.world1);
       this.world1.updateMatrixWorld();
 
       this.world1.traverseVisible((item) => {
         console.log(item.name);
-        if (item.name === `sol`) {
+        if (item.name === `sol.1`) {
           this.ground = item;
         }
         if (item.name === `zone-action`) {
@@ -206,7 +207,7 @@ export class Lvl1Scene extends Scene {
 
     if(this.particles === null){
 
-      var sizeParticle = Math.random(4*3);
+      var sizeParticle = Math.random() * (1.5 - 1) + 1;;
       
       this.pMaterial = new PointsMaterial({
         color: 0xFFFFFF,
@@ -217,7 +218,7 @@ export class Lvl1Scene extends Scene {
       });
   
       for (var p = 0; p < this.particleCount; p++) {
-        var pX = Math.random() * 25;
+        var pX = Math.random() * 50;
         var pY = Math.random() * 10;
         var pZ = Math.random() * 60;
         var particle = new Vector3(pX, pY, pZ);
