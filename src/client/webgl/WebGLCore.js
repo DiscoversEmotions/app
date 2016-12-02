@@ -1,7 +1,7 @@
 import * as motion from 'popmotion';
 import _ from 'lodash';
 import { Vector3, Color, FogExp2, Scene } from 'three';
-import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
+import { EffectComposer, RenderPass, GlitchPass, SMAAPass, FilmPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scenes } from '~/types';
 import { RoomScene, Mind1Scene, Memory1Scene, BootScene } from './scenes';
@@ -46,9 +46,12 @@ export class WebGLCore {
     this.parentElement.appendChild( this.renderer.domElement );
 
     this.initComposer();
+    this.initComposerGrain();
+
     this.resize({}, this.controller, this);
     this.updateScene({}, this.controller, this);
     this.updatePass({}, this.controller, this);
+
   }
 
   update(time, dt) {
@@ -120,6 +123,12 @@ export class WebGLCore {
     this.glitchPass.mode = 1;
     this.glitchPass.enabled = false;
     this.composer.addPass(this.glitchPass);
+  }
+
+  initComposerGrain(){
+    this.filmPass = new FilmPass(0.8, 0.325, 256, false);
+    this.filmPass.renderToScreen = true;
+    // this.composer.addPass(this.filmPass);
   }
 
   mountScene(sceneName) {

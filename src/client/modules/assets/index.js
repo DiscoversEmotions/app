@@ -30,6 +30,13 @@ const assets = [
     priority: 10,
   },
   {
+    key: `particleTexture`,
+    fileUrl: require(`~/assets/particle.png`),
+    type: AssetTypes.Texture,
+    status: AssetStatus.Queued,
+    priority: 10,
+  },
+  {
     key: `world2`,
     fileUrl: require(`~/assets/world2.awd`),
     type: AssetTypes.AWD,

@@ -1,6 +1,6 @@
 import {
   PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, MeshPhongMaterial,
-  Color, SphereGeometry, BackSide, Mesh, Vector3
+  Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
 } from 'three';
 import _ from 'lodash';
 import { ConnectMethod } from '~/core';
@@ -71,11 +71,15 @@ export class Mind1Scene extends Scene {
       shading: 1
     });
 
+    this.particles = null;
+    this.particlesGeom = new Geometry();
+    this.particleCount = 150;
+
   }
 
   getEnvConfig() {
     return {
-      fogDensity: 0.015,
+      fogDensity: 0.05,
       fogColor: new Color(0x000000)
     };
   }
@@ -155,6 +159,11 @@ export class Mind1Scene extends Scene {
 
     this.idle.play();
 
+    this.particleSystem.rotation.y -= 0.0005;
+
+    this.pCount = this.particleCount;
+    this.particleSystem.position.set(-5, -5, -25);
+
   }
 
   mount() {
@@ -180,6 +189,7 @@ export class Mind1Scene extends Scene {
       if (this.ground === null || this.tile === null) {
         throw new Error(`Missing someting in awd !`);
       }
+
       console.log(this.ground);
 
       this.groundCollision.push(this.ground);
@@ -197,6 +207,35 @@ export class Mind1Scene extends Scene {
 
       this.mixer = new AnimationMixer(this.persoMesh);
       this.idle = this.mixer.clipAction(this.persoMesh.geometry.animations[0]);
+
+    }
+
+    if(this.particles === null){
+
+      var sizeParticle = Math.random(4*3);
+      
+      this.pMaterial = new PointsMaterial({
+        color: 0xFFFFFF,
+        size: sizeParticle,
+        map: this.app.assetsManager.getAsset(`particleTexture`),
+        blending: AdditiveBlending,
+        transparent: true
+      });
+  
+      for (var p = 0; p < this.particleCount; p++) {
+        var pX = Math.random() * 25;
+        var pY = Math.random() * 10;
+        var pZ = Math.random() * 60;
+        var particle = new Vector3(pX, pY, pZ);
+        particle.velocity = new Vector3(0, -Math.random(), 0);
+
+        this.particlesGeom.vertices.push(particle);
+      }
+
+      this.particleSystem = new Points(this.particlesGeom, this.pMaterial);
+      this.particleSystem.sortParticles = true;
+
+      this.scene.add(this.particleSystem);
 
     }
 
