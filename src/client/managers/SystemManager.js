@@ -195,23 +195,16 @@ export class SystemManager {
   }
 
   getMessageType(msg) {
-    if ([
-      `boot-done`,
-      `connect-eyes-done`,
-      `load-memory-done`
-    ].indexOf(msg.key) > -1) {
-      return `success`;
+    if (_.includes([`boot-done`, `connect-eyes-done`, `load-memory-done`], msg.key)) {
+      return { key: `message`, type: `success`};
     }
-    if ([
-      `load-emotions-error`,
-      `load-emotions-error-love`,
-      `load-emotions-error-anger`,
-      `load-emotions-error-sadness`,
-      `load-emotions-done`
-    ].indexOf(msg.key) > -1) {
-      return `error`;
+    if (_.includes([
+      `load-emotions-error`, `load-emotions-error-love`, `load-emotions-error-anger`,
+      `load-emotions-error-sadness`, `load-emotions-done`
+    ], msg.key)) {
+      return { key: `message`, type: `error`};
     }
-    return `normal`;
+    return { key: `message`, type: `normal`};
   }
 
   getMessageRenderer(msg) {

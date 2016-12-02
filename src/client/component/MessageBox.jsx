@@ -18,7 +18,7 @@ function getShadowColor (type) {
   return `rgba(0, 0, 0, 0.5)`;
 }
 
-const Message = styled.div`
+const MessageBox = styled.div`
   height: 26px;
   font-family: 'Anonymous Pro', monospace;
   text-align: right;
@@ -29,9 +29,9 @@ const Message = styled.div`
   text-shadow: 0 0 5px ${ (props) => getShadowColor(props.type) };
 `;
 
-Message.defaultProps = {
+MessageBox.defaultProps = {
   type: `normal`
 };
 
 
-export default Message;
+export default MessageBox;

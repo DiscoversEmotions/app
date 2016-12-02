@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Button from '~/component/Button';
-import Message from '~/component/Message';
+import SimpleMessage from '~/component/SimpleMessage';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { allMessages } from '~/computed';
 
 const Container = styled.div`
   position: absolute;
-  height: ${ (props) => (props.numberOfLines * 26) + `px` };
+  height: 500px;
   width: 500px;
   bottom: 20px;
   right: 40px;
@@ -25,28 +25,22 @@ const System = compose(
   inject((provided) => ({ core: provided.core })),
   ConnectReact(
     {
-      messages: allMessages,
-      numberOfLines: `system.numberOfLines`
+      messages: allMessages
     }
   )
 )((props) => {
   const systemManager = props.core.systemManager;
   const messages = props.messages.slice().reverse();
   return (
-    <Container full={props.full || false } numberOfLines={ props.numberOfLines }>
+    <Container>
       {
-        (() => {
-          const result = [];
-          for (var i = 0; i < props.numberOfLines; i++) {
-            const msg = messages[i] !== undefined ? messages[i] : { key: `empty` };
-            result.push(
-              <Message key={i} type={ systemManager.getMessageType(msg) }>
-                { systemManager.formatMessage(msg) }
-              </Message>
-            );
+        messages.map(msg => {
+          const msgType = systemManager.getMessageType(msg);
+          switch (msgType.key) {
+            case `message`: return <SimpleMessage />
+            default: return null;
           }
-          return result.reverse();
-        })()
+        })
       }
     </Container>
   );
