@@ -33,20 +33,20 @@ export class ScenesManager {
     if (sceneTransition) {
       return;
     }
-    // if (currentSceneName === Scenes.Black && canStartRoom) {
-    //   transitionToScene({ scene: Scenes.Room });
-    // }
-    // if (currentSceneName === Scenes.Room && recoveryStarted && recoveryProgress.lvl1 === false) {
-    //   transitionToScene({ scene: Scenes.Lvl1 });
-    // }
-    // if (currentSceneName === Scenes.Lvl1 && recoveryProgress.lvl1 === true) {
-    //   transitionToScene({ scene: Scenes.Memory1 });
-    // }
-
-    // DEV
-    if (currentSceneName !== Scenes.Lvl1 && mind1AssetsReady) {
+    if (currentSceneName === Scenes.Black && canStartRoom) {
+      transitionToScene({ scene: Scenes.Room });
+    }
+    if (currentSceneName === Scenes.Room && recoveryStarted && recoveryProgress.lvl1 === false) {
       transitionToScene({ scene: Scenes.Lvl1 });
     }
+    if (currentSceneName === Scenes.Lvl1 && recoveryProgress.lvl1 === true) {
+      transitionToScene({ scene: Scenes.Memory1 });
+    }
+
+    // DEV
+    // if (currentSceneName !== Scenes.Lvl1 && mind1AssetsReady) {
+    //   transitionToScene({ scene: Scenes.Lvl1 });
+    // }
   }
 
 }

@@ -45,6 +45,9 @@ export class SystemManager {
     if (findErrorDone === false) {
       this.udateFindError(context);
       return;
+    } else {
+      this.updateProgression(context);
+      return;
     }
   }
 
@@ -101,6 +104,7 @@ export class SystemManager {
   }
 
   udateFindError(context) {
+    console.log(`udateFindError`);
     const { lastMessage, planNextMessage, updateLastMessage, mind1AssetsReady, messages, setFindErrorDone } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
@@ -144,32 +148,23 @@ export class SystemManager {
         if (nextProgress > NUMBER_OF_MEMORIES) {
           nextProgress = NUMBER_OF_MEMORIES;
         }
-        // if (lastMessage.progress === 10) {
-        //   nextMessage([
-        //     { key: `load-emotions-error` },
-        //     { key: `load-emotions-error-love` },
-        //     { key: `load-emotions-progress`, progress: nextProgress }
-        //   ], time);
-        // } else if (lastMessage.progress === 15) {
-        //   nextMessage([
-        //     { key: `load-emotions-error` },
-        //     { key: `load-emotions-error-anger` },
-        //     { key: `load-emotions-progress`, progress: nextProgress }
-        //   ], time);
-        // } else if (lastMessage.progress === 27) {
-        //   nextMessage([
-        //     { key: `load-emotions-error` },
-        //     { key: `load-emotions-error-sadness` },
-        //     { key: `load-emotions-progress`, progress: nextProgress }
-        //   ], time);
-        // } else {
-        // }
         updateMessage(`load-emotions-progress`, { progress: nextProgress }, time);
       } else {
         setFindErrorDone();
       }
       return;
     }
+  }
+
+  updateProgression(context) {
+    const { lastMessage, planNextMessage, updateLastMessage } = context;
+    const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
+    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+
+    if (lastMessage.key === `load-emotions-progress`) {
+      nextMessage({ key: `need-recovery` }, 200);
+    }
+
   }
 
   formatMessage(msg) {
@@ -181,6 +176,9 @@ export class SystemManager {
   }
 
   getMessageType(msg) {
+    if (msg.key === `need-recovery`) {
+      return { key: `recovery`, height: 200 };
+    }
     if (_.includes([`boot`, `boot-progress`, `boot-done`, `connect-eyes`, `connect-eyes-progress`, `connect-eyes-done`], msg.key)) {
       return { key: `console`, height: 26 };
     }
@@ -218,6 +216,7 @@ export class SystemManager {
     case `load-emotions-error-anger`: return (msg) => (`Anger [/system/emotions/anger.dg]`);
     case `load-emotions-error-sadness`: return (msg) => (`Sadness [/system/emotions/sadness.dg]`);
     case `load-emotions-done`: return (msg) => (`${NUMBER_OF_EMOTIONS - 3} / ${NUMBER_OF_EMOTIONS} emotions retrieved - 3 errors`);
+    case `need-recovery`: return (msg) => (`Recovery process is neeeded !`);
     default:
       console.error(new Error(`Message key ${msg.key} ??`));
       throw new Error(`Message key ${msg.key} ??`);

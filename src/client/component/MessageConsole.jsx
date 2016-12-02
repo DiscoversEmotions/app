@@ -4,9 +4,8 @@ import _ from 'lodash';
 import Button from '~/component/Button';
 import MessageBox from '~/component/MessageBox';
 import NeedRecovery from '~/component/NeedRecovery';
-import { compose, ConnectReact } from '~/core';
+import { compose } from '~/core';
 import { inject } from 'react-tunnel';
-import { lastMessage } from '~/computed';
 
 const Message = styled.div`
   position: absolute;
@@ -25,12 +24,7 @@ const Message = styled.div`
 `;
 
 const MessageConsole = compose(
-  inject((provided) => ({ core: provided.core })),
-  // ConnectReact(
-  //   {
-  //     lastMessage: lastMessage
-  //   }
-  // )
+  inject((provided) => ({ core: provided.core }))
 )((props) => {
   const msg = props.msg;
   return (

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import Button from '~/component/Button';
 import MessageSimple from '~/component/MessageSimple';
 import MessageConsole from '~/component/MessageConsole';
+import MessageRecovery from '~/component/MessageRecovery';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { allMessages } from '~/computed';
@@ -49,6 +50,7 @@ const System = compose(
           switch (msg.msgType.key) {
             case `simple`: return <MessageSimple msg={msg} />;
             case `console`: return <MessageConsole msg={msg} />;
+            case `recovery`: return <MessageRecovery msg={msg} />;
             default: return null;
           }
         })
