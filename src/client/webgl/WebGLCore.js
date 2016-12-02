@@ -4,7 +4,7 @@ import { Vector3, Color, FogExp2, Scene } from 'three';
 import { EffectComposer, RenderPass, GlitchPass, SMAAPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scenes } from '~/types';
-import { RoomScene, Lvl1Scene, Memory1Scene, BootScene } from './scenes';
+import { RoomScene, Lvl1Scene, Memory1Scene, Lvl2Scene, BootScene } from './scenes';
 import { Renderer } from './Renderer';
 
 export class WebGLCore {
@@ -37,6 +37,7 @@ export class WebGLCore {
       [Scenes.Room]: RoomScene,
       [Scenes.Lvl1]: Lvl1Scene,
       [Scenes.Memory1]: Memory1Scene,
+      [Scenes.Lvl2]: Lvl2Scene,
       [Scenes.Black]: BootScene
     }, (value, key) => {
       return new value(key, this, this.app, this.controller, this.parentElement);

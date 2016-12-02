@@ -7,7 +7,7 @@ import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
 import { Scene } from './Scene';
 
-export class Lvl1Scene extends Scene {
+export class Lvl2Scene extends Scene {
 
   constructor(...args) {
     super(...args);
@@ -153,7 +153,7 @@ export class Lvl1Scene extends Scene {
 
   mount() {
     if ( this.world1 === null) {
-      this.world1 = this.app.assetsManager.getAsset(`world1`);
+      this.world1 = this.app.assetsManager.getAsset(`world2`);
       this.world1.scale.set(0.1, 0.1, 0.1);
       this.scene.add(this.world1);
       this.world1.updateMatrixWorld();
