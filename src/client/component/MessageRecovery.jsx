@@ -21,7 +21,10 @@ const MessageSimple = compose(
   return (
     <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={ msg.width || 300 } >
       { props.core.systemManager.formatMessage(msg) }
-      <Button onClick={ () => props.startRecovery() }>
+      <Button onClick={() => {
+        props.startRecovery();
+        props.core.pointerLock.tryActivate();
+      }}>
         Start Recovery
       </Button>
     </MessageBox>

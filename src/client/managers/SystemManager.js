@@ -22,6 +22,7 @@ export class SystemManager {
       bootDone: `system.bootDone`,
       findErrorDone: `system.findErrorDone`,
       messages: `system.messages`,
+      recoveryProgress: `app.recoveryProgress`,
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
       mind1AssetsReady: mind1AssetsReady,
@@ -157,12 +158,20 @@ export class SystemManager {
   }
 
   updateProgression(context) {
-    const { lastMessage, planNextMessage, updateLastMessage } = context;
+    const { lastMessage, planNextMessage, updateLastMessage, recoveryProgress } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     if (lastMessage.key === `load-emotions-progress`) {
       nextMessage({ key: `need-recovery` }, 200);
+    }
+
+    if (lastMessage.key === `need-recovery` && recoveryProgress.lvl1 === true) {
+      nextMessage({ key: `emotion-recovered` }, 300);
+    }
+
+    if (lastMessage.key === `emotion-recovered`) {
+      nextMessage({ key: `linked-memory` }, 500);
     }
 
   }
@@ -217,6 +226,8 @@ export class SystemManager {
     case `load-emotions-error-sadness`: return (msg) => (`Sadness [/system/emotions/sadness.dg]`);
     case `load-emotions-done`: return (msg) => (`${NUMBER_OF_EMOTIONS - 3} / ${NUMBER_OF_EMOTIONS} emotions retrieved - 3 errors`);
     case `need-recovery`: return (msg) => (`Recovery process is neeeded !`);
+    case `emotion-recovered`: return (msg) => (`Emotion Recovered`);
+    case `linked-memory`: return (msg) => (`Linked Memory found !`);
     default:
       console.error(new Error(`Message key ${msg.key} ??`));
       throw new Error(`Message key ${msg.key} ??`);
