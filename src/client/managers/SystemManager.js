@@ -48,6 +48,9 @@ export class SystemManager {
     if (step === Steps.Room) {
       this.updateRoom(context);
     }
+    if (step === Steps.Emotion1) {
+      this.updateEmotion1(context);
+    }
 
     const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
 
@@ -156,6 +159,10 @@ export class SystemManager {
       }
       return;
     }
+
+  }
+
+  updateEmotion1(context) {
 
     // if (lastMessage.key === `need-recovery`) {
     //   nextMessage({ key: `emotion-recovered` }, 300);
