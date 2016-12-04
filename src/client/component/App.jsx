@@ -2,7 +2,9 @@ import React from 'react';
 import styled, { injectGlobal } from 'styled-components';
 import { compose, ConnectReact } from '~/core';
 import System from '~/component/System';
+import Logo from '~/component/Logo';
 import Credits from '~/component/Credits';
+import { canStartRoom } from '~/computed';
 
 require('normalize.css/normalize.css');
 
@@ -35,12 +37,19 @@ const AppContainer = styled.div`
 `;
 
 const App = compose(
-  // ConnectReact(
-  //   {}
-  // )
+  ConnectReact(
+    {
+      canStartRoom: canStartRoom
+    }
+  )
 )((props) => {
   return (
     <AppContainer>
+      {(() => {
+        if (props.canStartRoom === false) {
+          return <Logo />;
+        }
+      })()}
       <System />
     </AppContainer>
   );

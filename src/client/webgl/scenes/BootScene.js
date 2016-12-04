@@ -8,6 +8,12 @@ export class BootScene extends Scene {
     this.scene.add(this.cameraman);
   }
 
+  getEnvConfig() {
+    return {
+      fogColor: null
+    };
+  }
+
   update(time, dt) {}
 
   mount() {}
