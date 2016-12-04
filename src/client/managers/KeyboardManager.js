@@ -1,6 +1,7 @@
-import { ConnectFunction, ConnectMethod } from '~/core';
+import { ConnectMethod } from '~/core';
+import { lastMessage } from '~/computed';
 
-const KEYS_MAP = {
+export const KEYS_MAP = {
   83: `s`,
   40: `down`,
   90: `z`,
@@ -8,7 +9,9 @@ const KEYS_MAP = {
   37: `left`,
   81: `q`,
   39: `right`,
-  68: `d`
+  68: `d`,
+  32: `space`,
+  13: `enter`
 };
 
 export class KeyboardManager {
@@ -19,6 +22,7 @@ export class KeyboardManager {
 
   boot() {
     this.bind();
+    this.update({}, this.controller, this);
   }
 
   bind() {
@@ -31,12 +35,30 @@ export class KeyboardManager {
   }
 
   handleKey(e, isDown) {
+    console.log(e.keyCode);
     const setKeyStatus = this.controller.getSignal(`keyboard.setKeyStatus`);
     if (KEYS_MAP[e.keyCode] !== undefined) {
       setKeyStatus({
         keyName: KEYS_MAP[e.keyCode],
         keyState: isDown
       });
+    }
+  }
+
+  @ConnectMethod(
+    {
+      keys: `keyboard.keys`,
+      lastMessage: lastMessage
+    },
+    {
+      startRecovery: `app.startRecovery`
+    }
+  )
+  update({ keys, lastMessage, startRecovery }) {
+    // console.log(keys);
+    if (lastMessage.key === `need-recovery` && keys.enter === true) {
+      console.log(`Click`);
+      startRecovery();
     }
   }
 

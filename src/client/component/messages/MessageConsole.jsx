@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Button from '~/component/Button';
-import MessageBox from '~/component/MessageBox';
-import NeedRecovery from '~/component/NeedRecovery';
+import MessageBox from '~/component/messages/MessageBox';
 import { compose } from '~/core';
 import { inject } from 'react-tunnel';
 

@@ -105,7 +105,6 @@ export class SystemManager {
   }
 
   udateFindError(context) {
-    console.log(`udateFindError`);
     const { lastMessage, planNextMessage, updateLastMessage, mind1AssetsReady, messages, setFindErrorDone } = context;
     const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
