@@ -17,8 +17,8 @@ const MessageSimple = compose(
 )((props) => {
   const msg = props.msg;
   return (
-    <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={ msg.width || 300 } >
-      { props.core.systemManager.formatMessage(msg) }
+    <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.height } theWidth={ msg.width || 300 } >
+      { 'This is a message !' }
     </MessageBox>
   );
 });

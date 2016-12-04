@@ -12,7 +12,7 @@ const MessageSimple = compose(
   ConnectReact(
     {},
     {
-      startRecovery: `app.startRecovery`
+      // startRecovery: `app.startRecovery`
     }
   )
 )((props) => {
@@ -21,7 +21,8 @@ const MessageSimple = compose(
     <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={ msg.width || 300 } >
       { props.core.systemManager.formatMessage(msg) }
       <Button onClick={() => {
-        props.startRecovery();
+        console.log(`TODO`);
+        // props.startRecovery();
         props.core.pointerLock.tryActivate();
       }}>
         Start Recovery

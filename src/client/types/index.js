@@ -23,3 +23,18 @@ export const AssetTypes = {
   Json: `json`,
   Audio: `audio`
 };
+
+export const Steps = {
+  Boot: `boot`,
+  Room: `room`,
+  Emotion1: `emotion1`,
+  Memory1: `memory1`,
+  Emotion2: `emotion2`,
+  Memory2: `memory2`,
+  Emotion2: `emotion2`,
+  Memory2: `memory2`
+};
+
+export const NUMBER_OF_MEMORIES = 482;
+export const NUMBER_OF_EMOTIONS = 47;
+export const MESSAGES_MARGIN = 10;

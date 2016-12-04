@@ -5,6 +5,7 @@ import System from '~/component/System';
 import Logo from '~/component/Logo';
 import Credits from '~/component/Credits';
 import { canStartRoom } from '~/computed';
+import { Steps } from '~/types';
 
 require('normalize.css/normalize.css');
 
@@ -23,30 +24,30 @@ const AppContainer = styled.div`
   right: 0;
   bottom: 0;
 
-    &:after{
-      background: url( 'http://s.cdpn.io/1715/noise-1.png' )
-      position: absolute
-      content: ''
-      z-index: 1
-      opacity: 0.8
-      height: 100%
-      width: 100%
-      left: 0
-      top: 0
+  &:after{
+    background: url( 'http://s.cdpn.io/1715/noise-1.png' )
+    position: absolute
+    content: ''
+    z-index: 1
+    opacity: 0.8
+    height: 100%
+    width: 100%
+    left: 0
+    top: 0
   }
 `;
 
 const App = compose(
   ConnectReact(
     {
-      canStartRoom: canStartRoom
+      step: `app.step`
     }
   )
 )((props) => {
   return (
     <AppContainer>
       {(() => {
-        if (props.canStartRoom === false) {
+        if (props.step === Steps.Boot) {
           return <Logo />;
         }
       })()}

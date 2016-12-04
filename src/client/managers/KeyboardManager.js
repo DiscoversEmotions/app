@@ -1,5 +1,5 @@
 import { ConnectMethod } from '~/core';
-import { lastMessage } from '~/computed';
+import { waitForKeyPress } from '~/computed';
 
 export const KEYS_MAP = {
   83: `s`,
@@ -48,18 +48,20 @@ export class KeyboardManager {
   @ConnectMethod(
     {
       keys: `keyboard.keys`,
-      lastMessage: lastMessage
+      waitForKeyPress: waitForKeyPress
     },
     {
-      startRecovery: `app.startRecovery`
+      setStep: `app.setStep`
     }
   )
-  update({ keys, lastMessage, startRecovery }) {
-    // console.log(keys);
-    if (lastMessage.key === `need-recovery` && keys.enter === true) {
-      console.log(`Click`);
-      startRecovery();
+  update({ waitForKeyPress, keys, setStep }) {
+    if (waitForKeyPress !== null && keys[waitForKeyPress.key] === true) {
+      setStep({ step: waitForKeyPress.nextStep });
     }
+    // if (lastMessage.key === `need-recovery` && keys.enter === true) {
+    //   console.log(`TODO`);
+    //   // startRecovery();
+    // }
   }
 
 }

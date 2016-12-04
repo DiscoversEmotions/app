@@ -52,7 +52,7 @@ const assets = [
   },
   {
     key: `memory1`,
-    fileUrl: require(`~/assets/sonSouvenirTest.ogg`),
+    fileUrl: require(`~/assets/memory_1.ogg`),
     type: AssetTypes.Audio,
     status: AssetStatus.Queued,
     priority: 15

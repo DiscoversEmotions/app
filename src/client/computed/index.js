@@ -1,5 +1,5 @@
 import { Computed } from 'cerebral';
-import { AssetStatus, Scenes } from '~/types';
+import { AssetStatus, Scenes, Steps } from '~/types';
 import _ from 'lodash';
 
 export const requestedAssets = Computed(
@@ -41,19 +41,10 @@ export const lastMessage = Computed(
   }
 );
 
-export const allMessages = Computed(
-  {
-    messages: `system.messages`
-  },
-  ({ messages }) => {
-    return messages;
-  }
-);
-
 export const roomAssetsReady = Computed(
   {
     room: `assets.room.status`,
-    webglReady: `app.webglReady`
+    webglReady: `app.bundlesReady.webgl`
   },
   ({ room, webglReady }) => {
     return (room === AssetStatus.Ready && webglReady);
@@ -63,10 +54,10 @@ export const roomAssetsReady = Computed(
 export const canStartRoom = Computed(
   {
     roomAssetsReady: roomAssetsReady,
-    bootDone: `system.bootDone`
+    step: `app.step`
   },
-  ({ roomAssetsReady, bootDone }) => {
-    return (roomAssetsReady && bootDone);
+  ({ roomAssetsReady, step }) => {
+    return (roomAssetsReady && step === Steps.Room);
   }
 );
 
@@ -91,12 +82,28 @@ export const mind1AssetsReady = Computed(
 
 export const shouldBePointerLocked = Computed(
   {
-    currentSceneName: `app.currentSceneName`
+    currentSceneName: `app.scene.current`
   },
   ({ currentSceneName }) => {
     return (
       currentSceneName === Scenes.Lvl1 ||
       currentSceneName === Scenes.Memory1
     );
+  }
+);
+
+export const waitForKeyPress = Computed(
+  {
+    step: `app.step`,
+    lastMessage: lastMessage
+  },
+  ({ step, lastMessage }) => {
+    if (lastMessage.key === `need-recovery` && step === Steps.Room) {
+      return {
+        nextStep: Steps.Emotion1,
+        key: `enter`
+      };
+    }
+    return null;
   }
 );

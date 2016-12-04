@@ -89,8 +89,8 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
-      currentSceneName: `app.currentSceneName`,
-      nextSceneName: `app.nextSceneName`
+      currentSceneName: `app.scene.current`,
+      nextSceneName: `app.scene.next`
     }
   )
   updateScene({ currentSceneName, nextSceneName }) {
@@ -106,7 +106,7 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
-      sceneTransition: `app.sceneTransition`
+      sceneTransition: `app.scene.transition`
     }
   )
   updatePass({ sceneTransition }) {

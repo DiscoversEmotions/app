@@ -5,11 +5,11 @@ import Button from '~/component/Button';
 import MessageSimple from '~/component/messages/MessageSimple';
 import MessageConsole from '~/component/messages/MessageConsole';
 import MessageRecovery from '~/component/messages/MessageRecovery';
+import LoadEmotionsProgress from '~/component/messages/LoadEmotionsProgress';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
-import { allMessages } from '~/computed';
-
-const MESSAGES_MARGIN = 10;
+import { displayedMessages } from '~/computed';
+import { MESSAGES_MARGIN } from '~/types';
 
 const Container = styled.div`
   position: absolute;
@@ -29,7 +29,7 @@ const System = compose(
   inject((provided) => ({ core: provided.core })),
   ConnectReact(
     {
-      messages: allMessages
+      messages: `system.messages`
     }
   )
 )((props) => {
@@ -37,20 +37,19 @@ const System = compose(
   var distFromBottom = MESSAGES_MARGIN;
   const messages = props.messages.slice(-8).map(msg => Object.assign({}, msg));
   _.forEachRight(messages, (msg) => {
-    const msgType = systemManager.getMessageType(msg);
-    msg.msgType = msgType;
+    msg.type = systemManager.getMessageType(msg);
+    msg.height = systemManager.getMessageHeight(msg);
     msg.distFromBottom = distFromBottom;
-    distFromBottom += MESSAGES_MARGIN + msgType.height;
+    distFromBottom += MESSAGES_MARGIN + msg.height;
   });
 
   return (
     <Container>
       {
         messages.map(msg => {
-          switch (msg.msgType.key) {
-            case `simple`: return <MessageSimple msg={msg} />;
+          switch (msg.type) {
             case `console`: return <MessageConsole msg={msg} />;
-            case `recovery`: return <MessageRecovery msg={msg} />;
+            case `simple`: return <MessageSimple msg={msg} />;
             default: return null;
           }
         })

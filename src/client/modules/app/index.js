@@ -1,5 +1,5 @@
 import { state, set, debounce, when, wait, merge, input } from 'cerebral/operators';
-import { Scenes } from '~/types';
+import { Scenes, Steps } from '~/types';
 import { getDuration } from './actions';
 
 export default {
@@ -8,40 +8,37 @@ export default {
       width: 600,
       height: 600
     },
-    currentSceneName: Scenes.Black,
-    nextSceneName: Scenes.None,
-    prevSceneName: Scenes.None,
-    webglReady: false,
-    sceneTransition: false,
-    connectedToEyes: false,
-    recoveryStarted: false,
+    bundlesReady: {
+      webgl: false
+    },
+    scene: {
+      current: Scenes.Black,
+      next: Scenes.None,
+      prev: Scenes.None,
+      transition: false
+    },
     pointerLock: false,
-    recoveryProgress: {
-      lvl1: false,
-      lvl2: false,
-      lvl3: false
-    }
+    step: Steps.Boot
   },
   signals: {
+    setStep: [ set(state`app.step`, input`step`) ],
     setSize: [ merge(state`app.size`, { width: input`width`, height: input`height` }) ],
-    webglReady: [ set(state`app.webglReady`, true) ],
+    setBundleReady: [ set(state`app.bundlesReady.${input`bundle`}`, true) ],
     transitionToScene: [
-      set(state`app.nextSceneName`, input`scene`),
-      set(state`app.sceneTransition`, true),
+      set(state`app.scene.next`, input`scene`),
+      set(state`app.scene.transition`, true),
       [
         wait(500),
-        set(state`app.prevSceneName`, state`app.currentSceneName`),
-        set(state`app.currentSceneName`, input`scene`),
-        set(state`app.nextSceneName`, `none`)
+        set(state`app.scene.prev`, state`app.scene.current`),
+        set(state`app.scene.current`, input`scene`),
+        set(state`app.scene.next`, `none`)
       ],
       [
         wait(1000),
-        set(state`app.sceneTransition`, false)
+        set(state`app.scene.transition`, false)
       ]
     ],
-    startRecovery: [ set(state`app.recoveryStarted`, true) ],
     startPointerLock: [ set(state`app.pointerLock`, true) ],
-    stopPointerLock: [ set(state`app.pointerLock`, false) ],
-    setRecoveryStepDone: [ set(state`app.recoveryProgress.${input`step`}`, true) ]
+    stopPointerLock: [ set(state`app.pointerLock`, false) ]
   }
 };

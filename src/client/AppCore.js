@@ -107,7 +107,7 @@ export default class AppCore {
 
   bootWebgl(WebGLCore) {
     this.webGLCore = new WebGLCore(this, this.appCanvasEl, this.controller);
-    this.controller.getSignal(`app.webglReady`)();
+    this.controller.getSignal(`app.setBundleReady`)({ bundle: `webgl` });
   }
 
   update(task, time, dt) {

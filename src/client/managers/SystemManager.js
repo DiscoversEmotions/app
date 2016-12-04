@@ -1,9 +1,7 @@
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { lastMessage, roomAssetsReady, mind1AssetsReady } from '~/computed';
+import { Steps, NUMBER_OF_MEMORIES, NUMBER_OF_EMOTIONS } from '~/types';
 import * as motion from 'popmotion';
-
-const NUMBER_OF_MEMORIES = 482;
-const NUMBER_OF_EMOTIONS = 47;
 
 export class SystemManager {
 
@@ -18,43 +16,47 @@ export class SystemManager {
 
   @ConnectMethod(
     {
+      step: `app.step`,
       readyForNextMessage: `system.readyForNextMessage`,
-      bootDone: `system.bootDone`,
       findErrorDone: `system.findErrorDone`,
       messages: `system.messages`,
-      recoveryProgress: `app.recoveryProgress`,
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
       mind1AssetsReady: mind1AssetsReady,
     },
     {
-      planNextMessage: `system.planNextMessage`,
+      pushMessageAndWait: `system.pushMessageAndWait`,
       updateLastMessage: `system.updateLastMessage`,
-      setBootDone: `system.setBootDone`,
-      setFindErrorDone: `system.setFindErrorDone`
+      setStep: `app.setStep`
     }
   )
   update(context) {
-    const { readyForNextMessage, bootDone, findErrorDone } = context;
+
+    const {
+      readyForNextMessage, lastMessage, pushMessageAndWait, updateLastMessage,
+      mind1AssetsReady, messages, step
+    } = context;
+
     if (readyForNextMessage === false) {
       return;
     }
-    if (bootDone === false) {
+
+    if (step === Steps.Boot) {
       this.updateBoot(context);
       return;
     }
-    if (findErrorDone === false) {
-      this.udateFindError(context);
-      return;
-    } else {
-      this.updateProgression(context);
-      return;
+    if (step === Steps.Room) {
+      this.updateRoom(context);
     }
+
+    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
+
   }
 
   updateBoot(context) {
-    const { lastMessage, planNextMessage, roomAssetsReady, setBootDone, bootDone, updateLastMessage, messages } = context;
-    const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
+
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, roomAssetsReady } = context;
+    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     if (lastMessage.key === `boot`) {
@@ -97,16 +99,16 @@ export class SystemManager {
         }
         updateMessage(`connect-eyes-progress`, { progress: nextProgress }, time);
       } else {
-        setBootDone();
+        setStep({ step: Steps.Room });
       }
       return;
     }
-
   }
 
-  udateFindError(context) {
-    const { lastMessage, planNextMessage, updateLastMessage, mind1AssetsReady, messages, setFindErrorDone } = context;
-    const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
+  updateRoom(context) {
+
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, mind1AssetsReady } = context;
+    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
     const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     if (lastMessage.key === `connect-eyes-progress`) {
@@ -150,87 +152,35 @@ export class SystemManager {
         }
         updateMessage(`load-emotions-progress`, { progress: nextProgress }, time);
       } else {
-        setFindErrorDone();
+        nextMessage({ key: `need-recovery` }, 200);
       }
       return;
     }
-  }
 
-  updateProgression(context) {
-    const { lastMessage, planNextMessage, updateLastMessage, recoveryProgress } = context;
-    const nextMessage = (message, time = 300) => planNextMessage({ message: message, time: time });
-    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
-
-    if (lastMessage.key === `load-emotions-progress`) {
-      nextMessage({ key: `need-recovery` }, 200);
-    }
-
-    if (lastMessage.key === `need-recovery` && recoveryProgress.lvl1 === true) {
-      nextMessage({ key: `emotion-recovered` }, 300);
-    }
-
-    if (lastMessage.key === `emotion-recovered`) {
-      nextMessage({ key: `linked-memory` }, 500);
-    }
+    // if (lastMessage.key === `need-recovery`) {
+    //   nextMessage({ key: `emotion-recovered` }, 300);
+    // }
+    //
+    // if (lastMessage.key === `emotion-recovered`) {
+    //   nextMessage({ key: `linked-memory` }, 500);
+    // }
 
   }
 
-  formatMessage(msg) {
-    if (msg === undefined) {
-      console.log(`return empty`);
-      return ``;
+  getMessageHeight(msg) {
+    if (msg.type === `console`) {
+      return 26;
     }
-    return this.getMessageRenderer(msg)(msg);
+    return 40;
   }
 
   getMessageType(msg) {
-    if (msg.key === `need-recovery`) {
-      return { key: `recovery`, height: 200 };
-    }
-    if (_.includes([`boot`, `boot-progress`, `boot-done`, `connect-eyes`, `connect-eyes-progress`, `connect-eyes-done`], msg.key)) {
-      return { key: `console`, height: 26 };
-    }
-    if (_.includes([`load-memory-done`], msg.key)) {
-      return { key: `simple`, type: `success`, height: 30 };
-    }
     if (_.includes([
-      `load-emotions-error-love`, `load-emotions-error-anger`, `load-emotions-error-sadness`
+      `boot`, `boot-progress`, `boot-done`, `connect-eyes`, `connect-eyes-progress`, `connect-eyes-done`
     ], msg.key)) {
-      return { key: `simple`, type: `error`, height: 60 };
+      return `console`;
     }
-    if (_.includes([
-      `load-emotions-error`, `load-emotions-error-love`, `load-emotions-error-anger`,
-      `load-emotions-error-sadness`, `load-emotions-done`
-    ], msg.key)) {
-      return { key: `simple`, type: `error`, height: 30 };
-    }
-    return { key: `simple`, type: `normal`, height: 30 };
-  }
-
-  getMessageRenderer(msg) {
-    switch (msg.key) {
-    case `empty`: return (msg) => (``);
-    case `boot`: return (msg) => (`Start Booting System`);
-    case `boot-progress`: return (msg) => (`Booting System... ${msg.progress} / 100`);
-    case `boot-done`: return (msg) => (`System booted`);
-    case `connect-eyes`: return (msg) => (`Connecting to the ocular system`);
-    case `connect-eyes-progress`: return (msg) => (`Connecting to the ocular system... ${ Math.floor(msg.progress) } / 100`);
-    case `connect-eyes-done`: return (msg) => (`Ocular system connected`);
-    case `load-memory-progress`: return (msg) => (`Retrieving memories... ${msg.progress} / ${NUMBER_OF_MEMORIES}`);
-    case `load-memory-done`: return (msg) => (`${NUMBER_OF_MEMORIES} / ${NUMBER_OF_MEMORIES} memories retrieved - No error`);
-    case `load-emotions-progress`: return (msg) => (`Retrieving emotions... ${msg.progress} / ${NUMBER_OF_EMOTIONS}`);
-    case `load-emotions-error`: return (msg) => (`Warning: The following emotion is missing :`);
-    case `load-emotions-error-love`: return (msg) => (`Love [/system/emotions/love.dg]`);
-    case `load-emotions-error-anger`: return (msg) => (`Anger [/system/emotions/anger.dg]`);
-    case `load-emotions-error-sadness`: return (msg) => (`Sadness [/system/emotions/sadness.dg]`);
-    case `load-emotions-done`: return (msg) => (`${NUMBER_OF_EMOTIONS - 3} / ${NUMBER_OF_EMOTIONS} emotions retrieved - 3 errors`);
-    case `need-recovery`: return (msg) => (`Recovery process is neeeded !`);
-    case `emotion-recovered`: return (msg) => (`Emotion Recovered`);
-    case `linked-memory`: return (msg) => (`Linked Memory found !`);
-    default:
-      console.error(new Error(`Message key ${msg.key} ??`));
-      throw new Error(`Message key ${msg.key} ??`);
-    }
+    return `simple`;
   }
 
 }

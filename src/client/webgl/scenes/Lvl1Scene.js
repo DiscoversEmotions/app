@@ -17,6 +17,8 @@ export class Lvl1Scene extends Scene {
       hori: 0
     };
 
+    console.log(this.controller);
+
     this.world1 = null;
     this.perso = null;
     this.ground = null;
@@ -138,12 +140,9 @@ export class Lvl1Scene extends Scene {
     this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision, true);
     if (this.collisionTileResults.length) {
       // Why is this triggered when the scene start ?
-      console.log(`Collision with tile !`);
       const setRecoveryStepDone = this.controller.getSignal(`app.setRecoveryStepDone`);
-      console.log(setRecoveryStepDone);
       setRecoveryStepDone({ step: `lvl1` });
     }
-
 
     this._updateCameraman();
 
@@ -208,7 +207,7 @@ export class Lvl1Scene extends Scene {
     if(this.particles === null){
 
       var sizeParticle = Math.random() * (1.5 - 1) + 1;;
-      
+
       this.pMaterial = new PointsMaterial({
         color: 0xFFFFFF,
         size: sizeParticle,
@@ -216,7 +215,7 @@ export class Lvl1Scene extends Scene {
         blending: AdditiveBlending,
         transparent: true
       });
-  
+
       for (var p = 0; p < this.particleCount; p++) {
         var pX = Math.random() * 50;
         var pY = Math.random() * 10;
