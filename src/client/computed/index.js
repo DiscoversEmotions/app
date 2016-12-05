@@ -99,16 +99,10 @@ export const waitForKeyPress = Computed(
   },
   ({ step, lastMessage }) => {
     if (lastMessage.key === `need-recovery` && step === Steps.Room) {
-      return {
-        nextStep: Steps.Emotion1Explain,
-        key: `enter`
-      };
+      return `enter`;
     }
-    if (lastMessage.key === `linked-memory` && step === Steps.Emotion1Recovered) {
-      return {
-        nextStep: Steps.Memory1,
-        key: `enter`
-      };
+    if (lastMessage.key === `linked-memory` && step === Steps.EmotionRecovered) {
+      return `enter`;
     }
     return null;
   }
@@ -122,19 +116,11 @@ export const expectedScene = Computed(
     switch (step) {
     case Steps.Room:
       return Scenes.Room;
-    case Steps.Emotion1Explain:
-    case Steps.Emotion1Recovered:
-    case Steps.Emotion2Explain:
-    case Steps.Emotion2Recovered:
-    case Steps.Emotion3Explain:
-    case Steps.Emotion3Recovered:
+    case Steps.EmotionExplain:
+    case Steps.EmotionRecovered:
       return Scenes.Emotion;
-    case Steps.Memory1:
-    case Steps.Memory1Done:
-    case Steps.Memory2:
-    case Steps.Memory2Done:
-    case Steps.Memory3:
-    case Steps.Memory3Done:
+    case Steps.Memory:
+    case Steps.MemoryDone:
       return Scenes.Memory;
     default:
       return Scenes.Boot;

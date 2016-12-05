@@ -1,6 +1,6 @@
 import { state, set, debounce, when, wait, merge, input } from 'cerebral/operators';
 import { Scenes, Steps } from '~/types';
-import { getDuration } from './actions';
+import { getDuration, setNextStep } from './actions';
 
 export default {
   state: {
@@ -17,9 +17,11 @@ export default {
       transition: false
     },
     pointerLock: false,
-    step: Steps.Boot
+    step: Steps.Boot,
+    level: 1
   },
   signals: {
+    setNextStep: [ setNextStep ],
     setStep: [ set(state`app.step`, input`step`) ],
     setSize: [ merge(state`app.size`, { width: input`width`, height: input`height` }) ],
     setBundleReady: [ set(state`app.bundlesReady.${input`bundle`}`, true) ],

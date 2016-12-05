@@ -27,7 +27,7 @@ export class SystemManager {
     {
       pushMessageAndWait: `system.pushMessageAndWait`,
       updateLastMessage: `system.updateLastMessage`,
-      setStep: `app.setStep`
+      setNextStep: `app.setNextStep`
     }
   )
   update(context) {
@@ -49,17 +49,17 @@ export class SystemManager {
     case Steps.Boot: return this.updateBoot(context);
     case Steps.Room: return this.updateRoom(context);
 
-    case Steps.Emotion1Explain: return this.updateEmotion1Explain(context);
-    case Steps.Emotion1Recovered: return this.updateEmotion1Recovered(context);
-    case Steps.Memory1: return this.updateMemory1(context);
-    case Steps.Memory1Done: return this.updateMemory1Done(context);
+    case Steps.EmotionExplain: return this.updateEmotionExplain(context);
+    case Steps.EmotionRecovered: return this.updateEmotionRecovered(context);
+    case Steps.Memory: return this.updateMemory(context);
+    case Steps.MemoryDone: return this.updateMemoryDone(context);
     }
 
   }
 
   updateBoot(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, roomAssetsReady, nextMessage, updateMessage } = context;
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `boot`) {
       nextMessage({ key: `boot-progress`, progress: 0 }, 200);
@@ -101,7 +101,7 @@ export class SystemManager {
         }
         updateMessage(`connect-eyes-progress`, { progress: nextProgress }, time);
       } else {
-        setStep({ step: Steps.Room });
+        setNextStep();
       }
       return;
     }
@@ -109,7 +109,7 @@ export class SystemManager {
 
   updateRoom(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, mind1AssetsReady, nextMessage, updateMessage } = context;
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, mind1AssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `connect-eyes-progress`) {
       nextMessage({ key: `load-memory-progress`, progress: 0 }, 100);
@@ -159,11 +159,11 @@ export class SystemManager {
 
   }
 
-  updateEmotion1Explain(context) {
+  updateEmotionExplain(context) {
 
     const { lastMessage, nextMessage, updateMessage } = context;
 
-    if (lastMessage.key === `need-recovery`) {
+    if (lastMessage.key === `need-recovery` || lastMessage.key === `playing-memory-done`) {
       nextMessage({ key: `find-tiles` }, 300);
     }
 
@@ -173,7 +173,7 @@ export class SystemManager {
 
   }
 
-  updateEmotion1Recovered(context) {
+  updateEmotionRecovered(context) {
 
     const { lastMessage, nextMessage, updateMessage } = context;
 
@@ -187,7 +187,7 @@ export class SystemManager {
 
   }
 
-  updateMemory1(context) {
+  updateMemory(context) {
 
     const { lastMessage, nextMessage, updateMessage } = context;
 
@@ -197,16 +197,16 @@ export class SystemManager {
 
   }
 
-  updateMemory1Done(context) {
+  updateMemoryDone(context) {
 
-    const { lastMessage, nextMessage, updateMessage, setStep } = context;
+    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
 
     if (lastMessage.key === `now-playing-memory`) {
       nextMessage({ key: `playing-memory-done` }, 300);
     }
 
     if (lastMessage.key === `playing-memory-done`) {
-      setStep({ step: Steps.Emotion2Explain });
+      setNextStep();
     }
 
   }

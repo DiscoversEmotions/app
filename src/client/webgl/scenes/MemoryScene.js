@@ -32,13 +32,18 @@ export class MemoryScene extends Scene {
   }
 
   mount() {
+    this.solved = false;
+
     if (this.isPlaySound == false){
       this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
       // Override onended
       const initialOnEnded = this.memorySound.source.onended;
       this.memorySound.source.onended = () => {
         initialOnEnded();
-        this.controller.getSignal(`app.setStep`)({ step: Steps.Memory1Done });
+        if (this.solved === false) {
+          this.controller.getSignal(`app.setNextStep`)();
+          this.solved = true;
+        }
       };
       this.memorySound.play();
     }

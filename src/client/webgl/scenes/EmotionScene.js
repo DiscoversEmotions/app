@@ -205,8 +205,9 @@ export class EmotionScene extends Scene {
       console.log(`No ground collision`);
     }
     this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision);
-    if (this.collisionTileResults.length) {
-      this.controller.getSignal(`app.setStep`)({ step: Steps.Emotion1Recovered });
+    if (this.collisionTileResults.length && this.solved === false) {
+      this.controller.getSignal(`app.setNextStep`)();
+      this.solved = true;
     }
 
     this._updateCameraman();
@@ -227,6 +228,8 @@ export class EmotionScene extends Scene {
   }
 
   mount() {
+    this.solved = false;
+
     if ( this.world1 === null) {
       this.world1 = this.app.assetsManager.getAsset(`world1`);
       this.scene.add(this.world1);

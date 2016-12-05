@@ -25,21 +25,10 @@ export const AssetTypes = {
 export const Steps = {
   Boot: `boot`,
   Room: `room`,
-
-  Emotion1Explain: `emotion1-explain`,
-  Emotion1Recovered: `emotion1-recovered`,
-  Memory1: `memory1`,
-  Memory1Done: `memory1-done`,
-
-  Emotion2Explain: `emotion2-explain`,
-  Emotion2Recovered: `emotion2-recovered`,
-  Memory2: `memory2`,
-  Memory2Done: `memory2-done`,
-
-  Emotion2Explain: `emotion2-explain`,
-  Emotion2Recovered: `emotion2-recovered`,
-  Memory2: `memory2`,
-  Memory2Done: `memory2-done`
+  EmotionExplain: `emotion-explain`,
+  EmotionRecovered: `emotion-recovered`,
+  Memory: `memory`,
+  MemoryDone: `memory-done`,
 };
 
 export const NUMBER_OF_MEMORIES = 482;
