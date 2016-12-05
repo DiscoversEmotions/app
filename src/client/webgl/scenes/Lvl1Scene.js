@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, Raycaster, MeshPhongMaterial,
+  PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial,
   Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
 } from 'three';
 import _ from 'lodash';
@@ -36,7 +36,7 @@ export class Lvl1Scene extends Scene {
       color: 0xff0000
     });
     this.persoLight.position.y = 2;
-    this.persoLight.intensity = 1.5;
+    this.persoLight.intensity = 0.7;
     this.userPosition.add(this.persoLight);
 
     this.raycaster = new Raycaster();
@@ -59,11 +59,9 @@ export class Lvl1Scene extends Scene {
 
     this.updateKeyEvent({}, this.controller, this);
 
-    this.persoMaterial = new MeshPhongMaterial({
-      color: 0xff0000,
-      specular: 0x009900,
-      shininess: 30,
-      shading: 1
+    this.persoMaterial = new MeshBasicMaterial({
+      color: 0xffffff,
+      wireframe: true
     });
 
     this.particles = null;
@@ -198,7 +196,7 @@ export class Lvl1Scene extends Scene {
       this.perso.setMaterial(this.persoMaterial);
 
       this.perso.play(`walk`, 1);
-      
+
     }
 
     if(this.particles === null){
