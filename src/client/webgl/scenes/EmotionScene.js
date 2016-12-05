@@ -14,25 +14,23 @@ export class EmotionScene extends Scene {
   constructor(...args) {
     super(...args);
 
-    this.cameramanRotation = {
-      vert: 0,
-      hori: 0
-    };
+    // Bind
+    this.onMouseMove = _.throttle(this.onMouseMove.bind(this), 1000 / 60);
 
-    this.world1 = null;
-    this.perso = null;
-    this.collision = null;
-    this.tile = null;
+    // Init watchers
+    this.updateKeyEvent({}, this.controller, this);
 
+    // Perso
+    this.persoVelocity = 0;
+    this.persoMaterial = new MeshBasicMaterial({
+      color: 0xffffff,
+      wireframe: true
+    });
     this.userPosition = new Object3D();
     this.userPosition.position.set(0, 5, 0);
     this.scene.add(this.userPosition);
 
-    this.cameraman.position.set(0, 3, 7);
-    this.cameraman.setVerticalAngle(-0.3);
-    this.userPosition.add(this.cameraman);
-
-    this.persoVelocity = 0;
+    // Light inside perso
     this.persoLight = new PointLight({
       color: 0xff0000
     });
@@ -40,40 +38,58 @@ export class EmotionScene extends Scene {
     this.persoLight.intensity = 0.7;
     this.userPosition.add(this.persoLight);
 
+    // Cameraman
+    this.cameramanRotation = {
+      vert: 0,
+      hori: 0
+    };
+    this.cameraman.position.set(0, 3, 7);
+    this.cameraman.setVerticalAngle(-0.3);
+    this.userPosition.add(this.cameraman);
+
+    // Raycaster
     this.raycaster = new Raycaster();
 
-    this.mixer = null;
-    this.mixerArray = [];
-    this.groundCollision = [];
-    this.tileCollision = [];
-    this.isMouseDown = false;
+    this.initSkybox();
 
-    this.rayHelper = new ArrowHelper(new Vector3(0, -1, 0), new Vector3(0, 10, 0), 20 ,0xffff00);
-    this.scene.add(this.rayHelper);
-    this.rayHelper2 = new ArrowHelper(new Vector3(0, -1, 0), new Vector3(0, 10, 0), 20 ,0x0000ff);
-    this.scene.add(this.rayHelper2);
+    this.initParticles();
 
-    //SKY
-    this.skyGeo = new SphereGeometry(100, 60, 60);
-    this.skyMaterial = new MeshPhongMaterial({ color: 0x000000 });
-    this.skyMaterial.side = BackSide;
-    this.sky = new Mesh(this.skyGeo, this.skyMaterial);
-    // this.scene.add(this.sky);
+  }
 
-    // Bind
-    this._onMouseMove = _.throttle(this._onMouseMove.bind(this), 1000 / 60);
+  initSkybox() {
+    const skyGeo = new SphereGeometry(100, 60, 60);
+    const skyMaterial = new MeshPhongMaterial({
+      color: 0x000000,
+      side: BackSide
+    });
+    this.sky = new Mesh(skyGeo, skyMaterial);
+  }
 
-    this.updateKeyEvent({}, this.controller, this);
+  initParticles() {
+    // Particles
+    const particleCount = 320;
+    const particlesSize = 1;
 
-    this.persoMaterial = new MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true
+    const particlesGeom = new Geometry();
+    const particlesMaterial = new PointsMaterial({
+      color: 0xFFFFFF,
+      size: particlesSize,
+      blending: AdditiveBlending,
+      transparent: true
     });
 
-    this.particles = null;
-    this.particlesGeom = new Geometry();
-    this.particleCount = 320;
+    for (var p = 0; p < particleCount; p++) {
+      var pX = Math.random() * 50;
+      var pY = Math.random() * 10;
+      var pZ = Math.random() * 60;
+      var particle = new Vector3(pX, pY, pZ);
+      particlesGeom.vertices.push(particle);
+    }
 
+    this.particles = new Points(particlesGeom, particlesMaterial);
+    this.particles.sortParticles = true;
+
+    this.scene.add(this.particles);
   }
 
   getEnvConfig() {
@@ -100,25 +116,100 @@ export class EmotionScene extends Scene {
     this.userD = keys.d;
   }
 
+  mount() {
+    this.solved = false;
+    this.level = this.controller.getState(`app.level`);
+    this.collision = null;
+    this.tiles = [];
+    this.world = null;
+
+    // Mount perso if not exist
+    if (_.isNil(this.perso)) {
+      this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
+      this.userPosition.add(this.perso);
+      this.perso.scale.set(0.015, 0.015, 0.015);
+      this.perso.setMaterial(this.persoMaterial);
+      this.perso.play(`idle`, 1);
+    }
+
+    // Particle Texture
+    if (_.isNil(this.particles.material.map)) {
+      this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture`);
+    }
+
+    // Mousemove
+    document.addEventListener(`mousemove`, this.onMouseMove, false);
+
+    if (this.level === 1) {
+      this.mountEmotion1();
+    } else if (this.level === 2) {
+      this.mountEmotion2();
+    } else if (this.level === 3) {
+      this.mountEmotion3();
+    }
+
+    console.log(this.tiles);
+
+    this.scene.add(this.world);
+    this.world.updateMatrixWorld();
+    this.collision.material.visible = false;
+
+  }
+
+  mountEmotion1() {
+    this.world = this.app.assetsManager.getAsset(`world1`);
+    this.world.traverseVisible((item) => {
+      console.log(item.name);
+      if (item.name === `collision`) {
+        this.collision = item;
+      }
+      if (item.name === `zone-action`) {
+        this.tiles.push(item);
+      }
+    });
+  }
+
+  mountEmotion2() {
+    this.world = this.app.assetsManager.getAsset(`world2`);
+    this.world.traverseVisible((item) => {
+      console.log(item.name);
+    });
+  }
+
+  mountEmotion3() {
+    this.world = this.app.assetsManager.getAsset(`world3`);
+    this.world.traverseVisible((item) => {
+      console.log(item.name);
+    });
+  }
+
   update(time, dt) {
 
+    this.updatePerso(time, dt);
+
+    this.collisionTileResults = this.raycaster.intersectObjects(this.tiles);
+    if (this.collisionTileResults.length && this.solved === false) {
+      this.controller.getSignal(`app.setNextStep`)();
+      this.solved = true;
+    }
+
+    this.updateCameraman();
+
+    this.updateParticles(time, dt);
+
+  }
+
+  updatePerso(time, dt) {
     const movement = {
       forward: 0,
       left: 0
     };
 
-    if((this.userLeft && !this.userRight) || (this.userQ && !this.userD)){
-      movement.left = 1;
-    }
-    if((this.userRight && !this.userLeft) || (this.userD && !this.userQ)) {
-      movement.left = -1;
-    }
-    if((this.userUp && !this.userDown) || (this.userZ && !this.userS)){
-      movement.forward = 1;
-    }
-    if((this.userDown && !this.userUp) || (this.userS && !this.userZ)) {
-      movement.forward = -1;
-    }
+    // Find movement depending on key pressed
+    if ((this.userLeft && !this.userRight) || (this.userQ && !this.userD)) { movement.left = 1; }
+    if ((this.userRight && !this.userLeft) || (this.userD && !this.userQ)) { movement.left = -1; }
+    if ((this.userUp && !this.userDown) || (this.userZ && !this.userS)) { movement.forward = 1; }
+    if ((this.userDown && !this.userUp) || (this.userS && !this.userZ)) { movement.forward = -1; }
 
     const isMoving = (movement.forward !== 0 || movement.left !== 0);
 
@@ -127,7 +218,7 @@ export class EmotionScene extends Scene {
       { y: 0, x: -movement.left}
     ));
 
-
+    // Update Velocity
     if (isMoving) {
       this.persoVelocity += 0.0001;
     } else if (this.persoVelocity > 0) {
@@ -143,8 +234,8 @@ export class EmotionScene extends Scene {
       dist
     );
 
+    // Is there a ground ahead ?
     const distCanMove = dist < 0.1 ? 0.2 : dist * 2;
-
     const canMove = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
       motion.calc.radiansToDegrees(angle),
@@ -157,10 +248,7 @@ export class EmotionScene extends Scene {
     this.userPosition.translateX(+canMove.y * 2);
     this.raycaster.ray.origin.y += 2;
 
-    this.rayHelper.setDirection(new Vector3(0, -1, 0));
-    this.rayHelper.position.copy(this.raycaster.ray.origin);
-
-    const canMoveCollision = this.raycaster.intersectObjects(this.groundCollision);
+    const canMoveCollision = this.raycaster.intersectObjects([this.collision]);
     if (canMoveCollision.length) {
       // console.log(`ok can move`)
       this.userPosition.translateZ(-move.x);
@@ -195,135 +283,15 @@ export class EmotionScene extends Scene {
     );
     this.raycaster.ray.origin.y += 2;
 
-    this.rayHelper2.setDirection(new Vector3(0, -1, 0));
-    this.rayHelper2.position.copy(this.raycaster.ray.origin);
-
-    this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision);
+    this.collisionGroundResults = this.raycaster.intersectObjects([this.collision]);
     if (this.collisionGroundResults.length) {
       this.userPosition.position.y = this.collisionGroundResults[0].point.y;
     } else {
       console.log(`No ground collision`);
     }
-    this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision);
-    if (this.collisionTileResults.length && this.solved === false) {
-      this.controller.getSignal(`app.setNextStep`)();
-      this.solved = true;
-    }
-
-    this._updateCameraman();
-
-    // Annin
-    // this.mixerFinal = this.mixerArray[0];
-    // if(this.mixerFinal){
-    //   this.mixerFinal.update(time, dt);
-    // }
-    //
-    // this.idle.play();
-
-    this.particleSystem.rotation.y -= 0.0001;
-
-    this.pCount = this.particleCount;
-    this.particleSystem.position.set(-5, -5, -40);
-
   }
 
-  mount() {
-    this.solved = false;
-
-    if ( this.world1 === null) {
-      this.world1 = this.app.assetsManager.getAsset(`world1`);
-      this.scene.add(this.world1);
-      this.world1.updateMatrixWorld();
-
-      this.world1.traverseVisible((item) => {
-        console.log(item.name);
-        if (item.name === `collision`) {
-          this.collision = item;
-        }
-        if (item.name === `zone-action`) {
-          this.tile = item;
-        }
-      });
-      if (this.collision === null || this.tile === null) {
-        throw new Error(`Missing someting in awd !`);
-      }
-
-      this.collision.material.visible = false;
-      this.groundCollision.push(this.collision);
-      this.tileCollision.push(this.tile);
-
-    }
-
-    if(this.perso === null){
-
-      this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
-      this.userPosition.add(this.perso);
-      this.perso.scale.set(0.015, 0.015, 0.015);
-      this.perso.setMaterial(this.persoMaterial);
-
-      this.perso.play(`walk`, 1);
-
-    }
-
-    if(this.particles === null){
-
-      var sizeParticle = Math.random() * (1.5 - 1);
-
-      this.pMaterial = new PointsMaterial({
-        color: 0xFFFFFF,
-        size: sizeParticle,
-        map: this.app.assetsManager.getAsset(`particleTexture`),
-        blending: AdditiveBlending,
-        transparent: true
-      });
-
-      for (var p = 0; p < this.particleCount; p++) {
-        var pX = Math.random() * 50;
-        var pY = Math.random() * 10;
-        var pZ = Math.random() * 60;
-        var particle = new Vector3(pX, pY, pZ);
-        // particle.velocity = new Vector3(0, -Math.random(), 0);
-
-        this.particlesGeom.vertices.push(particle);
-      }
-
-      this.particleSystem = new Points(this.particlesGeom, this.pMaterial);
-      this.particleSystem.sortParticles = true;
-
-      this.scene.add(this.particleSystem);
-
-    }
-
-    document.addEventListener(`mousemove`, this._onMouseMove, false);
-
-  }
-
-  unmount() {
-    document.removeEventListener(`mousemove`, this._onMouseMove, false);
-  }
-
-  _onMouseMove(e) {
-    var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
-    var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
-
-    this.cameramanRotation.hori -= movementX * 0.003;
-    this.cameramanRotation.vert -= movementY * 0.003;
-
-    this.cameramanRotation.hori %= 1;
-    this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, 0, 1);
-  }
-
-
-  _onMouseDown(e) {
-    // this.store.actions.movement.setForward(1);
-  }
-
-  _onMouseUp(e) {
-    // this.store.actions.movement.setForward(0);
-  }
-
-  _updateCameraman() {
-    // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
+  updateCameraman() {
     this.userPosition.rotation.y = this.cameramanRotation.hori * (Math.PI * 2);
     const dist = motion.calc.dilate(7, 13, this.cameramanRotation.vert);
     const lookUp = motion.calc.dilate(0, 0.3, this.cameramanRotation.vert);
@@ -335,7 +303,27 @@ export class EmotionScene extends Scene {
     );
     this.cameraman.position.set(0, camPos.x, camPos.y);
     this.cameraman.setVerticalAngle(motion.calc.degreesToRadians(angle - 90));
-    // this.cameraman.setVerticalAngle(0);
+  }
+
+  updateParticles(time, dt) {
+    this.particles.rotation.y -= 0.0001;
+    // this.particles.position.set(-5, -5, -40);
+  }
+
+  unmount() {
+    document.removeEventListener(`mousemove`, this.onMouseMove, false);
+    this.scene.remove(this.world);
+  }
+
+  onMouseMove(e) {
+    var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+    var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+    this.cameramanRotation.hori -= movementX * 0.003;
+    this.cameramanRotation.vert -= movementY * 0.003;
+
+    this.cameramanRotation.hori %= 1;
+    this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, 0, 1);
   }
 
 }
