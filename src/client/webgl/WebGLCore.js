@@ -1,11 +1,12 @@
 import * as motion from 'popmotion';
 import _ from 'lodash';
-import { Vector3, Color, FogExp2, Scene } from 'three';
-import { EffectComposer, RenderPass, GlitchPass, SMAAPass, BloomPass } from 'postprocessing';
+import { Color, FogExp2, Scene } from 'three';
+import { EffectComposer, RenderPass, GlitchPass, BloomPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scenes } from '~/types';
 import { RoomScene, Lvl1Scene, Memory1Scene, Lvl2Scene, BootScene } from './scenes';
 import { Renderer } from './Renderer';
+import { CopyPass } from './utils';
 
 export class WebGLCore {
 
@@ -105,32 +106,34 @@ export class WebGLCore {
 
   @ConnectMethod(
     {
-      sceneTransition: `app.scene.transition`
+      sceneTransition: `app.scene.transition`,
+      scene: `app.scene.current`
     }
   )
-  updatePass({ sceneTransition }) {
-    if (sceneTransition) {
-      this.glitchPass.enabled = true;
-      // this.renderPass.renderToScreen = false;
+  updatePass({ sceneTransition, scene }) {
+    this.glitchPass.enabled = sceneTransition;
+    if (scene === Scenes.Lvl1) {
+      this.bloomPass.enabled = true;
     } else {
-      // this.renderPass.renderToScreen = true;
-      this.glitchPass.enabled = false;
+      this.bloomPass.enabled = false;
     }
   }
 
 
   initComposer() {
+
     this.glitchPass = new GlitchPass();
-    this.glitchPass.renderToScreen = false;
     this.glitchPass.mode = 1;
     this.glitchPass.enabled = false;
     this.composer.addPass(this.glitchPass);
 
     this.bloomPass = new BloomPass();
-    this.bloomPass.renderToScreen = true;
-    this.bloomPass.mode = 1;
-    this.bloomPass.enabled = true;
+    this.bloomPass.enabled = false;
     this.composer.addPass(this.bloomPass);
+
+    this.toScreenPass = new CopyPass();
+    this.toScreenPass.renderToScreen = true;
+    this.composer.addPass(this.toScreenPass);
   }
 
   mountScene(sceneName) {
