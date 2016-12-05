@@ -67,15 +67,19 @@ export const mind1AssetsReady = Computed(
     world1: `assets.world1.status`,
     world2: `assets.world2.status`,
     world3: `assets.world3.status`,
-    memory1: `assets.memory1.status`
+    memory_love: `assets.memory_love.status`,
+    memory_anger: `assets.memory_love.status`,
+    memory_sadness: `assets.memory_love.status`
   },
-  ({ perso, world1, world2, world3, memory1 }) => {
+  ({ perso, world1, world2, world3, memory_love, memory_anger, memory_sadness }) => {
     return (
       perso == AssetStatus.Ready &&
       world1 == AssetStatus.Ready &&
       world2 == AssetStatus.Ready &&
       world3 == AssetStatus.Ready &&
-      memory1 == AssetStatus.Ready
+      memory_love == AssetStatus.Ready &&
+      memory_anger == AssetStatus.Ready &&
+      memory_sadness == AssetStatus.Ready
     );
   }
 );
@@ -87,7 +91,7 @@ export const shouldBePointerLocked = Computed(
   ({ currentSceneName }) => {
     return (
       currentSceneName === Scenes.Emotion ||
-      currentSceneName === Scenes.Memory1
+      currentSceneName === Scenes.Memory
     );
   }
 );

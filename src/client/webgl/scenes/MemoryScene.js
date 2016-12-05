@@ -35,7 +35,7 @@ export class MemoryScene extends Scene {
     this.solved = false;
 
     if (this.isPlaySound == false){
-      this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
+      this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory_love`));
       // Override onended
       const initialOnEnded = this.memorySound.source.onended;
       this.memorySound.source.onended = () => {
