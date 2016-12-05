@@ -100,10 +100,28 @@ export const waitForKeyPress = Computed(
   ({ step, lastMessage }) => {
     if (lastMessage.key === `need-recovery` && step === Steps.Room) {
       return {
-        nextStep: Steps.Emotion1,
+        nextStep: Steps.Emotion1Explain,
         key: `enter`
       };
     }
     return null;
+  }
+);
+
+export const expectedScene = Computed(
+  {
+    step: `app.step`
+  },
+  ({ step }) => {
+    switch (step) {
+    case Steps.Room:
+      return Scenes.Room;
+    case Steps.Emotion1Explain:
+    case Steps.Emotion1:
+    case Steps.Emotion1Recovered:
+      return Scenes.Lvl1;
+    default:
+      return Scenes.Boot;
+    }
   }
 );

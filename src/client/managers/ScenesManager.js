@@ -1,5 +1,5 @@
 import { ConnectMethod } from '~/core';
-import { canStartRoom, mind1AssetsReady, lastMessage } from '~/computed';
+import { canStartRoom, mind1AssetsReady, lastMessage, expectedScene } from '~/computed';
 import { Scenes, Steps } from '~/types';
 
 export class ScenesManager {
@@ -14,38 +14,25 @@ export class ScenesManager {
 
   @ConnectMethod(
     {
-      currentScene: `app.scene.current`,
+      // step: `app.step`,
+      // canStartRoom: canStartRoom,
+      // mind1AssetsReady: mind1AssetsReady,
+      // lastMessage: lastMessage,
       sceneTransition: `app.scene.transition`,
-      step: `app.step`,
-      canStartRoom: canStartRoom,
-      mind1AssetsReady: mind1AssetsReady,
-      lastMessage: lastMessage
+      currentScene: `app.scene.current`,
+      expectedScene: expectedScene
     },
     {
       transitionToScene: `app.transitionToScene`
     }
   )
-  update({
-    currentScene, sceneTransition, canStartRoom, transitionToScene,
-    mind1AssetsReady, lastMessage, step
-  }) {
+  update({ sceneTransition, currentScene, expectedScene, transitionToScene }) {
     if (sceneTransition) {
       return;
     }
-    if (currentScene === Scenes.Black && canStartRoom) {
-      transitionToScene({ scene: Scenes.Room });
+    if (currentScene !== expectedScene) {
+      transitionToScene({ scene: expectedScene });
     }
-    if (currentScene === Scenes.Room && step === Steps.Emotion1) {
-      transitionToScene({ scene: Scenes.Lvl1 });
-    }
-    if (currentScene === Scenes.Lvl1 && lastMessage.key === `linked-memory`) {
-      transitionToScene({ scene: Scenes.Memory1 });
-    }
-
-    // DEV
-    // if (currentScene !== Scenes.Lvl1 && mind1AssetsReady) {
-    //   transitionToScene({ scene: Scenes.Lvl1 });
-    // }
   }
 
 }

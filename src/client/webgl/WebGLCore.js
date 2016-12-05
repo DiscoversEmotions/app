@@ -41,7 +41,7 @@ export class WebGLCore {
       [Scenes.Lvl1]: Lvl1Scene,
       [Scenes.Memory1]: Memory1Scene,
       [Scenes.Lvl2]: Lvl2Scene,
-      [Scenes.Black]: BootScene
+      [Scenes.Boot]: BootScene
     }, (value, key) => {
       return new value(key, this, this.app, this.controller, this.parentElement);
     });

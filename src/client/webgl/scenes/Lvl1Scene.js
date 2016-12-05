@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
 import { Scene } from './Scene';
+import { Steps } from '~/types';
 
 export class Lvl1Scene extends Scene {
 
@@ -139,9 +140,7 @@ export class Lvl1Scene extends Scene {
     }
     this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision, true);
     if (this.collisionTileResults.length) {
-      // Why is this triggered when the scene start ?
-      const setRecoveryStepDone = this.controller.getSignal(`app.setRecoveryStepDone`);
-      setRecoveryStepDone({ step: `lvl1` });
+      this.controller.getSignal(`app.setStep`)({ step: Steps.Memory1 });
     }
 
     this._updateCameraman();

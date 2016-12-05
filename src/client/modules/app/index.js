@@ -12,9 +12,8 @@ export default {
       webgl: false
     },
     scene: {
-      current: Scenes.Black,
+      current: Scenes.Boot,
       next: Scenes.None,
-      prev: Scenes.None,
       transition: false
     },
     pointerLock: false,
@@ -29,7 +28,6 @@ export default {
       set(state`app.scene.transition`, true),
       [
         wait(500),
-        set(state`app.scene.prev`, state`app.scene.current`),
         set(state`app.scene.current`, input`scene`),
         set(state`app.scene.next`, `none`)
       ],
