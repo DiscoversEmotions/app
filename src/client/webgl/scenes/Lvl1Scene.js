@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, Raycaster, MeshPhongMaterial,
+  PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial,
   Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
 } from 'three';
 import _ from 'lodash';
@@ -32,11 +32,12 @@ export class Lvl1Scene extends Scene {
     this.cameraman.setVerticalAngle(-0.3);
     this.userPosition.add(this.cameraman);
 
+    this.persoVelocity = 0;
     this.persoLight = new PointLight({
       color: 0xff0000
     });
     this.persoLight.position.y = 2;
-    this.persoLight.intensity = 1.5;
+    this.persoLight.intensity = 0.7;
     this.userPosition.add(this.persoLight);
 
     this.raycaster = new Raycaster();
@@ -59,11 +60,9 @@ export class Lvl1Scene extends Scene {
 
     this.updateKeyEvent({}, this.controller, this);
 
-    this.persoMaterial = new MeshPhongMaterial({
-      color: 0xff0000,
-      specular: 0x009900,
-      shininess: 30,
-      shading: 1
+    this.persoMaterial = new MeshBasicMaterial({
+      color: 0xffffff,
+      wireframe: true
     });
 
     this.particles = null;
@@ -116,16 +115,48 @@ export class Lvl1Scene extends Scene {
       movement.forward = -1;
     }
 
-    // this.light.position.x = Math.sin(time/5000) * 100;
-    // this.light.position.z = Math.cos(time/5000) * 100;
+    const isMoving = (movement.forward !== 0 || movement.left !== 0);
 
-    this.userPosition.translateZ(-(dt * 0.01) * movement.forward);
-    this.userPosition.translateX(-(dt * 0.01) * movement.left);
     const angle = motion.calc.degreesToRadians(motion.calc.angle(
       { y: movement.forward, x: 0 },
       { y: 0, x: -movement.left}
     ));
+
+
+    if (isMoving) {
+      this.persoVelocity += 0.0001;
+    } else if (this.persoVelocity > 0) {
+      this.persoVelocity -= 0.005;
+    }
+    this.persoVelocity = motion.calc.restrict(this.persoVelocity, 0, 0.02);
+
+    const dist = this.persoVelocity * dt;
+
+
+    const move = motion.calc.pointFromAngleAndDistance(
+      { x: 0, y: 0 },
+      motion.calc.radiansToDegrees(angle),
+      dist
+    );
+
+    this.userPosition.translateZ(-move.x);
+    this.userPosition.translateX(-move.y);
     this.perso.rotation.y = angle;
+
+    if (this.persoVelocity === 0) {
+      this.perso.applyWeight(`walk`, 0);
+      this.perso.applyWeight(`run`, 0);
+      this.perso.play(`idle`, 1);
+    } else if (this.persoVelocity <= 0.01) {
+      this.perso.applyWeight(`idle`, 0);
+      this.perso.applyWeight(`run`, 0);
+      this.perso.play(`walk`, 1);
+    } else {
+      this.perso.applyWeight(`idle`, 0);
+      this.perso.applyWeight(`walk`, 0);
+      this.perso.play(`run`, 1);
+    }
+
     this.perso.update(dt/1000);
 
     // Collision with ground
@@ -190,15 +221,15 @@ export class Lvl1Scene extends Scene {
     if(this.perso === null){
 
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
-      this.perso.applyWeight(`idle`, 0);
-      this.perso.applyWeight(`walk`, 1);
-      this.perso.applyWeight(`run`, 0);
+      // this.perso.applyWeight(`idle`, 0);
+      // this.perso.applyWeight(`walk`, 1);
+      // this.perso.applyWeight(`run`, 0);
       this.userPosition.add(this.perso);
       this.perso.scale.set(0.015, 0.015, 0.015);
       this.perso.setMaterial(this.persoMaterial);
 
       this.perso.play(`walk`, 1);
-      
+
     }
 
     if(this.particles === null){
