@@ -67,7 +67,7 @@ export class Lvl1Scene extends Scene {
 
     this.particles = null;
     this.particlesGeom = new Geometry();
-    this.particleCount = 80;
+    this.particleCount = 300;
 
   }
 
@@ -184,7 +184,7 @@ export class Lvl1Scene extends Scene {
     //
     // this.idle.play();
 
-    this.particleSystem.rotation.y -= 0.0003;
+    this.particleSystem.rotation.y -= 0.0001;
 
     this.pCount = this.particleCount;
     this.particleSystem.position.set(-5, -5, -40);
@@ -234,7 +234,7 @@ export class Lvl1Scene extends Scene {
 
     if(this.particles === null){
 
-      var sizeParticle = Math.random() * (1.5 - 1) + 1;;
+      var sizeParticle = Math.random() * (1.5 - 1);
 
       this.pMaterial = new PointsMaterial({
         color: 0xFFFFFF,
@@ -249,7 +249,7 @@ export class Lvl1Scene extends Scene {
         var pY = Math.random() * 10;
         var pZ = Math.random() * 60;
         var particle = new Vector3(pX, pY, pZ);
-        particle.velocity = new Vector3(0, -Math.random(), 0);
+        // particle.velocity = new Vector3(0, -Math.random(), 0);
 
         this.particlesGeom.vertices.push(particle);
       }
