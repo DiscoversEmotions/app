@@ -276,8 +276,8 @@ export class Lvl1Scene extends Scene {
     this.cameramanRotation.hori -= movementX * 0.003;
     this.cameramanRotation.vert -= movementY * 0.003;
 
-    // this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, -0.5, 0);
-    this.cameramanRotation.vert = this.cameramanRotation.vert;
+    this.cameramanRotation.hori %= 1;
+    this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, 0, 1);
   }
 
 
@@ -291,8 +291,18 @@ export class Lvl1Scene extends Scene {
 
   _updateCameraman() {
     // this.cameraman.setHorizontalAngle(this.cameramanRotation.hori);
-    this.userPosition.rotation.y = this.cameramanRotation.hori;
-    this.cameraman.setVerticalAngle(this.cameramanRotation.vert);
+    this.userPosition.rotation.y = this.cameramanRotation.hori * (Math.PI * 2);
+    const dist = motion.calc.dilate(7, 13, this.cameramanRotation.vert);
+    const lookUp = motion.calc.dilate(0, 0.3, this.cameramanRotation.vert);
+    const angle = motion.calc.dilate(60, 80, this.cameramanRotation.vert);
+    const camPos = motion.calc.pointFromAngleAndDistance(
+      { x: 3, y: 0 },
+      angle,
+      dist
+    );
+    this.cameraman.position.set(0, camPos.x, camPos.y);
+    this.cameraman.setVerticalAngle(motion.calc.degreesToRadians(angle - 90));
+    // this.cameraman.setVerticalAngle(0);
   }
 
 }
