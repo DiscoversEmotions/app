@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial,
+  PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial, ArrowHelper,
   Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
 } from 'three';
 import _ from 'lodash';
@@ -21,7 +21,7 @@ export class Lvl1Scene extends Scene {
 
     this.world1 = null;
     this.perso = null;
-    this.ground = null;
+    this.collision = null;
     this.tile = null;
 
     this.userPosition = new Object3D();
@@ -47,6 +47,11 @@ export class Lvl1Scene extends Scene {
     this.groundCollision = [];
     this.tileCollision = [];
     this.isMouseDown = false;
+
+    this.rayHelper = new ArrowHelper(new Vector3(0, -1, 0), new Vector3(0, 10, 0), 20 ,0xffff00);
+    this.scene.add(this.rayHelper);
+    this.rayHelper2 = new ArrowHelper(new Vector3(0, -1, 0), new Vector3(0, 10, 0), 20 ,0x0000ff);
+    this.scene.add(this.rayHelper2);
 
     //SKY
     this.skyGeo = new SphereGeometry(100, 60, 60);
@@ -132,18 +137,42 @@ export class Lvl1Scene extends Scene {
 
     const dist = this.persoVelocity * dt;
 
-
     const move = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
       motion.calc.radiansToDegrees(angle),
       dist
     );
 
-    this.userPosition.translateZ(-move.x);
-    this.userPosition.translateX(-move.y);
+    const distCanMove = dist < 0.1 ? 0.2 : dist * 2;
+
+    const canMove = motion.calc.pointFromAngleAndDistance(
+      { x: 0, y: 0 },
+      motion.calc.radiansToDegrees(angle),
+      distCanMove
+    );
+    this.userPosition.translateZ(-canMove.x * 2);
+    this.userPosition.translateX(-canMove.y * 2);
+    this.raycaster.set(this.userPosition.position, new Vector3(0, -1, 0));
+    this.userPosition.translateZ(+canMove.x * 2);
+    this.userPosition.translateX(+canMove.y * 2);
+    this.raycaster.ray.origin.y += 2;
+
+    this.rayHelper.setDirection(new Vector3(0, -1, 0));
+    this.rayHelper.position.copy(this.raycaster.ray.origin);
+
+    const canMoveCollision = this.raycaster.intersectObjects(this.groundCollision);
+    if (canMoveCollision.length) {
+      // console.log(`ok can move`)
+      this.userPosition.translateZ(-move.x);
+      this.userPosition.translateX(-move.y);
+    } else {
+      // console.log(`nope, can't move`);
+      this.persoVelocity = 0;
+    }
+
     this.perso.rotation.y = angle;
 
-    if (this.persoVelocity === 0) {
+    if (this.persoVelocity < 0.001) {
       this.perso.applyWeight(`walk`, 0);
       this.perso.applyWeight(`run`, 0);
       this.perso.play(`idle`, 1);
@@ -164,12 +193,18 @@ export class Lvl1Scene extends Scene {
       this.userPosition.position,
       new Vector3(0, -1, 0)
     );
-    this.raycaster.ray.origin.y += 50;
-    this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision, true);
+    this.raycaster.ray.origin.y += 2;
+
+    this.rayHelper2.setDirection(new Vector3(0, -1, 0));
+    this.rayHelper2.position.copy(this.raycaster.ray.origin);
+
+    this.collisionGroundResults = this.raycaster.intersectObjects(this.groundCollision);
     if (this.collisionGroundResults.length) {
       this.userPosition.position.y = this.collisionGroundResults[0].point.y;
+    } else {
+      console.log(`No ground collision`);
     }
-    this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision, true);
+    this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision);
     if (this.collisionTileResults.length) {
       this.controller.getSignal(`app.setStep`)({ step: Steps.Emotion1Recovered });
     }
@@ -199,21 +234,19 @@ export class Lvl1Scene extends Scene {
 
       this.world1.traverseVisible((item) => {
         console.log(item.name);
-        if (item.name === `sol.1`) {
-          this.ground = item;
+        if (item.name === `collision`) {
+          this.collision = item;
         }
         if (item.name === `zone-action`) {
           this.tile = item;
         }
-        if (item.name === `pont`) {
-          this.groundCollision.push(item);
-        }
       });
-      if (this.ground === null || this.tile === null) {
+      if (this.collision === null || this.tile === null) {
         throw new Error(`Missing someting in awd !`);
       }
 
-      this.groundCollision.push(this.ground);
+      this.collision.material.visible = false;
+      this.groundCollision.push(this.collision);
       this.tileCollision.push(this.tile);
 
     }
@@ -221,9 +254,6 @@ export class Lvl1Scene extends Scene {
     if(this.perso === null){
 
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
-      // this.perso.applyWeight(`idle`, 0);
-      // this.perso.applyWeight(`walk`, 1);
-      // this.perso.applyWeight(`run`, 0);
       this.userPosition.add(this.perso);
       this.perso.scale.set(0.015, 0.015, 0.015);
       this.perso.setMaterial(this.persoMaterial);
