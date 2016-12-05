@@ -19,12 +19,8 @@ const MessageSimple = compose(
   const msg = props.msg;
   return (
     <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={ msg.width || 300 } >
-      { props.core.systemManager.formatMessage(msg) }
-      <Button onClick={() => {
-        console.log(`TODO`);
-        // props.startRecovery();
-        props.core.pointerLock.tryActivate();
-      }}>
+      { msg.key }
+      <Button>
         Start Recovery
       </Button>
     </MessageBox>

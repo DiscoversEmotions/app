@@ -10,7 +10,7 @@ export default {
         success: [
           set(state`assets.${input`asset.key`}.status`, AssetStatus.Ready)
         ],
-        error: [() => { console.log(`error`); }]
+        error: [() => { console.error(`Fail to load asset`); }]
       }
     ]
   ],

@@ -48,7 +48,6 @@ export class BlendCharacter extends SkinnedMesh {
   }
 
   play( animName, weight ) {
-    //console.log("play('%s', %f)", animName, weight);
     return this.mixer.clipAction( animName ).setEffectiveWeight( weight ).play();
   }
 

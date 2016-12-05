@@ -32,7 +32,7 @@ export function updateLastMessage ({ state, input, controller }) {
       const id = messages.indexOf(message);
       state.merge(`system.messages.${id}`, input.message);
     } else {
-      console.log(`No message for '${messageKey}' in messages`);
+      console.error(`No message for '${messageKey}' in messages`);
     }
     setTimeout(() => {
       state.set(`system.readyForNextMessage`, true);

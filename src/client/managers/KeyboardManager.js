@@ -35,7 +35,7 @@ export class KeyboardManager {
   }
 
   handleKey(e, isDown) {
-    console.log(e.keyCode);
+    // console.log(e.keyCode);
     const setKeyStatus = this.controller.getSignal(`keyboard.setKeyStatus`);
     if (KEYS_MAP[e.keyCode] !== undefined) {
       setKeyStatus({

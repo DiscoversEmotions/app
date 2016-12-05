@@ -19,8 +19,6 @@ export class Lvl1Scene extends Scene {
       hori: 0
     };
 
-    console.log(this.controller);
-
     this.world1 = null;
     this.perso = null;
     this.ground = null;
@@ -177,7 +175,6 @@ export class Lvl1Scene extends Scene {
           this.tile = item;
         }
         if (item.name === `pont`) {
-          console.log(`pont !!`, item);
           this.groundCollision.push(item);
         }
       });
@@ -185,20 +182,14 @@ export class Lvl1Scene extends Scene {
         throw new Error(`Missing someting in awd !`);
       }
 
-      console.log(this.ground);
-
       this.groundCollision.push(this.ground);
       this.tileCollision.push(this.tile);
-      console.log(this.tile);
 
     }
 
     if(this.perso === null){
 
-      // console.log(this.app.assetsManager.getAsset(`perso`));
-
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
-      console.log(this.perso);
       this.perso.applyWeight(`idle`, 0);
       this.perso.applyWeight(`walk`, 1);
       this.perso.applyWeight(`run`, 0);
@@ -207,7 +198,7 @@ export class Lvl1Scene extends Scene {
       this.perso.setMaterial(this.persoMaterial);
 
       this.perso.play(`walk`, 1);
-
+      
     }
 
     if(this.particles === null){
