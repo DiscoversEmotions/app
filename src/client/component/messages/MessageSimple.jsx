@@ -19,6 +19,12 @@ const MessageSimple = compose(
   return (
     <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.height } theWidth={ msg.width || 300 } >
       { `message : ${msg.key}` }
+      { (() => {
+        if (msg.key === `need-recovery`) {
+          return `Press [ENTER] to start recovery`;
+        }
+        return null;
+      })() }
     </MessageBox>
   );
 });
