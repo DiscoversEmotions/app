@@ -86,7 +86,7 @@ export const shouldBePointerLocked = Computed(
   },
   ({ currentSceneName }) => {
     return (
-      currentSceneName === Scenes.Lvl1 ||
+      currentSceneName === Scenes.Emotion ||
       currentSceneName === Scenes.Memory1
     );
   }
@@ -124,9 +124,18 @@ export const expectedScene = Computed(
       return Scenes.Room;
     case Steps.Emotion1Explain:
     case Steps.Emotion1Recovered:
-      return Scenes.Lvl1;
+    case Steps.Emotion2Explain:
+    case Steps.Emotion2Recovered:
+    case Steps.Emotion3Explain:
+    case Steps.Emotion3Recovered:
+      return Scenes.Emotion;
     case Steps.Memory1:
-      return Scenes.Memory1;
+    case Steps.Memory1Done:
+    case Steps.Memory2:
+    case Steps.Memory2Done:
+    case Steps.Memory3:
+    case Steps.Memory3Done:
+      return Scenes.Memory;
     default:
       return Scenes.Boot;
     }

@@ -4,7 +4,7 @@ import { Color, FogExp2, Scene } from 'three';
 import { EffectComposer, RenderPass, GlitchPass, BloomPass } from 'postprocessing';
 import { ConnectFunction, ConnectMethod } from '~/core';
 import { Scenes } from '~/types';
-import { RoomScene, Lvl1Scene, Memory1Scene, Lvl2Scene, BootScene } from './scenes';
+import { RoomScene, EmotionScene, MemoryScene, BootScene } from './scenes';
 import { Renderer } from './Renderer';
 import { CopyPass } from './utils';
 
@@ -38,9 +38,8 @@ export class WebGLCore {
 
     this.scenesList = _.mapValues({
       [Scenes.Room]: RoomScene,
-      [Scenes.Lvl1]: Lvl1Scene,
-      [Scenes.Memory1]: Memory1Scene,
-      [Scenes.Lvl2]: Lvl2Scene,
+      [Scenes.Emotion]: EmotionScene,
+      [Scenes.Memory]: MemoryScene,
       [Scenes.Boot]: BootScene
     }, (value, key) => {
       return new value(key, this, this.app, this.controller, this.parentElement);
@@ -112,7 +111,7 @@ export class WebGLCore {
   )
   updatePass({ sceneTransition, scene }) {
     this.glitchPass.enabled = sceneTransition;
-    if (scene === Scenes.Lvl1) {
+    if (scene === Scenes.Emotion) {
       this.bloomPass.enabled = true;
     } else {
       this.bloomPass.enabled = false;

@@ -122,18 +122,18 @@ bowser@^1.0.0:
   resolved "https://registry.yarnpkg.com/bowser/-/bowser-1.5.0.tgz#b97414bacbc631f19f1e2e11466566ec19324983"
 
 buffer@^5.0.0:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.0.1.tgz#28165188f46d451b516b8be3e611b00029573486"
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.0.2.tgz#41d0407ff76782e9ec19f52f88e237ce6bb0de6d"
   dependencies:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
 cerebral@next:
-  version "2.0.0-0-alpha.2d565fc1"
-  resolved "https://registry.yarnpkg.com/cerebral/-/cerebral-2.0.0-0-alpha.2d565fc1.tgz#25c3619ea34020b4b53b1b5cc713cb9abb77cdd6"
+  version "2.0.0-0-alpha.d61a2254"
+  resolved "https://registry.yarnpkg.com/cerebral/-/cerebral-2.0.0-0-alpha.d61a2254.tgz#59880506183d415762d5e10b23f98b81060e9974"
   dependencies:
     eventemitter3 "^2.0.2"
-    function-tree "^0.5.0-0-alpha.2d565fc1"
+    function-tree "^0.5.0-0-alpha.d61a2254"
 
 chalk@^1.1.0, chalk@^1.1.3:
   version "1.1.3"
@@ -403,7 +403,7 @@ fresh@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.3.0.tgz#651f838e22424e7566de161d8358caa199f83d4f"
 
-function-tree@^0.5.0-0-alpha.2d565fc1:
+function-tree@^0.5.0-0-alpha.d61a2254:
   version "0.5.0-alpha.2-alpha.ed1e4568"
   resolved "https://registry.yarnpkg.com/function-tree/-/function-tree-0.5.0-alpha.2-alpha.ed1e4568.tgz#482bf6ae09bff1a98cd239f3477dc7d897454fbf"
   dependencies:
@@ -411,8 +411,8 @@ function-tree@^0.5.0-0-alpha.2d565fc1:
     eventemitter3 "^2.0.2"
 
 glamor@^2.15.5:
-  version "2.20.5"
-  resolved "https://registry.yarnpkg.com/glamor/-/glamor-2.20.5.tgz#4d1efa6300171dce2c20cc6b14c235e7b9f68143"
+  version "2.20.12"
+  resolved "https://registry.yarnpkg.com/glamor/-/glamor-2.20.12.tgz#f59bd96a87e57447b7c1eb3d69bceca1ab7127b8"
   dependencies:
     fbjs "^0.8.6"
 
@@ -667,8 +667,8 @@ railroad-diagrams@^1.0.0:
   resolved "https://registry.yarnpkg.com/railroad-diagrams/-/railroad-diagrams-1.0.0.tgz#eb7e6267548ddedfb899c1b90e57374559cddb7e"
 
 randexp@^0.4.2:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/randexp/-/randexp-0.4.3.tgz#1712d4f9cdd57e0005c13064e0e208fba8e58d50"
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/randexp/-/randexp-0.4.4.tgz#ba68265f4a9f9e85f5814d34e160291f939f168e"
   dependencies:
     discontinuous-range "1.0.0"
     ret "~0.1.10"
@@ -708,8 +708,8 @@ regenerator-runtime@^0.9.5:
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.9.6.tgz#d33eb95d0d2001a4be39659707c51b0cb71ce029"
 
 ret@~0.1.10:
-  version "0.1.12"
-  resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.12.tgz#29348dc8b879393692dc47574494c38a26bf648f"
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.13.tgz#38c2702ece654978941edd8b7dfac6aeeef4067d"
 
 right-now@^1.0.0:
   version "1.0.0"

@@ -2,8 +2,9 @@ import {
   PointLight, Object3D, AudioListener, Audio, AudioAnalyser, MeshPhongMaterial, Mesh, BoxGeometry
 } from 'three';
 import { Scene } from './Scene';
+import { Steps } from '~/types';
 
-export class Memory1Scene extends Scene {
+export class MemoryScene extends Scene {
 
   constructor(...args) {
     super(...args);
@@ -33,6 +34,12 @@ export class Memory1Scene extends Scene {
   mount() {
     if (this.isPlaySound == false){
       this.memorySound.setBuffer(this.app.assetsManager.getAsset(`memory1`));
+      // Override onended
+      const initialOnEnded = this.memorySound.source.onended;
+      this.memorySound.source.onended = () => {
+        initialOnEnded();
+        this.controller.getSignal(`app.setStep`)({ step: Steps.Memory1Done });
+      };
       this.memorySound.play();
     }
   }

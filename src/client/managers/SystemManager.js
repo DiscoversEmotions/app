@@ -48,8 +48,11 @@ export class SystemManager {
     switch (step) {
     case Steps.Boot: return this.updateBoot(context);
     case Steps.Room: return this.updateRoom(context);
+
     case Steps.Emotion1Explain: return this.updateEmotion1Explain(context);
     case Steps.Emotion1Recovered: return this.updateEmotion1Recovered(context);
+    case Steps.Memory1: return this.updateMemory1(context);
+    case Steps.Memory1Done: return this.updateMemory1Done(context);
     }
 
   }
@@ -182,6 +185,29 @@ export class SystemManager {
       nextMessage({ key: `linked-memory` }, 300);
     }
 
+  }
+
+  updateMemory1(context) {
+
+    const { lastMessage, nextMessage, updateMessage } = context;
+
+    if (lastMessage.key === `linked-memory`) {
+      nextMessage({ key: `now-playing-memory` }, 50);
+    }
+
+  }
+
+  updateMemory1Done(context) {
+
+    const { lastMessage, nextMessage, updateMessage, setStep } = context;
+
+    if (lastMessage.key === `now-playing-memory`) {
+      nextMessage({ key: `playing-memory-done` }, 300);
+    }
+
+    if (lastMessage.key === `playing-memory-done`) {
+      setStep({ step: Steps.Emotion2Explain });
+    }
 
   }
 

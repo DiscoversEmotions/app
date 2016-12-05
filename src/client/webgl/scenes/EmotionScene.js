@@ -9,7 +9,7 @@ import { Scene } from './Scene';
 import { Steps } from '~/types';
 import { BlendCharacter } from '~/webgl/utils';
 
-export class Lvl1Scene extends Scene {
+export class EmotionScene extends Scene {
 
   constructor(...args) {
     super(...args);
