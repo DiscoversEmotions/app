@@ -117,7 +117,6 @@ export const expectedScene = Computed(
     case Steps.Room:
       return Scenes.Room;
     case Steps.Emotion1Explain:
-    case Steps.Emotion1:
     case Steps.Emotion1Recovered:
       return Scenes.Lvl1;
     default:

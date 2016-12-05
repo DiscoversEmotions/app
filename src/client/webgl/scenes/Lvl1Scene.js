@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, Raycaster, SkinnedMesh, AnimationMixer, MeshPhongMaterial,
+  PointLight, Object3D, Raycaster, MeshPhongMaterial,
   Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
 } from 'three';
 import _ from 'lodash';
@@ -7,6 +7,7 @@ import { ConnectMethod } from '~/core';
 import * as motion from 'popmotion';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
+import { BlendCharacter } from '~/webgl/utils';
 
 export class Lvl1Scene extends Scene {
 
@@ -126,7 +127,8 @@ export class Lvl1Scene extends Scene {
       { y: movement.forward, x: 0 },
       { y: 0, x: -movement.left}
     ));
-    this.persoMesh.rotation.y = angle;
+    this.perso.rotation.y = angle;
+    this.perso.update(dt/1000);
 
     // Collision with ground
     this.raycaster.set(
@@ -140,18 +142,18 @@ export class Lvl1Scene extends Scene {
     }
     this.collisionTileResults = this.raycaster.intersectObjects(this.tileCollision, true);
     if (this.collisionTileResults.length) {
-      this.controller.getSignal(`app.setStep`)({ step: Steps.Memory1 });
+      this.controller.getSignal(`app.setStep`)({ step: Steps.Emotion1Recovered });
     }
 
     this._updateCameraman();
 
     // Annin
-    this.mixerFinal = this.mixerArray[0];
-    if(this.mixerFinal){
-      this.mixerFinal.update(time, dt);
-    }
-
-    this.idle.play();
+    // this.mixerFinal = this.mixerArray[0];
+    // if(this.mixerFinal){
+    //   this.mixerFinal.update(time, dt);
+    // }
+    //
+    // this.idle.play();
 
     this.particleSystem.rotation.y -= 0.0003;
 
@@ -193,13 +195,18 @@ export class Lvl1Scene extends Scene {
 
     if(this.perso === null){
 
-      this.perso = this.app.assetsManager.getAsset(`perso`).children[0];
-      this.persoMesh = new SkinnedMesh(this.perso.geometry, this.persoMaterial);
-      this.persoMesh.scale.set(0.015, 0.015, 0.015);
-      this.userPosition.add(this.persoMesh);
+      // console.log(this.app.assetsManager.getAsset(`perso`));
 
-      this.mixer = new AnimationMixer(this.persoMesh);
-      this.idle = this.mixer.clipAction(this.persoMesh.geometry.animations[0]);
+      this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
+      console.log(this.perso);
+      this.perso.applyWeight(`idle`, 0);
+      this.perso.applyWeight(`walk`, 1);
+      this.perso.applyWeight(`run`, 0);
+      this.userPosition.add(this.perso);
+      this.perso.scale.set(0.015, 0.015, 0.015);
+      this.perso.setMaterial(this.persoMaterial);
+
+      this.perso.play(`walk`, 1);
 
     }
 

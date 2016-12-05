@@ -28,7 +28,6 @@ export const Steps = {
   Boot: `boot`,
   Room: `room`,
   Emotion1Explain: `emotion1-explain`,
-  Emotion1: `emotion1`,
   Emotion1Recovered: `emotion1-recovered`,
   Memory1: `memory1`,
   Emotion2: `emotion2`,
