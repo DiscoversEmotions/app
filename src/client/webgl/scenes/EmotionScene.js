@@ -123,6 +123,8 @@ export class EmotionScene extends Scene {
     this.tiles = [];
     this.world = null;
 
+    console.log(`Level ${this.level}`);
+
     // Mount perso if not exist
     if (_.isNil(this.perso)) {
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
@@ -152,7 +154,9 @@ export class EmotionScene extends Scene {
 
     this.scene.add(this.world);
     this.world.updateMatrixWorld();
-    this.collision.material.visible = false;
+    if (this.level === 1) { // TODO: remove when collision on 2 & 3 are OK
+      this.collision.material.visible = false;
+    }
 
   }
 
@@ -173,6 +177,12 @@ export class EmotionScene extends Scene {
     this.world = this.app.assetsManager.getAsset(`world2`);
     this.world.traverseVisible((item) => {
       console.log(item.name);
+      if (item.name === `sol`) {
+        this.collision = item;
+      }
+      if (item.name === `zone`) {
+        this.tiles.push(item);
+      }
     });
   }
 
