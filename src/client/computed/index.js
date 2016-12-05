@@ -104,6 +104,12 @@ export const waitForKeyPress = Computed(
         key: `enter`
       };
     }
+    if (lastMessage.key === `linked-memory` && step === Steps.Emotion1Recovered) {
+      return {
+        nextStep: Steps.Memory1,
+        key: `enter`
+      };
+    }
     return null;
   }
 );
@@ -119,6 +125,8 @@ export const expectedScene = Computed(
     case Steps.Emotion1Explain:
     case Steps.Emotion1Recovered:
       return Scenes.Lvl1;
+    case Steps.Memory1:
+      return Scenes.Memory1;
     default:
       return Scenes.Boot;
     }

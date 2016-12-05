@@ -22,6 +22,7 @@ export class Memory1Scene extends Scene {
 
     this.audioListener = new AudioListener();
     this.memorySound = new Audio(this.audioListener);
+    console.log(this.memorySound);
     this.scene.add(this.memorySound);
 
     this.analyser1 = new AudioAnalyser(this.memorySound, 32);

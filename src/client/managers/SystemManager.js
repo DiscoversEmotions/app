@@ -32,35 +32,31 @@ export class SystemManager {
   )
   update(context) {
 
+    context.nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
+    context.updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+
     const {
       readyForNextMessage, lastMessage, pushMessageAndWait, updateLastMessage,
       mind1AssetsReady, messages, step
     } = context;
 
+
     if (readyForNextMessage === false) {
       return;
     }
 
-    if (step === Steps.Boot) {
-      this.updateBoot(context);
-      return;
+    switch (step) {
+    case Steps.Boot: return this.updateBoot(context);
+    case Steps.Room: return this.updateRoom(context);
+    case Steps.Emotion1Explain: return this.updateEmotion1Explain(context);
+    case Steps.Emotion1Recovered: return this.updateEmotion1Recovered(context);
     }
-    if (step === Steps.Room) {
-      this.updateRoom(context);
-    }
-    if (step === Steps.Emotion1) {
-      this.updateEmotion1(context);
-    }
-
-    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
 
   }
 
   updateBoot(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, roomAssetsReady } = context;
-    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
-    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, roomAssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `boot`) {
       nextMessage({ key: `boot-progress`, progress: 0 }, 200);
@@ -110,9 +106,7 @@ export class SystemManager {
 
   updateRoom(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, mind1AssetsReady } = context;
-    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
-    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, mind1AssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `connect-eyes-progress`) {
       nextMessage({ key: `load-memory-progress`, progress: 0 }, 100);
@@ -162,15 +156,32 @@ export class SystemManager {
 
   }
 
-  updateEmotion1(context) {
+  updateEmotion1Explain(context) {
 
-    // if (lastMessage.key === `need-recovery`) {
-    //   nextMessage({ key: `emotion-recovered` }, 300);
-    // }
-    //
-    // if (lastMessage.key === `emotion-recovered`) {
-    //   nextMessage({ key: `linked-memory` }, 500);
-    // }
+    const { lastMessage, nextMessage, updateMessage } = context;
+
+    if (lastMessage.key === `need-recovery`) {
+      nextMessage({ key: `find-tiles` }, 300);
+    }
+
+    if (lastMessage.key === `find-tiles`) {
+      nextMessage({ key: `use-arrow-to-move` }, 500);
+    }
+
+  }
+
+  updateEmotion1Recovered(context) {
+
+    const { lastMessage, nextMessage, updateMessage } = context;
+
+    if (lastMessage.key === `use-arrow-to-move`) {
+      nextMessage({ key: `emotion-recovered` }, 300);
+    }
+
+    if (lastMessage.key === `emotion-recovered`) {
+      nextMessage({ key: `linked-memory` }, 300);
+    }
+
 
   }
 
