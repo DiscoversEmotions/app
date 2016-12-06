@@ -67,7 +67,7 @@ export class Lvl1Scene extends Scene {
 
     this.particles = null;
     this.particlesGeom = new Geometry();
-    this.particleCount = 320;
+    this.particleCount = 400;
 
   }
 

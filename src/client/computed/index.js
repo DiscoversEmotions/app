@@ -110,9 +110,14 @@ export const waitForKeyPress = Computed(
 
 export const expectedScene = Computed(
   {
-    step: `app.step`
+    step: `app.step`,
+    assetsReady: mind1AssetsReady,
+    webglReady: `app.bundlesReady.webgl`
   },
-  ({ step }) => {
+  ({ step, assetsReady, webglReady }) => {
+    // if(assetsReady && webglReady){
+    //   return Scenes.Memory1;
+    // }
     switch (step) {
     case Steps.Room:
       return Scenes.Room;
