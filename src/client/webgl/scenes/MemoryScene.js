@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color
+  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending
 } from 'three';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
@@ -23,32 +23,12 @@ export class MemoryScene extends Scene {
     this.cube1.rotation.x = 1;
     this.cubeObject.add(this.cube1);
 
-    this.colorLight = new PointLight({ color: 0xff0000 });
-    this.colorLight.position.y = 1;
-    this.colorLight.intensity = 0.7;
-    this.cubeObject.add(this.colorLight);
-
-    // this.circle_geom = new Geometry();
-    // this.material_circle = new LineBasicMaterial({color:0xf9f9f9});
-    // this.circle = new Line(this.circle_geom, this.material_circle);
-
-    // var radius=5;
-    // var obj_resolution = 360;
-
-    // for (var i = 0; i <=  obj_resolution; i++) {
-    //   var angle = Math.PI/180*i;
-    //   var x = (radius) * Math.cos(angle);
-    //   var y = (radius) * Math.sin(angle);
-    //   var z = 0;
-    //   this.circle.geometry.vertices.push(new Vector3(x, y, z));
-    // }
-    // this.scene.add(this.circle);
-
-    // this.light = new AmbientLight( 0x404040, 3 );
-    // this.scene.add(this.light);
+    this.light = new AmbientLight( 0x404040, 3 );
+    this.scene.add(this.light);
 
     this.initialGeomVertices = [];
     this.saveVertices();
+
   }
 
   saveVertices() {
@@ -85,6 +65,11 @@ export class MemoryScene extends Scene {
     });
     console.log(this.analyser);
     this.memorySound.play();
+
+    // Particle Texture
+    if (_.isNil(this.cube1.material.map)) {
+      this.cube1.material.map = this.app.assetsManager.getAsset(`particle2Texture`);
+    }
   }
 
   mountMemory1() {
