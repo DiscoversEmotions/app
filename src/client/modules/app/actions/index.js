@@ -28,6 +28,8 @@ function getNext (step, level) {
   if (step === Steps.MemoryDone) {
     if (level < 3) {
       return { step: Steps.EmotionExplain, level: level + 1 };
+    } else {
+      return { step: Steps.RecoveryDone, level: level };
     }
   }
   console.error(`Whaaaat ?`);

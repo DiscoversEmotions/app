@@ -29,6 +29,7 @@ export const Steps = {
   EmotionRecovered: `emotion-recovered`,
   Memory: `memory`,
   MemoryDone: `memory-done`,
+  RecoveryDone: `recovery-done`,
 };
 
 export const NUMBER_OF_MEMORIES = 482;

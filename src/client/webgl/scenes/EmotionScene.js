@@ -184,13 +184,29 @@ export class EmotionScene extends Scene {
         this.tiles.push(item);
       }
     });
+
+    setTimeout(() => {
+      this.controller.getSignal(`app.setNextStep`)();
+      this.solved = true;
+    }, 3000);
   }
 
   mountEmotion3() {
     this.world = this.app.assetsManager.getAsset(`world3`);
     this.world.traverseVisible((item) => {
       console.log(item.name);
+      if (item.name === `sol`) {
+        this.collision = item;
+      }
+      if (item.name === `tombe`) {
+        this.tiles.push(item);
+      }
     });
+
+    setTimeout(() => {
+      this.controller.getSignal(`app.setNextStep`)();
+      this.solved = true;
+    }, 3000);
   }
 
   update(time, dt) {
