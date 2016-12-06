@@ -13,20 +13,22 @@ export class MemoryScene extends Scene {
     this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);
 
-    this.cube1_geom = new SphereGeometry(5, 20, 20);
+    this.cube1_geom = new SphereGeometry(1.5, 20, 20);
     this.material_cube1 = new MeshBasicMaterial( { color: 0xd5d5d5, wireframe: true, side: DoubleSide } );
 
+    this.cubeObject = new Object3D();
+    this.scene.add(this.cubeObject);
+
     this.cube1 = new Mesh(this.cube1_geom, this.material_cube1);
-    // this.material_cube1 = new PointsMaterial({size: 1, color: 0xFFFFFF, blending: AdditiveBlending, transparent: true});
-    // this.cube1 = new Points(this.cube1_geom, this.material_cube1);
-    this.cube1.rotation.x = -1;
-    this.scene.add(this.cube1);
+    this.cube1.rotation.x = 1;
+    this.cubeObject.add(this.cube1);
 
     this.light = new AmbientLight( 0x404040, 3 );
     this.scene.add(this.light);
 
     this.initialGeomVertices = [];
     this.saveVertices();
+
   }
 
   saveVertices() {
@@ -63,11 +65,6 @@ export class MemoryScene extends Scene {
     });
     console.log(this.analyser);
     this.memorySound.play();
-
-    // Particle Texture
-    // if (_.isNil(this.cube1.material.map)) {
-    //   this.cube1.material.map = this.app.assetsManager.getAsset(`particleTexture`);
-    // }
   }
 
   mountMemory1() {
@@ -93,18 +90,11 @@ export class MemoryScene extends Scene {
     // this.cube1.rotation.x += 0.01;
     // this.cube1.rotation.y += 0.02;
 
-    // const audioLvl = this.analyser1.getAverageFrequency() / 256;
-    // const audioLvl = this.analyser1.getFrequencyData()[ 8 ] / 256;
-    const scale = this.analyser.getFrequencies()[ 8 ] / 300;
+    const scale = this.analyser.getFrequencies()[ 8 ] / 100;
 
-    // console.log(audioLvl);
-
-    // this.material_cube1.emissive.b = audioLvl;
-    // this.cube1.scale.set(scale, scale, scale);
-
-    this.cube1.scale.x = .3 + (scale / 20);
-    this.cube1.scale.y = .3 + (scale / 20);
-    this.cube1.scale.z = .3 + (scale / 20);
+    // this.cube1.scale.x = .3 + (scale / 5);
+    // this.cube1.scale.y = .3 + (scale / 5);
+    // this.cube1.scale.z = .3 + (scale / 5);
 
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
       this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 100);
