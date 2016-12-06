@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color
+  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending
 } from 'three';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
@@ -13,14 +13,29 @@ export class MemoryScene extends Scene {
     this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);
 
+    this.cube1_geom = new SphereGeometry(5, 20, 20);
     this.material_cube1 = new MeshBasicMaterial( { color: 0xd5d5d5, wireframe: true, side: DoubleSide } );
-    this.cube1_geom = new SphereGeometry(5, 10, 10);
+    
     this.cube1 = new Mesh(this.cube1_geom, this.material_cube1);
-    this.cube1.rotation.x = 1;
+    // this.material_cube1 = new PointsMaterial({size: 1, color: 0xFFFFFF, blending: AdditiveBlending, transparent: true});
+    // this.cube1 = new Points(this.cube1_geom, this.material_cube1);
+    this.cube1.rotation.x = -1;
     this.scene.add(this.cube1);
 
     this.light = new AmbientLight( 0x404040, 3 );
     this.scene.add(this.light);
+
+    this.initialGeomVertices = [];
+    this.saveVertices();
+  }
+
+  saveVertices() {
+    for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
+      this.initialGeomVertices[i] = {};
+      this.initialGeomVertices[i].x = this.cube1.geometry.vertices[i].x;
+      this.initialGeomVertices[i].y = this.cube1.geometry.vertices[i].y;
+      this.initialGeomVertices[i].z = this.cube1.geometry.vertices[i].z;
+    }
   }
 
   mount() {
@@ -48,6 +63,11 @@ export class MemoryScene extends Scene {
     });
     console.log(this.analyser);
     this.memorySound.play();
+
+    // Particle Texture
+    // if (_.isNil(this.cube1.material.map)) {
+    //   this.cube1.material.map = this.app.assetsManager.getAsset(`particleTexture`);
+    // }
   }
 
   mountMemory1() {
@@ -75,7 +95,7 @@ export class MemoryScene extends Scene {
 
     // const audioLvl = this.analyser1.getAverageFrequency() / 256;
     // const audioLvl = this.analyser1.getFrequencyData()[ 8 ] / 256;
-    const scale = this.analyser.getFrequencies()[ 8 ] / 256;
+    const scale = this.analyser.getFrequencies()[ 8 ] / 300;
 
     // console.log(audioLvl);
 
@@ -87,10 +107,9 @@ export class MemoryScene extends Scene {
     this.cube1.scale.z = .3 + (scale / 20);
 
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
-
-      // this.cube1.geometry.vertices[i].x = this.analyser1.getFrequencyData()[ i ] / 100;
-      // this.cube1.geometry.vertices[i].y = this.analyser1.getFrequencyData()[ i ] / 300;
-      // this.cube1.geometry.vertices[i].z = this.analyser1.getFrequencyData()[ i ] / 100;
+      this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 100);
+      this.cube1.geometry.vertices[i].y = this.initialGeomVertices[i].y * (this.analyser.getFrequencies()[i] / 300);
+      this.cube1.geometry.vertices[i].z = this.initialGeomVertices[i].z * (this.analyser.getFrequencies()[i] / 100);
     }
 
     this.cube1.geometry.verticesNeedUpdate = true;
