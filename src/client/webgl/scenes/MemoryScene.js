@@ -65,11 +65,6 @@ export class MemoryScene extends Scene {
     });
     console.log(this.analyser);
     this.memorySound.play();
-
-    // Particle Texture
-    if (_.isNil(this.cube1.material.map)) {
-      this.cube1.material.map = this.app.assetsManager.getAsset(`particle2Texture`);
-    }
   }
 
   mountMemory1() {

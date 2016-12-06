@@ -52,7 +52,6 @@ export class EmotionScene extends Scene {
 
     this.initSkybox();
     this.initParticles();
-
   }
 
   initSkybox() {
@@ -331,6 +330,9 @@ export class EmotionScene extends Scene {
   }
 
   updateParticles(time, dt) {
+    // if(this.level == 3){
+    //   console.log(`COUCOU`);
+    // }
     this.particles.rotation.y -= 0.0001;
     this.particles.position.set(-5, -5, -30);
   }
