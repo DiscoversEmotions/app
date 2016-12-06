@@ -68,7 +68,7 @@ export class EmotionScene extends Scene {
   initParticles() {
     // Particles
     const particleCount = 320;
-    const particlesSize = 1;
+    const particlesSize = Math.random() * (1 - 0.5) + 0.5;
 
     const particlesGeom = new Geometry();
     const particlesMaterial = new PointsMaterial({
@@ -317,7 +317,7 @@ export class EmotionScene extends Scene {
 
   updateParticles(time, dt) {
     this.particles.rotation.y -= 0.0001;
-    // this.particles.position.set(-5, -5, -40);
+    this.particles.position.set(-5, -5, -30);
   }
 
   unmount() {
