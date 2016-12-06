@@ -48,11 +48,11 @@ export class SystemManager {
     switch (step) {
     case Steps.Boot: return this.updateBoot(context);
     case Steps.Room: return this.updateRoom(context);
-
     case Steps.EmotionExplain: return this.updateEmotionExplain(context);
     case Steps.EmotionRecovered: return this.updateEmotionRecovered(context);
     case Steps.Memory: return this.updateMemory(context);
     case Steps.MemoryDone: return this.updateMemoryDone(context);
+    case Steps.RecoveryDone: return this.updateRecoveryDone(context);
     }
 
   }
@@ -165,10 +165,12 @@ export class SystemManager {
 
     if (lastMessage.key === `need-recovery` || lastMessage.key === `playing-memory-done`) {
       nextMessage({ key: `find-tiles` }, 300);
+      return;
     }
 
     if (lastMessage.key === `find-tiles`) {
       nextMessage({ key: `use-arrow-to-move` }, 500);
+      return;
     }
 
   }
@@ -179,10 +181,12 @@ export class SystemManager {
 
     if (lastMessage.key === `use-arrow-to-move`) {
       nextMessage({ key: `emotion-recovered` }, 300);
+      return;
     }
 
     if (lastMessage.key === `emotion-recovered`) {
       nextMessage({ key: `linked-memory` }, 300);
+      return;
     }
 
   }
@@ -193,6 +197,7 @@ export class SystemManager {
 
     if (lastMessage.key === `linked-memory`) {
       nextMessage({ key: `now-playing-memory` }, 50);
+      return;
     }
 
   }
@@ -203,12 +208,37 @@ export class SystemManager {
 
     if (lastMessage.key === `now-playing-memory`) {
       nextMessage({ key: `playing-memory-done` }, 300);
+      return;
     }
 
     if (lastMessage.key === `playing-memory-done`) {
       setNextStep();
+      return;
     }
 
+  }
+
+  updateRecoveryDone(context) {
+    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
+
+    if (lastMessage.key === `playing-memory-done`) {
+      nextMessage({ key: `all-emotions-recovered` }, 300);
+      return;
+    }
+
+    if (lastMessage.key === `all-emotions-recovered`) {
+      nextMessage({ key: `new-memories-found`, progress: 0 }, 300);
+      return;
+    }
+
+    if (lastMessage.key === `new-memories-found`) {
+      if (lastMessage.progress < 3) {
+        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 300);
+      } else {
+        nextMessage({ key: `delete-or-not` }, 300);
+      }
+      return;
+    }
   }
 
   getMessageHeight(msg) {

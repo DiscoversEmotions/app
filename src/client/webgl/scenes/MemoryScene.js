@@ -43,8 +43,8 @@ export class MemoryScene extends Scene {
       this.solved = true;
     });
     this.analyser = sono.effect.analyser({
-        fftSize: 256,
-        smoothingTimeConstant: 0.7
+      fftSize: 256,
+      smoothingTimeConstant: 0.7
     });
     console.log(this.analyser);
     this.memorySound.play();

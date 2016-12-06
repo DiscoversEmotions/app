@@ -28,7 +28,7 @@ export function updateLastMessage ({ state, input, controller }) {
     }
     const messages = state.get(`system.messages`);
     const message = _.findLast(messages, (msg) => msg.key === messageKey);
-    if (messages !== undefined) {
+    if (message !== undefined) {
       const id = messages.indexOf(message);
       state.merge(`system.messages.${id}`, input.message);
     } else {
