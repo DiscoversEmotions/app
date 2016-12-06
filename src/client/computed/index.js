@@ -119,13 +119,15 @@ export const expectedScene = Computed(
     webglReady: `app.bundlesReady.webgl`
   },
   ({ step, assetsReady, webglReady }) => {
-    // if(assetsReady && webglReady){
-    //   return Scenes.Memory1;
-    // }
     switch (step) {
+    case Steps.Boot:
+      return Scenes.Boot;
     case Steps.Room:
     case Steps.RecoveryDone:
-    case Steps.ConfirmDelete:
+    case Steps.ConfirmKeep:
+    case Steps.Delete:
+    case Steps.Keep:
+    case Steps.Shutdown:
       return Scenes.Room;
     case Steps.EmotionExplain:
     case Steps.EmotionRecovered:
@@ -134,7 +136,7 @@ export const expectedScene = Computed(
     case Steps.MemoryDone:
       return Scenes.Memory;
     default:
-      return Scenes.Boot;
+      throw new Error(`No scene for ${step}`);
     }
   }
 );

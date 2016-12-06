@@ -1,6 +1,6 @@
 import { state, set, debounce, when, wait, merge, input } from 'cerebral/operators';
 import { Scenes, Steps } from '~/types';
-import { getDuration, setNextStep } from './actions';
+import { getDuration, setNextStep, reboot } from './actions';
 
 export default {
   state: {
@@ -18,7 +18,7 @@ export default {
     },
     pointerLock: false,
     step: Steps.Boot,
-    level: 3
+    level: 1
   },
   signals: {
     setNextStep: [ setNextStep ],
@@ -39,6 +39,7 @@ export default {
       ]
     ],
     startPointerLock: [ set(state`app.pointerLock`, true) ],
-    stopPointerLock: [ set(state`app.pointerLock`, false) ]
+    stopPointerLock: [ set(state`app.pointerLock`, false) ],
+    reboot: [ reboot ]
   }
 };

@@ -20,6 +20,7 @@ export class SystemManager {
       readyForNextMessage: `system.readyForNextMessage`,
       findErrorDone: `system.findErrorDone`,
       messages: `system.messages`,
+      keys: `keyboard.keys`,
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
       mind1AssetsReady: mind1AssetsReady,
@@ -27,7 +28,9 @@ export class SystemManager {
     {
       pushMessageAndWait: `system.pushMessageAndWait`,
       updateLastMessage: `system.updateLastMessage`,
-      setNextStep: `app.setNextStep`
+      setNextStep: `app.setNextStep`,
+      reboot: `app.reboot`,
+      setStep: `app.setStep`
     }
   )
   update(context) {
@@ -53,7 +56,9 @@ export class SystemManager {
     case Steps.Memory: return this.updateMemory(context);
     case Steps.MemoryDone: return this.updateMemoryDone(context);
     case Steps.RecoveryDone: return this.updateRecoveryDone(context);
-    case Steps.ConfirmDelete: return this.updateConfirmDelete(context);
+    case Steps.ConfirmKeep: return this.updateConfirmKeep(context);
+    case Steps.Delete: return this.updateDelete(context);
+    case Steps.Shutdown: return this.updateShutdown(context);
     }
 
   }
@@ -61,6 +66,11 @@ export class SystemManager {
   updateBoot(context) {
 
     const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage } = context;
+
+    if (lastMessage === null) {
+      nextMessage({ key: `boot` }, 200);
+      return;
+    }
 
     if (lastMessage.key === `boot`) {
       nextMessage({ key: `boot-progress`, progress: 0 }, 200);
@@ -186,7 +196,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `emotion-recovered`) {
-      nextMessage({ key: `linked-memory` }, 300);
+      nextMessage({ key: `linked-memory` }, 1000);
       return;
     }
 
@@ -220,7 +230,7 @@ export class SystemManager {
   }
 
   updateRecoveryDone(context) {
-    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
+    const { lastMessage, nextMessage, updateMessage, setStep, keys } = context;
 
     if (lastMessage.key === `playing-memory-done`) {
       nextMessage({ key: `all-emotions-recovered` }, 300);
@@ -240,15 +250,79 @@ export class SystemManager {
       }
       return;
     }
+
+    if (lastMessage.key === `delete-or-not`) {
+      if (keys.y) {
+        setStep({ step: Steps.Delete });
+      }
+      if (keys.n) {
+        setStep({ step: Steps.ConfirmKeep });
+      }
+      return;
+    }
+
   }
 
-  updateConfirmDelete(context) {
-    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
+  updateConfirmKeep(context) {
+    const { lastMessage, nextMessage, setStep, keys } = context;
 
     if (lastMessage.key === `delete-or-not`) {
       nextMessage({ key: `are-you-sure` }, 300);
       return;
     }
+
+    if (lastMessage.key === `are-you-sure`) {
+      if (keys.y) {
+        setStep({ step: Steps.Delete });
+      }
+      if (keys.n) {
+        setStep({ step: Steps.Keep });
+      }
+      return;
+    }
+  }
+
+  updateDelete(context) {
+    const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep } = context;
+
+    console.log(`updateDelete`, lastMessage.key, keys.space);
+
+    if (lastMessage.key === `delete-or-not`) {
+      nextMessage({ key: `delete-memories`, progress: 0 }, 300);
+      return;
+    }
+
+    if (lastMessage.key === `delete-memories`) {
+      if (lastMessage.progress < 10) {
+        updateMessage(`delete-memories`, { progress: lastMessage.progress + 1 }, 300);
+      } else {
+        nextMessage({ key: `need-reboot` }, 300);
+      }
+      return;
+    }
+
+    if (lastMessage.key === `need-reboot`) {
+      if (keys.space) {
+        setStep({ step: Steps.Shutdown });
+      }
+      return;
+    }
+
+  }
+
+  updateShutdown(context) {
+    const { lastMessage, nextMessage, updateMessage, reboot } = context;
+
+    if (lastMessage.key === `need-reboot`) {
+      nextMessage({ key: `shutdown` }, 1000);
+      return;
+    }
+
+    if (lastMessage.key === `shutdown`) {
+      reboot();
+      return;
+    }
+
   }
 
   getMessageHeight(msg) {

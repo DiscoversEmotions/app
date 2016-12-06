@@ -30,7 +30,10 @@ export const Steps = {
   Memory: `memory`,
   MemoryDone: `memory-done`,
   RecoveryDone: `recovery-done`,
-  ConfirmDelete: `confirm-delete`
+  ConfirmKeep: `confirm-delete`,
+  Delete: `delete`,
+  Keep: `keet`,
+  Shutdown: `shutdown`
 };
 
 export const NUMBER_OF_MEMORIES = 482;

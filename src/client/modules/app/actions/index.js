@@ -33,7 +33,7 @@ function getNext (step, level) {
     }
   }
   if (step === Steps.RecoveryDone) {
-    return { step: Steps.ConfirmDelete, level: level };
+    return { step: Steps.ConfirmKeep, level: level };
   }
   console.error(`Whaaaat ?`, step);
   return null;
@@ -45,4 +45,10 @@ export function setNextStep ({ state }) {
   const next = getNext(step, level);
   state.set(`app.step`, next.step);
   state.set(`app.level`, next.level);
+}
+
+export function reboot ({ state }) {
+  state.set(`app.step`, Steps.Boot);
+  state.set(`app.level`, 1);
+  state.set(`system.messages`, []);
 }
