@@ -10,21 +10,19 @@ import { lastMessage } from '~/computed';
 const MessageSimple = compose(
   inject((provided) => ({ core: provided.core })),
   // ConnectReact(
+  //   {},
   //   {
-  //     lastMessage: lastMessage
+  //     startRecovery: `app.startRecovery`
   //   }
   // )
 )((props) => {
   const msg = props.msg;
   return (
-    <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.height } theWidth={ msg.width || 300 } >
-      { `message : ${msg.key}` }
-      { (() => {
-        if (msg.key === `need-recovery`) {
-          return `Press [ENTER] to start recovery`;
-        }
-        return null;
-      })() }
+    <MessageBox bottomDist={ msg.distFromBottom } theHeight={ msg.msgType.height } theWidth={ msg.width || 300 } >
+      { msg.key }
+      <Button>
+        Start Recovery
+      </Button>
     </MessageBox>
   );
 });
