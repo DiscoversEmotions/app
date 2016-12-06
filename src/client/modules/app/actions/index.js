@@ -32,8 +32,11 @@ function getNext (step, level) {
       return { step: Steps.RecoveryDone, level: level };
     }
   }
-  console.error(`Whaaaat ?`);
-
+  if (step === Steps.RecoveryDone) {
+    return { step: Steps.ConfirmDelete, level: level };
+  }
+  console.error(`Whaaaat ?`, step);
+  return null;
 }
 
 export function setNextStep ({ state }) {

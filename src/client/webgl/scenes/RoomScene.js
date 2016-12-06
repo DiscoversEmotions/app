@@ -37,10 +37,21 @@ export class RoomScene extends Scene {
       keys: `keyboard.keys`,
       step: `app.step`,
       lastMessage:lastMessage
+    },
+    {
+      setNextStep: `app.setNextStep`
     }
   )
-  deleteOrNot({ keys, step, lastMessage }) {
+  deleteOrNot({ keys, step, lastMessage, setNextStep }) {
     if (step === Steps.RecoveryDone && lastMessage.key === `delete-or-not`) {
+      if (keys.y) {
+        console.log(`Yes`);
+      }
+      if (keys.n) {
+        setNextStep();
+      }
+    }
+    if (step === Steps.ConfirmDelete && lastMessage.key === `are-you-sure`) {
       if (keys.y) {
         console.log(`Yes`);
       }
