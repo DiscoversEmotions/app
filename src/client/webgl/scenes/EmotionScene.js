@@ -51,7 +51,6 @@ export class EmotionScene extends Scene {
     this.raycaster = new Raycaster();
 
     this.initSkybox();
-
     this.initParticles();
 
   }
