@@ -51,12 +51,12 @@ export class KeyboardManager {
       waitForKeyPress: waitForKeyPress
     },
     {
-      setStep: `app.setStep`
+      setNextStep: `app.setNextStep`
     }
   )
-  update({ waitForKeyPress, keys, setStep }) {
-    if (waitForKeyPress !== null && keys[waitForKeyPress.key] === true) {
-      setStep({ step: waitForKeyPress.nextStep });
+  update({ waitForKeyPress, keys, setNextStep }) {
+    if (waitForKeyPress !== null && keys[waitForKeyPress] === true) {
+      setNextStep();
     }
     // if (lastMessage.key === `need-recovery` && keys.enter === true) {
     //   console.log(`TODO`);

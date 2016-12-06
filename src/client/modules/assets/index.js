@@ -23,16 +23,16 @@ const assets = [
     priority: 0,
   },
   {
-    key: `world1`,
-    fileUrl: require(`~/assets/world1.awd`),
-    type: AssetTypes.AWD,
+    key: `particleTexture`,
+    fileUrl: require(`~/assets/particle.png`),
+    type: AssetTypes.Texture,
     status: AssetStatus.Queued,
     priority: 10,
   },
   {
-    key: `particleTexture`,
-    fileUrl: require(`~/assets/particle.png`),
-    type: AssetTypes.Texture,
+    key: `world1`,
+    fileUrl: require(`~/assets/world1.awd`),
+    type: AssetTypes.AWD,
     status: AssetStatus.Queued,
     priority: 10,
   },
@@ -51,8 +51,22 @@ const assets = [
     priority: 20,
   },
   {
-    key: `memory1`,
-    fileUrl: require(`~/assets/memory_1.ogg`),
+    key: `memory_anger`,
+    fileUrl: require(`~/assets/memory_anger.ogg`),
+    type: AssetTypes.Audio,
+    status: AssetStatus.Queued,
+    priority: 15
+  },
+  {
+    key: `memory_love`,
+    fileUrl: require(`~/assets/memory_love.ogg`),
+    type: AssetTypes.Audio,
+    status: AssetStatus.Queued,
+    priority: 15
+  },
+  {
+    key: `memory_sadness`,
+    fileUrl: require(`~/assets/memory_sadness.ogg`),
     type: AssetTypes.Audio,
     status: AssetStatus.Queued,
     priority: 15

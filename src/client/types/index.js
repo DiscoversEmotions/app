@@ -3,10 +3,8 @@ export const Scenes = {
   None: `none`,
   Boot: `boot`,
   Room: `room`,
-  Lvl1: `lvl1`,
-  Memory1: `memory1`,
-  Lvl2: `lvl2`,
-  Memory2: `memory2`
+  Emotion: `emotion`,
+  Memory: `memory`
 };
 
 export const AssetStatus = {
@@ -27,13 +25,10 @@ export const AssetTypes = {
 export const Steps = {
   Boot: `boot`,
   Room: `room`,
-  Emotion1Explain: `emotion1-explain`,
-  Emotion1Recovered: `emotion1-recovered`,
-  Memory1: `memory1`,
-  Emotion2: `emotion2`,
-  Memory2: `memory2`,
-  Emotion2: `emotion2`,
-  Memory2: `memory2`
+  EmotionExplain: `emotion-explain`,
+  EmotionRecovered: `emotion-recovered`,
+  Memory: `memory`,
+  MemoryDone: `memory-done`,
 };
 
 export const NUMBER_OF_MEMORIES = 482;

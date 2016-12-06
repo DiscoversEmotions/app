@@ -14,10 +14,6 @@ export class ScenesManager {
 
   @ConnectMethod(
     {
-      // step: `app.step`,
-      // canStartRoom: canStartRoom,
-      // mind1AssetsReady: mind1AssetsReady,
-      // lastMessage: lastMessage,
       sceneTransition: `app.scene.transition`,
       currentScene: `app.scene.current`,
       expectedScene: expectedScene

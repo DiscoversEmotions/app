@@ -27,40 +27,39 @@ export class SystemManager {
     {
       pushMessageAndWait: `system.pushMessageAndWait`,
       updateLastMessage: `system.updateLastMessage`,
-      setStep: `app.setStep`
+      setNextStep: `app.setNextStep`
     }
   )
   update(context) {
+
+    context.nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
+    context.updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     const {
       readyForNextMessage, lastMessage, pushMessageAndWait, updateLastMessage,
       mind1AssetsReady, messages, step
     } = context;
 
+
     if (readyForNextMessage === false) {
       return;
     }
 
-    if (step === Steps.Boot) {
-      this.updateBoot(context);
-      return;
-    }
-    if (step === Steps.Room) {
-      this.updateRoom(context);
-    }
-    if (step === Steps.Emotion1) {
-      this.updateEmotion1(context);
-    }
+    switch (step) {
+    case Steps.Boot: return this.updateBoot(context);
+    case Steps.Room: return this.updateRoom(context);
 
-    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
+    case Steps.EmotionExplain: return this.updateEmotionExplain(context);
+    case Steps.EmotionRecovered: return this.updateEmotionRecovered(context);
+    case Steps.Memory: return this.updateMemory(context);
+    case Steps.MemoryDone: return this.updateMemoryDone(context);
+    }
 
   }
 
   updateBoot(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, roomAssetsReady } = context;
-    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
-    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `boot`) {
       nextMessage({ key: `boot-progress`, progress: 0 }, 200);
@@ -102,7 +101,7 @@ export class SystemManager {
         }
         updateMessage(`connect-eyes-progress`, { progress: nextProgress }, time);
       } else {
-        setStep({ step: Steps.Room });
+        setNextStep();
       }
       return;
     }
@@ -110,9 +109,7 @@ export class SystemManager {
 
   updateRoom(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setStep, mind1AssetsReady } = context;
-    const nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
-    const updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+    const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, mind1AssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `connect-eyes-progress`) {
       nextMessage({ key: `load-memory-progress`, progress: 0 }, 100);
@@ -162,15 +159,55 @@ export class SystemManager {
 
   }
 
-  updateEmotion1(context) {
+  updateEmotionExplain(context) {
 
-    // if (lastMessage.key === `need-recovery`) {
-    //   nextMessage({ key: `emotion-recovered` }, 300);
-    // }
-    //
-    // if (lastMessage.key === `emotion-recovered`) {
-    //   nextMessage({ key: `linked-memory` }, 500);
-    // }
+    const { lastMessage, nextMessage, updateMessage } = context;
+
+    if (lastMessage.key === `need-recovery` || lastMessage.key === `playing-memory-done`) {
+      nextMessage({ key: `find-tiles` }, 300);
+    }
+
+    if (lastMessage.key === `find-tiles`) {
+      nextMessage({ key: `use-arrow-to-move` }, 500);
+    }
+
+  }
+
+  updateEmotionRecovered(context) {
+
+    const { lastMessage, nextMessage, updateMessage } = context;
+
+    if (lastMessage.key === `use-arrow-to-move`) {
+      nextMessage({ key: `emotion-recovered` }, 300);
+    }
+
+    if (lastMessage.key === `emotion-recovered`) {
+      nextMessage({ key: `linked-memory` }, 300);
+    }
+
+  }
+
+  updateMemory(context) {
+
+    const { lastMessage, nextMessage, updateMessage } = context;
+
+    if (lastMessage.key === `linked-memory`) {
+      nextMessage({ key: `now-playing-memory` }, 50);
+    }
+
+  }
+
+  updateMemoryDone(context) {
+
+    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
+
+    if (lastMessage.key === `now-playing-memory`) {
+      nextMessage({ key: `playing-memory-done` }, 300);
+    }
+
+    if (lastMessage.key === `playing-memory-done`) {
+      setNextStep();
+    }
 
   }
 
