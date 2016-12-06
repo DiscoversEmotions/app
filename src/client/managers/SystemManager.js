@@ -53,6 +53,7 @@ export class SystemManager {
     case Steps.Memory: return this.updateMemory(context);
     case Steps.MemoryDone: return this.updateMemoryDone(context);
     case Steps.RecoveryDone: return this.updateRecoveryDone(context);
+    case Steps.ConfirmDelete: return this.updateConfirmDelete(context);
     }
 
   }
@@ -237,6 +238,15 @@ export class SystemManager {
       } else {
         nextMessage({ key: `delete-or-not` }, 300);
       }
+      return;
+    }
+  }
+
+  updateConfirmDelete(context) {
+    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
+
+    if (lastMessage.key === `delete-or-not`) {
+      nextMessage({ key: `are-you-sure` }, 300);
       return;
     }
   }

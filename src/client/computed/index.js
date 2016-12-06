@@ -125,6 +125,7 @@ export const expectedScene = Computed(
     switch (step) {
     case Steps.Room:
     case Steps.RecoveryDone:
+    case Steps.ConfirmDelete:
       return Scenes.Room;
     case Steps.EmotionExplain:
     case Steps.EmotionRecovered:

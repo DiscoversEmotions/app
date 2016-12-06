@@ -1,12 +1,17 @@
-import { EventUtils } from '~/core';
+import { EventUtils, ConnectMethod } from '~/core';
 import { PointLight, Object3D, Mesh, MeshBasicMaterial, SphereGeometry, Color } from 'three';
 import _ from 'lodash';
 import { Scene } from './Scene';
+import { lastMessage } from '~/computed';
+import { Steps } from '~/types';
 
 export class RoomScene extends Scene {
 
   constructor(...args) {
     super(...args);
+
+    // Init watchers
+    this.deleteOrNot({}, this.controller, this);
 
     this.scene.add(this.cameraman);
 
@@ -24,6 +29,36 @@ export class RoomScene extends Scene {
       fogDensity: 0,
       fogColor: new Color(0x000000)
     };
+  }
+
+  // Keyboard Method
+  @ConnectMethod(
+    {
+      keys: `keyboard.keys`,
+      step: `app.step`,
+      lastMessage:lastMessage
+    },
+    {
+      setNextStep: `app.setNextStep`
+    }
+  )
+  deleteOrNot({ keys, step, lastMessage, setNextStep }) {
+    if (step === Steps.RecoveryDone && lastMessage.key === `delete-or-not`) {
+      if (keys.y) {
+        console.log(`Yes`);
+      }
+      if (keys.n) {
+        setNextStep();
+      }
+    }
+    if (step === Steps.ConfirmDelete && lastMessage.key === `are-you-sure`) {
+      if (keys.y) {
+        console.log(`Yes`);
+      }
+      if (keys.n) {
+        console.log(`No`);
+      }
+    }
   }
 
   mount() {

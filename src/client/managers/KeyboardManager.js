@@ -11,7 +11,9 @@ export const KEYS_MAP = {
   39: `right`,
   68: `d`,
   32: `space`,
-  13: `enter`
+  13: `enter`,
+  89: `y`,
+  78: `n`
 };
 
 export class KeyboardManager {
