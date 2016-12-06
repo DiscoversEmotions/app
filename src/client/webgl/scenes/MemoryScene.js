@@ -15,7 +15,7 @@ export class MemoryScene extends Scene {
 
     this.cube1_geom = new SphereGeometry(5, 20, 20);
     this.material_cube1 = new MeshBasicMaterial( { color: 0xd5d5d5, wireframe: true, side: DoubleSide } );
-    
+
     this.cube1 = new Mesh(this.cube1_geom, this.material_cube1);
     // this.material_cube1 = new PointsMaterial({size: 1, color: 0xFFFFFF, blending: AdditiveBlending, transparent: true});
     // this.cube1 = new Points(this.cube1_geom, this.material_cube1);
