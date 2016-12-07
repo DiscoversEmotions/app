@@ -70,7 +70,7 @@ export class EmotionScene extends Scene {
 
   initParticles() {
     // Particles
-    this.particleCount = 1000;
+    this.particleCount = 1500;
     const particlesSize = Math.random() * (1 - 0.5) + 0.5;
 
     this.particlesGeom = new Geometry();
@@ -83,7 +83,7 @@ export class EmotionScene extends Scene {
     });
 
     for (var p = 0; p < this.particleCount; p++) {
-      var pX = Math.random() * 100;
+      var pX = Math.random() * 50;
       var pY = Math.random() * 10;
       var pZ = Math.random() * 60;
       var particle = new Vector3(pX, pY, pZ);
@@ -92,8 +92,14 @@ export class EmotionScene extends Scene {
 
     this.particles = new Points(this.particlesGeom, particlesMaterial);
     this.particles.sortParticles = true;
-    this.particles.position.set(-5, -5, -30);
     this.particles.scale.z = 5;
+
+    if(this.level === 1){
+      this.particles.position.set(-5, -5, -30);
+    }
+    if(this.level === 3){
+      this.particles.position.set(0, 90, 0);
+    }
 
     this.scene.add(this.particles);
   }
@@ -338,12 +344,18 @@ export class EmotionScene extends Scene {
   }
 
   updateParticles(time, dt) {
-    // if(this.level == 3){
-    //   console.log(`COUCOU`);
-    // }
-    this.particles.rotation.y -= 0.0001;
-    // this.particles.rotation.y -= 0.02;
+    if(this.level === 1){
+      this.particles.rotation.y -= 0.0001;
+    }
 
+    if(this.level === 2){
+      this.particles.rotation.y -= 0.02;
+    }
+
+    if(this.level === 3){
+      this.particles.rotation.y -= 0.0001;
+      this.particles.rotation.x += 0.00001;
+    }
 
     this.particles.geometry.verticesNeedUpdate = true;
   }

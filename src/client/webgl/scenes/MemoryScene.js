@@ -82,7 +82,7 @@ export class MemoryScene extends Scene {
     }
 
     this.croquisMaterial = new MeshLambertMaterial({ map : this.memoryCroquis, side: DoubleSide, transparent: true, opacity: 0 });
-    this.croquisGeom = new PlaneGeometry(1, 1);
+    this.croquisGeom = new PlaneGeometry(3, 3);
     this.croquis = new Mesh(this.croquisGeom, this.croquisMaterial);
     this.croquis.position.set(0, 0, 0);
     this.scene.add(this.croquis);
@@ -135,13 +135,11 @@ export class MemoryScene extends Scene {
     this.cube1.geometry.verticesNeedUpdate = true;
 
     if(this.croquis.material.opacity < 1 && !this.croquisVisible){
-      this.croquis.material.opacity += 0.001;
-      // this.croquis.scale += 0.001;
-    } else {
-      this.croquisVisible = true;
-      this.croquis.material.opacity -= 0.001;
-      // this.croquis.scale += 0.001;
-    }
+      this.croquis.material.opacity += 0.00015;
+      this.croquis.scale.x += 0.0005;
+      this.croquis.scale.y += 0.0005;
+
+    } 
 
   }
 

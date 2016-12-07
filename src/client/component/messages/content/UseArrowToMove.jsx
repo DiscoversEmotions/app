@@ -14,7 +14,7 @@ const UseArrowToMove = (props) => {
   return (
     <Message msg={msg}>
       <Text>
-        Use [up] or [z] to move
+        Use [arrow keys] or [z, q, s, d] to move
       </Text>
     </Message>
   )
