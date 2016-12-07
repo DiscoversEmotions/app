@@ -31,9 +31,15 @@ export class EmotionScene extends Scene {
       color: 0xffffff,
       wireframe: true
     });
-    this.userPosition = new Object3D();
-    this.userPosition.position.set(0, 5, 0);
-    this.scene.add(this.userPosition);
+    this.movementOrigin = new Object3D();
+    this.movementOrigin.position.set(0, 5, 0);
+    this.cameramanRotationArround = new Object3D();
+    this.movementOrigin.add(this.cameramanRotationArround);
+    this.scene.add(this.movementOrigin);
+
+    // Arrow
+    this.arrowRotation = new Object3D();
+    this.movementOrigin.add(this.arrowRotation);
 
     // Light inside perso
     this.persoLight = new PointLight({
@@ -41,7 +47,7 @@ export class EmotionScene extends Scene {
     });
     this.persoLight.position.y = 2;
     this.persoLight.intensity = 0.7;
-    this.userPosition.add(this.persoLight);
+    this.movementOrigin.add(this.persoLight);
 
     // Cameraman
     this.cameramanRotation = {
@@ -50,7 +56,7 @@ export class EmotionScene extends Scene {
     };
     this.cameraman.position.set(0, 3, 7);
     this.cameraman.setVerticalAngle(-0.3);
-    this.userPosition.add(this.cameraman);
+    this.cameramanRotationArround.add(this.cameraman);
 
     // Raycaster
     this.raycaster = new Raycaster();
@@ -134,18 +140,28 @@ export class EmotionScene extends Scene {
     this.collision = null;
     this.tiles = [];
     this.world = null;
-
-    console.log(`Level ${this.level}`);
+    this.persoCamRotation = 0;
 
     // Mount perso if not exist
     if (_.isNil(this.perso)) {
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
-      this.userPosition.add(this.perso);
+      this.movementOrigin.add(this.perso);
       this.perso.scale.set(0.015, 0.015, 0.015);
       this.perso.setMaterial(this.persoMaterial);
       this.perso.play(`idle`, 1);
     }
-    this.userPosition.position.set(0, 0, 0);
+    this.movementOrigin.position.set(0, 0, 0);
+
+    if (_.isNil(this.arrow)) {
+      this.arrow = this.app.assetsManager.getAsset(`arrow`);
+      console.log(this.arrow);
+      this.arrow.children[0].material = new MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true
+      });
+      this.arrowRotation.add(this.arrow);
+      this.arrow.position.set(0, 1, 2);
+    }
 
     // Particle Texture
     if (_.isNil(this.particles.material.map)) {
@@ -216,9 +232,14 @@ export class EmotionScene extends Scene {
 
     this.updatePerso(time, dt);
 
+    this.updateArrow(time, dt);
+
     this.collisionTileResults = this.raycaster.intersectObjects(this.tiles);
     if (this.collisionTileResults.length && this.solved === false) {
       this.controller.getSignal(`app.setNextStep`)();
+      this.tiles.forEach(tile => {
+        tile.material.color = new Color(0xb7daf6);
+      });
       this.solved = true;
     }
 
@@ -242,13 +263,17 @@ export class EmotionScene extends Scene {
 
     const isMoving = (movement.forward !== 0 || movement.left !== 0);
 
-    const angle = motion.calc.degreesToRadians(motion.calc.angle(
-      { y: movement.forward, x: 0 },
-      { y: 0, x: -movement.left}
-    ));
+    const angle = (
+      motion.calc.degreesToRadians(motion.calc.angle(
+        { y: movement.forward, x: 0 },
+        { y: 0, x: -movement.left}
+      )) +
+      this.cameramanRotationArround.rotation.y
+    ) % (2 * Math.PI);
 
     // Update Velocity
     if (isMoving) {
+      this.persoCamRotation = 0;
       this.persoVelocityLinear += 0.0001;
     } else if (this.persoVelocityLinear > 0) {
       this.persoVelocityLinear -= 0.005;
@@ -256,6 +281,8 @@ export class EmotionScene extends Scene {
     this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.1);
 
     this.persoVelocity = (Math.pow(((this.persoVelocityLinear-0.1)*10), 3) / 10) + 0.1;
+
+    //
 
     const dist = this.persoVelocity * dt;
 
@@ -271,25 +298,31 @@ export class EmotionScene extends Scene {
       motion.calc.radiansToDegrees(angle),
       dist
     );
-    this.userPosition.translateZ(-canMove.x);
-    this.userPosition.translateX(-canMove.y);
-    this.raycaster.set(this.userPosition.position, new Vector3(0, -1, 0));
-    this.userPosition.translateZ(+canMove.x);
-    this.userPosition.translateX(+canMove.y);
+
+    this.movementOrigin.translateZ(-canMove.x);
+    this.movementOrigin.translateX(-canMove.y);
+    this.raycaster.set(this.movementOrigin.position, new Vector3(0, -1, 0));
+    this.movementOrigin.translateZ(+canMove.x);
+    this.movementOrigin.translateX(+canMove.y);
     this.raycaster.ray.origin.y += 2;
 
     const canMoveCollision = this.raycaster.intersectObjects([this.collision]);
     if (canMoveCollision.length) {
       // console.log(`ok can move`)
-      this.userPosition.translateZ(-move.x);
-      this.userPosition.translateX(-move.y);
+      this.movementOrigin.translateZ(-move.x);
+      this.movementOrigin.translateX(-move.y);
     } else {
       // console.log(`nope, can't move`);
       this.persoVelocityLinear = 0;
       this.persoVelocity = 0;
     }
 
-    this.perso.rotation.y = angle;
+    if (this.persoVelocity > 0.001) {
+      this.perso.rotation.y %= (2 * Math.PI);
+      if (this.perso.rotation.y !== angle) {
+        this.perso.rotation.y = angle;
+      }
+    }
 
     if (this.persoVelocity < 0.001) {
       this.perso.applyWeight(`walk`, 0);
@@ -309,17 +342,28 @@ export class EmotionScene extends Scene {
 
     // Collision with ground
     this.raycaster.set(
-      this.userPosition.position,
+      this.movementOrigin.position,
       new Vector3(0, -1, 0)
     );
     this.raycaster.ray.origin.y += 2;
 
     this.collisionGroundResults = this.raycaster.intersectObjects([this.collision]);
     if (this.collisionGroundResults.length) {
-      this.userPosition.position.y = this.collisionGroundResults[0].point.y;
+      this.movementOrigin.position.y = this.collisionGroundResults[0].point.y;
     } else {
       console.log(`No ground collision`);
     }
+  }
+
+  updateArrow(time, dt) {
+    const from = this.movementOrigin.getWorldPosition();
+    this.tiles[0].geometry.computeBoundingSphere();
+    const to = this.tiles[0].geometry.boundingSphere.center;
+    const angle = motion.calc.angle(
+      { x: from.x, y: from.z },
+      { x: to.x, y: to.z }
+    );
+    this.arrowRotation.rotation.y = motion.calc.degreesToRadians(angle + 180);
   }
 
   updateCameraman() {
@@ -330,7 +374,7 @@ export class EmotionScene extends Scene {
     // this.cameramanRotation.hori %= 1;
     // this.cameramanRotation.vert = (this.mousePos.y + 1) / 2;
 
-    this.userPosition.rotation.y = this.cameramanRotation.hori * (Math.PI * 2);
+    this.cameramanRotationArround.rotation.y = this.cameramanRotation.hori * (Math.PI * 2);
     const dist = motion.calc.dilate(7, 13, this.cameramanRotation.vert);
     const lookUp = motion.calc.dilate(0, 0.3, this.cameramanRotation.vert);
     const angle = motion.calc.dilate(100, 60, this.cameramanRotation.vert);
