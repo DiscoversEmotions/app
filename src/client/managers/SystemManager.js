@@ -325,20 +325,4 @@ export class SystemManager {
 
   }
 
-  getMessageHeight(msg) {
-    if (msg.type === `console`) {
-      return 26;
-    }
-    return 40;
-  }
-
-  getMessageType(msg) {
-    if (_.includes([
-      `boot`, `boot-progress`, `boot-done`, `connect-eyes`, `connect-eyes-progress`, `connect-eyes-done`
-    ], msg.key)) {
-      return `console`;
-    }
-    return `simple`;
-  }
-
 }

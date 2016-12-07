@@ -4,11 +4,15 @@ import styled from 'styled-components';
 export default styled.button`
     cursor: pointer;
     border: none;
-    padding: 10px 20px;
-    background: rgba(86, 74, 218, 0.92);
+    padding: 8px 20px;
+    border-radius: 100px;
+    background: #F44336;
     color: white;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-size: 12px;
 
     &:hover {
-      background: rgba(86, 74, 218, 1);
+      background: #D32F2F;
     }
 `;

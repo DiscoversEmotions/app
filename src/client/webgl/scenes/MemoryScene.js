@@ -1,6 +1,7 @@
 import {
   PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending
 } from 'three';
+import { ConnectMethod } from '~/core';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
 import sono from 'sono';
@@ -9,6 +10,9 @@ export class MemoryScene extends Scene {
 
   constructor(...args) {
     super(...args);
+
+    // Init watchers
+    this.updateKeys({}, this.controller, this);
 
     this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);
@@ -37,6 +41,20 @@ export class MemoryScene extends Scene {
       this.initialGeomVertices[i].x = this.cube1.geometry.vertices[i].x;
       this.initialGeomVertices[i].y = this.cube1.geometry.vertices[i].y;
       this.initialGeomVertices[i].z = this.cube1.geometry.vertices[i].z;
+    }
+  }
+
+  // Keyboard Method
+  @ConnectMethod(
+    {
+      keys: `keyboard.keys`
+    }
+  )
+  updateKeys({ keys }) {
+    if (keys.k) {
+      this.memorySound.stop();
+      this.controller.getSignal(`app.setNextStep`)();
+      this.solved = true;
     }
   }
 

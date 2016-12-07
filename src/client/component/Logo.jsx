@@ -1,16 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import _ from 'lodash';
-import { compose, ConnectReact } from '~/core';
-import { inject } from 'react-tunnel';
 
 
 const Container = styled.div`
 
 `;
 
-const Logo = compose(
-)((props) => {
+const Logo = (props) => {
   return (
     <Container dangerouslySetInnerHTML={{__html: `
       <svg version="1.1" id="basic-boot-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 1028" style="enable-background:new 0 0 1920 1028;" xml:space="preserve">
@@ -49,6 +46,6 @@ const Logo = compose(
 
     </Container>
   );
-});
+};
 
 export default Logo;

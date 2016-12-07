@@ -38,4 +38,3 @@ export const Steps = {
 
 export const NUMBER_OF_MEMORIES = 482;
 export const NUMBER_OF_EMOTIONS = 47;
-export const MESSAGES_MARGIN = 10;
