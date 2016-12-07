@@ -84,11 +84,18 @@ const assets = [
     type: AssetTypes.Texture,
     status: AssetStatus.Queued,
     priority: 15
-  }, 
+  },
   {
     key: `memory_sad_croquis`,
     fileUrl: require(`~/assets/memory_sad_croquis.png`),
     type: AssetTypes.Texture,
+    status: AssetStatus.Queued,
+    priority: 15
+  },
+  {
+    key: `arrow`,
+    fileUrl: require(`~/assets/arrow.awd`),
+    type: AssetTypes.AWD,
     status: AssetStatus.Queued,
     priority: 15
   }

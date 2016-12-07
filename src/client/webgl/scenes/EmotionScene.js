@@ -37,6 +37,10 @@ export class EmotionScene extends Scene {
     this.movementOrigin.add(this.cameramanRotationArround);
     this.scene.add(this.movementOrigin);
 
+    // Arrow
+    this.arrowRotation = new Object3D();
+    this.movementOrigin.add(this.arrowRotation);
+
     // Light inside perso
     this.persoLight = new PointLight({
       color: 0xff0000
@@ -132,8 +136,6 @@ export class EmotionScene extends Scene {
     this.world = null;
     this.persoCamRotation = 0;
 
-    console.log(`Level ${this.level}`);
-
     // Mount perso if not exist
     if (_.isNil(this.perso)) {
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
@@ -143,6 +145,17 @@ export class EmotionScene extends Scene {
       this.perso.play(`idle`, 1);
     }
     this.movementOrigin.position.set(0, 0, 0);
+
+    if (_.isNil(this.arrow)) {
+      this.arrow = this.app.assetsManager.getAsset(`arrow`);
+      console.log(this.arrow);
+      this.arrow.children[0].material = new MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true
+      });
+      this.arrowRotation.add(this.arrow);
+      this.arrow.position.set(0, 1, 2);
+    }
 
     // Particle Texture
     if (_.isNil(this.particles.material.map)) {
@@ -212,6 +225,8 @@ export class EmotionScene extends Scene {
   update(time, dt) {
 
     this.updatePerso(time, dt);
+
+    this.updateArrow(time, dt);
 
     this.collisionTileResults = this.raycaster.intersectObjects(this.tiles);
     if (this.collisionTileResults.length && this.solved === false) {
@@ -332,6 +347,17 @@ export class EmotionScene extends Scene {
     } else {
       console.log(`No ground collision`);
     }
+  }
+
+  updateArrow(time, dt) {
+    const from = this.movementOrigin.getWorldPosition();
+    this.tiles[0].geometry.computeBoundingSphere();
+    const to = this.tiles[0].geometry.boundingSphere.center;
+    const angle = motion.calc.angle(
+      { x: from.x, y: from.z },
+      { x: to.x, y: to.z }
+    );
+    this.arrowRotation.rotation.y = motion.calc.degreesToRadians(angle + 180);
   }
 
   updateCameraman() {
