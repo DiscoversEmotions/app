@@ -65,10 +65,10 @@ export class EmotionScene extends Scene {
 
   initParticles() {
     // Particles
-    const particleCount = 320;
+    this.particleCount = 500;
     const particlesSize = Math.random() * (1 - 0.5) + 0.5;
 
-    const particlesGeom = new Geometry();
+    this.particlesGeom = new Geometry();
     const particlesMaterial = new PointsMaterial({
       color: 0xFFFFFF,
       size: particlesSize,
@@ -76,18 +76,21 @@ export class EmotionScene extends Scene {
       transparent: true
     });
 
-    for (var p = 0; p < particleCount; p++) {
+    for (var p = 0; p < this.particleCount; p++) {
       var pX = Math.random() * 50;
       var pY = Math.random() * 10;
       var pZ = Math.random() * 60;
       var particle = new Vector3(pX, pY, pZ);
-      particlesGeom.vertices.push(particle);
+      this.particlesGeom.vertices.push(particle);
     }
 
-    this.particles = new Points(particlesGeom, particlesMaterial);
+    this.particles = new Points(this.particlesGeom, particlesMaterial);
     this.particles.sortParticles = true;
+    this.particles.position.set(-5, -5, -30);
 
     this.scene.add(this.particles);
+
+    console.log(this.particles);
   }
 
   getEnvConfig() {
@@ -333,8 +336,21 @@ export class EmotionScene extends Scene {
     // if(this.level == 3){
     //   console.log(`COUCOU`);
     // }
-    this.particles.rotation.y -= 0.0001;
-    this.particles.position.set(-5, -5, -30);
+    // this.particles.rotation.y -= 0.0001;
+    this.particles.rotation.y -= 0.02;
+
+    var pCount = this.particleCount;
+    // for(var j = 0; j < this.particles.geometry.vertices.length; j++){
+    //   this.particles.geometry.vertices[j].y = 0.0001;
+    // }
+
+    while (pCount--) {
+      var particle = this.particlesGeom.vertices[pCount];
+      // console.log(particle.y);
+
+    }
+
+    this.particles.geometry.verticesNeedUpdate = true;
   }
 
   unmount() {
