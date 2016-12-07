@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending
+  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending, PlaneGeometry, MeshLambertMaterial
 } from 'three';
 import { ConnectMethod } from '~/core';
 import { Scene } from './Scene';
@@ -27,11 +27,19 @@ export class MemoryScene extends Scene {
     this.cube1.rotation.x = 1;
     this.cubeObject.add(this.cube1);
 
+    this.cube1Light = new PointLight({
+      color: 0xff0000,
+      intensity: 5
+    });
+    this.cubeObject.add(this.cube1Light);
+
     this.light = new AmbientLight( 0x404040, 3 );
     this.scene.add(this.light);
 
     this.initialGeomVertices = [];
     this.saveVertices();
+
+    this.croquisVisible = false;
 
   }
 
@@ -66,11 +74,18 @@ export class MemoryScene extends Scene {
 
     if (this.level === 1) {
       this.mountMemory1();
+
     } else if (this.level === 2) {
       this.mountMemory2();
     } else if (this.level === 3) {
       this.mountMemory3();
     }
+
+    this.croquisMaterial = new MeshLambertMaterial({ map : this.memoryCroquis, side: DoubleSide, transparent: true, opacity: 0 });
+    this.croquisGeom = new PlaneGeometry(1, 1);
+    this.croquis = new Mesh(this.croquisGeom, this.croquisMaterial);
+    this.croquis.position.set(0, 0, 0);
+    this.scene.add(this.croquis);
 
     this.memorySound = sono.createSound(this.momoryBuffer);
     this.memorySound.on(`ended`, () => {
@@ -87,32 +102,29 @@ export class MemoryScene extends Scene {
 
   mountMemory1() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_love`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_love_croquis`);
   }
 
   mountMemory2() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_anger`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_anger_croquis`);
   }
 
   mountMemory3() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_sadness`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_sadness_croquis`);
   }
 
 
   getEnvConfig() {
     return {
-      background: new Color(0xffffff)
+      // background: new Color(0xffffff)
     };
   }
 
   update(time, dt) {
     // this.cube1.rotation.x += 0.01;
     // this.cube1.rotation.y += 0.02;
-
-    const scale = this.analyser.getFrequencies()[ 8 ] / 100;
-
-    // this.cube1.scale.x = .3 + (scale / 5);
-    // this.cube1.scale.y = .3 + (scale / 5);
-    // this.cube1.scale.z = .3 + (scale / 5);
 
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
       this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 100);
@@ -121,6 +133,15 @@ export class MemoryScene extends Scene {
     }
 
     this.cube1.geometry.verticesNeedUpdate = true;
+
+    if(this.croquis.material.opacity < 1 && !this.croquisVisible){
+      this.croquis.material.opacity += 0.001;
+      // this.croquis.scale += 0.001;
+    } else {
+      this.croquisVisible = true;
+      this.croquis.material.opacity -= 0.001;
+      // this.croquis.scale += 0.001;
+    }
 
   }
 

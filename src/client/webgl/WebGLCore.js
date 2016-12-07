@@ -111,7 +111,7 @@ export class WebGLCore {
   )
   updatePass({ sceneTransition, scene }) {
     this.glitchPass.enabled = sceneTransition;
-    if (scene === Scenes.Emotion) {
+    if (scene === Scenes.Emotion || scene === Scenes.Memory) {
       this.bloomPass.enabled = true;
     } else {
       this.bloomPass.enabled = false;
