@@ -24,6 +24,7 @@ export class SystemManager {
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
       mind1AssetsReady: mind1AssetsReady,
+      level: `app.level`
     },
     {
       pushMessage: `system.pushMessage`,
@@ -188,15 +189,15 @@ export class SystemManager {
 
   updateEmotionRecovered(context) {
 
-    const { lastMessage, nextMessage, updateMessage } = context;
+    const { lastMessage, nextMessage, updateMessage, level } = context;
 
     if (lastMessage.key === `use-arrow-to-move`) {
-      nextMessage({ key: `emotion-recovered` }, 300);
+      nextMessage({ key: `emotion-recovered`, level: level }, 300);
       return;
     }
 
     if (lastMessage.key === `emotion-recovered`) {
-      nextMessage({ key: `linked-memory` }, 1000);
+      nextMessage({ key: `linked-memory`, level: level }, 2000);
       return;
     }
 
@@ -207,7 +208,7 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `linked-memory`) {
-      nextMessage({ key: `now-playing-memory` }, 50);
+      nextMessage({ key: `now-playing-memory` }, 50, true);
       return;
     }
 

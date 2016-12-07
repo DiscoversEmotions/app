@@ -9,6 +9,8 @@ import LoadEmotions  from '~/component/messages/content/LoadEmotions';
 import NeedRecovery  from '~/component/messages/content/NeedRecovery';
 import FindTiles  from '~/component/messages/content/FindTiles';
 import UseArrowToMove  from '~/component/messages/content/UseArrowToMove';
+import EmotionRecovered  from '~/component/messages/content/EmotionRecovered';
+import LinkedMemory  from '~/component/messages/content/LinkedMemory';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
@@ -39,6 +41,8 @@ function getMessageHeight(msg) {
     })();
     case `need-recovery`: return 180;
     case `find-tiles`: return 130;
+    case `emotion-recovered`: return 110;
+    case `linked-memory`: return 180;
   }
   return 60;
 }
@@ -87,6 +91,8 @@ const System = compose(
             case `need-recovery`: return <NeedRecovery msg={msg} />;
             case `find-tiles`: return <FindTiles msg={msg} />;
             case `use-arrow-to-move`: return <UseArrowToMove msg={msg} />;
+            case `emotion-recovered`: return <EmotionRecovered msg={msg} />;
+            case `linked-memory`: return <LinkedMemory msg={msg} />;
           }
           return (
             <Message msg={ msg } type='error'>
