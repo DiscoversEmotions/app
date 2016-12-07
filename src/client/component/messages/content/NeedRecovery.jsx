@@ -30,7 +30,7 @@ const NeedRecovery = compose(
       msg={msg}
       type='error'
       title='Missing Emotions'
-      icon={ <ErrorIcon /> }
+      icon={ <ErrorIcon color='white' size={26} strokeWidth={35} /> }
     >
       <Text>
         3 emotion files are missing.<br />The emotion recovery process is required.
@@ -38,7 +38,9 @@ const NeedRecovery = compose(
       <ButtonContainer>
         <Button
           onClick={() => props.simulateKey({ keyName: `enter` })}
-        >Press [enter] key to start the emotion recovery process</Button>
+        >
+          Press [enter] to start the emotion recovery process
+        </Button>
       </ButtonContainer>
     </Message>
   )

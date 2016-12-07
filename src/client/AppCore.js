@@ -68,11 +68,11 @@ export default class AppCore {
       () => (this.controller.getSignal(`app.startPointerLock`)()),
       () => (this.controller.getSignal(`app.stopPointerLock`)())
     );
-    DOMEvents.on(document.body, `click`, () => {
-      if (this.shouldBePointerLocked) {
-        this.pointerLock.tryActivate();
-      }
-    });
+    // DOMEvents.on(document.body, `click`, () => {
+    //   if (this.shouldBePointerLocked) {
+    //     this.pointerLock.tryActivate();
+    //   }
+    // });
   }
 
   initTask() {

@@ -7,9 +7,13 @@ import MessageConsole from '~/component/messages/MessageConsole';
 import LoadMemories  from '~/component/messages/content/LoadMemories';
 import LoadEmotions  from '~/component/messages/content/LoadEmotions';
 import NeedRecovery  from '~/component/messages/content/NeedRecovery';
+import FindTiles  from '~/component/messages/content/FindTiles';
+import UseArrowToMove  from '~/component/messages/content/UseArrowToMove';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
+
+const MESSAGES_STACK_MAX_HEIGHT = 500;
 
 function getMessageType(msg) {
   if (_.includes([
@@ -34,6 +38,7 @@ function getMessageHeight(msg) {
       return height
     })();
     case `need-recovery`: return 180;
+    case `find-tiles`: return 130;
   }
   return 60;
 }
@@ -66,12 +71,14 @@ const System = compose(
     msg.height = getMessageHeight(msg);
     msg.distFromBottom = distFromBottom;
     distFromBottom += msg.height;
+    msg.ignored = distFromBottom > MESSAGES_STACK_MAX_HEIGHT;
   });
+  const notIgnoredMessages = messages.filter((msg) => !msg.ignored);
 
   return (
     <Container>
       {
-        messages.map(msg => {
+        notIgnoredMessages.map(msg => {
           if (msg.type === `console`) {
             return <MessageConsole msg={msg} />;
           }
@@ -79,6 +86,8 @@ const System = compose(
             case `load-memory-progress`: return <LoadMemories msg={msg} />;
             case `load-emotions-progress`: return <LoadEmotions msg={msg} />;
             case `need-recovery`: return <NeedRecovery msg={msg} />;
+            case `find-tiles`: return <FindTiles msg={msg} />;
+            case `use-arrow-to-move`: return <UseArrowToMove msg={msg} />;
           }
           return (
             <Message msg={ msg } type='error'>

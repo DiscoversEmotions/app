@@ -43,8 +43,8 @@ const Title = styled.h3`
 
 const IconContainer = styled.div`
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 20px;
+  top: 15px;
 `;
 
 const Message = (props) => {
