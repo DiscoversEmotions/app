@@ -11,6 +11,7 @@ require('normalize.css/normalize.css');
 
 injectGlobal`
   html, body {
+    font-family: 'Hind Siliguri', sans-serif;
     height: 100%;
     width: 100%;
     overflow: hidden;

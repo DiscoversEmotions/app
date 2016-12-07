@@ -26,7 +26,7 @@ export class SystemManager {
       mind1AssetsReady: mind1AssetsReady,
     },
     {
-      pushMessageAndWait: `system.pushMessageAndWait`,
+      pushMessage: `system.pushMessage`,
       updateLastMessage: `system.updateLastMessage`,
       setNextStep: `app.setNextStep`,
       reboot: `app.reboot`,
@@ -35,11 +35,11 @@ export class SystemManager {
   )
   update(context) {
 
-    context.nextMessage = (message, time) => pushMessageAndWait({ message: message, time: time });
+    context.nextMessage = (message, time, clean = false) => pushMessage({ message: message, time: time, clean: clean });
     context.updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
 
     const {
-      readyForNextMessage, lastMessage, pushMessageAndWait, updateLastMessage,
+      readyForNextMessage, lastMessage, pushMessage, updateLastMessage,
       mind1AssetsReady, messages, step
     } = context;
 
@@ -65,7 +65,7 @@ export class SystemManager {
 
   updateBoot(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage } = context;
+    const { pushMessage, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage === null) {
       nextMessage({ key: `boot` }, 200);
@@ -120,7 +120,7 @@ export class SystemManager {
 
   updateRoom(context) {
 
-    const { pushMessageAndWait, updateLastMessage, lastMessage, setNextStep, mind1AssetsReady, nextMessage, updateMessage } = context;
+    const { pushMessage, updateLastMessage, lastMessage, setNextStep, mind1AssetsReady, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `connect-eyes-progress`) {
       nextMessage({ key: `load-memory-progress`, progress: 0 }, 100);
@@ -163,7 +163,7 @@ export class SystemManager {
         }
         updateMessage(`load-emotions-progress`, { progress: nextProgress }, time);
       } else {
-        nextMessage({ key: `need-recovery` }, 200);
+        nextMessage({ key: `need-recovery` }, 300);
       }
       return;
     }
@@ -175,7 +175,7 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage } = context;
 
     if (lastMessage.key === `need-recovery` || lastMessage.key === `playing-memory-done`) {
-      nextMessage({ key: `find-tiles` }, 300);
+      nextMessage({ key: `find-tiles` }, 1000, true);
       return;
     }
 

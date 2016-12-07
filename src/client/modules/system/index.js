@@ -5,7 +5,7 @@ import {
   input,
   wait
 } from 'cerebral/operators';
-import { pushMessageAndWait, updateLastMessage } from './actions';
+import { pushMessage, updateLastMessage } from './actions';
 
 export default {
   state: {
@@ -13,7 +13,7 @@ export default {
     readyForNextMessage: true
   },
   signals: {
-    pushMessageAndWait: [ pushMessageAndWait ],
+    pushMessage: [ pushMessage ],
     updateLastMessage: [ updateLastMessage ]
   }
 };

@@ -19,8 +19,9 @@ export const KEYS_MAP = {
 
 export class KeyboardManager {
 
-  constructor(controller) {
+  constructor(controller, appCore) {
     this.controller = controller;
+    this.appCore = appCore;
   }
 
   boot() {
@@ -45,6 +46,9 @@ export class KeyboardManager {
         keyName: KEYS_MAP[e.keyCode],
         keyState: isDown
       });
+    }
+    if (KEYS_MAP[e.keyCode] === `enter`) {
+      this.appCore.pointerLock.tryActivate();
     }
   }
 

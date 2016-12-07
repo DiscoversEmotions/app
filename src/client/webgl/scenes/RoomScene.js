@@ -4,11 +4,18 @@ import _ from 'lodash';
 import { Scene } from './Scene';
 import { lastMessage } from '~/computed';
 import { Steps } from '~/types';
+import { ConnectMethod } from '~/core';
+import * as motion from 'popmotion';
 
 export class RoomScene extends Scene {
 
   constructor(...args) {
     super(...args);
+
+    this.pointerLocked = false;
+
+    // State Update
+    this.stateUpdate({}, this.controller, this);
 
     this.scene.add(this.cameraman);
 
@@ -52,14 +59,32 @@ export class RoomScene extends Scene {
   }
 
   _onMouseMove(e) {
-    const offset = EventUtils.getOffsetOf(e, this.parentElement);
-    this.mousePos.x = ((offset.x / this.size.width) * 2) - 1;
-    this.mousePos.y = ((offset.y / this.size.height) * 2) - 1;
+    if (this.pointerLocked) {
+      const movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+      const movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+      this.mousePos.x += movementX * 0.003;
+      this.mousePos.y += movementY * 0.003;
+      this.mousePos.x = motion.calc.restrict(this.mousePos.x, -1, 1);
+      this.mousePos.y = motion.calc.restrict(this.mousePos.y, -1, 1);
+    } else {
+      const offset = EventUtils.getOffsetOf(e, this.parentElement);
+      this.mousePos.x = ((offset.x / this.size.width) * 2) - 1;
+      this.mousePos.y = ((offset.y / this.size.height) * 2) - 1;
+    }
   }
 
   _updateCameraman() {
     this.cameraman.setHorizontalAngle((Math.PI * 1.5) - (1 * this.mousePos.x));
     this.cameraman.setVerticalAngle(- (0.5 * this.mousePos.y));
+  }
+
+  @ConnectMethod(
+    {
+      pointerLocked: `app.pointerLock`
+    }
+  )
+  stateUpdate({ pointerLocked }) {
+    this.pointerLocked = pointerLocked;
   }
 
 }
