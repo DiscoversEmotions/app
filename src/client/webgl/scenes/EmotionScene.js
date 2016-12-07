@@ -283,9 +283,7 @@ export class EmotionScene extends Scene {
     }
     this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.1);
 
-    this.persoVelocity = (Math.pow(((this.persoVelocityLinear-0.1)*10), 3) / 10) + 0.1;
-
-    //
+    this.persoVelocity = ((Math.pow(((this.persoVelocityLinear-0.1)*10), 3) / 10) + 0.1) / 2;
 
     const dist = this.persoVelocity * dt;
 
