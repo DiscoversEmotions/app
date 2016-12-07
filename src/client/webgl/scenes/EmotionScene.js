@@ -212,6 +212,9 @@ export class EmotionScene extends Scene {
       if (item.name === `zone`) {
         this.tiles.push(item);
       }
+      if (item.name === `eglise`) {
+        console.log(item);
+      }
     });
   }
 

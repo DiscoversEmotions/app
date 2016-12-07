@@ -112,7 +112,7 @@ export class MemoryScene extends Scene {
 
   mountMemory3() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_sadness`);
-    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_sadness_croquis`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_sad_croquis`);
   }
 
 
@@ -139,7 +139,7 @@ export class MemoryScene extends Scene {
       this.croquis.scale.x += 0.0005;
       this.croquis.scale.y += 0.0005;
 
-    } 
+    }
 
   }
 

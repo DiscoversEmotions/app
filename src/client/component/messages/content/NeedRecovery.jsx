@@ -36,9 +36,7 @@ const NeedRecovery = compose(
         3 emotion files are missing.<br />The emotion recovery process is required.
       </Text>
       <ButtonContainer>
-        <Button
-          onClick={() => props.simulateKey({ keyName: `enter` })}
-        >
+        <Button>
           Press [enter] to start the emotion recovery process
         </Button>
       </ButtonContainer>

@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 const blinkAnim = keyframes`
   0%   { opacity: 1; }
   50%  { opacity: 1; }
-  75%  { opacity: 0; }
+  75%  { opacity: 0.4; }
   100% { opacity: 1; }
 `;
 
