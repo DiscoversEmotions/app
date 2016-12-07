@@ -183,6 +183,8 @@ export class EmotionScene extends Scene {
       this.mountEmotion3();
     }
 
+    this.tiles.forEach(tile => tile.material.color = new Color(0xff0000));
+
     this.scene.add(this.world);
     this.world.updateMatrixWorld();
     if (this.level === 1) { // TODO: remove when collision on 2 & 3 are OK

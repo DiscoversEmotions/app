@@ -98,6 +98,27 @@ const assets = [
     type: AssetTypes.AWD,
     status: AssetStatus.Queued,
     priority: 15
+  },
+  {
+    key: `ambiance_emotion`,
+    fileUrl: require(`~/assets/ambiance_emotion.ogg`),
+    type: AssetTypes.Audio,
+    status: AssetStatus.Queued,
+    priority: 15
+  },
+  {
+    key: `ambiance_room`,
+    fileUrl: require(`~/assets/ambiance_room.ogg`),
+    type: AssetTypes.Audio,
+    status: AssetStatus.Queued,
+    priority: 10
+  },
+  {
+    key: `sound_glitch`,
+    fileUrl: require(`~/assets/sound_glitch_bis.ogg`),
+    type: AssetTypes.Audio,
+    status: AssetStatus.Queued,
+    priority: 0
   }
 ];
 

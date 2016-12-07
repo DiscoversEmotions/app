@@ -68,7 +68,7 @@ export class MemoryScene extends Scene {
   mount() {
     this.solved = false;
     this.level = this.controller.getState(`app.level`);
-    this.momoryBuffer = null;
+    this.memoryBuffer = null;
     this.analyser = null;
 
     if (this.level === 1) {
@@ -85,7 +85,10 @@ export class MemoryScene extends Scene {
     this.croquis.position.set(0, 0, 0);
     this.scene.add(this.croquis);
 
-    this.memorySound = sono.createSound(this.momoryBuffer);
+    this.memorySound = sono.createSound({
+      data: this.memoryBuffer,
+      valume: 0.6
+    });
     this.memorySound.on(`ended`, () => {
       this.controller.getSignal(`app.setNextStep`)();
       this.solved = true;
@@ -98,17 +101,17 @@ export class MemoryScene extends Scene {
   }
 
   mountMemory1() {
-    this.momoryBuffer = this.app.assetsManager.getAsset(`memory_love`);
+    this.memoryBuffer = this.app.assetsManager.getAsset(`memory_love`);
     this.memoryCroquis = this.app.assetsManager.getAsset(`memory_love_croquis`);
   }
 
   mountMemory2() {
-    this.momoryBuffer = this.app.assetsManager.getAsset(`memory_anger`);
+    this.memoryBuffer = this.app.assetsManager.getAsset(`memory_anger`);
     this.memoryCroquis = this.app.assetsManager.getAsset(`memory_anger_croquis`);
   }
 
   mountMemory3() {
-    this.momoryBuffer = this.app.assetsManager.getAsset(`memory_sadness`);
+    this.memoryBuffer = this.app.assetsManager.getAsset(`memory_sadness`);
     this.memoryCroquis = this.app.assetsManager.getAsset(`memory_sad_croquis`);
   }
 
