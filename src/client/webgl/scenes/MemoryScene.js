@@ -1,5 +1,5 @@
 import {
-  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending
+  PointLight, Object3D, MeshPhongMaterial, Mesh, BoxGeometry,SphereGeometry, MeshBasicMaterial, AmbientLight, DoubleSide, Line, LineBasicMaterial, Vector3, Geometry, Color, PointsMaterial, Points, AdditiveBlending, PlaneGeometry, MeshLambertMaterial
 } from 'three';
 import { ConnectMethod } from '~/core';
 import { Scene } from './Scene';
@@ -26,6 +26,12 @@ export class MemoryScene extends Scene {
     this.cube1 = new Mesh(this.cube1_geom, this.material_cube1);
     this.cube1.rotation.x = 1;
     this.cubeObject.add(this.cube1);
+
+    this.cube1Light = new PointLight({
+      color: 0xff0000,
+      intensity: 5
+    });
+    this.cubeObject.add(this.cube1Light);
 
     this.light = new AmbientLight( 0x404040, 3 );
     this.scene.add(this.light);
@@ -66,11 +72,21 @@ export class MemoryScene extends Scene {
 
     if (this.level === 1) {
       this.mountMemory1();
+
     } else if (this.level === 2) {
       this.mountMemory2();
     } else if (this.level === 3) {
       this.mountMemory3();
     }
+
+    this.croquisMaterial = new MeshLambertMaterial({ map : this.memoryCroquis, side: DoubleSide });
+    this.croquisGeom = new PlaneGeometry(1, 1);
+    this.croquis = new Mesh(this.croquisGeom, this.croquisMaterial);
+    // this.croquisGeom.position.x = 5;
+    // this.croquisGeom.position.y = 5;
+    this.croquis.position.set(1, 1, 0);
+    this.scene.add(this.croquis);
+    console.log(this.croquis);
 
     this.memorySound = sono.createSound(this.momoryBuffer);
     this.memorySound.on(`ended`, () => {
@@ -87,6 +103,7 @@ export class MemoryScene extends Scene {
 
   mountMemory1() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_love`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_love_croquis`);
   }
 
   mountMemory2() {
@@ -100,7 +117,7 @@ export class MemoryScene extends Scene {
 
   getEnvConfig() {
     return {
-      background: new Color(0xffffff)
+      // background: new Color(0xffffff)
     };
   }
 

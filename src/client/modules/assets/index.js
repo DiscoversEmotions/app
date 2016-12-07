@@ -70,6 +70,13 @@ const assets = [
     type: AssetTypes.Audio,
     status: AssetStatus.Queued,
     priority: 15
+  },
+  {
+    key: `memory_love_croquis`,
+    fileUrl: require(`~/assets/memory_love_croquis.png`),
+    type: AssetTypes.Texture,
+    status: AssetStatus.Queued,
+    priority: 15
   }
 ];
 
