@@ -339,7 +339,7 @@ export class EmotionScene extends Scene {
     var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
     var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
-    this.cameramanRotation.hori -= movementX * 0.003;
+    this.cameramanRotation.hori -= movementX * 0.0005;
     this.cameramanRotation.vert -= movementY * 0.003;
 
     this.cameramanRotation.hori %= 1;
