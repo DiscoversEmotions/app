@@ -293,11 +293,9 @@ export class EmotionScene extends Scene {
       this.persoVelocityLinear -= 0.005;
     }
     this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.05);
-
-    this.persoVelocity = ((Math.pow(((this.persoVelocityLinear-0.05)*20), 3) / 20) + 0.05);
-
+    const slowDown = 30;
+    this.persoVelocity = ((Math.pow(((this.persoVelocityLinear-(1/slowDown))*slowDown), 3) / slowDown) + (1/slowDown));
     const dist = this.persoVelocity * dt;
-
     const move = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
       motion.calc.radiansToDegrees(angle),
@@ -409,6 +407,7 @@ export class EmotionScene extends Scene {
   unmount() {
     document.removeEventListener(`mousemove`, this.onMouseMove, false);
     this.scene.remove(this.world);
+    this.world = null;
   }
 
   onMouseMove(e) {

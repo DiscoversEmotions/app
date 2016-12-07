@@ -5,6 +5,7 @@ import { ConnectMethod } from '~/core';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
 import sono from 'sono';
+import * as motion from 'popmotion';
 
 export class MemoryScene extends Scene {
 
@@ -39,8 +40,6 @@ export class MemoryScene extends Scene {
     this.initialGeomVertices = [];
     this.saveVertices();
 
-    this.croquisVisible = false;
-
   }
 
   saveVertices() {
@@ -74,7 +73,6 @@ export class MemoryScene extends Scene {
 
     if (this.level === 1) {
       this.mountMemory1();
-
     } else if (this.level === 2) {
       this.mountMemory2();
     } else if (this.level === 3) {
@@ -96,7 +94,6 @@ export class MemoryScene extends Scene {
       fftSize: 256,
       smoothingTimeConstant: 0.7
     });
-    console.log(this.analyser);
     this.memorySound.play();
   }
 
@@ -113,6 +110,11 @@ export class MemoryScene extends Scene {
   mountMemory3() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_sadness`);
     this.memoryCroquis = this.app.assetsManager.getAsset(`memory_sad_croquis`);
+  }
+
+  unmount() {
+    this.scene.remove(this.croquis);
+    this.croquis = null;
   }
 
 
@@ -134,11 +136,12 @@ export class MemoryScene extends Scene {
 
     this.cube1.geometry.verticesNeedUpdate = true;
 
-    if(this.croquis.material.opacity < 1 && !this.croquisVisible){
-      this.croquis.material.opacity += 0.00015;
-      this.croquis.scale.x += 0.0005;
-      this.croquis.scale.y += 0.0005;
-
+    if (this.solved === false) {
+      const soundProgress = this.memorySound.currentTime / this.memorySound.duration;
+      this.croquis.material.opacity = motion.calc.dilate(0, 0.5, soundProgress);
+      this.croquis.scale.x = motion.calc.dilate(1.2, 1.6, soundProgress);
+      this.croquis.scale.y = motion.calc.dilate(1.2, 1.6, soundProgress);
+      this.croquis.rotation.z = motion.calc.dilate(0, 0.5, soundProgress);
     }
 
   }
