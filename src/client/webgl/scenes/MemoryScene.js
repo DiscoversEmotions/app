@@ -39,6 +39,8 @@ export class MemoryScene extends Scene {
     this.initialGeomVertices = [];
     this.saveVertices();
 
+    this.croquisVisible = false;
+
   }
 
   saveVertices() {
@@ -79,14 +81,11 @@ export class MemoryScene extends Scene {
       this.mountMemory3();
     }
 
-    this.croquisMaterial = new MeshLambertMaterial({ map : this.memoryCroquis, side: DoubleSide });
+    this.croquisMaterial = new MeshLambertMaterial({ map : this.memoryCroquis, side: DoubleSide, transparent: true, opacity: 0 });
     this.croquisGeom = new PlaneGeometry(1, 1);
     this.croquis = new Mesh(this.croquisGeom, this.croquisMaterial);
-    // this.croquisGeom.position.x = 5;
-    // this.croquisGeom.position.y = 5;
-    this.croquis.position.set(1, 1, 0);
+    this.croquis.position.set(0, 0, 0);
     this.scene.add(this.croquis);
-    console.log(this.croquis);
 
     this.memorySound = sono.createSound(this.momoryBuffer);
     this.memorySound.on(`ended`, () => {
@@ -108,10 +107,12 @@ export class MemoryScene extends Scene {
 
   mountMemory2() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_anger`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_anger_croquis`);
   }
 
   mountMemory3() {
     this.momoryBuffer = this.app.assetsManager.getAsset(`memory_sadness`);
+    this.memoryCroquis = this.app.assetsManager.getAsset(`memory_sadness_croquis`);
   }
 
 
@@ -125,12 +126,6 @@ export class MemoryScene extends Scene {
     // this.cube1.rotation.x += 0.01;
     // this.cube1.rotation.y += 0.02;
 
-    const scale = this.analyser.getFrequencies()[ 8 ] / 100;
-
-    // this.cube1.scale.x = .3 + (scale / 5);
-    // this.cube1.scale.y = .3 + (scale / 5);
-    // this.cube1.scale.z = .3 + (scale / 5);
-
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
       this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 100);
       this.cube1.geometry.vertices[i].y = this.initialGeomVertices[i].y * (this.analyser.getFrequencies()[i] / 300);
@@ -138,6 +133,15 @@ export class MemoryScene extends Scene {
     }
 
     this.cube1.geometry.verticesNeedUpdate = true;
+
+    if(this.croquis.material.opacity < 1 && !this.croquisVisible){
+      this.croquis.material.opacity += 0.001;
+      // this.croquis.scale += 0.001;
+    } else {
+      this.croquisVisible = true;
+      this.croquis.material.opacity -= 0.001;
+      // this.croquis.scale += 0.001;
+    }
 
   }
 

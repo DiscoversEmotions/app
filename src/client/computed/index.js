@@ -70,9 +70,11 @@ export const mind1AssetsReady = Computed(
     memory_love: `assets.memory_love.status`,
     memory_anger: `assets.memory_love.status`,
     memory_sadness: `assets.memory_love.status`,
-    memory_love_croquis: `assets.memory_love_croquis.status`
+    memory_love_croquis: `assets.memory_love_croquis.status`, 
+    memory_anger_croquis: `assets.memory_anger_croquis.status`,
+    memory_sad_croquis: `assets.memory_sad_croquis.status`
   },
-  ({ perso, world1, world2, world3, memory_love, memory_anger, memory_sadness, memory_love_croquis }) => {
+  ({ perso, world1, world2, world3, memory_love, memory_anger, memory_sadness, memory_love_croquis, memory_anger_croquis, memory_sad_croquis }) => {
     return (
       perso == AssetStatus.Ready &&
       world1 == AssetStatus.Ready &&
@@ -81,7 +83,9 @@ export const mind1AssetsReady = Computed(
       memory_love == AssetStatus.Ready &&
       memory_anger == AssetStatus.Ready &&
       memory_sadness == AssetStatus.Ready &&
-      memory_love_croquis == AssetStatus.Ready
+      memory_love_croquis == AssetStatus.Ready &&
+      memory_anger_croquis == AssetStatus.Ready &&
+      memory_sad_croquis == AssetStatus.Ready
     );
   }
 );
