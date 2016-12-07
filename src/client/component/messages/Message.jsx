@@ -35,19 +35,27 @@ const Title = styled.h3`
   margin: 0;
   padding-top: 10px;
   padding-bottom: 5px;
-  padding-left: 15px;
+  padding-left: ${(props) => (props.hasIcon ? 65 : 15)}px;
   font-size: 20px;
   font-weight: 900;
   text-transform: uppercase;
 `;
 
+const IconContainer = styled.div`
+  position: absolute;
+  left: 10px;
+  top: 10px;
+`;
+
 const Message = (props) => {
   const msg = props.msg;
+
   return (
     <Container bottomDist={ msg.distFromBottom } theHeight={ msg.height } theWidth={ msg.width || 300 } >
       <RelativeContainer>
         <Progress progress={ props.progress } type={ props.type } />
-        { props.title ? <Title>{ props.title }</Title> : null }
+        { props.icon ? <IconContainer>{ props.icon }</IconContainer> : null }
+        { props.title ? <Title hasIcon={ props.icon }>{ props.title }</Title> : null }
         { props.children }
       </RelativeContainer>
     </Container>
@@ -64,6 +72,7 @@ Message.propTypes = {
   }).isRequired,
   title: React.PropTypes.element,
   children: React.PropTypes.element,
+  icon: React.PropTypes.element,
 };
 
 Message.defaultProps = {

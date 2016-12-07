@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Message from '~/component/messages/Message';
+import ErrorIcon from '~/component/icons/ErrorIcon';
 import { NUMBER_OF_EMOTIONS } from '~/types';
 
 const EMOTIONS_NAMES = [
@@ -282,16 +283,20 @@ const Text = styled.p`
 
 const MissingEmotion = styled.p`
   font-size: 14px;
-  padding-left: 20px;
-  color: #F44336;
-  padding-top: 3px;
+  padding-left: 60px;
+  color: white;
 `;
 
 const MissingEmotionDetail = styled.p`
   font-family: 'Anonymous Pro', monospace;
-  font-size: 10px;
-  padding-left: 30px;
-  color: #F44336;
+  font-size: 13px;
+  padding-left: 70px;
+  color: white;
+`;
+
+const MissingEmotionContainer = styled.div`
+  position: relative;
+  margin-top: 7px;
 `;
 
 const LoadEmotions = (props) => {
@@ -299,6 +304,7 @@ const LoadEmotions = (props) => {
   const progress = msg.progress / NUMBER_OF_EMOTIONS;
   const emoIndex = msg.progress % EMOTIONS_NAMES.length;
   const emo = EMOTIONS_NAMES[emoIndex];
+  const icon = <ErrorIcon size={26} strokeWidth={35} color='white' style={{ position: `absolute`, left: `20px`, top: `10px` }} />;
   return (
     <Message msg={msg} progress={progress} title='Loading emotions'>
       <Text>
@@ -306,37 +312,40 @@ const LoadEmotions = (props) => {
           if (progress < 1) {
             return emo;
           } else {
-            return `All emotions loaded`;
+            return `All emotions loaded.`;
           }
         })() }
       </Text>
       { (() => {
         if (msg.progress > 10) {
           return (
-            <div>
+            <MissingEmotionContainer>
               <MissingEmotion>Emotion file for <b>Love</b> is missing :</MissingEmotion>
               <MissingEmotionDetail>/data/emotions/love.em</MissingEmotionDetail>
-            </div>
+              { icon }
+            </MissingEmotionContainer>
           );
         }
       })() }
       { (() => {
         if (msg.progress > 21) {
           return (
-            <div>
+            <MissingEmotionContainer>
               <MissingEmotion>Emotion file for <b>Anger</b> is missing :</MissingEmotion>
               <MissingEmotionDetail>/data/emotions/anger.em</MissingEmotionDetail>
-            </div>
+              { icon }
+            </MissingEmotionContainer>
           );
         }
       })() }
       { (() => {
         if (msg.progress > 37) {
           return (
-            <div>
+            <MissingEmotionContainer>
               <MissingEmotion>Emotion file for <b>Sadness</b> is missing :</MissingEmotion>
               <MissingEmotionDetail>/data/emotions/sadness.em</MissingEmotionDetail>
-            </div>
+              { icon }
+            </MissingEmotionContainer>
           );
         }
       })() }

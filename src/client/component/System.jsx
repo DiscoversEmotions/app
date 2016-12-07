@@ -6,6 +6,7 @@ import Message from '~/component/messages/Message';
 import MessageConsole from '~/component/messages/MessageConsole';
 import LoadMemories  from '~/component/messages/content/LoadMemories';
 import LoadEmotions  from '~/component/messages/content/LoadEmotions';
+import NeedRecovery  from '~/component/messages/content/NeedRecovery';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
@@ -27,11 +28,12 @@ function getMessageHeight(msg) {
     case `load-memory-progress`: return 85;
     case `load-emotions-progress`: return (() => {
       var height = 85;
-      if (msg.progress >= 10) { height += 40; }
-      if (msg.progress >= 21) { height += 40; }
-      if (msg.progress >= 37) { height += 40; }
+      if (msg.progress >= 10) { height += 50; }
+      if (msg.progress >= 21) { height += 50; }
+      if (msg.progress >= 37) { height += 50; }
       return height
-    })()
+    })();
+    case `need-recovery`: return 180;
   }
   return 60;
 }
@@ -76,6 +78,7 @@ const System = compose(
           switch (msg.key) {
             case `load-memory-progress`: return <LoadMemories msg={msg} />;
             case `load-emotions-progress`: return <LoadEmotions msg={msg} />;
+            case `need-recovery`: return <NeedRecovery msg={msg} />;
           }
           return (
             <Message msg={ msg } type='error'>

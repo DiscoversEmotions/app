@@ -13,7 +13,8 @@ export const KEYS_MAP = {
   32: `space`,
   13: `enter`,
   89: `y`,
-  78: `n`
+  78: `n`,
+  75: `k`
 };
 
 export class KeyboardManager {

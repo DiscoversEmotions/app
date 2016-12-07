@@ -125,7 +125,7 @@ const LoadMemories = (props) => {
           if (progress < 1) {
             return memo;
           } else {
-            return `All memories loaded`;
+            return `All memories loaded.`;
           }
         })() }
       </Text>

@@ -21,7 +21,7 @@ export class EmotionScene extends Scene {
     this.updateKeyEvent({}, this.controller, this);
 
     // Perso
-    this.persoVelocity = 0;
+    this.persoVelocityLinear = 0;
     this.persoMaterial = new MeshBasicMaterial({
       color: 0xffffff,
       wireframe: true
@@ -131,6 +131,7 @@ export class EmotionScene extends Scene {
       this.perso.setMaterial(this.persoMaterial);
       this.perso.play(`idle`, 1);
     }
+    this.userPosition.position.set(0, 0, 0);
 
     // Particle Texture
     if (_.isNil(this.particles.material.map)) {
@@ -175,36 +176,26 @@ export class EmotionScene extends Scene {
     this.world = this.app.assetsManager.getAsset(`world2`);
     this.world.traverseVisible((item) => {
       console.log(item.name);
-      if (item.name === `sol`) {
+      if (item.name === `collision`) {
         this.collision = item;
       }
       if (item.name === `zone`) {
         this.tiles.push(item);
       }
     });
-
-    setTimeout(() => {
-      this.controller.getSignal(`app.setNextStep`)();
-      this.solved = true;
-    }, 3000);
   }
 
   mountEmotion3() {
     this.world = this.app.assetsManager.getAsset(`world3`);
     this.world.traverseVisible((item) => {
       console.log(item.name);
-      if (item.name === `sol`) {
+      if (item.name === `collision`) {
         this.collision = item;
       }
-      if (item.name === `tombe`) {
+      if (item.name === `zone`) {
         this.tiles.push(item);
       }
     });
-
-    setTimeout(() => {
-      this.controller.getSignal(`app.setNextStep`)();
-      this.solved = true;
-    }, 3000);
   }
 
   update(time, dt) {
@@ -244,11 +235,13 @@ export class EmotionScene extends Scene {
 
     // Update Velocity
     if (isMoving) {
-      this.persoVelocity += 0.0001;
-    } else if (this.persoVelocity > 0) {
-      this.persoVelocity -= 0.005;
+      this.persoVelocityLinear += 0.0001;
+    } else if (this.persoVelocityLinear > 0) {
+      this.persoVelocityLinear -= 0.005;
     }
-    this.persoVelocity = motion.calc.restrict(this.persoVelocity, 0, 0.02);
+    this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.1);
+
+    this.persoVelocity = (Math.pow(((this.persoVelocityLinear-0.1)*10), 3) / 10) + 0.1;
 
     const dist = this.persoVelocity * dt;
 
@@ -259,17 +252,16 @@ export class EmotionScene extends Scene {
     );
 
     // Is there a ground ahead ?
-    const distCanMove = dist < 0.1 ? 0.2 : dist * 2;
     const canMove = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
       motion.calc.radiansToDegrees(angle),
-      distCanMove
+      dist
     );
-    this.userPosition.translateZ(-canMove.x * 2);
-    this.userPosition.translateX(-canMove.y * 2);
+    this.userPosition.translateZ(-canMove.x);
+    this.userPosition.translateX(-canMove.y);
     this.raycaster.set(this.userPosition.position, new Vector3(0, -1, 0));
-    this.userPosition.translateZ(+canMove.x * 2);
-    this.userPosition.translateX(+canMove.y * 2);
+    this.userPosition.translateZ(+canMove.x);
+    this.userPosition.translateX(+canMove.y);
     this.raycaster.ray.origin.y += 2;
 
     const canMoveCollision = this.raycaster.intersectObjects([this.collision]);
@@ -279,6 +271,7 @@ export class EmotionScene extends Scene {
       this.userPosition.translateX(-move.y);
     } else {
       // console.log(`nope, can't move`);
+      this.persoVelocityLinear = 0;
       this.persoVelocity = 0;
     }
 
