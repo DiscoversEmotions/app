@@ -3,7 +3,7 @@ import {
   Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
 } from 'three';
 import _ from 'lodash';
-import { ConnectMethod } from '~/core';
+import { ConnectMethod, EventUtils } from '~/core';
 import * as motion from 'popmotion';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
@@ -18,7 +18,12 @@ export class EmotionScene extends Scene {
     this.onMouseMove = _.throttle(this.onMouseMove.bind(this), 1000 / 60);
 
     // Init watchers
-    this.updateKeyEvent({}, this.controller, this);
+    this.updateState({}, this.controller, this);
+
+    this.mousePos = {
+      x: 0,
+      y: 0
+    };
 
     // Perso
     this.persoVelocityLinear = 0;
@@ -103,7 +108,7 @@ export class EmotionScene extends Scene {
       keys: `keyboard.keys`
     }
   )
-  updateKeyEvent({ keys }) {
+  updateState({ keys }) {
     this.userLeft = keys.left;
     this.userRight = keys.right;
     this.userDown = keys.down;
@@ -309,10 +314,17 @@ export class EmotionScene extends Scene {
   }
 
   updateCameraman() {
+
+    // Update movement when not pointerLock
+    // const movementX = Math.abs(this.mousePos.x) < 0.1 ? 0 : ((this.mousePos.x - 0.1) / 0.9);
+    // this.cameramanRotation.hori -= movementX * 0.008;
+    // this.cameramanRotation.hori %= 1;
+    // this.cameramanRotation.vert = (this.mousePos.y + 1) / 2;
+
     this.userPosition.rotation.y = this.cameramanRotation.hori * (Math.PI * 2);
     const dist = motion.calc.dilate(7, 13, this.cameramanRotation.vert);
     const lookUp = motion.calc.dilate(0, 0.3, this.cameramanRotation.vert);
-    const angle = motion.calc.dilate(60, 80, this.cameramanRotation.vert);
+    const angle = motion.calc.dilate(100, 60, this.cameramanRotation.vert);
     const camPos = motion.calc.pointFromAngleAndDistance(
       { x: 3, y: 0 },
       angle,
@@ -336,8 +348,13 @@ export class EmotionScene extends Scene {
   }
 
   onMouseMove(e) {
-    var movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
-    var movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+    // const offset = EventUtils.getOffsetOf(e, this.parentElement);
+    // this.mousePos.x = ((offset.x / this.size.width) * 2) - 1;
+    // this.mousePos.y = ((offset.y / this.size.height) * 2) - 1;
+
+    const movementX = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+    const movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
     this.cameramanRotation.hori -= movementX * 0.0005;
     this.cameramanRotation.vert -= movementY * 0.003;

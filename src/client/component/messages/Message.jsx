@@ -11,7 +11,6 @@ const Container = styled.div`
   bottom: ${(props) => props.bottomDist }px;
   height: ${(props) => props.theHeight - 10 }px;
   width: ${(props) => props.theWidth }px;
-  font-family: sans-serif;
   text-align: left;
   padding: 0;
   box-sizing: border-box;

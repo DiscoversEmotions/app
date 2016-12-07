@@ -50,7 +50,6 @@ const Container = styled.div`
   bottom: 40px;
   right: 50px;
   padding: 0;
-  font-family: 'Anonymous Pro', monospace;
   color: white;
   text-align: left;
   line-height: 1.5;

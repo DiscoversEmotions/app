@@ -1,18 +1,21 @@
+import styled, { keyframes } from 'styled-components';
 
-import styled from 'styled-components';
+const blinkAnim = keyframes`
+  0%   { opacity: 1; }
+  50%  { opacity: 1; }
+  75%  { opacity: 0; }
+  100% { opacity: 1; }
+`;
 
 export default styled.button`
-    cursor: pointer;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 100px;
-    background: #F44336;
-    color: white;
-    line-height: 1.5;
-    text-transform: uppercase;
-    font-size: 12px;
-
-    &:hover {
-      background: #D32F2F;
-    }
+  cursor: default;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 100px;
+  color: white;
+  background: none;
+  line-height: 1.4;
+  font-size: 16px;
+  font-weight: 700;
+  animation: ${blinkAnim} 2s infinite;
 `;

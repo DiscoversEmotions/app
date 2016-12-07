@@ -1,17 +1,20 @@
 import _ from 'lodash';
 
-export function pushMessageAndWait ({ state, input, controller }) {
+export function pushMessage ({ state, input, controller }) {
   return new Promise(function(resolve, reject) {
     state.set(`system.readyForNextMessage`, false);
-    const time = input.time || 300;
-    const messages = state.get(`system.messages`).slice();
-    if (_.isArray(input.message)) {
-      messages.push(...input.message);
-    } else {
-      messages.push(input.message);
+    if (input.clean === true) {
+      state.set(`system.messages`, []);
     }
-    state.set(`system.messages`, messages.slice(-100));
+    const time = input.time || 300;
     setTimeout(() => {
+      var messages = state.get(`system.messages`).slice();
+      if (_.isArray(input.message)) {
+        messages.push(...input.message);
+      } else {
+        messages.push(input.message);
+      }
+      state.set(`system.messages`, messages);
       state.set(`system.readyForNextMessage`, true);
       resolve();
     }, time);

@@ -89,10 +89,11 @@ export const shouldBePointerLocked = Computed(
     currentSceneName: `app.scene.current`
   },
   ({ currentSceneName }) => {
-    return (
-      currentSceneName === Scenes.Emotion ||
-      currentSceneName === Scenes.Memory
-    );
+    // return (
+    //   currentSceneName === Scenes.Emotion ||
+    //   currentSceneName === Scenes.Memory
+    // );
+    return true;
   }
 );
 
@@ -102,10 +103,10 @@ export const waitForKeyPress = Computed(
     lastMessage: lastMessage
   },
   ({ step, lastMessage }) => {
-    if (lastMessage.key === `need-recovery` && step === Steps.Room) {
+    if (lastMessage && lastMessage.key === `need-recovery` && step === Steps.Room) {
       return `enter`;
     }
-    if (lastMessage.key === `linked-memory` && step === Steps.EmotionRecovered) {
+    if (lastMessage && lastMessage.key === `linked-memory` && step === Steps.EmotionRecovered) {
       return `enter`;
     }
     return null;
