@@ -1,13 +1,27 @@
 uniform float size;
 uniform float scale;
 
-varying vec2 vUv;
+#include <common>
+#include <color_pars_vertex>
+#include <shadowmap_pars_vertex>
+#include <logdepthbuf_pars_vertex>
+#include <clipping_planes_pars_vertex>
 
 void main() {
 
-	vUv = uv;
+	#include <color_vertex>
+	#include <begin_vertex>
+	#include <project_vertex>
 
-    vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-    gl_Position = projectionMatrix * mvPosition;
+	#ifdef USE_SIZEATTENUATION
+		gl_PointSize = size * ( scale / - mvPosition.z );
+	#else
+		gl_PointSize = size;
+	#endif
+
+	#include <logdepthbuf_vertex>
+	#include <clipping_planes_vertex>
+	#include <worldpos_vertex>
+	#include <shadowmap_vertex>
 
 }

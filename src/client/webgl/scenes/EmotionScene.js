@@ -1,7 +1,7 @@
 import {
   PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial, ArrowHelper,
   Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points,
-  AdditiveBlending, DoubleSide, ShaderMaterial, UniformsUtils, UniformsLib, ShaderLib
+  AdditiveBlending, DoubleSide, ShaderMaterial, UniformsUtils, UniformsLib, ShaderLib, Vector4
 } from 'three';
 import _ from 'lodash';
 import { ConnectMethod, EventUtils } from '~/core';
@@ -66,9 +66,6 @@ export class EmotionScene extends Scene {
     this.raycaster = new Raycaster();
 
     this.initSkybox();
-    this.initParticles();
-    // this.initParticlesShader();
-
   }
 
   initSkybox() {
@@ -80,66 +77,53 @@ export class EmotionScene extends Scene {
     this.sky = new Mesh(skyGeo, skyMaterial);
   }
 
-  initParticles() {
-    // Particles
-    this.particleCount = 1500;
+  // * PARTICLE WITH SHADER * //
+  createParticlesShader(){
+    const txtpart = this.app.assetsManager.getAsset(`particleTexture`);
     const particlesSize = Math.random() * (1 - 0.5) + 0.5;
 
-    this.particlesGeom = new Geometry();
-    const particlesMaterial = new PointsMaterial({
-      color: 0xFFFFFF,
-      size: particlesSize,
-      blending: AdditiveBlending,
-      transparent: true,
-      depthWrite: false
-    });
-
-    for (var p = 0; p < this.particleCount; p++) {
-      var pX = Math.random() * 50;
-      var pY = Math.random() * 10;
-      var pZ = Math.random() * 60;
-      var particle = new Vector3(pX, pY, pZ);
-      this.particlesGeom.vertices.push(particle);
-    }
-
-    this.particles = new Points(this.particlesGeom, particlesMaterial);
-    this.particles.sortParticles = true;
-    this.particles.scale.z = 20;
-
-    if(this.level === 1){
-      this.particles.position.set(-5, -5, -30);
-      this.particles.scale.z = 5;
-    }
-
-    if(this.level === 2){
-      this.particles.scale.z = 20;
-    }
-
-    if(this.level === 3){
-      this.particles.position.set(0, 90, 0);
-      this.particles.scale.z = 25;
-      particlesMaterial.size = Math.random() * (0.5 - 0) + 0;
-
-    }
-
-    this.scene.add(this.particles);
-  }
-
-  // * INIT PARTICLE WITH SHADER * //
-  initParticlesShader(){
     this.uniforms = {
-      color: 0xFFFFFF,
-      texture:   { value: this.particleTexture }
+      diffuse:{
+        value: new Color(0xFFFFFF)
+      },
+      size: {
+        value: particlesSize
+      },
+      scale:{
+        value: this.size.height * 0.5
+      },
+      opacity: {
+        value: 1
+      },
+      map: {
+        value: txtpart
+      },
+      offsetRepeat: {
+        value: new Vector4(txtpart.offset.x, txtpart.offset.y, txtpart.repeat.x, txtpart.repeat.y)
+      },
+      fogColor: {
+
+      },
+      fogDensity: {
+
+      }
     };
 
-    this.pointMaterial = new ShaderMaterial( {
+    this.particleMaterial = new ShaderMaterial({
       uniforms:       this.uniforms,
       vertexShader:   vertexShader,
       fragmentShader: fragmentShader,
       blending:       AdditiveBlending,
-      depthTest:      false,
-      transparent:    true
+      depthWrite:     false,
+      transparent:    true,
+      fog: true
     });
+    this.particleMaterial.defines = {
+      USE_MAP: ``,
+      USE_SIZEATTENUATION: ``
+    };
+
+    this.particleMaterial.sizeAttenuation = true;
 
     this.particleGeometry = new Geometry();
     this.particlesNumber = 1000;
@@ -152,7 +136,7 @@ export class EmotionScene extends Scene {
       this.particleGeometry.vertices.push(particle);
     }
 
-    this.particleSystem = new Points( this.particleGeometry, this.pointMaterial );
+    this.particleSystem = new Points( this.particleGeometry, this.particleMaterial );
     this.particleSystem.sortParticles = true;
     this.particleSystem.scale.z = 5;
 
@@ -162,7 +146,7 @@ export class EmotionScene extends Scene {
       // this.particleSystem.position.set(-30, -400, 150);
     }
 
-    console.log(this.particleSystem);
+    console.log(txtpart);
   }
 
   getEnvConfig() {
@@ -222,20 +206,15 @@ export class EmotionScene extends Scene {
       this.arrow.position.set(0, 1, 2);
     }
 
-    // if(_.isNil(this.particleTexture)){
-    //   this.particleTexture = this.app.assetsManager.getAsset(`particleTexture`);
-    //   this.initParticlesShader();
-    // }
-
+    if(_.isNil(this.particleMaterial)){
+      this.createParticlesShader();
+    }
 
     // Mousemove
     document.addEventListener(`mousemove`, this.onMouseMove, false);
 
     if(this.level === 1 || this.level === 2){
       // Particle Texture
-      if (_.isNil(this.particles.material.map)) {
-        this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture`);
-      }
     }
 
     if (this.level === 1) {
@@ -246,7 +225,6 @@ export class EmotionScene extends Scene {
 
     } else if (this.level === 3) {
       this.mountEmotion3();
-      this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture2`);
     }
 
     this.tiles.forEach(tile => tile.material.color = new Color(0xff0000));
@@ -327,8 +305,7 @@ export class EmotionScene extends Scene {
 
     this.updateCameraman();
 
-    this.updateParticles(time, dt);
-    // this.updateParticlesShader(time, dt);
+    this.updateParticlesShader(time, dt);
   }
 
   updatePerso(time, dt) {
@@ -455,24 +432,19 @@ export class EmotionScene extends Scene {
     this.cameraman.setVerticalAngle(motion.calc.degreesToRadians(angle - 90));
   }
 
-  updateParticles(time, dt) {
+  updateParticlesShader(time, dt){
     if(this.level === 1){
-      this.particles.rotation.y -= 0.00015;
+      this.particleSystem.rotation.y -= 0.00015;
     }
 
     if(this.level === 2){
-      this.particles.rotation.y -= 0.05;
+      this.particleSystem.rotation.y -= 0.05;
     }
 
     if(this.level === 3){
-      this.particles.rotation.x += 0.000025;
+      this.particleSystem.rotation.x += 0.000025;
     }
 
-    this.particles.geometry.verticesNeedUpdate = true;
-  }
-
-  updateParticlesShader(time, dt){
-    this.particleSystem.rotation.y -= 0.001;
     this.particleSystem.geometry.verticesNeedUpdate = true;
   }
 
