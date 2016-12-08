@@ -26,7 +26,7 @@ export const Steps = {
   Boot: `boot`,
   Room: `room`,
   EmotionExplain: `emotion-explain`,
-  EmotionRecovered: `emotion-almost-recovered`,
+  EmotionAlmostRecovered: `emotion-almost-recovered`,
   Memory: `memory`,
   MemoryDone: `memory-done`,
   RecoveryDone: `recovery-done`,

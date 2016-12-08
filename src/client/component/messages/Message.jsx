@@ -1,10 +1,26 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
 import Progress from '~/component/messages/Progress';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { lastMessage } from '~/computed';
+
+const enterAnim = keyframes`
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+`;
+
+// Here we create a component that will rotate everything we pass in over two seconds
+const Rotate = styled.div`
+  display: inline-block;
+`;
 
 const Container = styled.div`
   position: absolute;
@@ -21,6 +37,7 @@ const Container = styled.div`
   transition-duration: .3s;
   background: rgba(255, 255, 255, 0.01);
   box-shadow: 0 0 40px 5px rgba(0, 0, 0, 0.1);
+  animation: ${enterAnim} .3s linear;
 `;
 
 const RelativeContainer = styled.div`

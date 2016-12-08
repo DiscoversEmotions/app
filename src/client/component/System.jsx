@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
+import { Steps } from '~/types';
 import Button from '~/component/Button';
 import Message from '~/component/messages/Message';
 import MessageConsole from '~/component/messages/MessageConsole';
@@ -17,13 +18,14 @@ import DeleteOrNot  from '~/component/messages/content/DeleteOrNot';
 import AreYouSure  from '~/component/messages/content/AreYouSure';
 import EmotionRecovered  from '~/component/messages/content/EmotionRecovered';
 import AllEmotionsRecovered  from '~/component/messages/content/AllEmotionsRecovered';
+import DeleteMemories  from '~/component/messages/content/DeleteMemories';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
 
-const MESSAGES_STACK_MAX_HEIGHT = 500;
+const MESSAGES_STACK_MAX_HEIGHT = 600;
 
-function getMessageType(msg) {
+function getMessageType(msg, step) {
   if (_.includes([
     `boot`, `boot-progress`, `boot-done`, `connect-eyes`, `connect-eyes-progress`, `connect-eyes-done`
   ], msg.key)) {
@@ -32,7 +34,7 @@ function getMessageType(msg) {
   return `simple`;
 }
 
-function getMessageHeight(msg) {
+function getMessageHeight(msg, step) {
   if (msg.type === `console`) {
     return 26;
   }
@@ -45,16 +47,27 @@ function getMessageHeight(msg) {
       if (msg.progress >= 37) { height += 50; }
       return height
     })();
-    case `need-recovery`: return 180;
-    case `find-tiles`: return 130;
-    case `emotion-almost-recovered`: return 110;
+    case `need-recovery`: return 200;
+    case `find-tiles`: return 120;
+    case `emotion-almost-recovered`: return 120;
     case `linked-memory`: return 180;
-    case `now-playing-memory`: return 120;
-    case `new-memories-found`: return 100;
-    case `delete-or-not`: return 170;
-    case `are-you-sure`: return 170;
-    case `emotion-recovered`: return 100;
+    case `now-playing-memory`: return (() => {
+      if (step === Steps.Memory) {
+        return 160;
+      }
+      return 100;
+    })();
+    case `new-memories-found`: return 180;
+    case `delete-or-not`: return (() => {
+      if (step === Steps.RecoveryDone) {
+        return 360;
+      }
+      return 260;
+    })();
+    case `are-you-sure`: return 220;
+    case `emotion-recovered`: return 150;
     case `all-emotions-recovered`: return 100;
+    case `delete-memories`: return 100;
   }
   return 60;
 }
@@ -75,15 +88,16 @@ const Container = styled.div`
 const System = compose(
   ConnectReact(
     {
-      messages: `system.messages`
+      messages: `system.messages`,
+      step: `app.step`
     }
   )
 )((props) => {
   var distFromBottom = 0;
   const messages = props.messages.slice(-8).map(msg => Object.assign({}, msg));
   _.forEachRight(messages, (msg) => {
-    msg.type = getMessageType(msg);
-    msg.height = getMessageHeight(msg);
+    msg.type = getMessageType(msg, props.step);
+    msg.height = getMessageHeight(msg, props.step);
     msg.distFromBottom = distFromBottom;
     distFromBottom += msg.height;
     msg.ignored = distFromBottom > MESSAGES_STACK_MAX_HEIGHT;
@@ -105,12 +119,13 @@ const System = compose(
             case `use-arrow-to-move`: return <UseArrowToMove msg={msg} key={msg.key} />;
             case `emotion-almost-recovered`: return <EmotionAlmostRecovered msg={msg} key={msg.key} />;
             case `linked-memory`: return <LinkedMemory msg={msg} key={msg.key} />;
-            case `now-playing-memory`: return <NowPlayingMemory msg={msg} key={msg.key} />;
+            case `now-playing-memory`: return <NowPlayingMemory msg={msg} step={props.step} key={msg.key} />;
             case `new-memories-found`: return <NewMemoriesFound msg={msg} key={msg.key} />;
-            case `delete-or-not`: return <DeleteOrNot msg={msg} key={msg.key} />;
+            case `delete-or-not`: return <DeleteOrNot msg={msg} step={props.step} key={msg.key} />;
             case `are-you-sure`: return <AreYouSure msg={msg} key={msg.key} />;
             case `emotion-recovered`: return <EmotionRecovered msg={msg} key={msg.key} />;
             case `all-emotions-recovered`: return <AllEmotionsRecovered msg={msg} key={msg.key} />;
+            case `delete-memories`: return <DeleteMemories msg={msg} key={msg.key} />;
           }
           return (
             <Message msg={ msg } type='error'>

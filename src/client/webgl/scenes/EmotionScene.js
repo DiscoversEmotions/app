@@ -230,9 +230,7 @@ export class EmotionScene extends Scene {
 
     this.scene.add(this.world);
     this.world.updateMatrixWorld();
-    if (this.level === 1) { // TODO: remove when collision on 2 & 3 are OK
-      this.collision.material.visible = false;
-    }
+    this.collision.material.visible = false;
 
     this.particleMaterial.uniforms.map = {
       value: this.particleTxt

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import Message from '~/component/messages/Message';
 import Button from '~/component/Button';
+import { Steps } from '~/types';
 
 function getMemoryFile (level) {
   switch (level) {
@@ -25,15 +26,21 @@ const MemoryFile = styled.p`
 `;
 
 const NowPlayingMemory = (props) => {
-  const { msg } = props;
+  const { msg, step } = props;
+  console.log(step);
   return (
     <Message
       msg={msg}
       title='Playing Memory'
     >
-      <Text>Now plyaing :</Text>
+      <Text>Now playing :</Text>
       <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile>
-      <Button>Press [enter] to skip</Button>
+      { (() => {
+        if (step === Steps.Memory) {
+          return <Button>Press [enter] to skip</Button>;
+        }
+        return null;
+      })() }
     </Message>
   )
 };

@@ -5,14 +5,6 @@ import _ from 'lodash';
 
 const Container = styled.div`
   position: absolute;
-  left: 40%;
-  right: 40%;
-  top: 0;
-  bottom: 0;
-
-  svg {
-    width: 100%;
-  }
 `;
 
 const Logo = (props) => {
