@@ -79,7 +79,6 @@ export class EmotionScene extends Scene {
 
   // * PARTICLE WITH SHADER * //
   createParticlesShader(){
-    const txtpart = this.app.assetsManager.getAsset(`particleTexture`);
     const particlesSize = Math.random() * (1 - 0.5) + 0.5;
 
     this.uniforms = {
@@ -95,17 +94,14 @@ export class EmotionScene extends Scene {
       opacity: {
         value: 1
       },
-      map: {
-        value: txtpart
-      },
-      offsetRepeat: {
-        value: new Vector4(txtpart.offset.x, txtpart.offset.y, txtpart.repeat.x, txtpart.repeat.y)
-      },
       fogColor: {
 
       },
       fogDensity: {
 
+      },
+      particle_time: {
+        value: 0
       }
     };
 
@@ -126,7 +122,7 @@ export class EmotionScene extends Scene {
     this.particleMaterial.sizeAttenuation = true;
 
     this.particleGeometry = new Geometry();
-    this.particlesNumber = 1000;
+    this.particlesNumber = 1500;
 
     for (var p = 0; p < this.particlesNumber; p++) {
       var pX = Math.random() * 50;
@@ -145,8 +141,6 @@ export class EmotionScene extends Scene {
     if(this.level === 1){
       // this.particleSystem.position.set(-30, -400, 150);
     }
-
-    console.log(txtpart);
   }
 
   getEnvConfig() {
@@ -180,6 +174,7 @@ export class EmotionScene extends Scene {
     this.tiles = [];
     this.world = null;
     this.persoCamRotation = 0;
+    this.particleTxt = null;
 
     this.cameramanRotation.hori = 0.5;
     this.cameramanRotation.vert = 0.5;
@@ -213,10 +208,6 @@ export class EmotionScene extends Scene {
     // Mousemove
     document.addEventListener(`mousemove`, this.onMouseMove, false);
 
-    if(this.level === 1 || this.level === 2){
-      // Particle Texture
-    }
-
     if (this.level === 1) {
       this.mountEmotion1();
 
@@ -235,6 +226,13 @@ export class EmotionScene extends Scene {
       this.collision.material.visible = false;
     }
 
+    this.particleMaterial.uniforms.map = {
+      value: this.particleTxt
+    };
+
+    this.particleMaterial.uniforms.offsetRepeat = {
+      value: new Vector4(this.particleTxt.offset.x, this.particleTxt.offset.y, this.particleTxt.repeat.x, this.particleTxt.repeat.y)
+    };
   }
 
   mountEmotion1() {
@@ -251,6 +249,8 @@ export class EmotionScene extends Scene {
     this.webglCore.useEnvConfig({
       fogDensity: 0.03
     });
+
+    this.particleTxt = this.app.assetsManager.getAsset(`particleTexture`);
   }
 
   mountEmotion2() {
@@ -270,6 +270,8 @@ export class EmotionScene extends Scene {
     this.webglCore.useEnvConfig({
       fogDensity: 0.02
     });
+
+    this.particleTxt = this.app.assetsManager.getAsset(`particleTexture`);
   }
 
   mountEmotion3() {
@@ -286,6 +288,9 @@ export class EmotionScene extends Scene {
     this.webglCore.useEnvConfig({
       fogDensity: 0.01
     });
+
+    this.particleTxt = this.app.assetsManager.getAsset(`particleTexture2`);
+    // this.particleSystem.position.set(0, 90, 0);
   }
 
   update(time, dt) {
@@ -306,6 +311,7 @@ export class EmotionScene extends Scene {
     this.updateCameraman();
 
     this.updateParticlesShader(time, dt);
+
   }
 
   updatePerso(time, dt) {
@@ -442,10 +448,11 @@ export class EmotionScene extends Scene {
     }
 
     if(this.level === 3){
-      this.particleSystem.rotation.x += 0.000025;
+      this.particleMaterial.uniforms.particle_time.value -= time;
     }
 
-    this.particleSystem.geometry.verticesNeedUpdate = true;
+    // this.particleSystem.geometry.verticesNeedUpdate = true;
+
   }
 
   unmount() {

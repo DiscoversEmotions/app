@@ -35,7 +35,7 @@ const AppContainer = styled.div`
     position: absolute;
     content: '';
     z-index: 1;
-    opacity: 0.7;
+    opacity: 0.3;
     height: 100%;
     width: 100%;
     left: 0;

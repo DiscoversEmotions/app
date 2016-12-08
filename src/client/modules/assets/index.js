@@ -33,7 +33,7 @@ const assets = [
   {
     
     key: `particleTexture2`,
-    fileUrl: require(`~/assets/particle_rain.png`),
+    fileUrl: require(`~/assets/rain.png`),
     type: AssetTypes.Texture,
     status: AssetStatus.Queued,
     priority: 10,
