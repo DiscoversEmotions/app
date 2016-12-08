@@ -146,9 +146,6 @@ export class EmotionScene extends Scene {
     this.particleSystem.position.x = -10;
     this.particleSystem.position.y = -3;
 
-    if(this.level === 3){
-      // this.particleSystem.position.set(-30, -400, 150);
-    }
   }
 
   getEnvConfig() {
