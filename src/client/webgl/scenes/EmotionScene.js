@@ -77,7 +77,7 @@ export class EmotionScene extends Scene {
     this.sky = new Mesh(skyGeo, skyMaterial);
   }
 
-  // * PARTICLE WITH SHADER * //
+  // * PARTICLE SHADER * //
   createParticlesShader(){
     const particlesSize = Math.random() * (1 - 0.5) + 0.5;
 
@@ -100,8 +100,14 @@ export class EmotionScene extends Scene {
       fogDensity: {
 
       },
-      particle_time: {
+      particle_time_rain: {
         value: 0
+      },
+      particle_time_basic: {
+        value: 0
+      },
+      isSecondWorld: {
+        value: false
       }
     };
 
@@ -122,10 +128,10 @@ export class EmotionScene extends Scene {
     this.particleMaterial.sizeAttenuation = true;
 
     this.particleGeometry = new Geometry();
-    this.particlesNumber = 1500;
+    this.particlesNumber = 2000;
 
     for (var p = 0; p < this.particlesNumber; p++) {
-      var pX = Math.random() * 50;
+      var pX = Math.random() * 100;
       var pY = Math.random() * 10;
       var pZ = Math.random() * 60;
       var particle = new Vector3(pX, pY, pZ);
@@ -137,8 +143,10 @@ export class EmotionScene extends Scene {
     this.particleSystem.scale.z = 5;
 
     this.scene.add(this.particleSystem);
+    this.particleSystem.position.x = -10;
+    this.particleSystem.position.y = -3;
 
-    if(this.level === 1){
+    if(this.level === 3){
       // this.particleSystem.position.set(-30, -400, 150);
     }
   }
@@ -233,6 +241,7 @@ export class EmotionScene extends Scene {
     this.particleMaterial.uniforms.offsetRepeat = {
       value: new Vector4(this.particleTxt.offset.x, this.particleTxt.offset.y, this.particleTxt.repeat.x, this.particleTxt.repeat.y)
     };
+
   }
 
   mountEmotion1() {
@@ -290,7 +299,6 @@ export class EmotionScene extends Scene {
     });
 
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture2`);
-    // this.particleSystem.position.set(0, 90, 0);
   }
 
   update(time, dt) {
@@ -440,18 +448,18 @@ export class EmotionScene extends Scene {
 
   updateParticlesShader(time, dt){
     if(this.level === 1){
-      this.particleSystem.rotation.y -= 0.00015;
+      this.particleMaterial.uniforms.particle_time_basic.value -= time;
     }
 
     if(this.level === 2){
-      this.particleSystem.rotation.y -= 0.05;
+      this.particleMaterial.uniforms.isSecondWorld.value = true;
+      this.particleMaterial.uniforms.particle_time_basic.value -= time;
     }
 
     if(this.level === 3){
-      this.particleMaterial.uniforms.particle_time.value -= time;
+      this.particleMaterial.uniforms.isSecondWorld.value = false;
+      this.particleMaterial.uniforms.particle_time_rain.value -= time;
     }
-
-    // this.particleSystem.geometry.verticesNeedUpdate = true;
 
   }
 

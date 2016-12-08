@@ -1,6 +1,8 @@
 uniform float size;
 uniform float scale;
-uniform float particle_time;
+uniform float particle_time_rain;
+uniform float particle_time_basic;
+uniform bool isSecondWorld;
 
 #include <common>
 #include <color_pars_vertex>
@@ -13,7 +15,17 @@ void main() {
 	#include <color_vertex>
 	#include <begin_vertex>
 
-	transformed = vec3(transformed.x, mod(transformed.y + (particle_time / 5000000.0), 10.0), transformed.z);
+	if(isSecondWorld == true){
+		transformed = vec3(
+		mod(transformed.x + (particle_time_basic / 150000.0), 100.0), 
+		transformed.y, 
+		transformed.z);
+	} else {
+		transformed = vec3(
+		mod(transformed.x + (particle_time_basic / 1000000.0), 10000000.0), 
+		mod(transformed.y + (particle_time_rain / 30000000.0), 10.0), 
+		transformed.z);
+	}
 
 	#include <project_vertex>
 
