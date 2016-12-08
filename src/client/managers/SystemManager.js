@@ -285,8 +285,6 @@ export class SystemManager {
   updateDelete(context) {
     const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep } = context;
 
-    console.log(`updateDelete`, lastMessage.key, keys.space);
-
     if (lastMessage.key === `delete-or-not`) {
       nextMessage({ key: `delete-memories`, progress: 0 }, 300);
       return;
@@ -302,7 +300,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `need-reboot`) {
-      if (keys.space) {
+      if (keys.enter) {
         setStep({ step: Steps.Shutdown });
       }
       return;

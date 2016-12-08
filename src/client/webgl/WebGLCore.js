@@ -141,8 +141,7 @@ export class WebGLCore {
       this.scenesList[sceneName].mount();
     }
     if (_.isFunction(this.scenesList[sceneName].getEnvConfig)) {
-      const envConfig = Object.assign({}, this.defaultEnvConfig, this.scenesList[sceneName].getEnvConfig());
-      this.useEnvConfig(envConfig);
+      this.useEnvConfig(this.scenesList[sceneName].getEnvConfig());
     } else {
       this.useEnvConfig(this.defaultEnvConfig);
     }
@@ -164,9 +163,10 @@ export class WebGLCore {
   }
 
   useEnvConfig(config) {
-    this.coreScene.background = config.background;
-    this.coreScene.fog.density = config.fogDensity;
-    this.coreScene.fog.color = config.fogColor;
+    const envConfig = Object.assign({}, this.defaultEnvConfig, config);
+    this.coreScene.background = envConfig.background;
+    this.coreScene.fog.density = envConfig.fogDensity;
+    this.coreScene.fog.color = envConfig.fogColor;
   }
 
 }

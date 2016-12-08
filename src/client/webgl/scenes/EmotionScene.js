@@ -1,6 +1,7 @@
 import {
   PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial, ArrowHelper,
-  Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending, ShaderMaterial, UniformsUtils, UniformsLib, ShaderLib, GPUParticleSystem
+  Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points,
+  AdditiveBlending, DoubleSide, ShaderMaterial, UniformsUtils, UniformsLib, ShaderLib
 } from 'three';
 import _ from 'lodash';
 import { ConnectMethod, EventUtils } from '~/core';
@@ -187,6 +188,9 @@ export class EmotionScene extends Scene {
     this.world = null;
     this.persoCamRotation = 0;
 
+    this.cameramanRotation.hori = 0.5;
+    this.cameramanRotation.vert = 0.5;
+
     // Mount perso if not exist
     if (_.isNil(this.perso)) {
       this.perso = new BlendCharacter(this.app.assetsManager.getAsset(`perso`));
@@ -196,6 +200,7 @@ export class EmotionScene extends Scene {
       this.perso.play(`idle`, 1);
     }
     this.movementOrigin.position.set(0, 0, 0);
+    this.perso.rotation.y = Math.PI;
 
     if (_.isNil(this.arrow)) {
       this.arrow = this.app.assetsManager.getAsset(`arrow`);
@@ -230,7 +235,7 @@ export class EmotionScene extends Scene {
       this.mountEmotion3();
     }
 
-    console.log(this.tiles);
+    this.tiles.forEach(tile => tile.material.color = new Color(0xff0000));
 
     this.scene.add(this.world);
     this.world.updateMatrixWorld();
@@ -251,6 +256,9 @@ export class EmotionScene extends Scene {
         this.tiles.push(item);
       }
     });
+    this.webglCore.useEnvConfig({
+      fogDensity: 0.03
+    });
   }
 
   mountEmotion2() {
@@ -263,6 +271,12 @@ export class EmotionScene extends Scene {
       if (item.name === `zone`) {
         this.tiles.push(item);
       }
+      if (item.name === `eglise`) {
+        item.material.side = DoubleSide;
+      }
+    });
+    this.webglCore.useEnvConfig({
+      fogDensity: 0.02
     });
   }
 
@@ -276,6 +290,9 @@ export class EmotionScene extends Scene {
       if (item.name === `zone`) {
         this.tiles.push(item);
       }
+    });
+    this.webglCore.useEnvConfig({
+      fogDensity: 0.01
     });
   }
 
@@ -329,14 +346,10 @@ export class EmotionScene extends Scene {
     } else if (this.persoVelocityLinear > 0) {
       this.persoVelocityLinear -= 0.005;
     }
-    this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.1);
-
-    this.persoVelocity = (Math.pow(((this.persoVelocityLinear-0.1)*10), 3) / 10) + 0.1;
-
-    //
-
+    this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.05);
+    const slowDown = 30;
+    this.persoVelocity = ((Math.pow(((this.persoVelocityLinear-(1/slowDown))*slowDown), 3) / slowDown) + (1/slowDown));
     const dist = this.persoVelocity * dt;
-
     const move = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
       motion.calc.radiansToDegrees(angle),
@@ -359,11 +372,9 @@ export class EmotionScene extends Scene {
 
     const canMoveCollision = this.raycaster.intersectObjects([this.collision]);
     if (canMoveCollision.length) {
-      // console.log(`ok can move`)
       this.movementOrigin.translateZ(-move.x);
       this.movementOrigin.translateX(-move.y);
     } else {
-      // console.log(`nope, can't move`);
       this.persoVelocityLinear = 0;
       this.persoVelocity = 0;
     }
@@ -375,17 +386,15 @@ export class EmotionScene extends Scene {
       }
     }
 
+    this.perso.applyWeight(`idle`, 0);
+    this.perso.applyWeight(`walk`, 0);
+    this.perso.applyWeight(`run`, 0);
+
     if (this.persoVelocity < 0.001) {
-      this.perso.applyWeight(`walk`, 0);
-      this.perso.applyWeight(`run`, 0);
       this.perso.play(`idle`, 1);
     } else if (this.persoVelocity <= 0.01) {
-      this.perso.applyWeight(`idle`, 0);
-      this.perso.applyWeight(`run`, 0);
       this.perso.play(`walk`, 1);
     } else {
-      this.perso.applyWeight(`idle`, 0);
-      this.perso.applyWeight(`walk`, 0);
       this.perso.play(`run`, 1);
     }
 
@@ -418,12 +427,6 @@ export class EmotionScene extends Scene {
   }
 
   updateCameraman() {
-
-    // Update movement when not pointerLock
-    // const movementX = Math.abs(this.mousePos.x) < 0.1 ? 0 : ((this.mousePos.x - 0.1) / 0.9);
-    // this.cameramanRotation.hori -= movementX * 0.008;
-    // this.cameramanRotation.hori %= 1;
-    // this.cameramanRotation.vert = (this.mousePos.y + 1) / 2;
 
     this.cameramanRotationArround.rotation.y = this.cameramanRotation.hori * (Math.PI * 2);
     const dist = motion.calc.dilate(7, 13, this.cameramanRotation.vert);
@@ -463,6 +466,7 @@ export class EmotionScene extends Scene {
   unmount() {
     document.removeEventListener(`mousemove`, this.onMouseMove, false);
     this.scene.remove(this.world);
+    this.world = null;
   }
 
   onMouseMove(e) {
@@ -475,7 +479,7 @@ export class EmotionScene extends Scene {
     const movementY = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
     this.cameramanRotation.hori -= movementX * 0.0005;
-    this.cameramanRotation.vert -= movementY * 0.003;
+    this.cameramanRotation.vert += movementY * 0.003;
 
     this.cameramanRotation.hori %= 1;
     this.cameramanRotation.vert = motion.calc.restrict(this.cameramanRotation.vert, 0, 1);

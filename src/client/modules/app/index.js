@@ -28,15 +28,11 @@ export default {
     transitionToScene: [
       set(state`app.scene.next`, input`scene`),
       set(state`app.scene.transition`, true),
-      [
-        wait(500),
-        set(state`app.scene.current`, input`scene`),
-        set(state`app.scene.next`, `none`)
-      ],
-      [
-        wait(1000),
-        set(state`app.scene.transition`, false)
-      ]
+      wait(500),
+      set(state`app.scene.current`, input`scene`),
+      set(state`app.scene.next`, `none`),
+      wait(500),
+      set(state`app.scene.transition`, false)
     ],
     startPointerLock: [ set(state`app.pointerLock`, true) ],
     stopPointerLock: [ set(state`app.pointerLock`, false) ],

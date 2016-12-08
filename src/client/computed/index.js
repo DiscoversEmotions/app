@@ -44,10 +44,17 @@ export const lastMessage = Computed(
 export const roomAssetsReady = Computed(
   {
     room: `assets.room.status`,
-    webglReady: `app.bundlesReady.webgl`
+    webglReady: `app.bundlesReady.webgl`,
+    ambiance_room: `assets.ambiance_room.status`,
+    sound_glitch: `assets.sound_glitch.status`
   },
-  ({ room, webglReady }) => {
-    return (room === AssetStatus.Ready && webglReady);
+  ({ room, webglReady, ambiance_room, sound_glitch }) => {
+    return (
+      room === AssetStatus.Ready &&
+      ambiance_room === AssetStatus.Ready &&
+      sound_glitch === AssetStatus.Ready &&
+      webglReady
+    );
   }
 );
 
@@ -73,9 +80,13 @@ export const mind1AssetsReady = Computed(
     memory_love_croquis: `assets.memory_love_croquis.status`,
     memory_anger_croquis: `assets.memory_anger_croquis.status`,
     memory_sad_croquis: `assets.memory_sad_croquis.status`,
-    arrow: `assets.arrow.status`
+    arrow: `assets.arrow.status`,
+    ambiance_emotion: `assets.ambiance_emotion.status`
   },
-  ({ perso, world1, world2, world3, memory_love, memory_anger, memory_sadness, memory_love_croquis, memory_anger_croquis, memory_sad_croquis, arrow }) => {
+  ({
+    perso, world1, world2, world3, memory_love, memory_anger, memory_sadness, memory_love_croquis, memory_anger_croquis,
+    memory_sad_croquis, arrow, ambiance_emotion
+  }) => {
     return (
       perso === AssetStatus.Ready &&
       world1 === AssetStatus.Ready &&
@@ -87,7 +98,8 @@ export const mind1AssetsReady = Computed(
       memory_love_croquis === AssetStatus.Ready &&
       memory_anger_croquis === AssetStatus.Ready &&
       memory_sad_croquis === AssetStatus.Ready &&
-      arrow === AssetStatus.Ready
+      arrow === AssetStatus.Ready &&
+      ambiance_emotion === AssetStatus.Ready
     );
   }
 );
