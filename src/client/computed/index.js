@@ -81,11 +81,13 @@ export const mind1AssetsReady = Computed(
     memory_anger_croquis: `assets.memory_anger_croquis.status`,
     memory_sad_croquis: `assets.memory_sad_croquis.status`,
     arrow: `assets.arrow.status`,
-    ambiance_emotion: `assets.ambiance_emotion.status`
+    ambiance_emotion: `assets.ambiance_emotion.status`,
+    particleTxt_basic: `assets.particleTexture.status`,
+    particleTxt_rain: `assets.particleTexture2.status`
   },
   ({
     perso, world1, world2, world3, memory_love, memory_anger, memory_sadness, memory_love_croquis, memory_anger_croquis,
-    memory_sad_croquis, arrow, ambiance_emotion
+    memory_sad_croquis, arrow, ambiance_emotion, particleTxt_basic, particleTxt_rain
   }) => {
     return (
       perso === AssetStatus.Ready &&
