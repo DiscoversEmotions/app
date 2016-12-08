@@ -7,7 +7,7 @@ const blinkAnim = keyframes`
   100% { opacity: 1; }
 `;
 
-export default styled.button`
+export default styled.div`
   cursor: default;
   border: none;
   padding: 8px 20px;
@@ -17,5 +17,6 @@ export default styled.button`
   line-height: 1.4;
   font-size: 16px;
   font-weight: 700;
+  text-align: center;
   animation: ${blinkAnim} 2s infinite;
 `;

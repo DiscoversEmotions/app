@@ -57,6 +57,11 @@ const App = compose(
           return <Logo />;
         }
       })()}
+      {(() => {
+        if (props.step === Steps.End) {
+          return <Credits />;
+        }
+      })()}
       <System />
     </AppContainer>
   );

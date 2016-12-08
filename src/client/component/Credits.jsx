@@ -6,19 +6,25 @@ import { inject } from 'react-tunnel';
 
 
 const Container = styled.div`
-  background-color: black;
+  background: rgba(0, 0, 0, 0.4);
   color: white;
   height: 100vh;
   font-family: 'Anonymous Pro', monospace;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
 `;
 
 const Title = styled.div`
-  width: 15%; 
+  width: 15%;
   text-align: right;
   `
 
 const MainText = styled.div`
-  display: table-cell; 
+  display: table-cell;
   vertical-align: middle;
   height: 100vh;
   font-size: 13px;
@@ -80,7 +86,7 @@ const Mentions = styled.div`
   bottom: 15px;
   right: 30px;
   font-size: 13px;
-` 
+`
 
 const MentionsList = styled.ul`
   list-style: none;
@@ -115,7 +121,7 @@ const Credits = compose(
         </MainTitleBloc>
 
         <MainDescBloc>
-          Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco lavboris nisi ut aliquip ex ea commodo consequat. Ipsum dolor sit amet, consectetur adipiscin elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utnim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+          Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco lavboris nisi ut aliquip ex ea commodo consequat. Ipsum dolor sit amet, consectetur adipiscin elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utnim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </MainDescBloc>
       </MainText>
 
@@ -123,7 +129,7 @@ const Credits = compose(
         <TitleBloc>
           DESIGN
         </TitleBloc>
-        
+
         <DescBloc>
 
           <ListBloc>
@@ -164,7 +170,7 @@ const Credits = compose(
         <TitleBloc>
           REMERCIEMENTS
         </TitleBloc>
-  
+
         <DescBloc>
 
           <ListBloc>

@@ -60,6 +60,7 @@ export class SystemManager {
     case Steps.ConfirmKeep: return this.updateConfirmKeep(context);
     case Steps.Delete: return this.updateDelete(context);
     case Steps.Shutdown: return this.updateShutdown(context);
+    case Steps.Keep: return this.updateKeep(context);
     }
 
   }
@@ -173,9 +174,19 @@ export class SystemManager {
 
   updateEmotionExplain(context) {
 
-    const { lastMessage, nextMessage, updateMessage } = context;
+    const { lastMessage, nextMessage, updateMessage, level } = context;
 
-    if (lastMessage.key === `need-recovery` || lastMessage.key === `playing-memory-done`) {
+    if (lastMessage.key === `now-playing-memory`) {
+      nextMessage({ key: `emotion-recovered` }, 1000, true);
+      return;
+    }
+
+    if (lastMessage.key === `emotion-recovered`) {
+      nextMessage({ key: `find-tiles` }, 1000);
+      return;
+    }
+
+    if (lastMessage.key === `need-recovery`) {
       nextMessage({ key: `find-tiles` }, 1000, true);
       return;
     }
@@ -192,11 +203,11 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, level } = context;
 
     if (lastMessage.key === `use-arrow-to-move`) {
-      nextMessage({ key: `emotion-recovered`, level: level }, 300);
+      nextMessage({ key: `emotion-almost-recovered`, level: level }, 300);
       return;
     }
 
-    if (lastMessage.key === `emotion-recovered`) {
+    if (lastMessage.key === `emotion-almost-recovered`) {
       nextMessage({ key: `linked-memory`, level: level }, 2000);
       return;
     }
@@ -216,14 +227,9 @@ export class SystemManager {
 
   updateMemoryDone(context) {
 
-    const { lastMessage, nextMessage, updateMessage, setNextStep } = context;
+    const { lastMessage, nextMessage, updateMessage, setNextStep, level } = context;
 
     if (lastMessage.key === `now-playing-memory`) {
-      nextMessage({ key: `playing-memory-done` }, 300);
-      return;
-    }
-
-    if (lastMessage.key === `playing-memory-done`) {
       setNextStep();
       return;
     }
@@ -233,8 +239,13 @@ export class SystemManager {
   updateRecoveryDone(context) {
     const { lastMessage, nextMessage, updateMessage, setStep, keys } = context;
 
-    if (lastMessage.key === `playing-memory-done`) {
-      nextMessage({ key: `all-emotions-recovered` }, 300);
+    if (lastMessage.key === `now-playing-memory`) {
+      nextMessage({ key: `emotion-recovered` }, 500, true);
+      return;
+    }
+
+    if (lastMessage.key === `emotion-recovered`) {
+      nextMessage({ key: `all-emotions-recovered` }, 500);
       return;
     }
 
@@ -253,7 +264,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `delete-or-not`) {
-      if (keys.y) {
+      if (keys.enter) {
         setStep({ step: Steps.Delete });
       }
       if (keys.n) {
@@ -273,10 +284,10 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `are-you-sure`) {
-      if (keys.y) {
+      if (keys.enter) {
         setStep({ step: Steps.Delete });
       }
-      if (keys.n) {
+      if (keys.y) {
         setStep({ step: Steps.Keep });
       }
       return;
@@ -286,7 +297,7 @@ export class SystemManager {
   updateDelete(context) {
     const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep } = context;
 
-    if (lastMessage.key === `delete-or-not`) {
+    if (lastMessage.key === `delete-or-not` || lastMessage.key === `are-you-sure`) {
       nextMessage({ key: `delete-memories`, progress: 0 }, 300);
       return;
     }
@@ -322,6 +333,20 @@ export class SystemManager {
       return;
     }
 
+  }
+
+  updateKeep(context) {
+    const { lastMessage, nextMessage, updateMessage, reboot, setStep } = context;
+
+    if (lastMessage.key === `are-you-sure`) {
+      nextMessage({ key: `good-luck` }, 1000);
+      return;
+    }
+
+    if (lastMessage.key === `good-luck`) {
+      setStep({ step: Steps.End });
+      return;
+    }
   }
 
 }

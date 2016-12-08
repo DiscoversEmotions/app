@@ -26,14 +26,15 @@ export const Steps = {
   Boot: `boot`,
   Room: `room`,
   EmotionExplain: `emotion-explain`,
-  EmotionRecovered: `emotion-recovered`,
+  EmotionRecovered: `emotion-almost-recovered`,
   Memory: `memory`,
   MemoryDone: `memory-done`,
   RecoveryDone: `recovery-done`,
   ConfirmKeep: `confirm-delete`,
   Delete: `delete`,
   Keep: `keet`,
-  Shutdown: `shutdown`
+  Shutdown: `shutdown`,
+  End: `end`
 };
 
 export const NUMBER_OF_MEMORIES = 482;

@@ -17,9 +17,12 @@ const Text = styled.p`
   padding-left: 20px;
 `;
 
-const MemoryFile = styled.span`
+const MemoryFile = styled.p`
   font-family: 'Anonymous Pro', monospace;
   color: white;
+  padding-left: 20px;
+  padding-top: 5px;
+  font-size: 14px;
 `;
 
 const LinkedMemory = (props) => {
@@ -29,7 +32,8 @@ const LinkedMemory = (props) => {
       msg={msg}
       title='Associated Memory'
     >
-      <Text>To complete the recovery, the memory <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile> need to be restored.</Text>
+      <Text>To complete the recovery, the following memory file need to be restored :</Text>
+      <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile>
       <Button>Press [enter] to restore the memory</Button>
     </Message>
   )
