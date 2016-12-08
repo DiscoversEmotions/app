@@ -23,8 +23,17 @@ const assets = [
     priority: 0,
   },
   {
+
     key: `particleTexture`,
     fileUrl: require(`~/assets/particle.png`),
+    type: AssetTypes.Texture,
+    status: AssetStatus.Queued,
+    priority: 10,
+  },
+  {
+    
+    key: `particleTexture2`,
+    fileUrl: require(`~/assets/particle_rain.png`),
     type: AssetTypes.Texture,
     status: AssetStatus.Queued,
     priority: 10,

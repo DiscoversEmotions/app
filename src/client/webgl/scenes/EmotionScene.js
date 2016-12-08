@@ -68,6 +68,7 @@ export class EmotionScene extends Scene {
     this.initSkybox();
     this.initParticles();
     // this.initParticlesShader();
+
   }
 
   initSkybox() {
@@ -103,13 +104,22 @@ export class EmotionScene extends Scene {
 
     this.particles = new Points(this.particlesGeom, particlesMaterial);
     this.particles.sortParticles = true;
-    this.particles.scale.z = 5;
+    this.particles.scale.z = 20;
 
     if(this.level === 1){
       this.particles.position.set(-5, -5, -30);
+      this.particles.scale.z = 5;
     }
+
+    if(this.level === 2){
+      this.particles.scale.z = 20;
+    }
+
     if(this.level === 3){
       this.particles.position.set(0, 90, 0);
+      this.particles.scale.z = 25;
+      particlesMaterial.size = Math.random() * (0.5 - 0) + 0;
+
     }
 
     this.scene.add(this.particles);
@@ -117,7 +127,6 @@ export class EmotionScene extends Scene {
 
   // * INIT PARTICLE WITH SHADER * //
   initParticlesShader(){
-
     this.uniforms = {
       color: 0xFFFFFF,
       texture:   { value: this.particleTexture }
@@ -213,11 +222,6 @@ export class EmotionScene extends Scene {
       this.arrow.position.set(0, 1, 2);
     }
 
-    // Particle Texture
-    if (_.isNil(this.particles.material.map)) {
-      this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture`);
-    }
-
     // if(_.isNil(this.particleTexture)){
     //   this.particleTexture = this.app.assetsManager.getAsset(`particleTexture`);
     //   this.initParticlesShader();
@@ -227,12 +231,22 @@ export class EmotionScene extends Scene {
     // Mousemove
     document.addEventListener(`mousemove`, this.onMouseMove, false);
 
+    if(this.level === 1 || this.level === 2){
+      // Particle Texture
+      if (_.isNil(this.particles.material.map)) {
+        this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture`);
+      }
+    }
+
     if (this.level === 1) {
       this.mountEmotion1();
+
     } else if (this.level === 2) {
       this.mountEmotion2();
+
     } else if (this.level === 3) {
       this.mountEmotion3();
+      this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture2`);
     }
 
     this.tiles.forEach(tile => tile.material.color = new Color(0xff0000));
@@ -443,23 +457,22 @@ export class EmotionScene extends Scene {
 
   updateParticles(time, dt) {
     if(this.level === 1){
-      this.particles.rotation.y -= 0.0001;
+      this.particles.rotation.y -= 0.00015;
     }
 
     if(this.level === 2){
-      this.particles.rotation.y -= 0.02;
+      this.particles.rotation.y -= 0.05;
     }
 
     if(this.level === 3){
-      this.particles.rotation.y -= 0.0001;
-      this.particles.rotation.x += 0.00001;
+      this.particles.rotation.x += 0.000025;
     }
 
     this.particles.geometry.verticesNeedUpdate = true;
   }
 
   updateParticlesShader(time, dt){
-    this.particleSystem.rotation.y -= 0.0001;
+    this.particleSystem.rotation.y -= 0.001;
     this.particleSystem.geometry.verticesNeedUpdate = true;
   }
 
