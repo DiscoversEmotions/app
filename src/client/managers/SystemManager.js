@@ -38,6 +38,7 @@ export class SystemManager {
 
     context.nextMessage = (message, time, clean = false) => pushMessage({ message: message, time: time, clean: clean });
     context.updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
+    context.ignoreEnter = this.controller.getState(`keyboard.ignoreEnter`);
 
     const {
       readyForNextMessage, lastMessage, pushMessage, updateLastMessage,
@@ -125,7 +126,7 @@ export class SystemManager {
 
   updateRoom(context) {
 
-    const { pushMessage, updateLastMessage, lastMessage, setNextStep, mind1AssetsReady, nextMessage, updateMessage, keys } = context;
+    const { pushMessage, updateLastMessage, lastMessage, setNextStep, mind1AssetsReady, nextMessage, updateMessage, keys, ignoreEnter } = context;
 
     if (lastMessage === null) {
       return;
@@ -177,7 +178,7 @@ export class SystemManager {
       return;
     }
 
-    if (lastMessage.key === `need-recovery` && keys.enter) {
+    if (lastMessage.key === `need-recovery` && keys.enter && !ignoreEnter) {
       setNextStep();
     }
 
@@ -209,7 +210,7 @@ export class SystemManager {
 
   updateEmotionAlmostRecovered(context) {
 
-    const { lastMessage, nextMessage, updateMessage, level, keys, setNextStep } = context;
+    const { lastMessage, nextMessage, updateMessage, level, keys, setNextStep, ignoreEnter } = context;
 
     if (lastMessage === null) {
       return;
@@ -225,7 +226,7 @@ export class SystemManager {
       return;
     }
 
-    if (lastMessage.key === `linked-memory` && keys.enter) {
+    if (lastMessage.key === `linked-memory` && keys.enter && !ignoreEnter) {
       setNextStep();
       return;
     }
@@ -234,10 +235,15 @@ export class SystemManager {
 
   updateMemory(context) {
 
-    const { lastMessage, nextMessage, updateMessage, level } = context;
+    const { lastMessage, nextMessage, updateMessage, level, keys, setNextStep, ignoreEnter } = context;
 
     if (lastMessage.key === `linked-memory`) {
       nextMessage({ key: `now-playing-memory`, level: level }, 50, true);
+      return;
+    }
+
+    if (lastMessage.key === `now-playing-memory` && keys.enter && !ignoreEnter) {
+      setNextStep();
       return;
     }
 
@@ -245,14 +251,14 @@ export class SystemManager {
 
   updateMemoryDone(context) {
 
-    const { lastMessage, nextMessage, updateMessage, setNextStep, level, keys } = context;
+    const { lastMessage, nextMessage, updateMessage, setNextStep, level, keys, ignoreEnter } = context;
 
     if (lastMessage.key === `now-playing-memory`) {
       nextMessage({ key: `emotion-recovered` }, 100);
       return;
     }
 
-    if (lastMessage.key === `emotion-recovered` && keys.enter) {
+    if (lastMessage.key === `emotion-recovered` && keys.enter && !ignoreEnter) {
       setNextStep();
       return;
     }
@@ -260,7 +266,7 @@ export class SystemManager {
   }
 
   updateRecoveryDone(context) {
-    const { lastMessage, nextMessage, updateMessage, setStep, keys } = context;
+    const { lastMessage, nextMessage, updateMessage, setStep, keys, ignoreEnter } = context;
 
     if (lastMessage.key === `emotion-recovered`) {
       nextMessage({ key: `all-emotions-recovered` }, 500, true);
@@ -282,7 +288,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `delete-or-not`) {
-      if (keys.enter) {
+      if (keys.enter && !ignoreEnter) {
         setStep({ step: Steps.Delete });
       }
       if (keys.n) {
@@ -294,7 +300,7 @@ export class SystemManager {
   }
 
   updateConfirmKeep(context) {
-    const { lastMessage, nextMessage, setStep, keys } = context;
+    const { lastMessage, nextMessage, setStep, keys, ignoreEnter } = context;
 
     if (lastMessage.key === `delete-or-not`) {
       nextMessage({ key: `are-you-sure` }, 300);
@@ -302,7 +308,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `are-you-sure`) {
-      if (keys.enter) {
+      if (keys.enter && !ignoreEnter) {
         setStep({ step: Steps.Delete });
       }
       if (keys.y) {
@@ -313,7 +319,7 @@ export class SystemManager {
   }
 
   updateDelete(context) {
-    const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep } = context;
+    const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep, ignoreEnter } = context;
 
     if (lastMessage.key === `delete-or-not` || lastMessage.key === `are-you-sure`) {
       nextMessage({ key: `delete-memories`, progress: 0 }, 300);
@@ -330,7 +336,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `need-reboot`) {
-      if (keys.enter) {
+      if (keys.enter && !ignoreEnter) {
         setStep({ step: Steps.Shutdown });
       }
       return;

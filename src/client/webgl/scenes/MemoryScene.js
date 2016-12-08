@@ -14,7 +14,7 @@ export class MemoryScene extends Scene {
     super(...args);
 
     // Init watchers
-    this.updateKeys({}, this.controller, this);
+    // this.updateKeys({}, this.controller, this);
 
     this.cameraman.position.set(0, 0, 5);
     this.scene.add(this.cameraman);
@@ -53,36 +53,34 @@ export class MemoryScene extends Scene {
   }
 
   // Keyboard Method
-  @ConnectMethod(
-    {
-      keys: `keyboard.keys`,
-      lastMessage: lastMessage
-    }
-  )
-  updateKeys({ keys, lastMessage }) {
-    if (
-      lastMessage === null ||
-      lastMessage.key !== `now-playing-memory` ||
-      _.isNil(this.memorySound) ||
-      this.memorySound.playing === false
-    ) {
-      return;
-    }
-    if (this.ignoreEnter === false && keys.enter) {
-      if (this.memorySound) {
-        this.memorySound.stop();
-      }
-      this.controller.getSignal(`app.setNextStep`)();
-      this.solved = true;
-    }
-    if (keys.enter === false) {
-      this.ignoreEnter = false;
-    }
-  }
+  // @ConnectMethod(
+  //   {
+  //     keys: `keyboard.keys`,
+  //     lastMessage: lastMessage
+  //   }
+  // )
+  // updateKeys({ keys, lastMessage }) {
+  //   if (
+  //     lastMessage === null ||
+  //     lastMessage.key !== `now-playing-memory` ||
+  //     _.isNil(this.memorySound) ||
+  //     this.memorySound.playing === false
+  //   ) {
+  //     return;
+  //   }
+  //   if (this.ignoreEnter === false && keys.enter) {
+  //     if (this.memorySound) {
+  //       this.memorySound.stop();
+  //     }
+  //     this.controller.getSignal(`app.setNextStep`)();
+  //   }
+  //   if (keys.enter === false) {
+  //     this.ignoreEnter = false;
+  //   }
+  // }
 
   mount() {
-    this.ignoreEnter = this.controller.getState(`keyboard.keys.enter`);
-    this.solved = false;
+    this.step = this.controller.getState(`app.step`);
     this.level = this.controller.getState(`app.level`);
     this.memoryBuffer = null;
     this.analyser = null;
@@ -107,7 +105,6 @@ export class MemoryScene extends Scene {
     });
     this.memorySound.on(`ended`, () => {
       this.controller.getSignal(`app.setNextStep`)();
-      this.solved = true;
     });
     this.analyser = sono.effect.analyser({
       fftSize: 256,
@@ -139,15 +136,15 @@ export class MemoryScene extends Scene {
 
   getEnvConfig() {
     return {
-      // background: new Color(0xffffff)
+      background: new Color(0x000000)
     };
   }
 
   update(time, dt) {
-    const step = this.controller.getState(`app.step`);
+    this.step = this.controller.getState(`app.step`);
 
-    if (step === Steps.Memory) {
-
+    if (this.step !== this.controller.getState(`app.step`)) {
+      this.step = this.controller.getState(`app.step`);
     }
 
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
@@ -158,7 +155,7 @@ export class MemoryScene extends Scene {
 
     this.cube1.geometry.verticesNeedUpdate = true;
 
-    if (step === Steps.Memory) {
+    if (this.step === Steps.Memory) {
       const soundProgress = this.memorySound.currentTime / this.memorySound.duration;
       this.croquis.material.opacity = motion.calc.dilate(0, 0.5, soundProgress);
       this.croquis.scale.x = motion.calc.dilate(1.2, 1.6, soundProgress);
@@ -171,7 +168,7 @@ export class MemoryScene extends Scene {
       this.croquis.scale.y = 1.6;
       this.croquis.rotation.z = 0.5;
     }
-    
+
   }
 
 }

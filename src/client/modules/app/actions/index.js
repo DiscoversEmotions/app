@@ -1,4 +1,5 @@
 import { Steps } from '~/types';
+import { KEYS_MAP } from '~/managers/KeyboardManager';
 
 export function getDuration (defaultDuration) {
   return function getDurationAction ({ input }) {
@@ -45,6 +46,7 @@ export function setNextStep ({ state }) {
   const next = getNext(step, level);
   state.set(`app.step`, next.step);
   state.set(`app.level`, next.level);
+  state.set(`keyboard.ignoreEnter`, state.get(`keyboard.keys.enter`));
 }
 
 export function reboot ({ state }) {
@@ -52,4 +54,12 @@ export function reboot ({ state }) {
   state.set(`app.level`, 1);
   state.set(`system.messages`, []);
   state.set(`app.reboot`, state.get(`app.reboot`) + 1);
+}
+
+export function setStep ({ state, input }) {
+  const currentStep = state.get(`app.step`);
+  if (currentStep !== input.step) {
+    state.set(`app.step`, input.step);
+    state.set(`keyboard.ignoreEnter`, state.get(`keyboard.keys.enter`));
+  }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
+import { Steps } from '~/types';
 import Button from '~/component/Button';
 import Message from '~/component/messages/Message';
 import MessageConsole from '~/component/messages/MessageConsole';
@@ -23,7 +24,7 @@ import { displayedMessages } from '~/computed';
 
 const MESSAGES_STACK_MAX_HEIGHT = 500;
 
-function getMessageType(msg) {
+function getMessageType(msg, step) {
   if (_.includes([
     `boot`, `boot-progress`, `boot-done`, `connect-eyes`, `connect-eyes-progress`, `connect-eyes-done`
   ], msg.key)) {
@@ -32,7 +33,7 @@ function getMessageType(msg) {
   return `simple`;
 }
 
-function getMessageHeight(msg) {
+function getMessageHeight(msg, step) {
   if (msg.type === `console`) {
     return 26;
   }
@@ -49,7 +50,12 @@ function getMessageHeight(msg) {
     case `find-tiles`: return 120;
     case `emotion-almost-recovered`: return 120;
     case `linked-memory`: return 180;
-    case `now-playing-memory`: return 160;
+    case `now-playing-memory`: return (() => {
+      if (step === Steps.Memory) {
+        return 160;
+      }
+      return 100;
+    })();
     case `new-memories-found`: return 100;
     case `delete-or-not`: return 170;
     case `are-you-sure`: return 170;
@@ -75,15 +81,16 @@ const Container = styled.div`
 const System = compose(
   ConnectReact(
     {
-      messages: `system.messages`
+      messages: `system.messages`,
+      step: `app.step`
     }
   )
 )((props) => {
   var distFromBottom = 0;
   const messages = props.messages.slice(-8).map(msg => Object.assign({}, msg));
   _.forEachRight(messages, (msg) => {
-    msg.type = getMessageType(msg);
-    msg.height = getMessageHeight(msg);
+    msg.type = getMessageType(msg, props.step);
+    msg.height = getMessageHeight(msg, props.step);
     msg.distFromBottom = distFromBottom;
     distFromBottom += msg.height;
     msg.ignored = distFromBottom > MESSAGES_STACK_MAX_HEIGHT;

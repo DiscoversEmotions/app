@@ -119,22 +119,6 @@ export const shouldBePointerLocked = Computed(
   }
 );
 
-// export const waitForKeyPress = Computed(
-//   {
-//     step: `app.step`,
-//     lastMessage: lastMessage
-//   },
-//   ({ step, lastMessage }) => {
-//     if (lastMessage && lastMessage.key === `need-recovery` && step === Steps.Room) {
-//       return `enter`;
-//     }
-//     if (lastMessage && lastMessage.key === `linked-memory` && step === Steps.EmotionAlmostRecovered) {
-//       return `enter`;
-//     }
-//     return null;
-//   }
-// );
-
 export const expectedScene = Computed(
   {
     step: `app.step`,

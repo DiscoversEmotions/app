@@ -1,5 +1,3 @@
-import { ConnectMethod } from '~/core';
-import { waitForKeyPress } from '~/computed';
 
 export const KEYS_MAP = {
   83: `s`,
@@ -22,11 +20,13 @@ export class KeyboardManager {
   constructor(controller, appCore) {
     this.controller = controller;
     this.appCore = appCore;
+    this.step = null;
   }
 
   boot() {
+    this.setKeyStatus = this.controller.getSignal(`keyboard.setKeyStatus`);
+    this.setIgnoreEnter = this.controller.getSignal(`keyboard.setIgnoreEnter`);
     this.bind();
-    // this.update({}, this.controller, this);
   }
 
   bind() {
@@ -40,12 +40,15 @@ export class KeyboardManager {
 
   handleKey(e, isDown) {
     // console.log(e.keyCode);
-    const setKeyStatus = this.controller.getSignal(`keyboard.setKeyStatus`);
+
     if (KEYS_MAP[e.keyCode] !== undefined) {
-      setKeyStatus({
+      this.setKeyStatus({
         keyName: KEYS_MAP[e.keyCode],
         keyState: isDown
       });
+      if (isDown === false && KEYS_MAP[e.keyCode] === `enter`) {
+        this.setIgnoreEnter({ value: false });
+      }
     }
     if (KEYS_MAP[e.keyCode] === `enter`) {
       this.appCore.pointerLock.tryActivate();
