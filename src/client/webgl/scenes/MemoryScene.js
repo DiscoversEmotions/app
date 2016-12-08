@@ -127,15 +127,15 @@ export class MemoryScene extends Scene {
     // this.cube1.rotation.y += 0.02;
 
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
-      this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 100);
-      this.cube1.geometry.vertices[i].y = this.initialGeomVertices[i].y * (this.analyser.getFrequencies()[i] / 300);
-      this.cube1.geometry.vertices[i].z = this.initialGeomVertices[i].z * (this.analyser.getFrequencies()[i] / 100);
+      this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 55);
+      this.cube1.geometry.vertices[i].y = this.initialGeomVertices[i].y * (this.analyser.getFrequencies()[i] / 255);
+      this.cube1.geometry.vertices[i].z = this.initialGeomVertices[i].z * (this.analyser.getFrequencies()[i] / 55);
     }
 
     this.cube1.geometry.verticesNeedUpdate = true;
 
     if(this.croquis.material.opacity < 1 && !this.croquisVisible){
-      this.croquis.material.opacity += 0.00015;
+      this.croquis.material.opacity += 0.001;
       this.croquis.scale.x += 0.0005;
       this.croquis.scale.y += 0.0005;
 

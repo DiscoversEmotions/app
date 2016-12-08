@@ -1,6 +1,6 @@
 import {
   PointLight, Object3D, Raycaster, MeshPhongMaterial, MeshBasicMaterial, ArrowHelper,
-  Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending
+  Color, SphereGeometry, BackSide, Mesh, Vector3, PointsMaterial, Geometry, Points, AdditiveBlending, ShaderMaterial, UniformsUtils, UniformsLib, ShaderLib, GPUParticleSystem
 } from 'three';
 import _ from 'lodash';
 import { ConnectMethod, EventUtils } from '~/core';
@@ -8,6 +8,9 @@ import * as motion from 'popmotion';
 import { Scene } from './Scene';
 import { Steps } from '~/types';
 import { BlendCharacter } from '~/webgl/utils';
+
+import vertexShader from '~/webgl/shader/points_vert.glsl';
+import fragmentShader from '~/webgl/shader/points_frag.glsl';
 
 export class EmotionScene extends Scene {
 
@@ -63,6 +66,7 @@ export class EmotionScene extends Scene {
 
     this.initSkybox();
     this.initParticles();
+    // this.initParticlesShader();
   }
 
   initSkybox() {
@@ -108,6 +112,47 @@ export class EmotionScene extends Scene {
     }
 
     this.scene.add(this.particles);
+  }
+
+  // * INIT PARTICLE WITH SHADER * //
+  initParticlesShader(){
+
+    this.uniforms = {
+      color: 0xFFFFFF,
+      texture:   { value: this.particleTexture }
+    };
+
+    this.pointMaterial = new ShaderMaterial( {
+      uniforms:       this.uniforms,
+      vertexShader:   vertexShader,
+      fragmentShader: fragmentShader,
+      blending:       AdditiveBlending,
+      depthTest:      false,
+      transparent:    true
+    });
+
+    this.particleGeometry = new Geometry();
+    this.particlesNumber = 1000;
+
+    for (var p = 0; p < this.particlesNumber; p++) {
+      var pX = Math.random() * 50;
+      var pY = Math.random() * 10;
+      var pZ = Math.random() * 60;
+      var particle = new Vector3(pX, pY, pZ);
+      this.particleGeometry.vertices.push(particle);
+    }
+
+    this.particleSystem = new Points( this.particleGeometry, this.pointMaterial );
+    this.particleSystem.sortParticles = true;
+    this.particleSystem.scale.z = 5;
+
+    this.scene.add(this.particleSystem);
+
+    if(this.level === 1){
+      // this.particleSystem.position.set(-30, -400, 150);
+    }
+
+    console.log(this.particleSystem);
   }
 
   getEnvConfig() {
@@ -167,6 +212,12 @@ export class EmotionScene extends Scene {
     if (_.isNil(this.particles.material.map)) {
       this.particles.material.map = this.app.assetsManager.getAsset(`particleTexture`);
     }
+
+    // if(_.isNil(this.particleTexture)){
+    //   this.particleTexture = this.app.assetsManager.getAsset(`particleTexture`);
+    //   this.initParticlesShader();
+    // }
+
 
     // Mousemove
     document.addEventListener(`mousemove`, this.onMouseMove, false);
@@ -246,7 +297,7 @@ export class EmotionScene extends Scene {
     this.updateCameraman();
 
     this.updateParticles(time, dt);
-
+    // this.updateParticlesShader(time, dt);
   }
 
   updatePerso(time, dt) {
@@ -402,6 +453,11 @@ export class EmotionScene extends Scene {
     }
 
     this.particles.geometry.verticesNeedUpdate = true;
+  }
+
+  updateParticlesShader(time, dt){
+    this.particleSystem.rotation.y -= 0.0001;
+    this.particleSystem.geometry.verticesNeedUpdate = true;
   }
 
   unmount() {
