@@ -19,7 +19,7 @@ export default {
     pointerLock: false,
     step: Steps.Boot,
     level: 1,
-    rebbot: 0
+    reboot: 0
   },
   signals: {
     setNextStep: [ setNextStep ],

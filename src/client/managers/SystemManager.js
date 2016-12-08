@@ -254,7 +254,7 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, setNextStep, level, keys, ignoreEnter } = context;
 
     if (lastMessage.key === `now-playing-memory`) {
-      nextMessage({ key: `emotion-recovered` }, 100);
+      nextMessage({ key: `emotion-recovered`, level: level }, 100);
       return;
     }
 
@@ -280,7 +280,7 @@ export class SystemManager {
 
     if (lastMessage.key === `new-memories-found`) {
       if (lastMessage.progress < 3) {
-        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 300);
+        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 1000);
       } else {
         nextMessage({ key: `delete-or-not` }, 300);
       }

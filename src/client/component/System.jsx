@@ -18,11 +18,12 @@ import DeleteOrNot  from '~/component/messages/content/DeleteOrNot';
 import AreYouSure  from '~/component/messages/content/AreYouSure';
 import EmotionRecovered  from '~/component/messages/content/EmotionRecovered';
 import AllEmotionsRecovered  from '~/component/messages/content/AllEmotionsRecovered';
+import DeleteMemories  from '~/component/messages/content/DeleteMemories';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
 
-const MESSAGES_STACK_MAX_HEIGHT = 500;
+const MESSAGES_STACK_MAX_HEIGHT = 600;
 
 function getMessageType(msg, step) {
   if (_.includes([
@@ -56,11 +57,17 @@ function getMessageHeight(msg, step) {
       }
       return 100;
     })();
-    case `new-memories-found`: return 100;
-    case `delete-or-not`: return 170;
-    case `are-you-sure`: return 170;
-    case `emotion-recovered`: return 90;
+    case `new-memories-found`: return 180;
+    case `delete-or-not`: return (() => {
+      if (step === Steps.RecoveryDone) {
+        return 360;
+      }
+      return 260;
+    })();
+    case `are-you-sure`: return 220;
+    case `emotion-recovered`: return 150;
     case `all-emotions-recovered`: return 100;
+    case `delete-memories`: return 100;
   }
   return 60;
 }
@@ -112,12 +119,13 @@ const System = compose(
             case `use-arrow-to-move`: return <UseArrowToMove msg={msg} key={msg.key} />;
             case `emotion-almost-recovered`: return <EmotionAlmostRecovered msg={msg} key={msg.key} />;
             case `linked-memory`: return <LinkedMemory msg={msg} key={msg.key} />;
-            case `now-playing-memory`: return <NowPlayingMemory msg={msg} key={msg.key} />;
+            case `now-playing-memory`: return <NowPlayingMemory msg={msg} step={props.step} key={msg.key} />;
             case `new-memories-found`: return <NewMemoriesFound msg={msg} key={msg.key} />;
-            case `delete-or-not`: return <DeleteOrNot msg={msg} key={msg.key} />;
+            case `delete-or-not`: return <DeleteOrNot msg={msg} step={props.step} key={msg.key} />;
             case `are-you-sure`: return <AreYouSure msg={msg} key={msg.key} />;
             case `emotion-recovered`: return <EmotionRecovered msg={msg} key={msg.key} />;
             case `all-emotions-recovered`: return <AllEmotionsRecovered msg={msg} key={msg.key} />;
+            case `delete-memories`: return <DeleteMemories msg={msg} key={msg.key} />;
           }
           return (
             <Message msg={ msg } type='error'>

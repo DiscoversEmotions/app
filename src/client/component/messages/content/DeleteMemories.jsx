@@ -8,19 +8,20 @@ const Text = styled.p`
   padding-left: 20px;
 `;
 
-const AllEmotionsRecovered = (props) => {
+const DeleteMemories = (props) => {
   const { msg } = props;
+  const progress = msg.progress / 10;
   return (
     <Message
       msg={msg}
-      type='success'
-      title='All Emotions Recovered'
+      progress={progress}
+      title='Deleting memories'
     >
       <Text>
-        All Emotions Recovered.
+        Deleting memories
       </Text>
     </Message>
   )
 };
 
-export default AllEmotionsRecovered;
+export default DeleteMemories;
