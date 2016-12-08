@@ -51,7 +51,7 @@ const Message = (props) => {
   const msg = props.msg;
 
   return (
-    <Container bottomDist={ msg.distFromBottom } theHeight={ msg.height } theWidth={ msg.width || 300 } >
+    <Container bottomDist={ msg.distFromBottom } theHeight={ msg.height } theWidth={ msg.width || 350 } >
       <RelativeContainer>
         <Progress progress={ props.progress } type={ props.type } />
         { props.icon ? <IconContainer>{ props.icon }</IconContainer> : null }

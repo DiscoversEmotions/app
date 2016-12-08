@@ -17,9 +17,11 @@ const Text = styled.p`
   padding-left: 20px;
 `;
 
-const MemoryFile = styled.span`
+const MemoryFile = styled.p`
   font-family: 'Anonymous Pro', monospace;
   color: white;
+  font-size: 14px;
+  padding-left: 30px;
 `;
 
 const NowPlayingMemory = (props) => {
@@ -29,7 +31,8 @@ const NowPlayingMemory = (props) => {
       msg={msg}
       title='Playing Memory'
     >
-      <Text>Now plyaing <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile>...</Text>
+      <Text>Now plyaing :</Text>
+      <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile>
       <Button>Press [enter] to skip</Button>
     </Message>
   )

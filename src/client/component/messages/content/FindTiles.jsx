@@ -9,7 +9,6 @@ const Text = styled.p`
 `;
 
 const Name = styled.span`
-  font-family: 'Anonymous Pro', monospace;
   font-weight: 900;
 `;
 
@@ -18,7 +17,7 @@ const FindTiles = (props) => {
   return (
     <Message msg={msg} title='Emotion Recovery'>
       <Text>
-        Welcome in the <Name>Emotion Recovery Process</Name>.<br />Find red tiles to complete the process.
+        Welcome to the <Name>Emotion Recovery Process</Name>.<br />Find red tiles to complete the process.
       </Text>
     </Message>
   )

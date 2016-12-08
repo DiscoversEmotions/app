@@ -216,10 +216,10 @@ export class SystemManager {
 
   updateMemory(context) {
 
-    const { lastMessage, nextMessage, updateMessage } = context;
+    const { lastMessage, nextMessage, updateMessage, level } = context;
 
     if (lastMessage.key === `linked-memory`) {
-      nextMessage({ key: `now-playing-memory` }, 50, true);
+      nextMessage({ key: `now-playing-memory`, level: level }, 50, true);
       return;
     }
 
