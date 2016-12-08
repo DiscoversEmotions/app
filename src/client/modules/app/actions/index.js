@@ -51,4 +51,5 @@ export function reboot ({ state }) {
   state.set(`app.step`, Steps.Boot);
   state.set(`app.level`, 1);
   state.set(`system.messages`, []);
+  state.set(`app.reboot`, state.get(`app.reboot`) + 1);
 }

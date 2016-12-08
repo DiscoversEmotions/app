@@ -6,6 +6,7 @@ import { Scene } from './Scene';
 import { Steps } from '~/types';
 import sono from 'sono';
 import * as motion from 'popmotion';
+import { lastMessage } from '~/computed';
 
 export class MemoryScene extends Scene {
 
@@ -54,18 +55,33 @@ export class MemoryScene extends Scene {
   // Keyboard Method
   @ConnectMethod(
     {
-      keys: `keyboard.keys`
+      keys: `keyboard.keys`,
+      lastMessage: lastMessage
     }
   )
-  updateKeys({ keys }) {
-    if (keys.k) {
-      this.memorySound.stop();
+  updateKeys({ keys, lastMessage }) {
+    if (
+      lastMessage === null ||
+      lastMessage.key !== `now-playing-memory` ||
+      _.isNil(this.memorySound) ||
+      this.memorySound.playing === false
+    ) {
+      return;
+    }
+    if (this.ignoreEnter === false && keys.enter) {
+      if (this.memorySound) {
+        this.memorySound.stop();
+      }
       this.controller.getSignal(`app.setNextStep`)();
       this.solved = true;
+    }
+    if (keys.enter === false) {
+      this.ignoreEnter = false;
     }
   }
 
   mount() {
+    this.ignoreEnter = this.controller.getState(`keyboard.keys.enter`);
     this.solved = false;
     this.level = this.controller.getState(`app.level`);
     this.memoryBuffer = null;
@@ -152,6 +168,8 @@ export class MemoryScene extends Scene {
       this.croquis.scale.x = motion.calc.dilate(1.2, 1.6, soundProgress);
       this.croquis.scale.y = motion.calc.dilate(1.2, 1.6, soundProgress);
       this.croquis.rotation.z = motion.calc.dilate(0, 0.5, soundProgress);
+    } else {
+      this.memorySound.stop();
     }
 
   }

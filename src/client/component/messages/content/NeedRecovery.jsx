@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
-import { compose, ConnectReact } from '~/core';
 import Message from '~/component/messages/Message';
 import Button from '~/component/Button';
 import ErrorIcon from '~/component/icons/ErrorIcon';
@@ -16,14 +15,7 @@ const ButtonContainer = styled.div`
 `;
 
 
-const NeedRecovery = compose(
-  ConnectReact(
-    {},
-    {
-      simulateKey: `keyboard.simulateKey`
-    }
-  )
-)((props) => {
+const NeedRecovery = (props) => {
   const { msg } = props;
   return (
     <Message
@@ -42,6 +34,6 @@ const NeedRecovery = compose(
       </ButtonContainer>
     </Message>
   )
-});
+};
 
 export default NeedRecovery;

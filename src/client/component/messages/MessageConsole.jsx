@@ -11,6 +11,7 @@ const Message = styled.div`
   text-align: right;
   padding: 0;
   box-sizing: border-box;
+  transition-duration: .3s;
   margin: 0;
   right: 0px;
   font-size: 16px;

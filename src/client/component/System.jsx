@@ -9,6 +9,12 @@ import LoadEmotions  from '~/component/messages/content/LoadEmotions';
 import NeedRecovery  from '~/component/messages/content/NeedRecovery';
 import FindTiles  from '~/component/messages/content/FindTiles';
 import UseArrowToMove  from '~/component/messages/content/UseArrowToMove';
+import EmotionRecovered  from '~/component/messages/content/EmotionRecovered';
+import LinkedMemory  from '~/component/messages/content/LinkedMemory';
+import NowPlayingMemory  from '~/component/messages/content/NowPlayingMemory';
+import NewMemoriesFound  from '~/component/messages/content/NewMemoriesFound';
+import DeleteOrNot  from '~/component/messages/content/DeleteOrNot';
+import AreYouSure  from '~/component/messages/content/AreYouSure';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
@@ -39,6 +45,12 @@ function getMessageHeight(msg) {
     })();
     case `need-recovery`: return 180;
     case `find-tiles`: return 130;
+    case `emotion-almost-recovered`: return 110;
+    case `linked-memory`: return 180;
+    case `now-playing-memory`: return 100;
+    case `new-memories-found`: return 100;
+    case `delete-or-not`: return 100;
+    case `are-you-sure`: return 100;
   }
   return 60;
 }
@@ -79,14 +91,20 @@ const System = compose(
       {
         notIgnoredMessages.map(msg => {
           if (msg.type === `console`) {
-            return <MessageConsole msg={msg} />;
+            return <MessageConsole msg={msg} key={msg.key} />;
           }
           switch (msg.key) {
-            case `load-memory-progress`: return <LoadMemories msg={msg} />;
-            case `load-emotions-progress`: return <LoadEmotions msg={msg} />;
-            case `need-recovery`: return <NeedRecovery msg={msg} />;
-            case `find-tiles`: return <FindTiles msg={msg} />;
-            case `use-arrow-to-move`: return <UseArrowToMove msg={msg} />;
+            case `load-memory-progress`: return <LoadMemories msg={msg} key={msg.key} />;
+            case `load-emotions-progress`: return <LoadEmotions msg={msg} key={msg.key} />;
+            case `need-recovery`: return <NeedRecovery msg={msg} key={msg.key} />;
+            case `find-tiles`: return <FindTiles msg={msg} key={msg.key} />;
+            case `use-arrow-to-move`: return <UseArrowToMove msg={msg} key={msg.key} />;
+            case `emotion-almost-recovered`: return <EmotionRecovered msg={msg} key={msg.key} />;
+            case `linked-memory`: return <LinkedMemory msg={msg} key={msg.key} />;
+            case `now-playing-memory`: return <NowPlayingMemory msg={msg} key={msg.key} />;
+            case `new-memories-found`: return <NewMemoriesFound msg={msg} key={msg.key} />;
+            case `delete-or-not`: return <DeleteOrNot msg={msg} key={msg.key} />;
+            case `are-you-sure`: return <AreYouSure msg={msg} key={msg.key} />;
           }
           return (
             <Message msg={ msg } type='error'>

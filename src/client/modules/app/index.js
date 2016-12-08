@@ -18,7 +18,8 @@ export default {
     },
     pointerLock: false,
     step: Steps.Boot,
-    level: 1
+    level: 3,
+    rebbot: 0
   },
   signals: {
     setNextStep: [ setNextStep ],
