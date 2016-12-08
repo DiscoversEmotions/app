@@ -17,9 +17,9 @@ function getNext (step, level) {
     return { step: Steps.EmotionExplain, level: level };
   }
   if (step === Steps.EmotionExplain) {
-    return { step: Steps.EmotionRecovered, level: level };
+    return { step: Steps.EmotionAlmostRecovered, level: level };
   }
-  if (step === Steps.EmotionRecovered) {
+  if (step === Steps.EmotionAlmostRecovered) {
     return { step: Steps.Memory, level: level };
   }
   if (step === Steps.Memory) {

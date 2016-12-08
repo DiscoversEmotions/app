@@ -1,8 +1,19 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import _ from 'lodash';
 
-const Message = styled.div`
+const enterAnim = keyframes`
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+`;
+
+const Container = styled.div`
   position: absolute;
   bottom: ${(props) => props.bottomDist }px;
   height: 26px;
@@ -17,6 +28,7 @@ const Message = styled.div`
   font-size: 16px;
   color: white;
   text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  animation: ${enterAnim} .3s linear;
 `;
 
 const MessageConsole = (props) => {
@@ -36,9 +48,9 @@ const MessageConsole = (props) => {
     }
   })();
   return (
-    <Message bottomDist={ msg.distFromBottom } >
+    <Container bottomDist={ msg.distFromBottom } >
       { content }
-    </Message>
+    </Container>
   );
 };
 

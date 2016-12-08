@@ -26,7 +26,7 @@ export class KeyboardManager {
 
   boot() {
     this.bind();
-    this.update({}, this.controller, this);
+    // this.update({}, this.controller, this);
   }
 
   bind() {
@@ -50,25 +50,6 @@ export class KeyboardManager {
     if (KEYS_MAP[e.keyCode] === `enter`) {
       this.appCore.pointerLock.tryActivate();
     }
-  }
-
-  @ConnectMethod(
-    {
-      keys: `keyboard.keys`,
-      waitForKeyPress: waitForKeyPress
-    },
-    {
-      setNextStep: `app.setNextStep`
-    }
-  )
-  update({ waitForKeyPress, keys, setNextStep }) {
-    if (waitForKeyPress !== null && keys[waitForKeyPress] === true) {
-      setNextStep();
-    }
-    // if (lastMessage.key === `need-recovery` && keys.enter === true) {
-    //   console.log(`TODO`);
-    //   // startRecovery();
-    // }
   }
 
 }

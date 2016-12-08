@@ -144,8 +144,11 @@ export class MemoryScene extends Scene {
   }
 
   update(time, dt) {
-    // this.cube1.rotation.x += 0.01;
-    // this.cube1.rotation.y += 0.02;
+    const step = this.controller.getState(`app.step`);
+
+    if (step === Steps.Memory) {
+
+    }
 
     for (let i = 0; i < this.cube1.geometry.vertices.length; i++) {
       this.cube1.geometry.vertices[i].x = this.initialGeomVertices[i].x * (this.analyser.getFrequencies()[i] / 100);
@@ -155,14 +158,7 @@ export class MemoryScene extends Scene {
 
     this.cube1.geometry.verticesNeedUpdate = true;
 
-    if(this.croquis.material.opacity < 1 && !this.croquisVisible){
-      this.croquis.material.opacity += 0.001;
-      this.croquis.scale.x += 0.0005;
-      this.croquis.scale.y += 0.0005;
-
-    } 
-
-    if (this.solved === false) {
+    if (step === Steps.Memory) {
       const soundProgress = this.memorySound.currentTime / this.memorySound.duration;
       this.croquis.material.opacity = motion.calc.dilate(0, 0.5, soundProgress);
       this.croquis.scale.x = motion.calc.dilate(1.2, 1.6, soundProgress);
@@ -170,8 +166,12 @@ export class MemoryScene extends Scene {
       this.croquis.rotation.z = motion.calc.dilate(0, 0.5, soundProgress);
     } else {
       this.memorySound.stop();
+      this.croquis.material.opacity = 0.5;
+      this.croquis.scale.x = 1.6;
+      this.croquis.scale.y = 1.6;
+      this.croquis.rotation.z = 0.5;
     }
-
+    
   }
 
 }

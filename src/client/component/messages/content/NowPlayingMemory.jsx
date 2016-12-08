@@ -31,7 +31,7 @@ const NowPlayingMemory = (props) => {
       msg={msg}
       title='Playing Memory'
     >
-      <Text>Now plyaing :</Text>
+      <Text>Now playing :</Text>
       <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile>
       <Button>Press [enter] to skip</Button>
     </Message>

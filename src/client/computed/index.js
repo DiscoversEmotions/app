@@ -117,21 +117,21 @@ export const shouldBePointerLocked = Computed(
   }
 );
 
-export const waitForKeyPress = Computed(
-  {
-    step: `app.step`,
-    lastMessage: lastMessage
-  },
-  ({ step, lastMessage }) => {
-    if (lastMessage && lastMessage.key === `need-recovery` && step === Steps.Room) {
-      return `enter`;
-    }
-    if (lastMessage && lastMessage.key === `linked-memory` && step === Steps.EmotionRecovered) {
-      return `enter`;
-    }
-    return null;
-  }
-);
+// export const waitForKeyPress = Computed(
+//   {
+//     step: `app.step`,
+//     lastMessage: lastMessage
+//   },
+//   ({ step, lastMessage }) => {
+//     if (lastMessage && lastMessage.key === `need-recovery` && step === Steps.Room) {
+//       return `enter`;
+//     }
+//     if (lastMessage && lastMessage.key === `linked-memory` && step === Steps.EmotionAlmostRecovered) {
+//       return `enter`;
+//     }
+//     return null;
+//   }
+// );
 
 export const expectedScene = Computed(
   {
@@ -152,7 +152,7 @@ export const expectedScene = Computed(
     case Steps.End:
       return Scenes.Room;
     case Steps.EmotionExplain:
-    case Steps.EmotionRecovered:
+    case Steps.EmotionAlmostRecovered:
       return Scenes.Emotion;
     case Steps.Memory:
     case Steps.MemoryDone:

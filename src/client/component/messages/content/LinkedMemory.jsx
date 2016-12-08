@@ -34,7 +34,7 @@ const LinkedMemory = (props) => {
     >
       <Text>To complete the recovery, the following memory file need to be restored :</Text>
       <MemoryFile>{ getMemoryFile(msg.level) }</MemoryFile>
-      <Button>Press [enter] to restore the memory</Button>
+      <Button>Press [enter] to restore the file</Button>
     </Message>
   )
 };

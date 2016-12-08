@@ -45,15 +45,15 @@ function getMessageHeight(msg) {
       if (msg.progress >= 37) { height += 50; }
       return height
     })();
-    case `need-recovery`: return 180;
-    case `find-tiles`: return 130;
-    case `emotion-almost-recovered`: return 110;
+    case `need-recovery`: return 200;
+    case `find-tiles`: return 120;
+    case `emotion-almost-recovered`: return 120;
     case `linked-memory`: return 180;
-    case `now-playing-memory`: return 120;
+    case `now-playing-memory`: return 160;
     case `new-memories-found`: return 100;
     case `delete-or-not`: return 170;
     case `are-you-sure`: return 170;
-    case `emotion-recovered`: return 100;
+    case `emotion-recovered`: return 90;
     case `all-emotions-recovered`: return 100;
   }
   return 60;
