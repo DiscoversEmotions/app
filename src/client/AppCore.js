@@ -33,7 +33,7 @@ export default class AppCore {
     // Managers
     this.assetsManager = new AssetsManager(this.controller);
     this.scenesManager = new ScenesManager(this.controller);
-    this.systemManager = new SystemManager(this.controller);
+    this.systemManager = new SystemManager(this.controller, this);
     this.keyboardManager = new KeyboardManager(this.controller, this);
     this.soundManager = new SoundManager(this.controller, this.assetsManager);
 

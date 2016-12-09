@@ -29,7 +29,6 @@ const EmotionRecovered = (props) => {
         })()} fully recovered.
       </Text>
       <Button>{ (() => {
-        console.log(msg.level);
         if (msg.level === 1) {
           return `Press [enter] to start recovering Anger emotion`;
         } else if (msg.level === 2) {

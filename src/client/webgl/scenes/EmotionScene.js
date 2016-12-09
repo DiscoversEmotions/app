@@ -294,6 +294,15 @@ export class EmotionScene extends Scene {
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture2`);
 
     this.movementOrigin.position.set(0, -5, 0);
+
+    // TODO remove this
+    // setTimeout(() => {
+    //   this.controller.getSignal(`app.setNextStep`)();
+    //   this.tiles.forEach(tile => {
+    //     tile.material.color = new Color(0xb7daf6);
+    //   });
+    //   this.solved = true;
+    // }, 2000);
   }
 
   update(time, dt) {

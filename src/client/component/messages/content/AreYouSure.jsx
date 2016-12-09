@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import Message from '~/component/messages/Message';
 import Button from '~/component/Button';
+import { Steps } from '~/types';
 
 const Text = styled.p`
   font-size: 14px;
@@ -10,19 +11,21 @@ const Text = styled.p`
 `;
 
 const AreYouSure = (props) => {
-  const { msg } = props;
+  const { msg, step } = props;
+  console.log(step);
   return (
     <Message
       msg={msg}
       type='error'
-      title='Are you sure'
+      title='Are you sure ?'
     >
       <Text>
         Keeping these memories could cause serious metal desorder.<br />
         Are you sure you want to keep these memories ?
       </Text>
-      <Button style={{ paddingBottom: `0px` }}>Press [y] to keep</Button>
-      <Button>Press [enter] to delete</Button>
+      { ((step === Steps.ConfirmKeep) ? <Button style={{ paddingBottom: `0px` }}>Press [y] to keep</Button> : null) }
+      { ((step === Steps.ConfirmKeep) ? <Button>Press [enter] to delete</Button> : null ) }
+
     </Message>
   )
 };

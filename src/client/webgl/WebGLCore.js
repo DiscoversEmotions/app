@@ -7,6 +7,7 @@ import { Scenes } from '~/types';
 import { RoomScene, EmotionScene, MemoryScene, BootScene } from './scenes';
 import { Renderer } from './Renderer';
 import { CopyPass } from './utils';
+import { BrightnessPass } from './pass/BrighnessPass';
 
 export class WebGLCore {
 
@@ -113,8 +114,10 @@ export class WebGLCore {
     this.glitchPass.enabled = sceneTransition;
     if (scene === Scenes.Emotion || scene === Scenes.Memory) {
       this.bloomPass.enabled = true;
+      this.brightnessPass.enabled = true;
     } else {
       this.bloomPass.enabled = false;
+      this.brightnessPass.enabled = false;
     }
   }
 
@@ -129,6 +132,10 @@ export class WebGLCore {
     this.bloomPass = new BloomPass();
     this.bloomPass.enabled = false;
     this.composer.addPass(this.bloomPass);
+
+    this.brightnessPass = new BrightnessPass();
+    this.brightnessPass.enabled = true;
+    this.composer.addPass(this.brightnessPass);
 
     this.toScreenPass = new CopyPass();
     this.toScreenPass.renderToScreen = true;

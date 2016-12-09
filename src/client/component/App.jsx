@@ -53,19 +53,8 @@ const App = compose(
 )((props) => {
   return (
     <AppContainer>
-      {(() => {
-        if (props.step === Steps.Boot) {
-          return <Logo />;
-        } else {
-          return <Menu />;
-        }
-      })()}
-      {(() => {
-        if (props.step === Steps.End) {
-          return <Credits />;
-        }
-      })()}
-      <System />
+      {((props.step === Steps.Boot) ? <Logo /> : <Menu />)}
+      {((props.step === Steps.End) ? <Credits /> : <System />)}
     </AppContainer>
   );
 });

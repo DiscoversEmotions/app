@@ -17,7 +17,7 @@ const enterAnim = keyframes`
 `;
 
 const Container = styled.div`
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.8);
   color: white;
   height: 100vh;
   font-family: 'Anonymous Pro', monospace;
@@ -29,11 +29,6 @@ const Container = styled.div`
   z-index: 2000;
   animation: ${enterAnim} .3s linear;
 `;
-
-const Title = styled.div`
-  width: 15%;
-  text-align: right;
-  `
 
 const MainText = styled.div`
   display: table-cell;
@@ -116,28 +111,19 @@ const GobelinsListElement = styled.li`
 const Credits = (props) => {
   return (
     <Container full={props.full || false }>
-
-      <Title>
-        REMEMBER
-      </Title>
-
       <MainText>
         <MainTitleBloc>
           PROJET REMEMBER. GOBELINS, L’ECOLE DE L’IMAGE
         </MainTitleBloc>
-
         <MainDescBloc>
           Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco lavboris nisi ut aliquip ex ea commodo consequat. Ipsum dolor sit amet, consectetur adipiscin elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utnim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         </MainDescBloc>
       </MainText>
-
       <Designers>
         <TitleBloc>
           DESIGN
         </TitleBloc>
-
         <DescBloc>
-
           <ListBloc>
             <ListBlocElement>
               Lovis Odin
@@ -149,17 +135,13 @@ const Credits = (props) => {
               Aurélie Remia
             </ListBlocElement>
           </ListBloc>
-
         </DescBloc>
       </Designers>
-
       <Devs>
         <TitleBloc>
           CODE
         </TitleBloc>
-
         <DescBloc>
-
           <ListBloc>
             <ListBlocElement>
               Etienne Deladonchamps
@@ -168,17 +150,13 @@ const Credits = (props) => {
               Phuong Nghi Nguyen
             </ListBlocElement>
           </ListBloc>
-
         </DescBloc>
       </Devs>
-
       <Remerciement>
         <TitleBloc>
           REMERCIEMENTS
         </TitleBloc>
-
         <DescBloc>
-
           <ListBloc>
             <ListBlocElement>
               Monsieur Yolo (sound design)
@@ -190,13 +168,9 @@ const Credits = (props) => {
               Monsieur yaourte (voix off/H)
             </ListBlocElement>
           </ListBloc>
-
         </DescBloc>
-
       </Remerciement>
-
       <Mentions>
-
         <MentionsList>
           <MentionsListElement>
             Mentions Légales
@@ -205,9 +179,7 @@ const Credits = (props) => {
             GOBELINS
           </GobelinsListElement>
         </MentionsList>
-
       </Mentions>
-
     </Container>
   );
 };

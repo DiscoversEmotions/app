@@ -5,8 +5,9 @@ import * as motion from 'popmotion';
 
 export class SystemManager {
 
-  constructor(controller) {
+  constructor(controller, appCore) {
     this.controller = controller;
+    this.appCore = appCore;
   }
 
   boot() {
@@ -353,7 +354,7 @@ export class SystemManager {
   }
 
   updateKeep(context) {
-    const { lastMessage, nextMessage, updateMessage, reboot, setStep } = context;
+    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock } = context;
 
     if (lastMessage.key === `are-you-sure`) {
       nextMessage({ key: `good-luck` }, 1000);
@@ -361,6 +362,7 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `good-luck`) {
+      this.appCore.pointerLock.deactivate();
       setStep({ step: Steps.End });
       return;
     }
