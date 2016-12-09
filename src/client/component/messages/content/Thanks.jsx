@@ -15,14 +15,10 @@ const Thanks = (props) => {
     <Message
       msg={msg}
       type='error'
-      title='Thanks for playing'
+      title='You made the right choice'
     >
-      <Text>
-        Thanks for playing.
-      </Text>
-      <Button>
-        Press [enter] to show credits
-      </Button>
+      <Text>Thanks for playing.</Text>
+      <Button>Press [enter] to show credits</Button>
     </Message>
   )
 };

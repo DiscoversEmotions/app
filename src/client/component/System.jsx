@@ -51,12 +51,17 @@ function getMessageHeight(msg, step) {
     case `need-recovery`: return 200;
     case `find-tiles`: return 230;
     case `emotion-almost-recovered`: return 120;
-    case `linked-memory`: return 180;
+    case `linked-memory`: return 190;
     case `now-playing-memory`: return ((step === Steps.Memory) ? 160 : 100);
-    case `new-memories-found`: return 180;
+    case `new-memories-found`: return (() => {
+      if (msg.progress > 20) { return 180; }
+      if (msg.progress > 10) { return 160; }
+      if (msg.progress > 5) { return 140; }
+      return 110;
+    })();
     case `delete-or-not`: return ((step === Steps.RecoveryDone) ? 380 : 260);
     case `are-you-sure`: return ((step === Steps.ConfirmKeep) ? 220 : 130);
-    case `emotion-recovered`: return 150;
+    case `emotion-recovered`: return 160;
     case `all-emotions-recovered`: return 100;
     case `delete-memories`: return (() => {
       if (msg.progress > 12) { return 370; }

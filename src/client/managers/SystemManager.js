@@ -274,8 +274,8 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `new-memories-found`) {
-      if (lastMessage.progress < 3) {
-        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 1000);
+      if (lastMessage.progress < 30) {
+        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 100);
       } else {
         nextMessage({ key: `delete-or-not` }, 300);
       }
