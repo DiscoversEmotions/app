@@ -365,7 +365,9 @@ export class SystemManager {
     console.log(lastMessage.key === `thanks`, keys.enter, !ignoreEnter);
 
     if (lastMessage.key === `thanks` && keys.enter && !ignoreEnter) {
-      this.appCore.pointerLock.deactivate();
+      setTimeout(() => {
+        this.appCore.pointerLock.deactivate();
+      }, 100);
       setStep({ step: Steps.Credits });
       return;
     }
