@@ -34,7 +34,8 @@ export const Steps = {
   Delete: `delete`,
   Keep: `keep`,
   Shutdown: `shutdown`,
-  End: `end`
+  End: `end`,
+  Credits: `Credits`
 };
 
 export const NUMBER_OF_MEMORIES = 482;

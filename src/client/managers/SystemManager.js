@@ -63,6 +63,7 @@ export class SystemManager {
     case Steps.Delete: return this.updateDelete(context);
     case Steps.Shutdown: return this.updateShutdown(context);
     case Steps.Keep: return this.updateKeep(context);
+    case Steps.End: return this.updateEnd(context);
     }
 
   }
@@ -357,15 +358,22 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock } = context;
 
     if (lastMessage.key === `are-you-sure`) {
-      nextMessage({ key: `good-luck` }, 6000);
+      nextMessage({ key: `thanks` }, 300);
       return;
     }
 
-    if (lastMessage.key === `good-luck`) {
+  }
+
+  updateEnd(context) {
+
+    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock, keys, ignoreEnter } = context;
+
+    if (lastMessage.key === `thanks` && keys.enter && !ignoreEnter) {
       this.appCore.pointerLock.deactivate();
-      setStep({ step: Steps.End });
+      setStep({ step: Steps.Credits });
       return;
     }
+
   }
 
 }

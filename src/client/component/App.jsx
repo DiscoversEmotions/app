@@ -54,7 +54,7 @@ const App = compose(
   return (
     <AppContainer>
       {((props.step === Steps.Boot) ? <Logo /> : <Menu />)}
-      {((props.step === Steps.End) ? <Credits /> : <System />)}
+      {((props.step === Steps.Credits) ? <Credits /> : <System />)}
     </AppContainer>
   );
 });
