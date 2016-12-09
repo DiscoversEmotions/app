@@ -179,7 +179,7 @@ const Credits = (props) => {
         </LeftItem>
         <LeftItem>
           <TitleBloc>
-            REMERCIEMENTS
+            THANKS TO
           </TitleBloc>
           <DescBloc>
             <ListBloc>
