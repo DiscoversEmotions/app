@@ -46,11 +46,8 @@ export class EmotionScene extends Scene {
     this.movementOrigin.add(this.arrowRotation);
 
     // Light inside perso
-    this.persoLight = new PointLight({
-      color: 0xff0000
-    });
+    this.persoLight = new PointLight(0xf9c4ec, 0.6, 0, 0.6);
     this.persoLight.position.y = 2;
-    this.persoLight.intensity = 0.7;
     this.movementOrigin.add(this.persoLight);
 
     // Cameraman
@@ -253,6 +250,10 @@ export class EmotionScene extends Scene {
     });
 
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture`);
+
+    this.persoLight.color = new Color(0xf9c4ec);
+    this.persoLight.intensity = 0.6;
+    this.persoLight.decay = 0.6;
   }
 
   mountEmotion2() {
@@ -274,6 +275,10 @@ export class EmotionScene extends Scene {
     });
 
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture`);
+
+    this.persoLight.color = new Color(0xf9e2c3);
+    this.persoLight.intensity = 0.7;
+    this.persoLight.decay = 0.6;
   }
 
   mountEmotion3() {
@@ -295,14 +300,10 @@ export class EmotionScene extends Scene {
 
     this.movementOrigin.position.set(0, -5, 0);
 
-    // TODO remove this
-    // setTimeout(() => {
-    //   this.controller.getSignal(`app.setNextStep`)();
-    //   this.tiles.forEach(tile => {
-    //     tile.material.color = new Color(0xb7daf6);
-    //   });
-    //   this.solved = true;
-    // }, 2000);
+    this.persoLight.color = new Color(0xc3c1fb);
+    this.persoLight.intensity = 1;
+    this.persoLight.decay = 2;
+    console.log(this.persoLight.intensity);
   }
 
   update(time, dt) {

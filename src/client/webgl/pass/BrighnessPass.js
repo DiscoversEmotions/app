@@ -4,9 +4,6 @@ import { Pass } from 'postprocessing';
 import fragment from './brightness.frag.glsl';
 import vertex from './brightness.vert.glsl';
 
-console.log(fragment);
-
-
 class BrightnessMaterial extends ShaderMaterial {
   constructor() {
     super({
