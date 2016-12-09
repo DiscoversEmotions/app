@@ -135,7 +135,7 @@ export const expectedScene = Computed(
     case Steps.Delete:
     case Steps.Keep:
     case Steps.Shutdown:
-    case Steps.End:
+    case Steps.Credits:
       return Scenes.Room;
     case Steps.EmotionExplain:
     case Steps.EmotionAlmostRecovered:

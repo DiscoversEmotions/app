@@ -42,10 +42,13 @@ export class SystemManager {
     context.updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
     context.ignoreEnter = this.controller.getState(`keyboard.ignoreEnter`);
 
+
     const {
       readyForNextMessage, lastMessage, pushMessage, updateLastMessage,
       mind1AssetsReady, messages, step
     } = context;
+
+    console.log(step);
 
     if (readyForNextMessage === false) {
       return;
@@ -63,7 +66,6 @@ export class SystemManager {
     case Steps.Delete: return this.updateDelete(context);
     case Steps.Shutdown: return this.updateShutdown(context);
     case Steps.Keep: return this.updateKeep(context);
-    case Steps.End: return this.updateEnd(context);
     }
 
   }
@@ -355,18 +357,14 @@ export class SystemManager {
   }
 
   updateKeep(context) {
-    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock } = context;
+    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock, keys, ignoreEnter } = context;
 
     if (lastMessage.key === `are-you-sure`) {
       nextMessage({ key: `thanks` }, 300);
       return;
     }
 
-  }
-
-  updateEnd(context) {
-
-    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock, keys, ignoreEnter } = context;
+    console.log(lastMessage.key === `thanks`, keys.enter, !ignoreEnter);
 
     if (lastMessage.key === `thanks` && keys.enter && !ignoreEnter) {
       this.appCore.pointerLock.deactivate();
