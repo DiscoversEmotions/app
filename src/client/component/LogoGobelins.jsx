@@ -3,8 +3,12 @@ import styled, { css } from 'styled-components';
 import _ from 'lodash';
 
 const Container = styled.div`
+  position: absolute;
+  bottom: 3%;
+  left: 3%;
+
   svg{
-    width: 5%;
+    width: 10%;
   }
 `;
 
