@@ -17,24 +17,24 @@ void main() {
 
 	if(isSecondWorld == true){
 		transformed = vec3(
-		mod(transformed.x - (particle_time / 150.0), 100.0), 
-		transformed.y, 
+		mod(transformed.x - (particle_time / 150.0), 100.0),
+		transformed.y,
 		transformed.z);
-	} 
+	}
 
 	else if(isThirdWorld == true){
 		transformed = vec3(
-		transformed.x, 
-		mod(transformed.y - (particle_time / 700.0), 15.0) + 0.0, 
+		transformed.x,
+		mod(transformed.y - (particle_time / 700.0), 15.0) + 0.0,
 		transformed.z);
 	}
 
 	else {
 		transformed = vec3(
-		mod(transformed.x - (particle_time / 1200.0), 1000.0), 
-		transformed.y, 
+		mod(transformed.x - (particle_time / 1200.0), 1000.0),
+		transformed.y,
 		transformed.z);
-	} 
+	}
 
 	#include <project_vertex>
 

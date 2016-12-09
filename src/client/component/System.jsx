@@ -19,6 +19,7 @@ import EmotionRecovered  from '~/component/messages/content/EmotionRecovered';
 import AllEmotionsRecovered  from '~/component/messages/content/AllEmotionsRecovered';
 import DeleteMemories  from '~/component/messages/content/DeleteMemories';
 import NeedReboot  from '~/component/messages/content/NeedReboot';
+import Thanks  from '~/component/messages/content/Thanks';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
@@ -50,12 +51,17 @@ function getMessageHeight(msg, step) {
     case `need-recovery`: return 200;
     case `find-tiles`: return 230;
     case `emotion-almost-recovered`: return 120;
-    case `linked-memory`: return 180;
+    case `linked-memory`: return 190;
     case `now-playing-memory`: return ((step === Steps.Memory) ? 160 : 100);
-    case `new-memories-found`: return 180;
+    case `new-memories-found`: return (() => {
+      if (msg.progress > 20) { return 180; }
+      if (msg.progress > 10) { return 160; }
+      if (msg.progress > 5) { return 140; }
+      return 110;
+    })();
     case `delete-or-not`: return ((step === Steps.RecoveryDone) ? 380 : 260);
-    case `are-you-sure`: return ((step === Steps.ConfirmKeep) ? 220 : 120);
-    case `emotion-recovered`: return 150;
+    case `are-you-sure`: return ((step === Steps.ConfirmKeep) ? 220 : 130);
+    case `emotion-recovered`: return 160;
     case `all-emotions-recovered`: return 100;
     case `delete-memories`: return (() => {
       if (msg.progress > 12) { return 370; }
@@ -66,6 +72,7 @@ function getMessageHeight(msg, step) {
       return 90;
     })();
     case `need-reboot`: return 160;
+    case `thanks`: return 150;
   }
   return 60;
 }
@@ -93,8 +100,15 @@ const System = compose(
 )((props) => {
   var distFromBottom = 0;
   var numberOfMessages = 8;
-  if (props.step === Steps.Delete) {
+  if (
+    props.step === Steps.ConfirmKeep ||
+    props.step === Steps.Keep ||
+    props.step === Steps.Delete
+  ) {
     numberOfMessages = 2;
+  }
+  if (props.step === Steps.Thanks) {
+    numberOfMessages = 3;
   }
   const messages = props.messages.slice(-numberOfMessages).map(msg => Object.assign({}, msg));
   _.forEachRight(messages, (msg) => {
@@ -128,6 +142,7 @@ const System = compose(
             case `all-emotions-recovered`: return <AllEmotionsRecovered msg={msg} key={msg.key} />;
             case `delete-memories`: return <DeleteMemories msg={msg} key={msg.key} />;
             case `need-reboot`: return <NeedReboot msg={msg} key={msg.key} />;
+            case `thanks`: return <Thanks msg={msg} key={msg.key} />;
           }
           return (
             <Message msg={ msg } type='error'>

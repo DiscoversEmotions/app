@@ -42,10 +42,13 @@ export class SystemManager {
     context.updateMessage = (key, message, time = 300) => updateLastMessage({ message: message, time: time, key: key });
     context.ignoreEnter = this.controller.getState(`keyboard.ignoreEnter`);
 
+
     const {
       readyForNextMessage, lastMessage, pushMessage, updateLastMessage,
       mind1AssetsReady, messages, step
     } = context;
+
+    console.log(step);
 
     if (readyForNextMessage === false) {
       return;
@@ -273,8 +276,8 @@ export class SystemManager {
     }
 
     if (lastMessage.key === `new-memories-found`) {
-      if (lastMessage.progress < 3) {
-        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 1000);
+      if (lastMessage.progress < 30) {
+        updateMessage(`new-memories-found`, { progress: lastMessage.progress + 1 }, 100);
       } else {
         nextMessage({ key: `delete-or-not` }, 300);
       }
@@ -354,18 +357,21 @@ export class SystemManager {
   }
 
   updateKeep(context) {
-    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock } = context;
+    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock, keys, ignoreEnter } = context;
 
     if (lastMessage.key === `are-you-sure`) {
-      nextMessage({ key: `good-luck` }, 6000);
+      nextMessage({ key: `thanks` }, 300);
       return;
     }
 
-    if (lastMessage.key === `good-luck`) {
+    console.log(lastMessage.key === `thanks`, keys.enter, !ignoreEnter);
+
+    if (lastMessage.key === `thanks` && keys.enter && !ignoreEnter) {
       this.appCore.pointerLock.deactivate();
-      setStep({ step: Steps.End });
+      setStep({ step: Steps.Credits });
       return;
     }
+
   }
 
 }

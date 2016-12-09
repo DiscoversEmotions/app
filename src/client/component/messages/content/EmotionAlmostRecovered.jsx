@@ -37,7 +37,7 @@ const EmotionAlmostRecovered = (props) => {
   return (
     <Message
       msg={msg}
-      title='Emotion Recovered'
+      title='Emotion Discovered'
     >
       <Text>
         The emotion { getEmotionName(msg.level) } is almost recovered !

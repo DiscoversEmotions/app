@@ -10,11 +10,9 @@ const Text = styled.p`
 `;
 
 function getMemoryFile (progress) {
-  switch (progress) {
-    case 1: return `/data/memories/20161208-1729.mem`;
-    case 2: return `/data/memories/20161208-1730.mem`;
-    case 3: return `/data/memories/20161208-1732.mem`;
-  }
+  if (progress < 10) { return `/data/memories/20161208-1729.mem`; }
+  if (progress < 20) { return `/data/memories/20161208-1730.mem`; }
+  return `/data/memories/20161208-1732.mem`;
 }
 
 const MemoryFile = styled.p`
@@ -28,7 +26,7 @@ const MemoryFile = styled.p`
 
 const NewMemoriesFound = (props) => {
   const { msg } = props;
-  const progress = msg.progress / 3;
+  const progress = msg.progress / 30;
   return (
     <Message
       msg={msg}
@@ -38,12 +36,15 @@ const NewMemoriesFound = (props) => {
       <Text>3 new memories have been found.</Text>
       <Text>Analysing...</Text>
       <MemoryFile>{(() => {
-        var result = [`/data/memories/20161208-1729.mem`];
-        if (msg.progress > 0) {
+        var result = [];
+        if (msg.progress > 5) {
+          result.push(`/data/memories/20161208-1729.mem`);
+        }
+        if (msg.progress > 10) {
           result.push(<br />);
           result.push(`/data/memories/20161208-1730.mem`);
         }
-        if (msg.progress > 1) {
+        if (msg.progress > 20) {
           result.push(<br />);
           result.push(`/data/memories/20161208-1732.mem`);
         }
