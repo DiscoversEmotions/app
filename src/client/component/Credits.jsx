@@ -39,18 +39,18 @@ const Question  = styled.h3`
 
 const LeftContainer = styled.div`
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 15%;
-  font-size: 16px;
+  font-size: 14px;
   width: 40%;
 `
 
 const RightContainer = styled.div`
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 65%;
   width: 25%;
-  font-size: 16px;
+  font-size: 14px;
 `
 
 const MainTitleBloc = styled.h1`
@@ -187,10 +187,10 @@ const Credits = (props) => {
                 Geoffrey CALDERON (sound design)
               </ListBlocElement>
               <ListBlocElement>
-                Yann RIEU (male voice)
+                Yann RIEU (man voice)
               </ListBlocElement>
               <ListBlocElement>
-                Alizée AMUAT (femelle over)
+                Alizée AMUAT (woman voice)
               </ListBlocElement>
             </ListBloc>
           </DescBloc>
