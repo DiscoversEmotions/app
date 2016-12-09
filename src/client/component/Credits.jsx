@@ -159,13 +159,13 @@ const Credits = (props) => {
         <DescBloc>
           <ListBloc>
             <ListBlocElement>
-              Monsieur Yolo (sound design)
+              Geoffrey CALDERON (sound design)
             </ListBlocElement>
             <ListBlocElement>
-              Madame yaourte (voix off/F)
+              Yann RIEU (male voice)
             </ListBlocElement>
             <ListBlocElement>
-              Monsieur yaourte (voix off/H)
+              Alizée AMUAT (femelle over)
             </ListBlocElement>
           </ListBloc>
         </DescBloc>
