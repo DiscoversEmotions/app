@@ -53,11 +53,18 @@ function getMessageHeight(msg, step) {
     case `linked-memory`: return 180;
     case `now-playing-memory`: return ((step === Steps.Memory) ? 160 : 100);
     case `new-memories-found`: return 180;
-    case `delete-or-not`: return ((step === Steps.RecoveryDone) ? 360 : 260);
+    case `delete-or-not`: return ((step === Steps.RecoveryDone) ? 380 : 260);
     case `are-you-sure`: return ((step === Steps.ConfirmKeep) ? 220 : 120);
     case `emotion-recovered`: return 150;
     case `all-emotions-recovered`: return 100;
-    case `delete-memories`: return 100;
+    case `delete-memories`: return (() => {
+      if (msg.progress > 12) { return 360; }
+      if (msg.progress > 9) { return 280; }
+      if (msg.progress > 6) { return 250; }
+      if (msg.progress > 3) { return 190; }
+      if (msg.progress > 0) { return 180; }
+      return 90;
+    })();
     case `need-reboot`: return 160;
   }
   return 60;
@@ -85,7 +92,11 @@ const System = compose(
   )
 )((props) => {
   var distFromBottom = 0;
-  const messages = props.messages.slice(-8).map(msg => Object.assign({}, msg));
+  var numberOfMessages = 8;
+  if (props.step === Steps.Delete) {
+    numberOfMessages = 2;
+  }
+  const messages = props.messages.slice(-numberOfMessages).map(msg => Object.assign({}, msg));
   _.forEachRight(messages, (msg) => {
     msg.type = getMessageType(msg, props.step);
     msg.height = getMessageHeight(msg, props.step);

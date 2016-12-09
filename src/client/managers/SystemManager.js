@@ -316,13 +316,13 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep, ignoreEnter } = context;
 
     if (lastMessage.key === `delete-or-not` || lastMessage.key === `are-you-sure`) {
-      nextMessage({ key: `delete-memories`, progress: 0 }, 300);
+      nextMessage({ key: `delete-memories`, progress: 0 }, 700);
       return;
     }
 
     if (lastMessage.key === `delete-memories`) {
-      if (lastMessage.progress < 10) {
-        updateMessage(`delete-memories`, { progress: lastMessage.progress + 1 }, 300);
+      if (lastMessage.progress < 15) {
+        updateMessage(`delete-memories`, { progress: lastMessage.progress + 1 }, 200);
       } else {
         nextMessage({ key: `need-reboot` }, 300);
       }

@@ -155,10 +155,11 @@ export class EmotionScene extends Scene {
   // Keyboard Method
   @ConnectMethod(
     {
-      keys: `keyboard.keys`
+      keys: `keyboard.keys`,
+      step: `app.step`
     }
   )
-  updateState({ keys }) {
+  updateState({ keys, step }) {
     this.userLeft = keys.left;
     this.userRight = keys.right;
     this.userDown = keys.down;
@@ -167,6 +168,14 @@ export class EmotionScene extends Scene {
     this.userS = keys.s;
     this.userQ = keys.q;
     this.userD = keys.d;
+    // TODO: This is for prez only
+    if (keys.k && step === Steps.EmotionExplain) {
+      this.controller.getSignal(`app.setNextStep`)();
+      this.tiles.forEach(tile => {
+        tile.material.color = new Color(0xb7daf6);
+      });
+      this.solved = true;
+    }
   }
 
   mount() {

@@ -6,7 +6,11 @@ export function pushMessage ({ state, input, controller }) {
     if (input.clean === true) {
       state.set(`system.messages`, []);
     }
-    const time = input.time || 300;
+    var time = input.time || 300;
+    // TODO: This is for prez only
+    if (state.get(`keyboard.keys.k`)) {
+      time = 10;
+    }
     setTimeout(() => {
       var messages = state.get(`system.messages`).slice();
       if (_.isArray(input.message)) {
@@ -24,7 +28,11 @@ export function pushMessage ({ state, input, controller }) {
 export function updateLastMessage ({ state, input, controller }) {
   state.set(`system.readyForNextMessage`, false);
   return new Promise(function(resolve, reject) {
-    const time = input.time || 300;
+    var time = input.time || 300;
+    // TODO: This is for prez only
+    if (state.get(`keyboard.keys.k`)) {
+      time = 10;
+    }
     const messageKey = input.key;
     if (messageKey === undefined) {
       console.error(new Error(`Need Key !`));

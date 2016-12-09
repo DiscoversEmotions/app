@@ -12,7 +12,6 @@ const Text = styled.p`
 function getMemoryFile (progress) {
   switch (progress) {
     case 1: return `/data/memories/20161208-1729.mem`;
-    case 1: return `/data/memories/20161208-1729.mem`;
     case 2: return `/data/memories/20161208-1730.mem`;
     case 3: return `/data/memories/20161208-1732.mem`;
   }

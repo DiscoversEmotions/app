@@ -34,7 +34,7 @@ const DeleteOrNot = (props) => {
       <Text>The recomended action is to delete this memory and two related memories: </Text>
       <MemoryFile>/data/memories/20161208-1732.mem</MemoryFile>
       <MemoryFile>/data/memories/20161208-1730.mem</MemoryFile>
-      { ((step === Steps.RecoveryDone) ? <Button style={{ paddingBottom: `0px` }}>Press [enter] to delete</Button> : null) }
+      { ((step === Steps.RecoveryDone) ? <Button style={{ paddingBottom: `0px` }}>Press [enter] to delete three memories</Button> : null) }
       { ((step === Steps.RecoveryDone) ? <Button>Press [n] to keep</Button> : null) }
     </Message>
   )
