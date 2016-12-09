@@ -22,8 +22,8 @@ void main() {
 		transformed.z);
 	} else {
 		transformed = vec3(
-		mod(transformed.x + (particle_time_basic / 1000000.0), 10000000.0), 
-		mod(transformed.y + (particle_time_rain / 30000000.0), 10.0), 
+		mod(transformed.x + (particle_time_basic / 1500000.0), 10000000.0), 
+		mod(transformed.y + (particle_time_rain / 10000000.0), 10.0), 
 		transformed.z);
 	}
 
