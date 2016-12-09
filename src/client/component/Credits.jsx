@@ -31,34 +31,51 @@ const Container = styled.div`
   animation: ${enterAnim} .3s linear;
 `;
 
-const MainText = styled.div`
-  display: table-cell;
-  vertical-align: middle;
-  height: 100vh;
-  font-size: 13px;
+const Question  = styled.h3`
+  font-size: 3vw;
+  position: absolute;
+  top: 20%;
+  left: 15%;
+`;
+
+const LeftContainer = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 15%;
+  font-size: 16px;
+  width: 40%;
+`
+
+const RightContainer = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 65%;
+  width: 25%;
+  font-size: 16px;
 `
 
 const MainTitleBloc = styled.h1`
-  width: 48%;
-  padding-left: 15%;
-  font-size: 16px;
+  font-size: 18px;
   letter-spacing: 0.2em;
 `
 
 const MainDescBloc = styled.p`
-  width: 35%;
-  padding-left: 15%;
+  margin-top: 20px;
+  line-height: 1.5;
+`;
+
+const MainDescBlocContainer = styled.div`
   top: 25px;
   position: relative;
 `
 
 const TitleBloc = styled.h1`
-  font-size: 15px;
+  font-size: 18px;
   letter-spacing: 0.2em;
 `
 
 const DescBloc = styled.p`
-  font-size: 13px;
+  font-size: 16px;
 `
 
 const ListBloc = styled.ul`
@@ -67,32 +84,11 @@ const ListBloc = styled.ul`
 
 const ListBlocElement = styled.li`
   list-style: none;
+  padding-top: 5px;
 `
 
-const Designers = styled.div`
-  position: absolute;
-  top: 53%;
-  transform: translateY(-50%);
-  left: 65%;
-`
-
-const Devs = styled.div`
-  position: absolute;
-  transform: translateY(-50%);
-  top: 52%;
-  left: 83%;
-`
-
-const Remerciement = styled.div`
-  position: absolute;
-  top: 65%;
-  left: 65%;
-`
-
-const Mentions = styled.div`
-  position: absolute;
-  bottom: 15px;
-  font-size: 13px;
+const LeftItem = styled.div`
+  margin-bottom: 30px;
 `
 
 const MentionsList = styled.ul`
@@ -107,70 +103,83 @@ const GobelinsListElement = styled.li`
   margin-left: 25px;
 `
 
-
 const Credits = (props) => {
   return (
     <Container full={props.full || false }>
-      <MainText>
+      <Question>If you could erase some of your memories,<br />would you dare?</Question>
+      <LeftContainer>
         <MainTitleBloc>
-          PROJET REMEMBER. GOBELINS, L’ECOLE DE L’IMAGE
+          REMEMBER PROJET. GOBELINS, L’ECOLE DE L’IMAGE
         </MainTitleBloc>
-        <MainDescBloc>
-          Ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco lavboris nisi ut aliquip ex ea commodo consequat. Ipsum dolor sit amet, consectetur adipiscin elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Utnim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </MainDescBloc>
-      </MainText>
-      <Designers>
-        <TitleBloc>
-          DESIGN
-        </TitleBloc>
-        <DescBloc>
-          <ListBloc>
-            <ListBlocElement>
-              Lovis Odin
-            </ListBlocElement>
-            <ListBlocElement>
-              Adrien Muzyczka
-            </ListBlocElement>
-            <ListBlocElement>
-              Aurélie Remia
-            </ListBlocElement>
-          </ListBloc>
-        </DescBloc>
-      </Designers>
-      <Devs>
-        <TitleBloc>
-          CODE
-        </TitleBloc>
-        <DescBloc>
-          <ListBloc>
-            <ListBlocElement>
-              Etienne Deladonchamps
-            </ListBlocElement>
-            <ListBlocElement>
-              Phuong Nghi Nguyen
-            </ListBlocElement>
-          </ListBloc>
-        </DescBloc>
-      </Devs>
-      <Remerciement>
-        <TitleBloc>
-          REMERCIEMENTS
-        </TitleBloc>
-        <DescBloc>
-          <ListBloc>
-            <ListBlocElement>
-              Geoffrey CALDERON (sound design)
-            </ListBlocElement>
-            <ListBlocElement>
-              Yann RIEU (male voice)
-            </ListBlocElement>
-            <ListBlocElement>
-              Alizée AMUAT (femelle over)
-            </ListBlocElement>
-          </ListBloc>
-        </DescBloc>
-      </Remerciement>
-      <Mentions>
+        <MainDescBlocContainer>
+          <MainDescBloc>
+            REMEMBER est une expérience interactive visant à nous provoquer et nous interroger sur nos propres choix, à travers un univers empli de mystère.
+          </MainDescBloc>
+          <MainDescBloc>
+            Le réel enjeu de ce projet a été de nous faire comprendre le lien entre émotions et souvenirs; comprendre la façon unique dont ils sont connectés dans l'aventure d'un protagoniste qui part à la reconquête de ses émotions perdues.
+          </MainDescBloc>
+          <MainDescBloc>
+            Cette expérience a été réalisée en webGL afin de rendre l'expérience la plus immersive possible.
+          </MainDescBloc>
+          <MainDescBloc>
+            Ce projet est l'aboutissement d'un travail de 2 mois, produit dans le cadre d'un projet pédagogique réalisé à Gobelins, l'École de l'Image.
+          </MainDescBloc>
+        </MainDescBlocContainer>
+      </LeftContainer>
+      <RightContainer>
+        <LeftItem>
+          <TitleBloc>
+            DESIGN
+          </TitleBloc>
+          <DescBloc>
+            <ListBloc>
+              <ListBlocElement>
+                Lovis Odin
+              </ListBlocElement>
+              <ListBlocElement>
+                Adrien Muzyczka
+              </ListBlocElement>
+              <ListBlocElement>
+                Aurélie Remia
+              </ListBlocElement>
+            </ListBloc>
+          </DescBloc>
+        </LeftItem>
+        <LeftItem>
+          <TitleBloc>
+            CODE
+          </TitleBloc>
+          <DescBloc>
+            <ListBloc>
+              <ListBlocElement>
+                Etienne Deladonchamps
+              </ListBlocElement>
+              <ListBlocElement>
+                Phuong Nghi Nguyen
+              </ListBlocElement>
+            </ListBloc>
+          </DescBloc>
+        </LeftItem>
+        <LeftItem>
+          <TitleBloc>
+            REMERCIEMENTS
+          </TitleBloc>
+          <DescBloc>
+            <ListBloc>
+              <ListBlocElement>
+                Geoffrey CALDERON (sound design)
+              </ListBlocElement>
+              <ListBlocElement>
+                Yann RIEU (male voice)
+              </ListBlocElement>
+              <ListBlocElement>
+                Alizée AMUAT (femelle over)
+              </ListBlocElement>
+            </ListBloc>
+          </DescBloc>
+        </LeftItem>
+      </RightContainer>
+      <LeftItem>
         <MentionsList>
           <MentionsListElement>
             Mentions Légales
@@ -179,7 +188,7 @@ const Credits = (props) => {
             <LogoGobelins />
           </GobelinsListElement>
         </MentionsList>
-      </Mentions>
+      </LeftItem>
     </Container>
   );
 };

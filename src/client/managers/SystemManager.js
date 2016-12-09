@@ -48,8 +48,6 @@ export class SystemManager {
       mind1AssetsReady, messages, step
     } = context;
 
-    console.log(step);
-
     if (readyForNextMessage === false) {
       return;
     }

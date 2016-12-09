@@ -55,6 +55,7 @@ const App = compose(
     <AppContainer>
       {((props.step === Steps.Boot) ? <Logo /> : <Menu />)}
       {((props.step === Steps.Credits) ? <Credits /> : <System />)}
+      <Credits />
     </AppContainer>
   );
 });
