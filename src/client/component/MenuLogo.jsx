@@ -4,14 +4,19 @@ import _ from 'lodash';
 
 
 const Container = styled.div`
-  position: absolute;
+  margin-top: 2vh;
+  width: 10px;
+
+  svg {
+    height: 100%;
+  }
 `;
 
-const Logo = (props) => {
+const MenuLogo = (props) => {
   const color = props.color || `#FFFFFF`;
   return (
     <Container {...props} dangerouslySetInnerHTML={{__html: `
-      <svg version="1.1" id="basic-boot-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 1028" style="enable-background:new 0 0 1920 1028;" xml:space="preserve">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 300 1920 428" style="enable-background:new 0 300 1920 428;" xml:space="preserve">
         <title>Plan de travail 1</title>
         <path style="fill: ${color}" d="M562.6,533.3h-71.2v58.2h82.7v17.7H469.8V445H573v17.7h-81.5v52.9h71.2V533.3z"/>
         <path style="fill: ${color}" d="M652.2,445l53.7,134l53.7-134h28.1v164.2H766v-64l2-69l-53.9,133h-16.6l-53.8-132.6l2.1,68.7v64h-21.7V445H652.2z"/>
@@ -27,4 +32,4 @@ const Logo = (props) => {
   );
 };
 
-export default Logo;
+export default MenuLogo;

@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { injectGlobal } from 'styled-components';
 import { compose, ConnectReact } from '~/core';
 import System from '~/component/System';
+import Menu from '~/component/Menu';
 import Logo from '~/component/Logo';
 import Credits from '~/component/Credits';
 import { canStartRoom } from '~/computed';
@@ -55,6 +56,8 @@ const App = compose(
       {(() => {
         if (props.step === Steps.Boot) {
           return <Logo />;
+        } else {
+          return <Menu />;
         }
       })()}
       {(() => {

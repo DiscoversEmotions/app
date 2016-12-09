@@ -113,13 +113,7 @@ const GobelinsListElement = styled.li`
 `
 
 
-const Credits = compose(
-  inject((provided) => ({ core: provided.core })),
-  ConnectReact(
-    {
-    }
-  )
-)((props) => {
+const Credits = (props) => {
   return (
     <Container full={props.full || false }>
 
@@ -166,7 +160,7 @@ const Credits = compose(
 
         <DescBloc>
 
-           <ListBloc>
+          <ListBloc>
             <ListBlocElement>
               Etienne Deladonchamps
             </ListBlocElement>
@@ -216,8 +210,6 @@ const Credits = compose(
 
     </Container>
   );
-});
-
-
+};
 
 export default Credits;
