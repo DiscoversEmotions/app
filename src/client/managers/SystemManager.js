@@ -342,7 +342,7 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, reboot } = context;
 
     if (lastMessage.key === `need-reboot`) {
-      nextMessage({ key: `shutdown` }, 1000);
+      nextMessage({ key: `shutdown` }, 300);
       return;
     }
 
@@ -357,7 +357,7 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock } = context;
 
     if (lastMessage.key === `are-you-sure`) {
-      nextMessage({ key: `good-luck` }, 1000);
+      nextMessage({ key: `good-luck` }, 6000);
       return;
     }
 

@@ -203,7 +203,6 @@ export class EmotionScene extends Scene {
 
     if (_.isNil(this.arrow)) {
       this.arrow = this.app.assetsManager.getAsset(`arrow`);
-      console.log(this.arrow);
       this.arrow.children[0].material = new MeshBasicMaterial({
         color: 0xffffff,
         wireframe: true
@@ -246,7 +245,6 @@ export class EmotionScene extends Scene {
   mountEmotion1() {
     this.world = this.app.assetsManager.getAsset(`world1`);
     this.world.traverseVisible((item) => {
-      console.log(item.name);
       if (item.name === `collision`) {
         this.collision = item;
       }
@@ -268,7 +266,6 @@ export class EmotionScene extends Scene {
   mountEmotion2() {
     this.world = this.app.assetsManager.getAsset(`world2`);
     this.world.traverseVisible((item) => {
-      console.log(item.name);
       if (item.name === `collision`) {
         this.collision = item;
       }
@@ -293,7 +290,6 @@ export class EmotionScene extends Scene {
   mountEmotion3() {
     this.world = this.app.assetsManager.getAsset(`world3`);
     this.world.traverseVisible((item) => {
-      console.log(item.name);
       if (item.name === `collision`) {
         this.collision = item;
       }
@@ -312,7 +308,6 @@ export class EmotionScene extends Scene {
     this.persoLight.color = new Color(0xc3c1fb);
     this.persoLight.intensity = 1;
     this.persoLight.decay = 2;
-    console.log(this.persoLight.intensity);
   }
 
   update(time, dt) {
@@ -368,6 +363,9 @@ export class EmotionScene extends Scene {
     this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.05);
     const slowDown = 30;
     this.persoVelocity = ((Math.pow(((this.persoVelocityLinear-(1/slowDown))*slowDown), 3) / slowDown) + (1/slowDown));
+    // TODO: Thois is for prez only
+    this.persoVelocity = motion.calc.restrict(this.persoVelocity, 0, 0.01);
+
     const dist = this.persoVelocity * dt;
     const move = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
@@ -433,7 +431,7 @@ export class EmotionScene extends Scene {
         this.movementOrigin.position.y = this.collisionGroundResults[0].point.y;
       }
     } else {
-      console.log(`No ground collision`);
+      // console.log(`No ground collision`);
     }
   }
 

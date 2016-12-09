@@ -58,9 +58,9 @@ function getMessageHeight(msg, step) {
     case `emotion-recovered`: return 150;
     case `all-emotions-recovered`: return 100;
     case `delete-memories`: return (() => {
-      if (msg.progress > 12) { return 360; }
-      if (msg.progress > 9) { return 280; }
-      if (msg.progress > 6) { return 250; }
+      if (msg.progress > 12) { return 370; }
+      if (msg.progress > 9) { return 290; }
+      if (msg.progress > 6) { return 260; }
       if (msg.progress > 3) { return 190; }
       if (msg.progress > 0) { return 180; }
       return 90;
