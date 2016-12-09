@@ -5,8 +5,9 @@ import * as motion from 'popmotion';
 
 export class SystemManager {
 
-  constructor(controller) {
+  constructor(controller, appCore) {
     this.controller = controller;
+    this.appCore = appCore;
   }
 
   boot() {
@@ -315,13 +316,13 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, reboot, keys, setNextStep, setStep, ignoreEnter } = context;
 
     if (lastMessage.key === `delete-or-not` || lastMessage.key === `are-you-sure`) {
-      nextMessage({ key: `delete-memories`, progress: 0 }, 300);
+      nextMessage({ key: `delete-memories`, progress: 0 }, 700);
       return;
     }
 
     if (lastMessage.key === `delete-memories`) {
-      if (lastMessage.progress < 10) {
-        updateMessage(`delete-memories`, { progress: lastMessage.progress + 1 }, 300);
+      if (lastMessage.progress < 15) {
+        updateMessage(`delete-memories`, { progress: lastMessage.progress + 1 }, 200);
       } else {
         nextMessage({ key: `need-reboot` }, 300);
       }
@@ -341,7 +342,7 @@ export class SystemManager {
     const { lastMessage, nextMessage, updateMessage, reboot } = context;
 
     if (lastMessage.key === `need-reboot`) {
-      nextMessage({ key: `shutdown` }, 1000);
+      nextMessage({ key: `shutdown` }, 300);
       return;
     }
 
@@ -353,14 +354,15 @@ export class SystemManager {
   }
 
   updateKeep(context) {
-    const { lastMessage, nextMessage, updateMessage, reboot, setStep } = context;
+    const { lastMessage, nextMessage, updateMessage, reboot, setStep, stopPointerLock } = context;
 
     if (lastMessage.key === `are-you-sure`) {
-      nextMessage({ key: `good-luck` }, 1000);
+      nextMessage({ key: `good-luck` }, 6000);
       return;
     }
 
     if (lastMessage.key === `good-luck`) {
+      this.appCore.pointerLock.deactivate();
       setStep({ step: Steps.End });
       return;
     }

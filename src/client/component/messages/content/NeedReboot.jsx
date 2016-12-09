@@ -18,7 +18,7 @@ const NeedReboot = (props) => {
       title='Reboot'
     >
       <Text>
-        You need to rebbot the system to apply recents changes.
+        You need to reboot the system to apply recents changes.
       </Text>
       <Button>
         Press [enter] to reboot

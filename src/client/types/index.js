@@ -32,7 +32,7 @@ export const Steps = {
   RecoveryDone: `recovery-done`,
   ConfirmKeep: `confirm-delete`,
   Delete: `delete`,
-  Keep: `keet`,
+  Keep: `keep`,
   Shutdown: `shutdown`,
   End: `end`
 };

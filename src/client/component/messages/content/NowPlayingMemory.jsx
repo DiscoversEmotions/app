@@ -27,7 +27,6 @@ const MemoryFile = styled.p`
 
 const NowPlayingMemory = (props) => {
   const { msg, step } = props;
-  console.log(step);
   return (
     <Message
       msg={msg}

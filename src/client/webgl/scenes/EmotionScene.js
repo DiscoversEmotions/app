@@ -46,11 +46,8 @@ export class EmotionScene extends Scene {
     this.movementOrigin.add(this.arrowRotation);
 
     // Light inside perso
-    this.persoLight = new PointLight({
-      color: 0xff0000
-    });
+    this.persoLight = new PointLight(0xf9c4ec, 0.6, 0, 0.6);
     this.persoLight.position.y = 2;
-    this.persoLight.intensity = 0.7;
     this.movementOrigin.add(this.persoLight);
 
     // Cameraman
@@ -158,10 +155,11 @@ export class EmotionScene extends Scene {
   // Keyboard Method
   @ConnectMethod(
     {
-      keys: `keyboard.keys`
+      keys: `keyboard.keys`,
+      step: `app.step`
     }
   )
-  updateState({ keys }) {
+  updateState({ keys, step }) {
     this.userLeft = keys.left;
     this.userRight = keys.right;
     this.userDown = keys.down;
@@ -170,6 +168,14 @@ export class EmotionScene extends Scene {
     this.userS = keys.s;
     this.userQ = keys.q;
     this.userD = keys.d;
+    // TODO: This is for prez only
+    if (keys.k && step === Steps.EmotionExplain) {
+      this.controller.getSignal(`app.setNextStep`)();
+      this.tiles.forEach(tile => {
+        tile.material.color = new Color(0xb7daf6);
+      });
+      this.solved = true;
+    }
   }
 
   mount() {
@@ -197,7 +203,6 @@ export class EmotionScene extends Scene {
 
     if (_.isNil(this.arrow)) {
       this.arrow = this.app.assetsManager.getAsset(`arrow`);
-      console.log(this.arrow);
       this.arrow.children[0].material = new MeshBasicMaterial({
         color: 0xffffff,
         wireframe: true
@@ -240,7 +245,6 @@ export class EmotionScene extends Scene {
   mountEmotion1() {
     this.world = this.app.assetsManager.getAsset(`world1`);
     this.world.traverseVisible((item) => {
-      console.log(item.name);
       if (item.name === `collision`) {
         this.collision = item;
       }
@@ -253,12 +257,15 @@ export class EmotionScene extends Scene {
     });
 
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture`);
+
+    this.persoLight.color = new Color(0xf9c4ec);
+    this.persoLight.intensity = 0.6;
+    this.persoLight.decay = 0.6;
   }
 
   mountEmotion2() {
     this.world = this.app.assetsManager.getAsset(`world2`);
     this.world.traverseVisible((item) => {
-      console.log(item.name);
       if (item.name === `collision`) {
         this.collision = item;
       }
@@ -274,12 +281,15 @@ export class EmotionScene extends Scene {
     });
 
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture`);
+
+    this.persoLight.color = new Color(0xf9e2c3);
+    this.persoLight.intensity = 0.7;
+    this.persoLight.decay = 0.6;
   }
 
   mountEmotion3() {
     this.world = this.app.assetsManager.getAsset(`world3`);
     this.world.traverseVisible((item) => {
-      console.log(item.name);
       if (item.name === `collision`) {
         this.collision = item;
       }
@@ -294,6 +304,10 @@ export class EmotionScene extends Scene {
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture2`);
 
     this.movementOrigin.position.set(0, -5, 0);
+
+    this.persoLight.color = new Color(0xc3c1fb);
+    this.persoLight.intensity = 1;
+    this.persoLight.decay = 2;
   }
 
   update(time, dt) {
@@ -349,6 +363,9 @@ export class EmotionScene extends Scene {
     this.persoVelocityLinear = motion.calc.restrict(this.persoVelocityLinear, 0, 0.05);
     const slowDown = 30;
     this.persoVelocity = ((Math.pow(((this.persoVelocityLinear-(1/slowDown))*slowDown), 3) / slowDown) + (1/slowDown));
+    // TODO: Thois is for prez only
+    this.persoVelocity = motion.calc.restrict(this.persoVelocity, 0, 0.01);
+
     const dist = this.persoVelocity * dt;
     const move = motion.calc.pointFromAngleAndDistance(
       { x: 0, y: 0 },
@@ -414,7 +431,7 @@ export class EmotionScene extends Scene {
         this.movementOrigin.position.y = this.collisionGroundResults[0].point.y;
       }
     } else {
-      console.log(`No ground collision`);
+      // console.log(`No ground collision`);
     }
   }
 

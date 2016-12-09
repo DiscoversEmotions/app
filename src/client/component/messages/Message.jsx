@@ -35,7 +35,7 @@ const Container = styled.div`
   font-size: 16px;
   color: white;
   transition-duration: .3s;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 40px 5px rgba(0, 0, 0, 0.1);
   animation: ${enterAnim} .3s linear;
 `;

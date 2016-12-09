@@ -51,23 +51,20 @@ function getMessageHeight(msg, step) {
     case `find-tiles`: return 230;
     case `emotion-almost-recovered`: return 120;
     case `linked-memory`: return 180;
-    case `now-playing-memory`: return (() => {
-      if (step === Steps.Memory) {
-        return 160;
-      }
-      return 100;
-    })();
+    case `now-playing-memory`: return ((step === Steps.Memory) ? 160 : 100);
     case `new-memories-found`: return 180;
-    case `delete-or-not`: return (() => {
-      if (step === Steps.RecoveryDone) {
-        return 360;
-      }
-      return 260;
-    })();
-    case `are-you-sure`: return 220;
+    case `delete-or-not`: return ((step === Steps.RecoveryDone) ? 380 : 260);
+    case `are-you-sure`: return ((step === Steps.ConfirmKeep) ? 220 : 120);
     case `emotion-recovered`: return 150;
     case `all-emotions-recovered`: return 100;
-    case `delete-memories`: return 100;
+    case `delete-memories`: return (() => {
+      if (msg.progress > 12) { return 370; }
+      if (msg.progress > 9) { return 290; }
+      if (msg.progress > 6) { return 260; }
+      if (msg.progress > 3) { return 190; }
+      if (msg.progress > 0) { return 180; }
+      return 90;
+    })();
     case `need-reboot`: return 160;
   }
   return 60;
@@ -95,7 +92,11 @@ const System = compose(
   )
 )((props) => {
   var distFromBottom = 0;
-  const messages = props.messages.slice(-8).map(msg => Object.assign({}, msg));
+  var numberOfMessages = 8;
+  if (props.step === Steps.Delete) {
+    numberOfMessages = 2;
+  }
+  const messages = props.messages.slice(-numberOfMessages).map(msg => Object.assign({}, msg));
   _.forEachRight(messages, (msg) => {
     msg.type = getMessageType(msg, props.step);
     msg.height = getMessageHeight(msg, props.step);
@@ -122,7 +123,7 @@ const System = compose(
             case `now-playing-memory`: return <NowPlayingMemory msg={msg} step={props.step} key={msg.key} />;
             case `new-memories-found`: return <NewMemoriesFound msg={msg} key={msg.key} />;
             case `delete-or-not`: return <DeleteOrNot msg={msg} step={props.step} key={msg.key} />;
-            case `are-you-sure`: return <AreYouSure msg={msg} key={msg.key} />;
+            case `are-you-sure`: return <AreYouSure msg={msg} step={props.step} key={msg.key} />;
             case `emotion-recovered`: return <EmotionRecovered msg={msg} key={msg.key} />;
             case `all-emotions-recovered`: return <AllEmotionsRecovered msg={msg} key={msg.key} />;
             case `delete-memories`: return <DeleteMemories msg={msg} key={msg.key} />;
