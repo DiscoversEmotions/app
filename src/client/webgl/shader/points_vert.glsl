@@ -25,7 +25,7 @@ void main() {
 	else if(isThirdWorld == true){
 		transformed = vec3(
 		transformed.x, 
-		mod(transformed.y - (particle_time / 500.0), 1000.0) - 200, 
+		mod(transformed.y - (particle_time / 700.0), 15.0) + 0.0, 
 		transformed.z);
 	}
 
