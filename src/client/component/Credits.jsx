@@ -3,6 +3,7 @@ import styled, { css, keyframes } from 'styled-components';
 import _ from 'lodash';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
+import LogoGobelins from '~/component/LogoGobelins';
 
 
 const enterAnim = keyframes`
@@ -70,7 +71,7 @@ const ListBlocElement = styled.li`
 
 const Designers = styled.div`
   position: absolute;
-  top: 55%;
+  top: 53%;
   transform: translateY(-50%);
   left: 65%;
 `
@@ -78,7 +79,7 @@ const Designers = styled.div`
 const Devs = styled.div`
   position: absolute;
   transform: translateY(-50%);
-  top: 54%;
+  top: 52%;
   left: 83%;
 `
 
@@ -91,7 +92,6 @@ const Remerciement = styled.div`
 const Mentions = styled.div`
   position: absolute;
   bottom: 15px;
-  right: 30px;
   font-size: 13px;
 `
 
@@ -176,7 +176,7 @@ const Credits = (props) => {
             Mentions Légales
           </MentionsListElement>
           <GobelinsListElement>
-            GOBELINS
+            <LogoGobelins />
           </GobelinsListElement>
         </MentionsList>
       </Mentions>
