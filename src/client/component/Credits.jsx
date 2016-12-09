@@ -104,7 +104,7 @@ const MentionsListElement = styled.li`
 `
 
 const GobelinsListElement = styled.li`
-  margin-left: 25px;
+
 `
 
 
@@ -172,9 +172,6 @@ const Credits = (props) => {
       </Remerciement>
       <Mentions>
         <MentionsList>
-          <MentionsListElement>
-            Mentions Légales
-          </MentionsListElement>
           <GobelinsListElement>
             <LogoGobelins />
           </GobelinsListElement>
