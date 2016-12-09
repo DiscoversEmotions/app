@@ -100,13 +100,13 @@ export class EmotionScene extends Scene {
       fogDensity: {
 
       },
-      particle_time_rain: {
-        value: 0
-      },
-      particle_time_basic: {
+      particle_time: {
         value: 0
       },
       isSecondWorld: {
+        value: false
+      },
+      isThirdWorld: {
         value: false
       }
     };
@@ -128,7 +128,7 @@ export class EmotionScene extends Scene {
     this.particleMaterial.sizeAttenuation = true;
 
     this.particleGeometry = new Geometry();
-    this.particlesNumber = 2000;
+    this.particlesNumber = 2500;
 
     for (var p = 0; p < this.particlesNumber; p++) {
       var pX = Math.random() * 100;
@@ -445,18 +445,22 @@ export class EmotionScene extends Scene {
   }
 
   updateParticlesShader(time, dt){
+    this.particleMaterial.uniforms.particle_time.value = time;
+
     if(this.level === 1){
-      this.particleMaterial.uniforms.particle_time_basic.value -= time;
+      this.particleMaterial.uniforms.isSecondWorld.value = false;
+      this.particleMaterial.uniforms.isThirdWorld.value = false;
     }
 
     if(this.level === 2){
       this.particleMaterial.uniforms.isSecondWorld.value = true;
-      this.particleMaterial.uniforms.particle_time_basic.value -= time;
+      this.particleMaterial.uniforms.isThirdWorld.value = false;
+
     }
 
     if(this.level === 3){
       this.particleMaterial.uniforms.isSecondWorld.value = false;
-      this.particleMaterial.uniforms.particle_time_rain.value -= time;
+      this.particleMaterial.uniforms.isThirdWorld.value = true;
     }
 
   }
