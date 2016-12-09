@@ -100,7 +100,7 @@ const MentionsListElement = styled.li`
 `
 
 const GobelinsListElement = styled.li`
-  margin-left: 25px;
+
 `
 
 const Credits = (props) => {
@@ -181,9 +181,6 @@ const Credits = (props) => {
       </RightContainer>
       <LeftItem>
         <MentionsList>
-          <MentionsListElement>
-            Mentions Légales
-          </MentionsListElement>
           <GobelinsListElement>
             <LogoGobelins />
           </GobelinsListElement>
