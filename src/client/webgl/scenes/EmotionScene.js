@@ -210,10 +210,8 @@ export class EmotionScene extends Scene {
 
     if (this.level === 1) {
       this.mountEmotion1();
-
     } else if (this.level === 2) {
       this.mountEmotion2();
-
     } else if (this.level === 3) {
       this.mountEmotion3();
     }
@@ -289,6 +287,8 @@ export class EmotionScene extends Scene {
 
     this.particleTxt = this.app.assetsManager.getAsset(`particleTexture2`);
     // this.particleSystem.position.set(0, 90, 0);
+
+    this.movementOrigin.position.set(0, -5, 0);
   }
 
   update(time, dt) {
@@ -404,7 +404,10 @@ export class EmotionScene extends Scene {
 
     this.collisionGroundResults = this.raycaster.intersectObjects([this.collision]);
     if (this.collisionGroundResults.length) {
-      this.movementOrigin.position.y = this.collisionGroundResults[0].point.y;
+      const verticalDiff = Math.abs(this.movementOrigin.position.y - this.collisionGroundResults[0].point.y);
+      if (verticalDiff < 2) {
+        this.movementOrigin.position.y = this.collisionGroundResults[0].point.y;
+      }
     } else {
       console.log(`No ground collision`);
     }

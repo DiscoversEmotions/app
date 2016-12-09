@@ -1,9 +1,20 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import _ from 'lodash';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 
+
+const enterAnim = keyframes`
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+`;
 
 const Container = styled.div`
   background: rgba(0, 0, 0, 0.4);
@@ -16,6 +27,7 @@ const Container = styled.div`
   right: 0;
   bottom: 0;
   z-index: 2000;
+  animation: ${enterAnim} .3s linear;
 `;
 
 const Title = styled.div`

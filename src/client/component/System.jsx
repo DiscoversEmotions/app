@@ -9,7 +9,6 @@ import LoadMemories  from '~/component/messages/content/LoadMemories';
 import LoadEmotions  from '~/component/messages/content/LoadEmotions';
 import NeedRecovery  from '~/component/messages/content/NeedRecovery';
 import FindTiles  from '~/component/messages/content/FindTiles';
-import UseArrowToMove  from '~/component/messages/content/UseArrowToMove';
 import EmotionAlmostRecovered  from '~/component/messages/content/EmotionAlmostRecovered';
 import LinkedMemory  from '~/component/messages/content/LinkedMemory';
 import NowPlayingMemory  from '~/component/messages/content/NowPlayingMemory';
@@ -19,6 +18,7 @@ import AreYouSure  from '~/component/messages/content/AreYouSure';
 import EmotionRecovered  from '~/component/messages/content/EmotionRecovered';
 import AllEmotionsRecovered  from '~/component/messages/content/AllEmotionsRecovered';
 import DeleteMemories  from '~/component/messages/content/DeleteMemories';
+import NeedReboot  from '~/component/messages/content/NeedReboot';
 import { compose, ConnectReact } from '~/core';
 import { inject } from 'react-tunnel';
 import { displayedMessages } from '~/computed';
@@ -48,7 +48,7 @@ function getMessageHeight(msg, step) {
       return height
     })();
     case `need-recovery`: return 200;
-    case `find-tiles`: return 120;
+    case `find-tiles`: return 230;
     case `emotion-almost-recovered`: return 120;
     case `linked-memory`: return 180;
     case `now-playing-memory`: return (() => {
@@ -68,6 +68,7 @@ function getMessageHeight(msg, step) {
     case `emotion-recovered`: return 150;
     case `all-emotions-recovered`: return 100;
     case `delete-memories`: return 100;
+    case `need-reboot`: return 160;
   }
   return 60;
 }
@@ -116,7 +117,6 @@ const System = compose(
             case `load-emotions-progress`: return <LoadEmotions msg={msg} key={msg.key} />;
             case `need-recovery`: return <NeedRecovery msg={msg} key={msg.key} />;
             case `find-tiles`: return <FindTiles msg={msg} key={msg.key} />;
-            case `use-arrow-to-move`: return <UseArrowToMove msg={msg} key={msg.key} />;
             case `emotion-almost-recovered`: return <EmotionAlmostRecovered msg={msg} key={msg.key} />;
             case `linked-memory`: return <LinkedMemory msg={msg} key={msg.key} />;
             case `now-playing-memory`: return <NowPlayingMemory msg={msg} step={props.step} key={msg.key} />;
@@ -126,6 +126,7 @@ const System = compose(
             case `emotion-recovered`: return <EmotionRecovered msg={msg} key={msg.key} />;
             case `all-emotions-recovered`: return <AllEmotionsRecovered msg={msg} key={msg.key} />;
             case `delete-memories`: return <DeleteMemories msg={msg} key={msg.key} />;
+            case `need-reboot`: return <NeedReboot msg={msg} key={msg.key} />;
           }
           return (
             <Message msg={ msg } type='error'>

@@ -12,7 +12,7 @@ const enterAnim = keyframes`
     opacity: 0;
   }
   to {
-    transform: translateY(0%);
+    transform: translateX(0%);
     opacity: 1;
   }
 `;

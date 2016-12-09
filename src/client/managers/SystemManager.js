@@ -24,7 +24,8 @@ export class SystemManager {
       lastMessage: lastMessage,
       roomAssetsReady: roomAssetsReady,
       mind1AssetsReady: mind1AssetsReady,
-      level: `app.level`
+      level: `app.level`,
+      reboot: `app.reboot`
     },
     {
       pushMessage: `system.pushMessage`,
@@ -67,19 +68,16 @@ export class SystemManager {
 
   updateBoot(context) {
 
-    const { pushMessage, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage } = context;
+    const { pushMessage, updateLastMessage, lastMessage, setNextStep, roomAssetsReady, nextMessage, updateMessage, reboot } = context;
 
     if (lastMessage === null) {
       nextMessage({ key: `boot` }, 200);
       return;
     }
 
-    if (lastMessage === null) {
-      return;
-    }
-
     if (lastMessage.key === `boot`) {
-      nextMessage({ key: `boot-progress`, progress: 0 }, 200);
+      const time = reboot === 0 ? 200 : 3000;
+      nextMessage({ key: `boot-progress`, progress: 0 }, time);
       return;
     }
 
@@ -201,11 +199,6 @@ export class SystemManager {
       return;
     }
 
-    if (lastMessage.key === `find-tiles`) {
-      nextMessage({ key: `use-arrow-to-move` }, 500);
-      return;
-    }
-
   }
 
   updateEmotionAlmostRecovered(context) {
@@ -216,7 +209,7 @@ export class SystemManager {
       return;
     }
 
-    if (lastMessage.key === `use-arrow-to-move`) {
+    if (lastMessage.key === `find-tiles`) {
       nextMessage({ key: `emotion-almost-recovered`, level: level }, 300);
       return;
     }
