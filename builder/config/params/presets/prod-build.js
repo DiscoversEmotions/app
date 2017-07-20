@@ -2,7 +2,7 @@ module.exports = {
   name: 'Production',
   webpack: {
     devtool: '#source-map',
-    publicPath: '/dmii/2018/remember/'
+    publicPath: '/remember-experiment/'
   },
   optimize: true,
   watchClient: false,
